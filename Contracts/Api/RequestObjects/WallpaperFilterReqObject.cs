@@ -2,7 +2,7 @@
 
 namespace Contracts.Api.RequestObjects
 {
-    public class WallpaperFilterReq
+    public class WallpaperFilterReqObject
     {
         //for requestor        
         public string Name { get; set; }

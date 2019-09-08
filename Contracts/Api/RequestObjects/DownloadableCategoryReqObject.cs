@@ -2,7 +2,7 @@
 
 namespace Contracts.Api.RequestObjects
 {
-    public class DownloadableCategoryReq
+    public class DownloadableCategoryReqObject
     {
         public string Cheat { get; set; }
         public Version Version { get; set; }
