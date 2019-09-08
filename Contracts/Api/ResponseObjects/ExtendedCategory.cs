@@ -19,7 +19,8 @@ namespace Contracts.Api.ResponseObjects
                 return
                   CategoryString.StartsWith("Girls") ||
                   CategoryString.StartsWith("Men") ||
-                  CategoryString == string.Empty;
+                  CategoryString == string.Empty ||
+                  CategoryString == "All";
             }
         }
 
