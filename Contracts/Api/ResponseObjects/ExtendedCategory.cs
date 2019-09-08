@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Contracts.Api.RequestObjects
+namespace Contracts.Api.ResponseObjects
 {
     public class ExtendedCategory
     {
