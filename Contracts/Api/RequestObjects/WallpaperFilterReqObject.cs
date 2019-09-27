@@ -7,6 +7,9 @@ namespace Contracts.Api.RequestObjects
         //for requestor        
         public string Name { get; set; }
 
+        //for all
+        public string UserId { get; set; }
+
         //for filter
         public double MinRatio { get; set; }
         public double MaxRatio { get; set; }
