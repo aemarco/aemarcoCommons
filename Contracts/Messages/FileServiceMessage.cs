@@ -18,5 +18,8 @@ namespace Contracts.Messages
         //adds for Wallpaper
         public int CategoryId { get; set; }
 
+        //adds for Video
+        public int VideoCategoryId { get; set; }
+
     }
 }
