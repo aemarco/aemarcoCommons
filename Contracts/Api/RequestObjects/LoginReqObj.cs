@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 
@@ -7,7 +8,7 @@ namespace Contracts.Api.RequestObjects
     /// <summary>
     /// ATTENTION: Keep in sync with 'Toolbox.ApiTools.RequestObjects'
     /// </summary>
-    public class LoginObject
+    public class LoginReqObj
     {
         [Required]
         [EmailAddress]
@@ -21,6 +22,9 @@ namespace Contracts.Api.RequestObjects
 
         public virtual string WindowsUser { get; set; } = Environment.UserName;
 
-
+        public virtual string ToJson()
+        {
+            return JsonConvert.SerializeObject(this, Formatting.Indented);
+        }
     }
 }
