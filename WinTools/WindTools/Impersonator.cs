@@ -1,4 +1,4 @@
-﻿namespace Tools.WinTools
+﻿namespace WinTools.WindTools
 {
 
     using System;
@@ -18,9 +18,9 @@
 
         private const int LOGON32_PROVIDER_DEFAULT = 0;
         private const int LOGON32_LOGON_INTERACTIVE = 2;
-        readonly IntPtr m_Token;
+        private readonly IntPtr m_Token;
 
-        private WindowsImpersonationContext m_Context = null;
+        private readonly WindowsImpersonationContext m_Context = null;
 
 
         [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
