@@ -40,6 +40,8 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -57,6 +59,7 @@
     <Compile Include="WindTools\ConsoleHide.cs" />
     <Compile Include="WindTools\OSVersionInfoClass.cs" />
     <Compile Include="WindTools\Register.cs" />
+    <Compile Include="WindTools\WallpaperSetter.cs" />
     <Compile Include="WpfTools\BaseModels\BaseNotifier.cs" />
     <Compile Include="WpfTools\BaseModels\BaseService.cs" />
     <Compile Include="WpfTools\BaseModels\BaseViewModel.cs" />
