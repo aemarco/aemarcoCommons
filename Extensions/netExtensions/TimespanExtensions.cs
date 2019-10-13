@@ -31,7 +31,6 @@ namespace Extensions.netExtensions
             if (significantDigits > 0 && ts.Seconds > 0)
             {
                 sb.Append($"{ts.Seconds} seconds");
-                significantDigits--;
             }
             else if (significantDigits > 0 && ts.TotalSeconds < 1)
             {
