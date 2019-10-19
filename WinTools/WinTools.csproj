@@ -77,6 +77,7 @@
     <Compile Include="WpfTools\Converters\ImageConverter.cs" />
     <Compile Include="WpfTools\Converters\IntToStringValueConverter.cs" />
     <Compile Include="WpfTools\Converters\InversBoolToVisibilityValueConverter.cs" />
+    <Compile Include="WpfTools\Converters\TimespanToStringConverter.cs" />
     <Compile Include="WpfTools\Helpers\AutoScrollHelper.cs" />
     <Compile Include="WpfTools\Helpers\MessageBoxHelper.cs" />
     <Compile Include="WpfTools\Helpers\ProgressEventArgs.cs" />
@@ -98,6 +99,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Extensions\Extensions.csproj">
+      <Project>{34dcd123-ac8e-4059-8267-070a8daa38a4}</Project>
+      <Name>Extensions</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
