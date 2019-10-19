@@ -15,6 +15,7 @@ namespace Contracts.Api.RequestObjects
         public double MaxRatio { get; set; }
         public List<string> Categories { get; set; }
         public List<int> CategoryIds { get; set; }
+        public int GirlId { get; set; }
         public int MinAdult { get; set; }
         public int MaxAdult { get; set; }
         public string Search { get; set; }
