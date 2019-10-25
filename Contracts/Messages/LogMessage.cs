@@ -14,6 +14,7 @@ namespace Contracts.Messages
         public LogLevel LogLevel { get; set; }
         public string Message { get; set; }
         public Dictionary<string, string> ExceptionDict { get; set; }
+        public string AdditionalBase64Info { get; set; }
 
 
 
