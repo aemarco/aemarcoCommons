@@ -14,6 +14,11 @@ namespace WinTools.WpfTools.BaseModels
             if (propertyName != null)
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            NotifyPropertyChanged(propertyName);
+        }
+
 
         #endregion
 
