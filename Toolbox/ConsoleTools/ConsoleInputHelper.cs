@@ -28,7 +28,13 @@ namespace Toolbox.ConsoleTools
             return selection == "Yes";
         }
 
-
+        /// <summary>
+        /// Textinput
+        /// </summary>
+        /// <param name="prompt">prompt</param>
+        /// <param name="minLenght">min length</param>
+        /// <param name="clear">console should be cleared?</param>
+        /// <returns>input string</returns>
         public static string EnsureInput(string prompt, int minLenght = 1, bool clear = false)
         {
             string input = null;
@@ -47,6 +53,41 @@ namespace Toolbox.ConsoleTools
 
             return input;
         }
+
+
+        public static int EnsureIntInputInRange(string prompt, int min = 0, int max = int.MaxValue, bool clear = false)
+        {
+            int? result = null;
+
+            while (result == null || result.Value < min || result.Value > max)
+            {
+                if (int.TryParse(EnsureInput(prompt, 1, clear), out int newNum))
+                    result = newNum;
+            }
+
+            return result.Value;
+        }
+
+        public static int? EnsureIntInputNullOrInRange(string prompt, int min = 0, int max = int.MaxValue, bool clear = false)
+        {
+            int? result = null;
+
+            if (Decision($"Want to define {prompt}?", false))
+            {
+                while (result == null || result.Value < min || result.Value > max)
+                {
+                    if (int.TryParse(EnsureInput(prompt, 1, clear), out int newNum))
+                        result = newNum;
+                }
+            }
+
+            return result;
+        }
+
+
+
+
+
 
         /// <summary>
         /// Allows Selection in a ConsoleMenu
