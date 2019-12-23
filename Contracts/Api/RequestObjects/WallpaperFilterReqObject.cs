@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Contracts.Api.RequestObjects
 {
@@ -58,5 +59,15 @@ namespace Contracts.Api.RequestObjects
         /// true means that results beeing filtered to pictures marked as favorites for current user
         /// </summary>
         public bool FavoritesOnly { get; set; }
+
+        /// <summary>
+        /// defines how many results are desired for this request
+        /// </summary>
+        public int DesiredAmount { get; set; } = 1;
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this, Formatting.Indented);
+        }
     }
 }
