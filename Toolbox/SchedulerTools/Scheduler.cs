@@ -78,6 +78,15 @@ namespace Toolbox.SchedulerTools
                 var now = DateTimeOffset.Now;
                 if (task.PlannedFor <= now) //due
                 {
+
+                    //maybe replan if we are outside working hours
+                    if (task.SchedulingOptions.HasFlag(SchedulingOptions.DelayUntilNextTimeWindow) &&
+                        UpdateToWaitTillServiceHours(task))
+                    {
+                        OnNewLog("Info", $"Task {task.Name} replanned for {task.PlannedFor.LocalDateTime.ToShortDateString()} {task.PlannedFor.LocalDateTime.ToShortTimeString()}");
+                        continue;
+                    }
+
                     _openTasks.Remove(task);
                     OnNewLog("Debug", $"Task \"{task.Name}\" starting.");
                     //perform
@@ -89,6 +98,7 @@ namespace Toolbox.SchedulerTools
 
                         //happy :)
                         task.RetryCount = 0;
+                        OnNewLog("Debug", $"Task \"{task.Name}\" done.");
                     }
                     catch (Exception ex)
                     {
@@ -111,7 +121,6 @@ namespace Toolbox.SchedulerTools
                             continue;
                         }
                     }
-                    OnNewLog("Debug", $"Task \"{task.Name}\" done.");
 
                     //replan
                     if (task.SchedulingOptions.HasFlag(SchedulingOptions.RecurringByInterval) ||
@@ -201,8 +210,9 @@ namespace Toolbox.SchedulerTools
             OnNewLog("Info", $"Task {taskObject.Name} scheduled at {taskObject.PlannedFor.LocalDateTime.ToShortDateString()} {taskObject.PlannedFor.LocalDateTime.ToShortTimeString()}");
         }
 
-        protected virtual void UpdateToWaitTillServiceHours(TaskObject taskObject)
+        protected virtual bool UpdateToWaitTillServiceHours(TaskObject taskObject)
         {
+            bool result = false;
             var now = DateTimeOffset.Now;
             if (taskObject.PlannedFor < now) taskObject.PlannedFor = now;
 
@@ -211,6 +221,7 @@ namespace Toolbox.SchedulerTools
 
             if (currentTarget < taskObject.TimeWindowStart || currentTarget > taskObject.TimeWindowEnd)
             {
+                result = true;
                 //out of Timewindow
                 TimeSpan haveToWait = taskObject.TimeWindowStart - currentTarget;
                 if (currentTarget > taskObject.TimeWindowEnd)
@@ -219,7 +230,7 @@ namespace Toolbox.SchedulerTools
                 }
                 taskObject.PlannedFor = taskObject.PlannedFor.Add(haveToWait);
             }
-
+            return result;
         }
 
         public virtual void ReplanFor(string name, DateTimeOffset start)
@@ -233,6 +244,11 @@ namespace Toolbox.SchedulerTools
             //start worker loop if not already running.
             EnsureLoopRunning();
         }
+
+
+
+
+
 
         public virtual void RemoveFromPlanning(string name)
         {
