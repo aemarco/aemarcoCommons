@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Contracts.Api.RequestObjects
 {
@@ -65,9 +66,23 @@ namespace Contracts.Api.RequestObjects
         /// </summary>
         public int DesiredAmount { get; set; } = 1;
 
+
+
+        [JsonIgnore]
+        public string Signature
+        {
+            get
+            {
+                if (CategoryIds?.Any() ?? false) CategoryIds = CategoryIds.OrderBy(x => x).ToList();
+                if (Categories?.Any() ?? false) Categories = Categories.OrderBy(x => x).ToList();
+                if (Extensions?.Any() ?? false) Extensions = Extensions.OrderBy(x => x).ToList();
+                return this.ToString();
+            }
+        }
         public override string ToString()
         {
             return JsonConvert.SerializeObject(this, Formatting.Indented);
         }
+
     }
 }
