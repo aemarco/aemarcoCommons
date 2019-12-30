@@ -61,8 +61,12 @@ namespace Contracts.Api.RequestObjects
         /// </summary>
         public bool FavoritesOnly { get; set; }
 
+
+
+
         /// <summary>
-        /// defines how many results are desired for this request
+        /// defines how many results are desired for this request,
+        /// irrelevant for Signature
         /// </summary>
         public int DesiredAmount { get; set; } = 1;
 
@@ -76,7 +80,11 @@ namespace Contracts.Api.RequestObjects
                 if (CategoryIds?.Any() ?? false) CategoryIds = CategoryIds.OrderBy(x => x).ToList();
                 if (Categories?.Any() ?? false) Categories = Categories.OrderBy(x => x).ToList();
                 if (Extensions?.Any() ?? false) Extensions = Extensions.OrderBy(x => x).ToList();
-                return this.ToString();
+                var current = DesiredAmount;
+                DesiredAmount = 0;
+                var signature = this.ToString();
+                DesiredAmount = current;
+                return signature;
             }
         }
         public override string ToString()
