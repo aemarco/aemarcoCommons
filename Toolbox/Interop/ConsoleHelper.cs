@@ -1,12 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Text;
 
-namespace WinTools.WindTools
+namespace Toolbox.Interop
 {
-    public class ConsoleHide
+    public static class ConsoleHelper
     {
+
+        #region hide/show
+
         private const int SW_HIDE = 0;
         private const int SW_SHOW = 5;
+
+        [DllImport("kernel32.dll")]
+        static extern IntPtr GetConsoleWindow();
+        [DllImport("user32.dll")]
+        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
         public static void Hide()
         {
@@ -19,13 +29,8 @@ namespace WinTools.WindTools
             ShowWindow(handle, SW_SHOW);
         }
 
-        #region winApi
-
-        [DllImport("kernel32.dll")]
-        static extern IntPtr GetConsoleWindow();
-        [DllImport("user32.dll")]
-        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
         #endregion
+
+
     }
 }

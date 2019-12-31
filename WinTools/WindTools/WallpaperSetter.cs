@@ -1,17 +1,16 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Microsoft.Win32;
-using System.Runtime.InteropServices;
 
-
-namespace WinTools.WindTools
+namespace Toolbox.ActOnWindowsTools
 {
     public class WallpaperSetter
     {
@@ -20,7 +19,7 @@ namespace WinTools.WindTools
         public const string VIRTUALSCREEN_NAME = "Virtual";
         private readonly string _defaultBackgroundFile;
         private WallpaperMode _wallMode;
-        
+
         private readonly Dictionary<Monitor, List<string>> _monitorDictionary;
         protected readonly HttpClient _client;
 
@@ -364,14 +363,14 @@ namespace WinTools.WindTools
         Fill,
         Tile
     }
-    
+
 
     internal enum WallpaperSetMode
     {
         VirtualScreen,
         IndividualScreens
     }
-    
+
     internal class Monitor
     {
 
@@ -404,15 +403,15 @@ namespace WinTools.WindTools
             DeviceName = name;
             WallpaperMode = mode;
         }
-        
-        
+
+
         #endregion
 
         #region props
 
         internal string DeviceName { get; }
         public WallpaperMode WallpaperMode { get; internal set; }
-        
+
         #endregion
 
         #region private

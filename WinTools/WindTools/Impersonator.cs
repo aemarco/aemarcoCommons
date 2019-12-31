@@ -1,28 +1,33 @@
-﻿namespace WinTools.WindTools
+﻿using System;
+using System.ComponentModel;
+using System.Runtime.InteropServices;
+using System.Security.Permissions;
+using System.Security.Principal;
+
+namespace WinTools.WindTools
 {
-
-    using System;
-    using System.ComponentModel;
-    using System.Runtime.InteropServices;
-    using System.Security.Permissions;
-    using System.Security.Principal;
-
     public class Impersonator : IDisposable
     {
-        [DllImport("advapi32.dll", SetLastError = true)]
-        public static extern bool LogonUser(String lpszUsername, String lpszDomain,
-        String lpszPassword, int dwLogonType, int dwLogonProvider, ref IntPtr phToken);
 
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
-        public extern static bool CloseHandle(IntPtr handle);
 
-        private const int LOGON32_PROVIDER_DEFAULT = 0;
+        [DllImport("advapi32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        private static extern bool LogonUser(string lpszUsername,
+                                            string lpszDomain,
+                                            string lpszPassword,
+                                            int dwLogonType,
+                                            int dwLogonProvider,
+                                            ref IntPtr phToken);
+
+        [DllImport("Kernel32")]
+        private extern static bool CloseHandle(IntPtr handle);
+
+
+
+
         private const int LOGON32_LOGON_INTERACTIVE = 2;
-        private readonly IntPtr m_Token;
-
+        private const int LOGON32_PROVIDER_DEFAULT = 0;
+        private IntPtr m_Token;
         private readonly WindowsImpersonationContext m_Context = null;
-
-
         [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
         public Impersonator(string domain, string username, string password)
         {
@@ -43,13 +48,34 @@
             m_Context = identity.Impersonate();
         }
 
+
+
         [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
         public void Dispose()
         {
-            m_Context.Undo();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            // If disposing equals true, dispose all resources
+            if (disposing)
+            {
+                // Dispose managed resources.
+                m_Context.Undo();
+                m_Context.Dispose();
+            }
+
+            // clean up unmanaged resources here.
             CloseHandle(m_Token);
+            m_Token = IntPtr.Zero;
         }
 
 
+
     }
+
+
+
 }

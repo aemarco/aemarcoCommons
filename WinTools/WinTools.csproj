@@ -51,9 +51,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WindTools\Deployment.cs" />
-    <Compile Include="WindTools\DiskSpace.cs" />
     <Compile Include="WindTools\Impersonator.cs" />
-    <Compile Include="WindTools\ConsoleHide.cs" />
     <Compile Include="WindTools\OSVersionInfoClass.cs" />
     <Compile Include="WindTools\Register.cs" />
     <Compile Include="WindTools\WallpaperSetter.cs" />
@@ -98,6 +96,10 @@
     <ProjectReference Include="..\Extensions\Extensions.csproj">
       <Project>{34dcd123-ac8e-4059-8267-070a8daa38a4}</Project>
       <Name>Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Toolbox\Toolbox.csproj">
+      <Project>{8da7ac1a-7de3-4964-bbb4-1f0a67333fbf}</Project>
+      <Name>Toolbox</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
