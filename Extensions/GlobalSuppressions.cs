@@ -4,3 +4,4 @@
 // a specific target and scoped to a namespace, type, member, etc.
 
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "<Ausstehend>", Scope = "member", Target = "~M:Extensions.contentExtensions.RegexExtensions.IsValidEmail(System.String)~System.Boolean")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "<Ausstehend>", Scope = "member", Target = "~M:Extensions.netExtensions.UriExtensions.Ping(System.Uri)~System.Boolean")]
