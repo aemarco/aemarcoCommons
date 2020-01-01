@@ -7,6 +7,7 @@ using System.Text;
 
 namespace Toolbox.Interop
 {
+    [Obsolete("Use \"DriveInfo\" instead.")]
     public static class DiskHelper
     {
         #region Diskspace
@@ -74,10 +75,5 @@ namespace Toolbox.Interop
         }
 
         #endregion
-
-
-
-
-
     }
 }
