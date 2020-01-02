@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Debugging\ClickOnceSetting.cs" />
     <Compile Include="Interop\Impersonator.cs" />
     <Compile Include="Interop\OSVersionInfoClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
