@@ -50,7 +50,9 @@ namespace ToolboxOld.Interop
 
 
 
-        [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
+        #region IDisposable
+
+        private bool _disposed = false;
         public void Dispose()
         {
             Dispose(true);
@@ -59,20 +61,28 @@ namespace ToolboxOld.Interop
 
         protected virtual void Dispose(bool disposing)
         {
-            // If disposing equals true, dispose all resources
+            if (_disposed) return;
+
             if (disposing)
             {
-                // Dispose managed resources.
+                //managed resources here
                 m_Context.Undo();
                 m_Context.Dispose();
             }
 
-            // clean up unmanaged resources here.
+            //unmanaged resources here
             CloseHandle(m_Token);
             m_Token = IntPtr.Zero;
+
+            _disposed = true;
         }
 
+        ~Impersonator()
+        {
+            Dispose(false);
+        }
 
+        #endregion
 
     }
 
