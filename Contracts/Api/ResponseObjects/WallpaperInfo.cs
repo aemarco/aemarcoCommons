@@ -15,6 +15,11 @@ namespace Contracts.Api.ResponseObjects
         /// </summary>
         public string Url { get; set; }
         /// <summary>
+        /// delivered when using DesiredWidth and DesiredHeight
+        /// attach this to the Url, and you get the already cropped picture
+        /// </summary>
+        public string CropQuery { get; set; }
+        /// <summary>
         /// url pointing to the original source (can be null)
         /// </summary>
         public string SourceUrl { get; set; }
@@ -50,6 +55,19 @@ namespace Contracts.Api.ResponseObjects
         /// "," seperated tags (entirely free text stuff)
         /// </summary>
         public string Tagstring { get; set; }
+        /// <summary>
+        /// is true if this wallpaper is favorized by the user
+        /// </summary>
+        public bool IsFavorite { get; set; }
+
+
+        public bool FromCache { get; set; }
+
+
+
+
+
+
 
         //for anonym Downloader
         /// <summary>

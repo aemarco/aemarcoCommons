@@ -1,4 +1,5 @@
-﻿using Contracts.Api.RequestObjects;
+﻿using Contracts.Api.Interfaces;
+using Contracts.Api.RequestObjects;
 using System;
 using System.Text;
 
@@ -77,11 +78,6 @@ namespace Extensions.contentExtensions
             return result;
         }
 
-        public static void ToRealAdult(this WallpaperFilterReqObject request, int userMax)
-        {
-            request.MinAdult = request.MinAdult.ToRealAdult(userMax);
-            request.MaxAdult = request.MaxAdult.ToRealAdult(userMax);
 
-        }
     }
 }
