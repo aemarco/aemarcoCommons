@@ -1,5 +1,4 @@
-﻿using Contracts.Api.Interfaces;
-using Contracts.Api.RequestObjects;
+﻿using Contracts.Api.RequestObjects;
 using System;
 using System.Text;
 
