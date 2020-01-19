@@ -55,7 +55,7 @@ namespace Extensions.contentExtensions
 
         public static int ToUserMaxAdultLevel(this WallpaperFilterRequest request, int usersMax)
         {
-            if (string.IsNullOrWhiteSpace(request.Search))
+            if (!string.IsNullOrWhiteSpace(request.Search))
             {
                 if (request.Search.Contains("idkfa")) usersMax = 101;
                 else if (request.Search.Contains("idfa")) usersMax = 79;
