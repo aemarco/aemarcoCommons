@@ -1,6 +1,7 @@
 ﻿using Contracts.Api.RequestObjects;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Extensions.contentExtensions
@@ -44,15 +45,43 @@ namespace Extensions.contentExtensions
         }
 
 
+        public static bool ToUserIsSupervisorInfo(this WallpaperFilterRequest request, bool isSupervisor)
+        {
+            var cheat = CheatCode.Cheats.FirstOrDefault(x => request.Search?.Contains(x.Key) ?? false);
+            if (cheat != null)
+            {
+                isSupervisor |= cheat.IsSupervisor;
+            }
+            return isSupervisor;
+        }
+
         public static int ToUserMaxAdultLevel(this WallpaperFilterRequest request, int usersMax)
         {
-            if (!string.IsNullOrWhiteSpace(request.Search))
+            var cheat = CheatCode.Cheats.FirstOrDefault(x => request.Search?.Contains(x.Key) ?? false);
+            if (cheat != null)
             {
-                if (request.Search.Contains("idkfa")) usersMax = 101;
-                else if (request.Search.Contains("idfa")) usersMax = 79;
-                else if (request.Search.Contains("idka")) usersMax = 59;
+                usersMax = cheat.MaxAdult;
+
             }
             return usersMax;
         }
+
+        public static string ToCheatFreeSearch(this WallpaperFilterRequest request)
+        {
+            string result = request.Search;
+            if (!string.IsNullOrWhiteSpace(result))
+            {
+                foreach (var cheat in CheatCode.Cheats)
+                {
+                    result = result.Replace(cheat.Key, string.Empty);
+                }
+            }
+            return result;
+        }
+
+
+
+
+
     }
 }
