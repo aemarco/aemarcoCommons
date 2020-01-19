@@ -44,6 +44,15 @@ namespace Extensions.contentExtensions
         }
 
 
+
+
+
+
+
+
+
+
+
         public static int ToUserMaxAdultLevel(this WallpaperFilterRequest request, int usersMax)
         {
             if (string.IsNullOrWhiteSpace(request.Search))
