@@ -4,15 +4,18 @@ namespace Contracts
 {
     public static class Constants
     {
-        public static string WEBGIRLS_URL = "https://aemarco.myds.me";
+        // ReSharper disable IdentifierTypo
+        public const string WebgirlsUrl = "https://aemarco.myds.me";
+        
 
         //wallpaper
-        public static string CHANGER_EMAIL = "aeChanger@normal.com";
-        public static string DOWNLOADER_EMAIL = "aeChanger@normal.com";
-        public static string WATERMARK = "aemarco.myds.me";
+        public const string ChangerEmail = "aeChanger@normal.com";
+        public const string DownloaderEmail = "aeChanger@normal.com";
+        public const string Watermark = "aemarco.myds.me";
 
         //video
-        public static int TIME_UNTIL_VIDEOVIEW_COUTS_AS_PLAYED_SECONDS = 15;
+        public const int TimeUntilVideoViewCoutsAsPlayedSeconds = 15;
+        // ReSharper restore IdentifierTypo
 
     }
 }
