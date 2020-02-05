@@ -12,19 +12,19 @@ namespace ToolboxOld.Debugging
         public static void EnsureMaintainUserSettings(this ApplicationSettingsBase settings, string keyName)
         {
             var keyValue = settings[keyName];
-            var defaultValue = settings.Properties[keyName].DefaultValue;
-            if (keyValue == defaultValue)
+            var defaultValue = settings.Properties[keyName]?.DefaultValue;
+
+            if (keyValue != defaultValue) return;
+
+            foreach (SettingsProperty prop in settings.Properties)
             {
-                foreach (SettingsProperty prop in settings.Properties)
+                if (prop.Attributes.ContainsKey(typeof(UserScopedSettingAttribute)))
                 {
-                    if (prop.Attributes.ContainsKey(typeof(UserScopedSettingAttribute)))
-                    {
-                        object result = settings.GetPreviousVersion(prop.Name);
-                        settings[prop.Name] = result;
-                    }
+                    object result = settings.GetPreviousVersion(prop.Name);
+                    settings[prop.Name] = result;
                 }
-                settings.Save();
             }
+            settings.Save();
         }
     }
 }

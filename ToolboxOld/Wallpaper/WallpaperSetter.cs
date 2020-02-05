@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Toolbox.Interop;
+using Toolbox.MonitorTools;
 
 namespace ToolboxOld.Wallpaper
 {
@@ -38,30 +39,50 @@ namespace ToolboxOld.Wallpaper
             _defaultBackgroundFile = new FileInfo("CurrentWallpaper.jpg").FullName;
             _wallMode = wallMode;
 
-            _monitors = new List<Monitor>();
+            _monitors = GetMonitors().ToList();
+            _client = new HttpClient(new WebRequestHandler());
+        }
 
-            foreach (Screen scr in Screen.AllScreens)
+        private IEnumerable<Monitor> GetMonitors()
+        {
+            foreach (var scr in Screen.AllScreens)
             {
-                var mon = new Monitor(scr.Bounds, scr.DeviceName, _defaultBackgroundFile, _wallMode);
-                _monitors.Add(mon);
+                yield return CreateMonitor(scr);
             }
-            //adding Virtual Screen as well.
+
+            yield return CreateVirtualMonitor();
+        }
+
+        private Monitor CreateMonitor(Screen screen)
+        {
+            var targetRectangle = new Rectangle(
+                -Screen.AllScreens.Min(x => x.Bounds.X) + screen.Bounds.Left,
+                -Screen.AllScreens.Min(x => x.Bounds.Y) + screen.Bounds.Top,
+                screen.Bounds.Width,
+                screen.Bounds.Height);
+
+            return new Monitor(targetRectangle, screen.DeviceName, _defaultBackgroundFile, _wallMode);
+        }
+
+        private Monitor CreateVirtualMonitor()
+        {
             var allScreenRect = new Rectangle(
                 Screen.AllScreens.Min(x => x.Bounds.X),
                 Screen.AllScreens.Min(x => x.Bounds.Y),
                 SystemInformation.VirtualScreen.Width,
                 SystemInformation.VirtualScreen.Height);
             var virtualMon = new Monitor(allScreenRect, VIRTUALSCREEN_NAME, _defaultBackgroundFile, _wallMode);
-            _monitors.Add(virtualMon);
-
-            _client = new HttpClient(new WebRequestHandler());
+            return virtualMon;
         }
+
+
+
 
         #endregion
 
         #region props
 
-        public WallpaperMode Wallpapermode
+        public WallpaperMode WallpaperMode
         {
             get { return _wallMode; }
             set
@@ -75,10 +96,6 @@ namespace ToolboxOld.Wallpaper
             }
         }
 
-        public static int PercentLeftRightCutAllowed { get; set; }
-        public static int PercentTopBottomCutAllowed { get; set; }
-
-
         #endregion
 
         #region private
@@ -91,7 +108,7 @@ namespace ToolboxOld.Wallpaper
                 {
                     if (virtualScreen)
                     {
-                        var mon = _monitors.Where(x => x.DeviceName == VIRTUALSCREEN_NAME).First();
+                        var mon = _monitors.First(x => x.DeviceName == VIRTUALSCREEN_NAME);
                         mon.DrawToGraphics(virtualScreenGraphic);
                     }
                     else
@@ -230,6 +247,7 @@ namespace ToolboxOld.Wallpaper
 
         #region statics
 
+
         /// <summary>
         /// Returns true if the Image can be snapped to the desired Monitor.
         /// Tolerated cutting amount can be adjusted PercentLeftRightCutAllowed and PercentTopBottomCutAllowed
@@ -239,6 +257,7 @@ namespace ToolboxOld.Wallpaper
         /// <param name="monitorWidth">Width of Monitor</param>
         /// <param name="monitorHeight">Height of Monitor</param>
         /// <returns></returns>
+        [Obsolete("Not used in WallpaperChanger")]
         public static bool CanBeSnapped(int imageWidth,
                                         int imageHeight,
                                         int monitorWidth,
@@ -250,34 +269,7 @@ namespace ToolboxOld.Wallpaper
             return (imageRatio <= maxRatio && imageRatio >= minRatio);
         }
 
-        /// <summary>
-        /// returns the min and max Ratio for which Pictures can be Snapped based on allowed % cuts
-        /// </summary>
-        /// <param name="monitorWidth"></param>
-        /// <param name="monitorHeight"></param>
-        /// <param name="percentLeftRightCutAllowed"></param>
-        /// <param name="percentTopBottomCutAllowed"></param>
-        /// <returns>minRatio and maxRatio</returns>
-        public static (double minRatio, double maxRatio) GetRatioRange(int monitorWidth,
-                                                                       int monitorHeight,
-                                                                       int percentLeftRightCutAllowed = -1,
-                                                                       int percentTopBottomCutAllowed = -1)
-        {
-            if (percentLeftRightCutAllowed == -1) percentLeftRightCutAllowed = PercentLeftRightCutAllowed;
-            if (percentTopBottomCutAllowed == -1) percentTopBottomCutAllowed = PercentTopBottomCutAllowed;
-
-            double maxWidth = 100.0 * monitorWidth / (100 - percentLeftRightCutAllowed);
-            double maxHeight = 100.0 * monitorHeight / (100 - percentTopBottomCutAllowed);
-
-            var minratio = monitorWidth / maxHeight;
-            var maxratio = maxWidth / monitorHeight;
-            if (maxratio == double.PositiveInfinity)
-                maxratio = double.MaxValue;
-
-            return (Math.Round(minratio, 2), Math.Round(maxratio, 2));
-        }
-
-
+        [Obsolete("Not used in WallpaperChanger")]
         public static (double minRatio, double maxRatio) GetRatioRange(int monitorWidth,
                                                                        int monitorHeight,
                                                                        int cuttingTolerance)
@@ -286,260 +278,35 @@ namespace ToolboxOld.Wallpaper
         }
 
 
-        #endregion
-
-    }
-    public enum WallpaperMode
-    {
-        [WallpaperModeWindowsMapping(WindowsWallpaperStyle.Fit)]
-        Fit,
-        [WallpaperModeWindowsMapping(WindowsWallpaperStyle.Fill)]
-        AllowFill,
-        [WallpaperModeWindowsMapping(WindowsWallpaperStyle.Fill)]
-        AllowFillForceCut,
-        [WallpaperModeWindowsMapping(WindowsWallpaperStyle.Fill)]
-        Fill
-    }
-
-    internal sealed class WallpaperModeWindowsMappingAttribute : Attribute
-    {
-        public WallpaperModeWindowsMappingAttribute(WindowsWallpaperStyle windowsWallpaperStyle)
-        {
-            WindowsWallpaperStyle = windowsWallpaperStyle;
-        }
-        public WindowsWallpaperStyle WindowsWallpaperStyle { get; }
-    }
-
-    internal class Monitor
-    {
-
-        #region ctor
-
-        private Rectangle _rectangle;
-        private Image _wallpaper;
-
-
-        internal Monitor(Rectangle rect, string name, string backgroundFile, WallpaperMode mode)
-        {
-            if (String.IsNullOrWhiteSpace(backgroundFile) || String.IsNullOrWhiteSpace(name))
-            {
-                throw new NullReferenceException("Monitor kann nicht initialisiert werden");
-            }
-
-
-            //set mandatory fields 
-            _rectangle = new Rectangle(
-                GetRectangleX(rect),
-                GetRectangleY(rect),
-                rect.Width,
-                rect.Height);
-
-
-            _wallpaper = GetPreviousImage(backgroundFile, _rectangle);
-            DeviceName = name;
-            WallpaperMode = mode;
-        }
-
-
-        #endregion
-
-        #region props
-
-        internal string DeviceName { get; }
-        public WallpaperMode WallpaperMode { get; internal set; }
-
-        #endregion
-
-        #region private
-
-        private int GetRectangleX(Rectangle rect)
-        {
-            var minX = Screen.AllScreens.Min(x => x.Bounds.X);
-            int result = -minX + rect.Left;
-            return result;
-        }
-        private int GetRectangleY(Rectangle rect)
-        {
-            var minY = Screen.AllScreens.Min(x => x.Bounds.Y);
-            int result = -minY + rect.Top;
-            return result;
-        }
-        private Bitmap GetPreviousImage(string backgroundFile, Rectangle rectangle)
-        {
-            Bitmap result = null;
-
-            if (File.Exists(backgroundFile))
-            {
-                try
-                {
-                    using (Bitmap old = new Bitmap(backgroundFile))
-                    {
-                        if (old.Width >= (rectangle.X + rectangle.Width) &&
-                            old.Height >= (rectangle.Y + rectangle.Height))
-                        {
-                            result = new Bitmap(old.Clone(rectangle, old.PixelFormat));
-                        }
-                        else
-                        {
-                            throw new FileLoadException("Image size not compatible.");
-                        }
-                    }
-                }
-                catch
-                {
-                    File.Delete(backgroundFile);
-                    result = new Bitmap(_rectangle.Width, _rectangle.Height);
-                }
-            }
-            return result;
-        }
-
 
         /// <summary>
-        /// Sets the Picture as big as possible with Black bars if needed
+        /// returns the min and max Ratio for which Pictures can be Snapped based on allowed % cuts
         /// </summary>
-        /// <param name="readyToUsePicture"></param>
-        private void SetDirectWallpaper(Image readyToUsePicture)
+        /// <param name="monitorWidth"></param>
+        /// <param name="monitorHeight"></param>
+        /// <param name="percentLeftRightCutAllowed"></param>
+        /// <param name="percentTopBottomCutAllowed"></param>
+        /// <returns>minRatio and maxRatio</returns>
+        [Obsolete("Not used in WallpaperChanger")]
+        public static (double minRatio, double maxRatio) GetRatioRange(int monitorWidth,
+            int monitorHeight,
+            int percentLeftRightCutAllowed = -1,
+            int percentTopBottomCutAllowed = -1)
         {
-            float heightRatio = (float)_rectangle.Height / (float)readyToUsePicture.Height;
-            float widthRatio = (float)_rectangle.Width / (float)readyToUsePicture.Width;
+            if (percentLeftRightCutAllowed == -1) percentLeftRightCutAllowed = Monitor.PercentLeftRightCutAllowed;
+            if (percentTopBottomCutAllowed == -1) percentTopBottomCutAllowed = Monitor.PercentTopBottomCutAllowed;
 
-            int height, width;
-            int x = 0;
-            int y = 0;
+            double maxWidth = 100.0 * monitorWidth / (100 - percentLeftRightCutAllowed);
+            double maxHeight = 100.0 * monitorHeight / (100 - percentTopBottomCutAllowed);
 
-            if (heightRatio < widthRatio) //Bild schmaler als Monitor
-            {
-                width = (int)((float)readyToUsePicture.Width * heightRatio);
-                height = (int)((float)readyToUsePicture.Height * heightRatio);
-                x = (int)((float)(_rectangle.Width - width) / 2f);
-            }
-            else //Bild breiter als Monitor
-            {
-                width = (int)((float)readyToUsePicture.Width * widthRatio);
-                height = (int)((float)readyToUsePicture.Height * widthRatio);
-                y = (int)((float)(_rectangle.Height - height) / 2f);
-            }
+            var minratio = monitorWidth / maxHeight;
+            var maxratio = maxWidth / monitorHeight;
+            if (double.IsPositiveInfinity(maxratio))
+                maxratio = double.MaxValue;
 
-            Rectangle drawTo = new Rectangle(x, y, width, height);
-
-            Bitmap targetImg = new Bitmap(_rectangle.Width, _rectangle.Height);
-            Graphics g = Graphics.FromImage(targetImg);
-            g.DrawImage(readyToUsePicture, drawTo);
-            _wallpaper = targetImg;
+            return (Math.Round(minratio, 2), Math.Round(maxratio, 2));
         }
-        /// <summary>
-        /// Sets the Picture and fills the screen by cutting the Picture
-        /// </summary>
-        /// <param name="pictureToBeCutted"></param>
-        private void SetSnappedWallpaper(Image pictureToBeCutted)
-        {
-            Rectangle rect;
-            double targetRatio = 1.0 * _rectangle.Width / _rectangle.Height;
-
-            if (targetRatio < (1.0 * pictureToBeCutted.Width / pictureToBeCutted.Height))
-            {   // ratio zu groß
-                int targetWidth = (int)(targetRatio * pictureToBeCutted.Height);
-                rect = new Rectangle(0, 0, targetWidth, pictureToBeCutted.Height);
-                rect.X = (pictureToBeCutted.Width - rect.Width) / 2;
-            }
-            else
-            {
-                // ratio zu klein
-                int targetHeight = (int)(pictureToBeCutted.Width / targetRatio);
-                rect = new Rectangle(0, 0, pictureToBeCutted.Width, targetHeight);
-                rect.Y = (pictureToBeCutted.Height - rect.Height) / 2;
-            }
-
-            if (rect.X == 0 && rect.Y == 0)
-            {   // ratio stimmt überein
-                SetDirectWallpaper(pictureToBeCutted);
-            }
-            else
-            {
-                SetDirectWallpaper(((Bitmap)pictureToBeCutted).Clone(rect, pictureToBeCutted.PixelFormat));
-            }
-        }
-        /// <summary>
-        /// Cuts the Picture by the allowed amount and sets it as big as possible with black bars.
-        /// Should be called only if it can´t be "Snapped"
-        /// </summary>
-        /// <param name="pictureToBeCutted"></param>
-        private void SetCuttedWallpaper(Image pictureToBeCutted)
-        {
-            Rectangle rect;
-            double targetRatio = 1.0 * _rectangle.Width / _rectangle.Height;
-
-            if (targetRatio < 1.0 * pictureToBeCutted.Width / pictureToBeCutted.Height)
-            {   // ratio zu groß
-                double pixelsToCut = 1.0 * pictureToBeCutted.Width / 100 * WallpaperSetter.PercentLeftRightCutAllowed;
-                rect = new Rectangle(0, 0, pictureToBeCutted.Width - (int)pixelsToCut, pictureToBeCutted.Height);
-                rect.X = (pictureToBeCutted.Width - rect.Width) / 2;
-            }
-            else
-            {   // ratio zu klein
-                double pixelsToCut = 1.0 * pictureToBeCutted.Height / 100 * WallpaperSetter.PercentTopBottomCutAllowed;
-                rect = new Rectangle(0, 0, pictureToBeCutted.Width, pictureToBeCutted.Height - (int)pixelsToCut);
-                rect.Y = (pictureToBeCutted.Height - rect.Height) / 2;
-            }
-
-            SetDirectWallpaper(((Bitmap)pictureToBeCutted).Clone(rect, pictureToBeCutted.PixelFormat));
-        }
-
         #endregion
 
-        internal void SetWallpaper(Image wall)
-        {
-            if (wall == null)
-            {
-                throw new NullReferenceException("Wallpaper can´t be null");
-            }
-
-            switch (WallpaperMode)
-            {
-                case WallpaperMode.AllowFill:
-                    {
-                        if (WallpaperSetter.CanBeSnapped(wall.Width, wall.Height, _rectangle.Width, _rectangle.Height))
-                        {
-                            SetSnappedWallpaper(wall);
-                        }
-                        else
-                        {
-                            SetDirectWallpaper(wall);
-                        }
-                        break;
-                    }
-                case WallpaperMode.AllowFillForceCut:
-                    {
-                        if (WallpaperSetter.CanBeSnapped(wall.Width, wall.Height, _rectangle.Width, _rectangle.Height))
-                        {
-                            SetSnappedWallpaper(wall);
-                        }
-                        else
-                        {
-                            SetCuttedWallpaper(wall);
-                        }
-                        break;
-                    }
-                case WallpaperMode.Fit:
-                    {
-                        SetDirectWallpaper(wall);
-                        break;
-                    }
-                case WallpaperMode.Fill:
-                    {
-                        SetSnappedWallpaper(wall);
-                        break;
-                    }
-            }
-        }
-
-        internal void DrawToGraphics(Graphics g)
-        {
-            g.DrawImage(_wallpaper, _rectangle);
-        }
-
-
     }
-
 }

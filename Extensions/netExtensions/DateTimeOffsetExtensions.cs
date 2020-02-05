@@ -4,14 +4,14 @@ namespace Extensions.netExtensions
 {
     public static class DateTimeOffsetExtensions
     {
-        public static bool IsYoungerThan(this DateTimeOffset timeStamp, TimeSpan duration)
+        public static bool IsYoungerThan(this DateTimeOffset timeStamp, TimeSpan timeSpan)
         {
-            return timeStamp.Add(duration) > DateTimeOffset.Now;
+            return timeStamp.Add(timeSpan) > DateTimeOffset.Now;
         }
 
-        public static bool IsOlderThan(this DateTimeOffset timeOffset, TimeSpan duration)
+        public static bool IsOlderThan(this DateTimeOffset timeStamp, TimeSpan timeSpan)
         {
-            return !timeOffset.IsYoungerThan(duration);
+            return timeStamp.Add(timeSpan) < DateTimeOffset.Now;
         }
 
     }
