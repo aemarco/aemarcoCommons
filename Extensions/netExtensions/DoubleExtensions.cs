@@ -14,7 +14,7 @@ namespace Extensions.netExtensions
         }
 
 
-        public static bool IsNearlyEqual(this double number, double compareValue, double epsilon)
+        public static bool IsNearlyEqual(this double number, double compareValue, double epsilon = 0.0000001d)
         {
             const double minNormal = 2.2250738585072014E-308d;
             var absA = Math.Abs(number);

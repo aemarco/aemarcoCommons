@@ -2,22 +2,47 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Newtonsoft.Json;
 
 // http://www.codeproject.com/Articles/73000/Getting-Operating-System-Version-Info-Even-for-Win
-//https://en.wikipedia.org/wiki/List_of_Microsoft_Windows_versions
+// https://en.wikipedia.org/wiki/List_of_Microsoft_Windows_versions
 
 //Thanks to Member 7861383, Scott Vickery for the Windows 8.1 update and workaround.
 //I have moved it to the beginning of the Name property, though...
 
-//Thakts to Brisingr Aerowing for help with the Windows 10 adapatation
+//Thanks to Brisingr Aerowing for help with the Windows 10 adapatation
+
+
+
 
 namespace ToolboxOld.Interop
 {
     /// <summary>
     /// Provides detailed information about the host operating system.
     /// </summary>
+    
+#pragma warning disable CA1060 // Pinvokes in native Methodenklasse verschieben
     public static class OSVersionInfo
+#pragma warning restore CA1060 // Pinvokes in native Methodenklasse verschieben
+
     {
+        public static object AsObject()
+        {
+            return new 
+            {
+                Name,
+                Edition,
+                OSVersionInfo.ServicePack,
+                BuildVersion = OSVersionInfo.BuildVersion.ToString(),
+                Version = OSVersionInfo.Version.ToString(),
+                ProgramBits = OSVersionInfo.ProgramBits.ToString(),
+                OSBits = OSVersionInfo.OSBits.ToString(),
+                ProcessorBits = OSVersionInfo.ProcessorBits.ToString()
+            };
+        }
+
+
+
         #region ENUMS
         public enum SoftwareArchitecture
         {
@@ -47,9 +72,13 @@ namespace ToolboxOld.Interop
         {
             get
             {
+#pragma warning disable IDE0059 // Unnötige Zuweisung eines Werts.
                 SoftwareArchitecture pbits = SoftwareArchitecture.Unknown;
+#pragma warning restore IDE0059 // Unnötige Zuweisung eines Werts.
 
+#pragma warning disable IDE0059 // Unnötige Zuweisung eines Werts.
                 System.Collections.IDictionary test = Environment.GetEnvironmentVariables();
+#pragma warning restore IDE0059 // Unnötige Zuweisung eines Werts.
 
                 switch (IntPtr.Size * 8)
                 {
@@ -74,7 +103,9 @@ namespace ToolboxOld.Interop
         {
             get
             {
+#pragma warning disable IDE0059 // Unnötige Zuweisung eines Werts.
                 SoftwareArchitecture osbits = SoftwareArchitecture.Unknown;
+#pragma warning restore IDE0059 // Unnötige Zuweisung eines Werts.
 
                 switch (IntPtr.Size * 8)
                 {
@@ -128,7 +159,9 @@ namespace ToolboxOld.Interop
                             break;
                     }
                 }
+#pragma warning disable CA1031 // Keine allgemeinen Ausnahmetypen abfangen
                 catch
+#pragma warning restore CA1031 // Keine allgemeinen Ausnahmetypen abfangen
                 {
                     // Ignore        
                 }
@@ -153,10 +186,10 @@ namespace ToolboxOld.Interop
                 string edition = String.Empty;
 
                 OperatingSystem osVersion = Environment.OSVersion;
-                var osVersionInfo = new OSVERSIONINFOEX
-                {
-                    dwOSVersionInfoSize = Marshal.SizeOf(typeof(OSVERSIONINFOEX))
-                };
+#pragma warning disable IDE0017 // Initialisierung von Objekten vereinfachen
+                OSVERSIONINFOEX osVersionInfo = new OSVERSIONINFOEX();
+#pragma warning restore IDE0017 // Initialisierung von Objekten vereinfachen
+                osVersionInfo.dwOSVersionInfoSize = Marshal.SizeOf(typeof(OSVERSIONINFOEX));
 
                 if (GetVersionEx(ref osVersionInfo))
                 {
@@ -256,9 +289,12 @@ namespace ToolboxOld.Interop
                     #region VERSION 6
                     else if (majorVersion == 6)
                     {
+#pragma warning disable IDE0018 // Inlinevariablendeklaration
+                        int ed;
+#pragma warning restore IDE0018 // Inlinevariablendeklaration
                         if (GetProductInfo(majorVersion, minorVersion,
                             osVersionInfo.wServicePackMajor, osVersionInfo.wServicePackMinor,
-                            out int ed))
+                            out ed))
                         {
                             switch (ed)
                             {
@@ -499,10 +535,10 @@ namespace ToolboxOld.Interop
                 string name = "unknown";
 
                 OperatingSystem osVersion = Environment.OSVersion;
-                var osVersionInfo = new OSVERSIONINFOEX
-                {
-                    dwOSVersionInfoSize = Marshal.SizeOf(typeof(OSVERSIONINFOEX))
-                };
+#pragma warning disable IDE0017 // Initialisierung von Objekten vereinfachen
+                OSVERSIONINFOEX osVersionInfo = new OSVERSIONINFOEX();
+#pragma warning restore IDE0017 // Initialisierung von Objekten vereinfachen
+                osVersionInfo.dwOSVersionInfoSize = Marshal.SizeOf(typeof(OSVERSIONINFOEX));
 
                 if (GetVersionEx(ref osVersionInfo))
                 {
@@ -517,12 +553,16 @@ namespace ToolboxOld.Interop
 
                         // For applications that have been manifested for Windows 8.1 & Windows 10. Applications not manifested for 8.1 or 10 will return the Windows 8 OS version value (6.2). 
                         // By reading the registry, we'll get the exact version - meaning we can even compare against  Win 8 and Win 8.1.
-                        string exactVersion = RegistryRead(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "CurrentVersion", string.Empty);
+                        string exactVersion = RegistryRead(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "CurrentVersion", "");
                         if (!string.IsNullOrEmpty(exactVersion))
                         {
                             string[] splitResult = exactVersion.Split('.');
+#pragma warning disable CA1305 // IFormatProvider angeben
                             majorVersion = Convert.ToInt32(splitResult[0]);
+#pragma warning restore CA1305 // IFormatProvider angeben
+#pragma warning disable CA1305 // IFormatProvider angeben
                             minorVersion = Convert.ToInt32(splitResult[1]);
+#pragma warning restore CA1305 // IFormatProvider angeben
                         }
                         if (IsWindows10())
                         {
@@ -697,15 +737,21 @@ namespace ToolboxOld.Interop
 
         #region SYSTEMMETRICS
         [DllImport("user32")]
+#pragma warning disable CA1401 // P/Invokes dürfen nicht sichtbar sein
         public static extern int GetSystemMetrics(int nIndex);
+#pragma warning restore CA1401 // P/Invokes dürfen nicht sichtbar sein
         #endregion SYSTEMMETRICS
 
         #region SYSTEMINFO
         [DllImport("kernel32.dll")]
+#pragma warning disable CA1401 // P/Invokes dürfen nicht sichtbar sein
         public static extern void GetSystemInfo([MarshalAs(UnmanagedType.Struct)] ref SYSTEM_INFO lpSystemInfo);
+#pragma warning restore CA1401 // P/Invokes dürfen nicht sichtbar sein
 
         [DllImport("kernel32.dll")]
+#pragma warning disable CA1401 // P/Invokes dürfen nicht sichtbar sein
         public static extern void GetNativeSystemInfo([MarshalAs(UnmanagedType.Struct)] ref SYSTEM_INFO lpSystemInfo);
+#pragma warning restore CA1401 // P/Invokes dürfen nicht sichtbar sein
         #endregion SYSTEMINFO
 
         #endregion GET
@@ -731,24 +777,63 @@ namespace ToolboxOld.Interop
 
         #region SYSTEM_INFO
         [StructLayout(LayoutKind.Sequential)]
+#pragma warning disable CA1815 // Equals und Gleichheitsoperator für Werttypen außer Kraft setzen
+#pragma warning disable CA1815 // Equals und Gleichheitsoperator für Werttypen außer Kraft setzen
+#pragma warning disable CA1707 // Bezeichner dürfen keine Unterstriche enthalten
+#pragma warning disable CA1034 // Geschachtelte Typen dürfen nicht sichtbar sein
         public struct SYSTEM_INFO
+#pragma warning restore CA1034 // Geschachtelte Typen dürfen nicht sichtbar sein
+#pragma warning restore CA1707 // Bezeichner dürfen keine Unterstriche enthalten
+#pragma warning restore CA1815 // Equals und Gleichheitsoperator für Werttypen außer Kraft setzen
+#pragma warning restore CA1815 // Equals und Gleichheitsoperator für Werttypen außer Kraft setzen
         {
             internal _PROCESSOR_INFO_UNION uProcessorInfo;
+#pragma warning disable CA1051 // Sichtbare Instanzfelder nicht deklarieren
             public uint dwPageSize;
+#pragma warning restore CA1051 // Sichtbare Instanzfelder nicht deklarieren
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2111:PointersShouldNotBeVisible")]
+#pragma warning disable CA1051 // Sichtbare Instanzfelder nicht deklarieren
             public IntPtr lpMinimumApplicationAddress;
+#pragma warning restore CA1051 // Sichtbare Instanzfelder nicht deklarieren
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2111:PointersShouldNotBeVisible")]
+#pragma warning disable CA1051 // Sichtbare Instanzfelder nicht deklarieren
             public IntPtr lpMaximumApplicationAddress;
+#pragma warning restore CA1051 // Sichtbare Instanzfelder nicht deklarieren
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2111:PointersShouldNotBeVisible")]
+#pragma warning disable CA1051 // Sichtbare Instanzfelder nicht deklarieren
             public IntPtr dwActiveProcessorMask;
+#pragma warning restore CA1051 // Sichtbare Instanzfelder nicht deklarieren
+#pragma warning disable CA1051 // Sichtbare Instanzfelder nicht deklarieren
             public uint dwNumberOfProcessors;
+#pragma warning restore CA1051 // Sichtbare Instanzfelder nicht deklarieren
+#pragma warning disable CA1051 // Sichtbare Instanzfelder nicht deklarieren
             public uint dwProcessorType;
+#pragma warning restore CA1051 // Sichtbare Instanzfelder nicht deklarieren
+#pragma warning disable CA1051 // Sichtbare Instanzfelder nicht deklarieren
             public uint dwAllocationGranularity;
+#pragma warning restore CA1051 // Sichtbare Instanzfelder nicht deklarieren
+#pragma warning disable CA1051 // Sichtbare Instanzfelder nicht deklarieren
             public ushort dwProcessorLevel;
+#pragma warning restore CA1051 // Sichtbare Instanzfelder nicht deklarieren
+#pragma warning disable CA1051 // Sichtbare Instanzfelder nicht deklarieren
             public ushort dwProcessorRevision;
+#pragma warning restore CA1051 // Sichtbare Instanzfelder nicht deklarieren
         }
         #endregion SYSTEM_INFO
 
         #region _PROCESSOR_INFO_UNION
         [StructLayout(LayoutKind.Explicit)]
+#pragma warning disable IDE1006 // Benennungsstile
+#pragma warning disable CA1707 // Bezeichner dürfen keine Unterstriche enthalten
+#pragma warning disable CA1815 // Equals und Gleichheitsoperator für Werttypen außer Kraft setzen
+#pragma warning disable CA1815 // Equals und Gleichheitsoperator für Werttypen außer Kraft setzen
+#pragma warning disable CA1034 // Geschachtelte Typen dürfen nicht sichtbar sein
         public struct _PROCESSOR_INFO_UNION
+#pragma warning restore CA1034 // Geschachtelte Typen dürfen nicht sichtbar sein
+#pragma warning restore CA1815 // Equals und Gleichheitsoperator für Werttypen außer Kraft setzen
+#pragma warning restore CA1815 // Equals und Gleichheitsoperator für Werttypen außer Kraft setzen
+#pragma warning restore CA1707 // Bezeichner dürfen keine Unterstriche enthalten
+#pragma warning restore IDE1006 // Benennungsstile
         {
             [FieldOffset(0)]
             internal uint dwOemId;
@@ -760,11 +845,19 @@ namespace ToolboxOld.Interop
         #endregion _PROCESSOR_INFO_UNION
 
         #region 64 BIT OS DETECTION
+#pragma warning disable CA2101 // Marshalling für P/Invoke-Zeichenfolgenargumente angeben
         [DllImport("kernel32", SetLastError = true, CallingConvention = CallingConvention.Winapi)]
+#pragma warning restore CA2101 // Marshalling für P/Invoke-Zeichenfolgenargumente angeben
+#pragma warning disable CA1401 // P/Invokes dürfen nicht sichtbar sein
         public extern static IntPtr LoadLibrary(string libraryName);
+#pragma warning restore CA1401 // P/Invokes dürfen nicht sichtbar sein
 
+#pragma warning disable CA2101 // Marshalling für P/Invoke-Zeichenfolgenargumente angeben
         [DllImport("kernel32", SetLastError = true, CallingConvention = CallingConvention.Winapi)]
+#pragma warning restore CA2101 // Marshalling für P/Invoke-Zeichenfolgenargumente angeben
+#pragma warning disable CA1401 // P/Invokes dürfen nicht sichtbar sein
         public extern static IntPtr GetProcAddress(IntPtr hwnd, string procedureName);
+#pragma warning restore CA1401 // P/Invokes dürfen nicht sichtbar sein
         #endregion 64 BIT OS DETECTION
 
         #region PRODUCT
@@ -787,7 +880,9 @@ namespace ToolboxOld.Interop
         private const int PRODUCT_BUSINESS_N = 0x00000010;
         private const int PRODUCT_WEB_SERVER = 0x00000011;
         private const int PRODUCT_CLUSTER_SERVER = 0x00000012;
-        //private const int PRODUCT_HOME_SERVER = 0x00000013;
+#pragma warning disable IDE0051 // Nicht verwendete private Member entfernen
+        private const int PRODUCT_HOME_SERVER = 0x00000013;
+#pragma warning restore IDE0051 // Nicht verwendete private Member entfernen
         private const int PRODUCT_STORAGE_EXPRESS_SERVER = 0x00000014;
         private const int PRODUCT_STORAGE_STANDARD_SERVER = 0x00000015;
         private const int PRODUCT_STORAGE_WORKGROUP_SERVER = 0x00000016;
@@ -845,13 +940,21 @@ namespace ToolboxOld.Interop
 
         #region VERSIONS
         private const int VER_NT_WORKSTATION = 1;
-        //private const int VER_NT_DOMAIN_CONTROLLER = 2;
+#pragma warning disable IDE0051 // Nicht verwendete private Member entfernen
+        private const int VER_NT_DOMAIN_CONTROLLER = 2;
+#pragma warning restore IDE0051 // Nicht verwendete private Member entfernen
         private const int VER_NT_SERVER = 3;
-        //private const int VER_SUITE_SMALLBUSINESS = 1;
+#pragma warning disable IDE0051 // Nicht verwendete private Member entfernen
+        private const int VER_SUITE_SMALLBUSINESS = 1;
+#pragma warning restore IDE0051 // Nicht verwendete private Member entfernen
         private const int VER_SUITE_ENTERPRISE = 2;
-        //private const int VER_SUITE_TERMINAL = 16;
+#pragma warning disable IDE0051 // Nicht verwendete private Member entfernen
+        private const int VER_SUITE_TERMINAL = 16;
+#pragma warning restore IDE0051 // Nicht verwendete private Member entfernen
         private const int VER_SUITE_DATACENTER = 128;
-        //private const int VER_SUITE_SINGLEUSERTS = 256;
+#pragma warning disable IDE0051 // Nicht verwendete private Member entfernen
+        private const int VER_SUITE_SINGLEUSERTS = 256;
+#pragma warning restore IDE0051 // Nicht verwendete private Member entfernen
         private const int VER_SUITE_PERSONAL = 512;
         private const int VER_SUITE_BLADE = 1024;
         #endregion VERSIONS
@@ -867,10 +970,11 @@ namespace ToolboxOld.Interop
             get
             {
                 string servicePack = String.Empty;
-                var osVersionInfo = new OSVERSIONINFOEX
-                {
-                    dwOSVersionInfoSize = Marshal.SizeOf(typeof(OSVERSIONINFOEX))
-                };
+#pragma warning disable IDE0017 // Initialisierung von Objekten vereinfachen
+                OSVERSIONINFOEX osVersionInfo = new OSVERSIONINFOEX();
+#pragma warning restore IDE0017 // Initialisierung von Objekten vereinfachen
+
+                osVersionInfo.dwOSVersionInfoSize = Marshal.SizeOf(typeof(OSVERSIONINFOEX));
 
                 if (GetVersionEx(ref osVersionInfo))
                 {
@@ -891,7 +995,9 @@ namespace ToolboxOld.Interop
         {
             get
             {
+#pragma warning disable CA1305 // IFormatProvider angeben
                 return int.Parse(RegistryRead(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "CurrentBuildNumber", "0"));
+#pragma warning restore CA1305 // IFormatProvider angeben
             }
         }
         #endregion BUILD
@@ -936,11 +1042,13 @@ namespace ToolboxOld.Interop
                 {
                     return 10;
                 }
-                string exactVersion = RegistryRead(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "CurrentVersion", string.Empty);
+                string exactVersion = RegistryRead(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "CurrentVersion", "");
                 if (!string.IsNullOrEmpty(exactVersion))
                 {
                     string[] splitVersion = exactVersion.Split('.');
+#pragma warning disable CA1305 // IFormatProvider angeben
                     return int.Parse(splitVersion[0]);
+#pragma warning restore CA1305 // IFormatProvider angeben
                 }
                 return Environment.OSVersion.Version.Major;
             }
@@ -959,11 +1067,13 @@ namespace ToolboxOld.Interop
                 {
                     return 0;
                 }
-                string exactVersion = RegistryRead(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "CurrentVersion", string.Empty);
+                string exactVersion = RegistryRead(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "CurrentVersion", "");
                 if (!string.IsNullOrEmpty(exactVersion))
                 {
                     string[] splitVersion = exactVersion.Split('.');
+#pragma warning disable CA1305 // IFormatProvider angeben
                     return int.Parse(splitVersion[1]);
+#pragma warning restore CA1305 // IFormatProvider angeben
                 }
                 return Environment.OSVersion.Version.Minor;
             }
@@ -999,7 +1109,7 @@ namespace ToolboxOld.Interop
 
                 if (fnPtr != IntPtr.Zero)
                 {
-                    return (IsWow64ProcessDelegate)Marshal.GetDelegateForFunctionPointer(fnPtr, typeof(IsWow64ProcessDelegate));
+                    return (IsWow64ProcessDelegate)Marshal.GetDelegateForFunctionPointer((IntPtr)fnPtr, typeof(IsWow64ProcessDelegate));
                 }
             }
 
@@ -1015,7 +1125,10 @@ namespace ToolboxOld.Interop
                 return false;
             }
 
-            bool retVal = fnDelegate.Invoke(Process.GetCurrentProcess().Handle, out bool isWow64);
+#pragma warning disable IDE0018 // Inlinevariablendeklaration
+            bool isWow64;
+#pragma warning restore IDE0018 // Inlinevariablendeklaration
+            bool retVal = fnDelegate.Invoke(Process.GetCurrentProcess().Handle, out isWow64);
 
             if (retVal == false)
             {
@@ -1030,7 +1143,7 @@ namespace ToolboxOld.Interop
 
         private static bool IsWindows10()
         {
-            string productName = RegistryRead(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "ProductName", string.Empty);
+            string productName = RegistryRead(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "ProductName", "");
             if (productName.StartsWith("Windows 10", StringComparison.OrdinalIgnoreCase))
             {
                 return true;
@@ -1044,9 +1157,9 @@ namespace ToolboxOld.Interop
 
         private static string RegistryRead(string RegistryPath, string Field, string DefaultValue)
         {
-            string rtn = string.Empty;
-            string backSlash = string.Empty;
-            string newRegistryPath = string.Empty;
+            string rtn = "";
+            string backSlash = "";
+            string newRegistryPath = "";
 
             try
             {
@@ -1055,7 +1168,9 @@ namespace ToolboxOld.Interop
 
                 if (split_result.Length > 0)
                 {
+#pragma warning disable CA1304 // CultureInfo angeben
                     split_result[0] = split_result[0].ToUpper();        // Make the first entry uppercase...
+#pragma warning restore CA1304 // CultureInfo angeben
 
                     if (split_result[0] == "HKEY_CLASSES_ROOT") OurKey = Registry.ClassesRoot;
                     else if (split_result[0] == "HKEY_CURRENT_USER") OurKey = Registry.CurrentUser;
@@ -1071,7 +1186,9 @@ namespace ToolboxOld.Interop
                             backSlash = "\\";
                         }
 
-                        if (newRegistryPath != string.Empty)
+#pragma warning disable CA1820 // Anhand der Zeichenfolgenlänge auf leere Zeichenfolgen prüfen
+                        if (newRegistryPath != "")
+#pragma warning restore CA1820 // Anhand der Zeichenfolgenlänge auf leere Zeichenfolgen prüfen
                         {
                             //rtn = (string)Registry.GetValue(RegistryPath, "CurrentVersion", DefaultValue);
 
@@ -1082,7 +1199,9 @@ namespace ToolboxOld.Interop
                     }
                 }
             }
+#pragma warning disable CA1031 // Keine allgemeinen Ausnahmetypen abfangen
             catch { }
+#pragma warning restore CA1031 // Keine allgemeinen Ausnahmetypen abfangen
 
             return rtn;
         }
@@ -1090,3 +1209,5 @@ namespace ToolboxOld.Interop
         #endregion Registry Methods
     }
 }
+
+

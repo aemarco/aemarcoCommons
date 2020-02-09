@@ -9,7 +9,7 @@ namespace ToolboxOld.Interop
     public class Impersonator : IDisposable
     {
 
-
+        // ReSharper disable once StringLiteralTypo
         [DllImport("advapi32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         private static extern bool LogonUser(string lpszUsername,
                                             string lpszDomain,
@@ -19,40 +19,40 @@ namespace ToolboxOld.Interop
                                             ref IntPtr phToken);
 
         [DllImport("Kernel32")]
-        private extern static bool CloseHandle(IntPtr handle);
+        private static extern bool CloseHandle(IntPtr handle);
 
 
 
 
-        private const int LOGON32_LOGON_INTERACTIVE = 2;
-        private const int LOGON32_PROVIDER_DEFAULT = 0;
-        private IntPtr m_Token;
-        private readonly WindowsImpersonationContext m_Context = null;
+        private const int Logon32LogonInteractive = 2;
+        private const int Logon32ProviderDefault = 0;
+        private IntPtr _mToken;
+        private readonly WindowsImpersonationContext _mContext;
         [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
         public Impersonator(string domain, string username, string password)
         {
-            m_Token = IntPtr.Zero;
-            bool logonSuccessfull = LogonUser(
+            _mToken = IntPtr.Zero;
+            var logonSuccessful = LogonUser(
                 username,
                 domain,
                 password,
-                LOGON32_LOGON_INTERACTIVE,
-                LOGON32_PROVIDER_DEFAULT,
-                ref m_Token);
-            if (logonSuccessfull == false)
+                Logon32LogonInteractive,
+                Logon32ProviderDefault,
+                ref _mToken);
+            if (logonSuccessful == false)
             {
-                int error = Marshal.GetLastWin32Error();
+                var error = Marshal.GetLastWin32Error();
                 throw new Win32Exception(error);
             }
-            WindowsIdentity identity = new WindowsIdentity(m_Token);
-            m_Context = identity.Impersonate();
+            var identity = new WindowsIdentity(_mToken);
+            _mContext = identity.Impersonate();
         }
 
 
 
         #region IDisposable
 
-        private bool _disposed = false;
+        private bool _disposed;
         public void Dispose()
         {
             Dispose(true);
@@ -66,13 +66,13 @@ namespace ToolboxOld.Interop
             if (disposing)
             {
                 //managed resources here
-                m_Context.Undo();
-                m_Context.Dispose();
+                _mContext.Undo();
+                _mContext.Dispose();
             }
 
             //unmanaged resources here
-            CloseHandle(m_Token);
-            m_Token = IntPtr.Zero;
+            CloseHandle(_mToken);
+            _mToken = IntPtr.Zero;
 
             _disposed = true;
         }

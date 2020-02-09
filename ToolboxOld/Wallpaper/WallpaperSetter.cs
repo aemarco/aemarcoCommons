@@ -1,5 +1,4 @@
 ﻿using Extensions.netExtensions;
-using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -7,7 +6,6 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Toolbox.Interop;
@@ -19,21 +17,22 @@ namespace ToolboxOld.Wallpaper
     {
         #region ctor
 
-        public const string VIRTUALSCREEN_NAME = "Virtual";
+        public const string VirtualScreenName = "Virtual";
         private readonly string _defaultBackgroundFile;
         private WallpaperMode _wallMode;
         private readonly List<Monitor> _monitors;
-        protected readonly HttpClient _client;
+        private readonly HttpClient _client;
 
         /// <summary>
         /// Use this Instance to handle setting Wallpapers
         /// </summary>
-        /// <param name="mode">
+        /// <param name="wallMode">
         ///  Fit: Places the Wallpaper as big as possible without cutting (black bars)
         ///  Fill: Cuts as much needed to fill the screen
         ///  AllowFill: Decides automatically between Fill and Fit based on allowed cutting
         ///  AllowFillForceCut (default): Like AllowFill, otherwise Fit with allowed cutting 
         /// </param>
+        // ReSharper disable once MemberCanBeProtected.Global
         public WallpaperSetter(WallpaperMode wallMode)
         {
             _defaultBackgroundFile = new FileInfo("CurrentWallpaper.jpg").FullName;
@@ -71,7 +70,7 @@ namespace ToolboxOld.Wallpaper
                 Screen.AllScreens.Min(x => x.Bounds.Y),
                 SystemInformation.VirtualScreen.Width,
                 SystemInformation.VirtualScreen.Height);
-            var virtualMon = new Monitor(allScreenRect, VIRTUALSCREEN_NAME, _defaultBackgroundFile, _wallMode);
+            var virtualMon = new Monitor(allScreenRect, VirtualScreenName, _defaultBackgroundFile, _wallMode);
             return virtualMon;
         }
 
@@ -82,17 +81,17 @@ namespace ToolboxOld.Wallpaper
 
         #region props
 
+        // ReSharper disable once MemberCanBeProtected.Global
         public WallpaperMode WallpaperMode
         {
-            get { return _wallMode; }
+            get => _wallMode;
             set
             {
-                if (value != _wallMode)
-                {
-                    _wallMode = value;
-                    foreach (var mon in _monitors)
-                        mon.WallpaperMode = value;
-                }
+                if (value == _wallMode) return;
+
+                _wallMode = value;
+                foreach (var mon in _monitors)
+                    mon.WallpaperMode = value;
             }
         }
 
@@ -104,17 +103,17 @@ namespace ToolboxOld.Wallpaper
         {
             using (Image virtualScreenBitmap = new Bitmap(SystemInformation.VirtualScreen.Width, SystemInformation.VirtualScreen.Height))
             {
-                using (Graphics virtualScreenGraphic = Graphics.FromImage(virtualScreenBitmap))
+                using (var virtualScreenGraphic = Graphics.FromImage(virtualScreenBitmap))
                 {
                     if (virtualScreen)
                     {
-                        var mon = _monitors.First(x => x.DeviceName == VIRTUALSCREEN_NAME);
+                        var mon = _monitors.First(x => x.DeviceName == VirtualScreenName);
                         mon.DrawToGraphics(virtualScreenGraphic);
                     }
                     else
                     {
                         foreach (var mon in _monitors
-                                    .Where(x => x.DeviceName != VIRTUALSCREEN_NAME))
+                                    .Where(x => x.DeviceName != VirtualScreenName))
                         {
                             mon.DrawToGraphics(virtualScreenGraphic);
                         }
@@ -125,16 +124,16 @@ namespace ToolboxOld.Wallpaper
             WallpaperHelper.SetWallpaper(_defaultBackgroundFile, WindowsWallpaperStyle.Tile);
         }
 
-        protected virtual async Task<Image> GetImage(string file)
+        protected async Task<Image> GetImage(string file)
         {
             if (file.StartsWith("http"))
             {
                 var resp = await _client.GetAsync(file, HttpCompletionOption.ResponseHeadersRead);
                 resp.EnsureSuccessStatusCode();
 
-                using (Stream stream = await resp.Content.ReadAsStreamAsync())
+                using (var stream = await resp.Content.ReadAsStreamAsync())
                 {
-                    Image img = Image.FromStream(stream);
+                    var img = Image.FromStream(stream);
                     return img;
                 }
             }
@@ -149,7 +148,8 @@ namespace ToolboxOld.Wallpaper
 
         #region Setting Wall
 
-        //eins auf allen Monitoren --> direct to Windows API
+        //one for each screen --> direct to Windows API
+
         /// <summary>
         /// Sets given Wallpaper foreach Screen
         /// </summary>
@@ -160,7 +160,8 @@ namespace ToolboxOld.Wallpaper
             WallpaperHelper.SetWallpaper(file, attr.WindowsWallpaperStyle);
         }
 
-        //einzelne
+        //single
+
         /// <summary>
         /// Sets given Bitmap on given Screen
         /// </summary>
@@ -168,11 +169,11 @@ namespace ToolboxOld.Wallpaper
         /// <param name="file">Wallpaper to set</param>
         public async Task SetWallForScreen(string screen, string file)
         {
-            if (String.IsNullOrWhiteSpace(screen) || String.IsNullOrWhiteSpace(file))
+            if (string.IsNullOrWhiteSpace(screen) || string.IsNullOrWhiteSpace(file))
             {
                 throw new ArgumentException("Screen or Wallpaper not provided correctly.");
             }
-            Image image = await GetImage(file);
+            var image = await GetImage(file);
             SetWallForScreen(screen, image);
         }
         /// <summary>
@@ -180,21 +181,22 @@ namespace ToolboxOld.Wallpaper
         /// </summary>
         /// <param name="screen">Screen Device name</param>
         /// <param name="image">Image to set</param>
+        // ReSharper disable once MemberCanBePrivate.Global
         public void SetWallForScreen(string screen, Image image)
         {
-            if (String.IsNullOrWhiteSpace(screen) || image == null)
+            if (string.IsNullOrWhiteSpace(screen) || image == null)
             {
                 throw new ArgumentException("Screen or Wallpaper not provided correctly.");
             }
             SetWallsForScreens(new List<string> { screen }, new List<Image> { image });
         }
 
-        //mehrere
+        //multiple
         /// <summary>
         /// Sets given Wallpapers to given Screens
         /// </summary>
         /// <param name="screens">Screen Device names</param>
-        /// <param name="bitmaps">Wallpapers to set</param>
+        /// <param name="files">Wallpapers to set</param>
         public async Task SetWallsForScreens(List<string> screens, List<string> files)
         {
             if (screens == null) throw new ArgumentNullException(nameof(screens));
@@ -205,7 +207,7 @@ namespace ToolboxOld.Wallpaper
             if (screens.Count != files.Count) throw new ArgumentException(nameof(files));
 
 
-            List<Image> images = new List<Image>();
+            var images = new List<Image>();
             foreach (var file in files)
             {
                 images.Add(await GetImage(file));
@@ -218,6 +220,7 @@ namespace ToolboxOld.Wallpaper
         /// </summary>
         /// <param name="screens">Screen Device names</param>
         /// <param name="images">Image to set on those screens</param>
+        // ReSharper disable once MemberCanBeProtected.Global
         public void SetWallsForScreens(List<string> screens, List<Image> images)
         {
             if (screens == null) throw new ArgumentNullException(nameof(screens));
@@ -228,19 +231,19 @@ namespace ToolboxOld.Wallpaper
             if (screens.Count != images.Count) throw new ArgumentException(nameof(images));
 
 
-            for (int i = 0; i < screens.Count; i++)
+            for (var i = 0; i < screens.Count; i++)
             {
-                Monitor mon = _monitors.FirstOrDefault(x => x.DeviceName == screens[i]);
+                var mon = _monitors.FirstOrDefault(x => x.DeviceName == screens[i]);
                 if (mon == null)
                 {
-                    Screen scr = Screen.AllScreens.FirstOrDefault(x => x.DeviceName == screens[i]);
+                    var scr = Screen.AllScreens.FirstOrDefault(x => x.DeviceName == screens[i]);
                     if (scr == null) continue;
                     mon = new Monitor(scr.Bounds, scr.DeviceName, _defaultBackgroundFile, _wallMode);
                     _monitors.Add(mon);
                 }
                 mon.SetWallpaper(images[i]);
             }
-            SetBackgroundImage(screens.Contains(VIRTUALSCREEN_NAME));
+            SetBackgroundImage(screens.Contains(VirtualScreenName));
         }
 
         #endregion
