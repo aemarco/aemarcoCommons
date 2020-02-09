@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace Toolbox.SerializationTools
@@ -38,10 +39,26 @@ namespace Toolbox.SerializationTools
             return Storage.Keys.ToList();
         }
 
+
         public List<T> GetAllValues()
         {
             return Storage.Values.ToList();
         }
+
+
+        public void RemoveMatching(Func<T, bool> filter)
+        {
+            var removalKeys = Storage
+                .Where(x => filter(x.Value))
+                .Select(x => x.Key);
+            foreach (var key in removalKeys)
+            {
+                Storage.Remove(key);
+            }
+        }
+
+
+
 
         public void RemoveEntry(string key)
         {
@@ -85,7 +102,7 @@ namespace Toolbox.SerializationTools
         /// <returns>true if save was successfull</returns>
         public void Save(string file = null)
         {
-            if (String.IsNullOrWhiteSpace(file)) file = Filepath;
+            if (string.IsNullOrWhiteSpace(file)) file = Filepath;
 
             try
             {
