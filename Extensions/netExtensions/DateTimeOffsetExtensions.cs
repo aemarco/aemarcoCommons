@@ -14,5 +14,20 @@ namespace Extensions.netExtensions
             return timeStamp.Add(timeSpan) < DateTimeOffset.Now;
         }
 
+        public static bool IsInFuture(this DateTimeOffset timeStamp)
+        {
+            return DateTimeOffset.Now < timeStamp;
+
+        }
+
+        public static bool IsInFuture(this DateTimeOffset timeStamp, TimeSpan minimumDistance)
+        {
+            return timeStamp.IsInFuture() && timeStamp.Add(-minimumDistance).IsInFuture();
+
+        }
+
+
+
+
     }
 }
