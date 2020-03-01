@@ -8,7 +8,7 @@ namespace Toolbox.PictureTools
         protected Rectangle TargetArea { get; }
         private Image _currentPicture;
 
-        protected PictureInPicture(Rectangle targetArea)
+        public PictureInPicture(Rectangle targetArea)
         {
             TargetArea = targetArea;
         }
@@ -18,12 +18,12 @@ namespace Toolbox.PictureTools
         /// Sets the Picture as big as possible with Black bars to keep aspect ratio
         /// </summary>
         /// <param name="image">readyToUsePicture</param>
-        protected void SetPicture(Image image)
+        public void SetPicture(Image image)
         {
             //shortcut if the picture already fits
             if (image.Width == TargetArea.Width && image.Height == TargetArea.Height)
             {
-                _currentPicture = image;
+                _currentPicture = new Bitmap(image);
                 return;
             }
             

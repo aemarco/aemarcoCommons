@@ -21,7 +21,7 @@ namespace Extensions.contentExtensions
                                       RegexOptions.None, TimeSpan.FromMilliseconds(200));
 
                 // Examines the domain part of the email and normalizes it.
-                string DomainMapper(Match match)
+                static string DomainMapper(Match match)
                 {
                     // Use IdnMapping class to convert Unicode domain names.
                     var idn = new IdnMapping();
@@ -59,7 +59,10 @@ namespace Extensions.contentExtensions
             }
         }
 
-
+        public static string GetNumberFromText(this string text)
+        {
+            return Regex.Match(text, @"\d+").Value;
+        }
 
 
     }

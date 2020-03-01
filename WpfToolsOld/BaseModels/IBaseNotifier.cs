@@ -4,5 +4,7 @@ namespace WpfToolsOld.BaseModels
 {
     public interface IBaseNotifier : INotifyPropertyChanged
     {
+
     }
+
 }
