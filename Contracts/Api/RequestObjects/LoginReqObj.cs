@@ -5,24 +5,23 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Contracts.Api.RequestObjects
 {
-    /// <summary>
-    /// ATTENTION: Keep in sync with 'Toolbox.ApiTools.RequestObjects'
-    /// </summary>
     public class LoginReqObj
     {
-        [Required]
-        [EmailAddress]
-        public virtual string Email { get; set; }
 
-        [Required]
         [DataType(DataType.Password)]
-        public virtual string Password { get; set; }
+        public string Token { get; set; }
 
-        public virtual bool RememberMe { get; set; } = false;
+        [EmailAddress]
+        public string Email { get; set; }
 
-        public virtual string WindowsUser { get; set; } = Environment.UserName;
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
 
-        public virtual string ToJson()
+        public bool RememberMe { get; set; } = false;
+
+        public string WindowsUser { get; set; } = Environment.UserName;
+
+        public string ToJson()
         {
             return JsonConvert.SerializeObject(this, Formatting.Indented);
         }
