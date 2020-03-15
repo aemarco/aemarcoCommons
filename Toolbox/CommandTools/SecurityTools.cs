@@ -17,8 +17,8 @@ namespace Toolbox.CommandTools
                 var startInfo = new ProcessStartInfo
                 {
                     WindowStyle = ProcessWindowStyle.Hidden,
-                    FileName = Constants.WindowsDefenderCmdPath,
-                    Arguments = $"{Constants.WindowsDefenderCmdFileScanArgs}{filePath}",
+                    FileName = @"C:\Program Files\Windows Defender\MpCmdRun.exe",
+                    Arguments = $"-Scan -ScanType 3 -File {filePath}",
                     RedirectStandardOutput = true,
                     UseShellExecute = false
                 };

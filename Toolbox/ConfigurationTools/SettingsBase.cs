@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using Extensions.netExtensions;
 using Microsoft.Extensions.Configuration;
@@ -25,22 +27,16 @@ namespace Toolbox.ConfigurationTools
 
 
         private void HandleStringPlaceholders(IConfiguration root)
-        {
+        { 
             foreach (var propInfo in this.GetType().GetProperties()
                 .Where(x => x.PropertyType == typeof(string))
                 .Where(x => x.CanRead && x.CanWrite))
             {
                 var currentValue = (string)propInfo.GetValue(this);
-                if (currentValue == null) continue;
-
-                foreach (Match match in Regex.Matches(currentValue, @"{{3}([^|\n]+?)}{3}"))
+                var resolved = currentValue.ResolvePlaceholders(root);
+                if (currentValue != resolved)
                 {
-                    var search = match.Groups[1].Value;
-                    var newValue = root.SearchValue(search);
-                    if (newValue == null) continue;
-
-                    currentValue = currentValue.Replace(match.Value, newValue);
-                    propInfo.SetValue(this, currentValue);
+                    propInfo.SetValue(this, resolved);
                 }
             }
         }
