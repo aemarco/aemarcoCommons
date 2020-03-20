@@ -83,7 +83,7 @@ namespace Toolbox.SchedulerTools
                     if (task.SchedulingOptions.HasFlag(SchedulingOptions.DelayUntilNextTimeWindow) &&
                         UpdateToWaitTillServiceHours(task))
                     {
-                        OnNewLog("Info", $"Task {task.Name} replanned for {task.PlannedFor.LocalDateTime.ToShortDateString()} {task.PlannedFor.LocalDateTime.ToShortTimeString()}");
+                        OnNewLog("Info", $"Task {task.Name} re-planned for {task.PlannedFor.LocalDateTime.ToShortDateString()} {task.PlannedFor.LocalDateTime.ToShortTimeString()}");
                         continue;
                     }
 
@@ -212,33 +212,39 @@ namespace Toolbox.SchedulerTools
 
         protected virtual bool UpdateToWaitTillServiceHours(TaskObject taskObject)
         {
-            bool result = false;
             var now = DateTimeOffset.Now;
             if (taskObject.PlannedFor < now) taskObject.PlannedFor = now;
 
             //ServiceHours
-            TimeSpan currentTarget = taskObject.PlannedFor.ToLocalTime().TimeOfDay;
-
-            if (currentTarget < taskObject.TimeWindowStart || currentTarget > taskObject.TimeWindowEnd)
+            var currentTarget = taskObject.PlannedFor.ToLocalTime().TimeOfDay;
+            if (currentTarget >= taskObject.TimeWindowStart && currentTarget <= taskObject.TimeWindowEnd) return false;
+            if (_bypassServiceHours)
             {
-                result = true;
-                //out of Timewindow
-                TimeSpan haveToWait = taskObject.TimeWindowStart - currentTarget;
-                if (currentTarget > taskObject.TimeWindowEnd)
-                {
-                    haveToWait += TimeSpan.FromDays(1);
-                }
-                taskObject.PlannedFor = taskObject.PlannedFor.Add(haveToWait);
+                _bypassServiceHours = false;
+                return false;
             }
-            return result;
+
+            //out of Time window
+            var haveToWait = taskObject.TimeWindowStart - currentTarget;
+            if (currentTarget > taskObject.TimeWindowEnd)
+            {
+                haveToWait += TimeSpan.FromDays(1);
+            }
+            taskObject.PlannedFor = taskObject.PlannedFor.Add(haveToWait);
+
+            
+            return true;
         }
 
+        private bool _bypassServiceHours;
         public virtual void ReplanFor(string name, DateTimeOffset start)
         {
             if (_openTasks.FirstOrDefault(x => x.Name == name) is TaskObject task)
             {
                 task.PlannedFor = start;
-                OnNewLog("Info", $"Task {task.Name} replaned for {task.PlannedFor.LocalDateTime.ToShortDateString()} {task.PlannedFor.LocalDateTime.ToShortTimeString()}");
+                OnNewLog("Info", $"Task {task.Name} re-planed for {task.PlannedFor.LocalDateTime.ToShortDateString()} {task.PlannedFor.LocalDateTime.ToShortTimeString()}");
+
+                _bypassServiceHours = true;
             }
 
             //start worker loop if not already running.
