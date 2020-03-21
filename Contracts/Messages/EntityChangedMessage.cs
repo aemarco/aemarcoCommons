@@ -5,6 +5,7 @@ namespace Contracts.Messages
     public class EntityChangedMessage
     {
         public string Sender { get; set; }
+        public string User { get; set; }
         public string Type { get; set; }
         public string State { get; set; }
 
