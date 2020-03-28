@@ -12,7 +12,6 @@ namespace Contracts
 
         //wallpaper
         public const string ChangerEmail = "aeChanger@normal.com";
-        public const string DownloaderEmail = "aeChanger@normal.com";
         public const string Watermark = "aemarco.myds.me";
 
         //video

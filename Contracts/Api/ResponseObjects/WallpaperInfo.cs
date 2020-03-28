@@ -61,20 +61,8 @@ namespace Contracts.Api.ResponseObjects
         public bool IsFavorite { get; set; }
 
 
+
         public bool FromCache { get; set; }
-
-
-
-
-
-
-
-        //for anonym Downloader
-        /// <summary>
-        /// used in WallpaperDownloader for authentication purpose
-        /// </summary>
-        public Guid Auth { get; set; }
-
-
+        
     }
 }
