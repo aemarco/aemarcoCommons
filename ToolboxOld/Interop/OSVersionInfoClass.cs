@@ -2,7 +2,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using Newtonsoft.Json;
+
 
 // http://www.codeproject.com/Articles/73000/Getting-Operating-System-Version-Info-Even-for-Win
 // https://en.wikipedia.org/wiki/List_of_Microsoft_Windows_versions
