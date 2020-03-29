@@ -8,7 +8,7 @@ namespace Contracts
 
         //webgirls
         public const string WebgirlsUrl = "https://aemarco.myds.me";
-        public const string WebgirlsSupervisorEmail = "4aemarco@gmail.com";
+       
 
         //wallpaper
         public const string ChangerEmail = "aeChanger@normal.com";
