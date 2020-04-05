@@ -1,9 +1,6 @@
 ﻿using Contracts.Api.RequestObjects;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using Extensions.netExtensions;
 
 namespace Extensions.contentExtensions

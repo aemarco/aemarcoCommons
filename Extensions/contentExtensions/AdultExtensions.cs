@@ -1,5 +1,4 @@
-﻿using Contracts.Api.RequestObjects;
-using System;
+﻿using System;
 using System.Text;
 
 namespace Extensions.contentExtensions

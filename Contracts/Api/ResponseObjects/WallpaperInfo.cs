@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Contracts.Api.ResponseObjects
+﻿namespace Contracts.Api.ResponseObjects
 {
     public class WallpaperInfo
     {

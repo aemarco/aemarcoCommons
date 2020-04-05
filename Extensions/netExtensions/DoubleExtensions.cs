@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Drawing;
-using Contracts.Api.RequestObjects;
 
 namespace Extensions.netExtensions
 {
