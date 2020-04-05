@@ -29,9 +29,7 @@ namespace Toolbox.CommandTools
                     var isSave = process?.ExitCode == 0 &&
                              !string.IsNullOrEmpty(message) &&
                              message.Contains("found no threats");
-
                     if (!isSave && File.Exists(filePath)) File.Delete(filePath);
-
                     return new VirusScanResult(filePath, isSave, message);
                 }
             }
