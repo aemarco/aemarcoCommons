@@ -1,10 +1,12 @@
-﻿namespace Contracts
+﻿using System.Collections.Generic;
+
+namespace Contracts
 {
     public static class Constants
     {
         // ReSharper disable StringLiteralTypo
         // ReSharper disable IdentifierTypo
-
+        // ReSharper disable MemberCanBePrivate.Global
 
         //webgirls
         public const string WebgirlsUrl = "https://aemarco.myds.me";
@@ -23,10 +25,23 @@
         public const string ThumbnailDetail = "?width=1110&roundedcorners=40&bgcolor=222";
         public const string ThumbnailProfileSmall = "?height=450&roundedcorners=10&bgcolor=222";
         public const string ThumbnailProfileDetail = "?height=600&roundedcorners=15&bgcolor=222";
-
+        public static IEnumerable<string> GetThumbnailQueries(bool includeProfile)
+        {
+            var result = new List<string>
+            {
+                ThumbnailSmall,
+                ThumbnailDetail
+            };
+            if (!includeProfile) return result;
+            
+            result.Add(ThumbnailProfileSmall);
+            result.Add(ThumbnailProfileDetail);
+            return result;
+        }
 
         // ReSharper restore StringLiteralTypo
         // ReSharper restore IdentifierTypo
+        // ReSharper restore MemberCanBePrivate.Global
 
     }
 }
