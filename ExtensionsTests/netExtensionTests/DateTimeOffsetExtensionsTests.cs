@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Extensions.netExtensions;
 using FluentAssertions;
 using NUnit.Framework;
