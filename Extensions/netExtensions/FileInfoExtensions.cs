@@ -80,6 +80,7 @@ namespace Extensions.netExtensions
 
         public static bool TryDelete(this FileInfo file)
         {
+            if (!File.Exists(file.FullName)) return false;
             try
             {
                 file.Delete();
