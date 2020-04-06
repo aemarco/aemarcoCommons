@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -77,10 +78,39 @@ namespace Extensions.netExtensions
 
 
 
+        public static bool TryDelete(this FileInfo file)
+        {
+            try
+            {
+                file.Delete();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
+        public static string TryHashFromFile(this FileInfo file)
+        {
+            try
+            {
+                return file.HashFromFile();
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
+        public static string HashFromFile(this FileInfo file)
+        {
+            if (!File.Exists(file.FullName)) 
+                throw new FileNotFoundException();
 
-
+            using Stream stream = File.OpenRead(file.FullName);
+            return stream.Hash();
+        }
 
 
     }

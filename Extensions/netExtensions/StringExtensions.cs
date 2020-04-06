@@ -1,10 +1,14 @@
-﻿using System.Security.Cryptography;
+﻿using System;
+using System.IO;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Extensions.netExtensions
 {
     public static class StringExtensions
     {
+
+        [Obsolete("refactor this shit")]
         /// <summary>
         /// Gibt einen MD5 Hash als String zurück
         /// </summary>
@@ -27,6 +31,16 @@ namespace Extensions.netExtensions
                 return sb.ToString();
             }
         }
+
+
+
+       
+
+
+
+
+
+
 
 
 
