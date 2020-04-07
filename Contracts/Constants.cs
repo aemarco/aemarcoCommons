@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Contracts
 {
@@ -9,6 +10,7 @@ namespace Contracts
         // ReSharper disable MemberCanBePrivate.Global
 
         //webgirls
+        [Obsolete("Use CentralBackendSettings.WebgirlsUrl")]
         public const string WebgirlsUrl = "https://aemarco.myds.me";
        
 
