@@ -9,12 +9,11 @@ namespace Contracts
         // ReSharper disable IdentifierTypo
         // ReSharper disable MemberCanBePrivate.Global
 
-        public const string JwtRegex = @"^([A-Za-z0-9-_+\/=]+)\.([A-Za-z0-9-_+\/=]+)\.([A-Za-z0-9-_+\/=]+)$";
 
-
-
-
-
+        /// <summary>
+        /// use Group 1 for Header, Group 2 for Payload, Group 3 for Signature
+        /// </summary>
+        public const string JwtRegex = @"([A-Za-z0-9-_+\/=]+)\.([A-Za-z0-9-_+\/=]+)\.([A-Za-z0-9-_+\/=]+)$";
 
 
 

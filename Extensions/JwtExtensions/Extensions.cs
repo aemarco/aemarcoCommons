@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using Contracts.Api;
-using Contracts.Api.ResponseObjects;
 using Extensions.netExtensions;
 using Newtonsoft.Json;
 
-
-namespace Extensions.contentExtensions
+namespace Extensions.JwtExtensions
 {
-    public static class JwtExtensions
+    public static class Extensions
     {
+
+        public static string SanitizeToken(this string token)
+        {
+            return Regex.Match(token, Contracts.Constants.JwtRegex).Value;
+        }
+
         public static JwtTokenModel ToJwtTokenModel(this string token)
         {
             if (string.IsNullOrWhiteSpace(token)) return null;
@@ -32,7 +36,6 @@ namespace Extensions.contentExtensions
                 return null;
             }
         }
-
         public static bool StillValid(this JwtTokenModel model)
         {
             return model?.ValidUntil.IsInFuture(TimeSpan.FromMinutes(1)) ?? false;
@@ -53,8 +56,5 @@ namespace Extensions.contentExtensions
             if (!model.StillValid()) return false;
             return !model.ValidUntil.IsInFuture(minimumDuration);
         }
-
-
-
     }
 }

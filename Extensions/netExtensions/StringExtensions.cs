@@ -7,7 +7,6 @@ namespace Extensions.netExtensions
 {
     public static class StringExtensions
     {
-
         [Obsolete("refactor this shit")]
         /// <summary>
         /// Gibt einen MD5 Hash als String zurück
@@ -31,10 +30,6 @@ namespace Extensions.netExtensions
                 return sb.ToString();
             }
         }
-
-
-
-
 
 
     }
