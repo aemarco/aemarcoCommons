@@ -40,7 +40,7 @@ namespace Extensions.netExtensions
         /// <returns>Hash als string.</returns>
         public static string GetMD5Hash(this string textToHash)
         {
-            var test = textToHash.ToHexHashString();
+            
             // Use input string to calculate MD5 hash
             using (MD5 md5 = MD5.Create())
             {
