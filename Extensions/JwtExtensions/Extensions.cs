@@ -10,12 +10,21 @@ namespace Extensions.JwtExtensions
 {
     public static class Extensions
     {
-
+        /// <summary>
+        /// Sanitizes a string to exactly the token
+        /// </summary>
+        /// <param name="token">string to sanitize</param>
+        /// <returns>entire token</returns>
         public static string SanitizeToken(this string token)
         {
             return Regex.Match(token, Contracts.Constants.JwtRegex).Value;
         }
 
+        /// <summary>
+        /// Converts a bearer token to a JwtTokenModel
+        /// </summary>
+        /// <param name="token">token to convert</param>
+        /// <returns>JtwTokenModel from payload, or null on invalid token</returns>
         public static JwtTokenModel ToJwtTokenModel(this string token)
         {
             if (string.IsNullOrWhiteSpace(token)) return null;
@@ -36,11 +45,23 @@ namespace Extensions.JwtExtensions
                 return null;
             }
         }
+
+        /// <summary>
+        /// Checks if at least valid for 1 minute according
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public static bool StillValid(this JwtTokenModel model)
         {
             return model?.ValidUntil.IsInFuture(TimeSpan.FromMinutes(1)) ?? false;
         }
 
+        /// <summary>
+        /// Check if given token should be renewed, based on percent of duration till renewal suggestion
+        /// </summary>
+        /// <param name="model">token to check</param>
+        /// <param name="percentTillRenewal">percent of duration till renewal suggested</param>
+        /// <returns>true only if still valid and should be renewed</returns>
         public static bool ShouldBeRenewed(this JwtTokenModel model, int percentTillRenewal = 70)
         {
             if (!model.StillValid()) return false;
@@ -51,6 +72,12 @@ namespace Extensions.JwtExtensions
             return !renewalAt.IsInFuture();
         }
 
+        /// <summary>
+        /// Check if given token should be renewed, based on duration which the token should be still valid
+        /// </summary>
+        /// <param name="model">token to check</param>
+        /// <param name="minimumDuration">duration, for which the token should be still valid</param>
+        /// <returns>true only if still valid and should be renewed</returns>
         public static bool ShouldBeRenewed(this JwtTokenModel model, TimeSpan minimumDuration)
         {
             if (!model.StillValid()) return false;

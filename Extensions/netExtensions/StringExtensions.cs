@@ -1,12 +1,37 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.Extensions.Primitives;
 
 namespace Extensions.netExtensions
 {
     public static class StringExtensions
     {
+        public static string ToHexHashString(this string textToHash)
+        {
+            using var ms = new MemoryStream(Encoding.UTF8.GetBytes(textToHash));
+            var hash = ms.ToHashBytes();
+            var sb = new StringBuilder();
+            foreach (var b in hash)
+            {
+                sb.Append(b.ToString("X2"));
+            }
+            return sb.ToString();
+        }
+
+        public static string ToBase64HashString(this string textToHash)
+        {
+            using var ms = new MemoryStream(Encoding.UTF8.GetBytes(textToHash));
+            var hash = ms.ToHashBytes().ToArray();
+            return Convert.ToBase64String(hash);
+        }
+
+
+
+
+
         [Obsolete("refactor this shit")]
         /// <summary>
         /// Gibt einen MD5 Hash als String zurück
@@ -15,6 +40,7 @@ namespace Extensions.netExtensions
         /// <returns>Hash als string.</returns>
         public static string GetMD5Hash(this string textToHash)
         {
+            var test = textToHash.ToHexHashString();
             // Use input string to calculate MD5 hash
             using (MD5 md5 = MD5.Create())
             {
