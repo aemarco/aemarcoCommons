@@ -9,6 +9,16 @@ namespace Contracts
         // ReSharper disable IdentifierTypo
         // ReSharper disable MemberCanBePrivate.Global
 
+        public const string JwtRegex = @"^([A-Za-z0-9-_+\/=]+)\.([A-Za-z0-9-_+\/=]+)\.([A-Za-z0-9-_+\/=]+)$";
+
+
+
+
+
+
+
+
+
         //webgirls
         [Obsolete("Use CentralBackendSettings.WebgirlsUrl")]
         public const string WebgirlsUrl = "https://aemarco.myds.me";
