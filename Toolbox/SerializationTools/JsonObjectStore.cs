@@ -44,11 +44,14 @@ namespace Toolbox.SerializationTools
         }
 
 
+       
         public void RemoveMatching(Func<T, bool> filter)
         {
             var removalKeys = Storage
                 .Where(x => filter(x.Value))
-                .Select(x => x.Key);
+                .Select(x => x.Key)
+                .ToList();
+            
             foreach (var key in removalKeys)
             {
                 Storage.Remove(key);
@@ -86,12 +89,15 @@ namespace Toolbox.SerializationTools
 
         #region serialization
 
-        public void CheckForAutosave()
+        public bool CheckForAutosave()
         {
             if (LastSaved.AddMinutes(5) < DateTimeOffset.Now)
             {
                 Save();
+                return true;
             }
+
+            return false;
         }
 
         /// <summary>
@@ -104,9 +110,13 @@ namespace Toolbox.SerializationTools
 
             try
             {
-                LastSaved = DateTimeOffset.Now;
-                var text = JsonConvert.SerializeObject(this, Formatting.Indented);
-                File.WriteAllText(file, text);
+                lock (Storage)
+                {
+                    LastSaved = DateTimeOffset.Now;
+                    var text = JsonConvert.SerializeObject(this, Formatting.Indented);
+                    File.WriteAllText(file, text);
+                    
+                }
             }
             catch
             {
