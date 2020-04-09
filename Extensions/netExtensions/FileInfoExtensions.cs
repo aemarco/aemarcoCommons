@@ -92,11 +92,11 @@ namespace Extensions.netExtensions
             }
         }
 
-        public static string TryHashFromFile(this FileInfo file)
+        public static string TryBase64HashFromFile(this FileInfo file)
         {
             try
             {
-                return file.HashFromFile();
+                return file.Base64HashFromFile();
             }
             catch
             {
@@ -104,13 +104,13 @@ namespace Extensions.netExtensions
             }
         }
 
-        public static string HashFromFile(this FileInfo file)
+        public static string Base64HashFromFile(this FileInfo file)
         {
             if (!File.Exists(file.FullName)) 
                 throw new FileNotFoundException();
 
             using Stream stream = File.OpenRead(file.FullName);
-            return stream.Hash();
+            return stream.ToBase64HashString();
         }
 
 

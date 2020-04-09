@@ -27,7 +27,7 @@ namespace Extensions.netExtensions
         /// </summary>
         /// <param name="stream">stream to hash</param>
         /// <returns>base64 string</returns>
-        public static string Hash(this Stream stream)
+        public static string ToBase64HashString(this Stream stream)
         {
             using var md5 = MD5.Create();
             return Convert.ToBase64String(md5.ComputeHash(stream));
