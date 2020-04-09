@@ -16,13 +16,6 @@ namespace Contracts
         public const string JwtRegex = @"([A-Za-z0-9-_+\/=]+)\.([A-Za-z0-9-_+\/=]+)\.([A-Za-z0-9-_+\/=]+)$";
 
 
-
-
-        //webgirls
-        [Obsolete("Use CentralBackendSettings.WebgirlsUrl")]
-        public const string WebgirlsUrl = "https://aemarco.myds.me";
-       
-
         //wallpaper
         public const string ChangerEmail = "aeChanger@normal.com";
         public const string ChangerUserId = "52dbf093-b08c-411e-9e1d-8b31135e4707";
