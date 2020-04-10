@@ -7,20 +7,18 @@ namespace Contracts.Api
 {
     public class JwtTokenModel
     {
-        [JsonProperty("nbf")]
+        [JsonProperty("iat")]
         [JsonConverter(typeof(SecondEpochConverter))]
         public DateTimeOffset IssuedAt { get; set; } = DateTimeOffset.MinValue;
-
         [JsonProperty("exp")]
         [JsonConverter(typeof(SecondEpochConverter))]
         public DateTimeOffset ValidUntil { get; set; } = DateTimeOffset.MinValue;
-
         [JsonProperty("sub")]
         public string UserId { get; set; }
         [JsonProperty("email")]
         public string Email { get; set; }
-        
-
+        [JsonProperty("stamp")]
+        public string SecurityStamp { get; set; }
         public int AdultLevel { get; set; }
         public bool IsSupervisor { get; set; }
     }
