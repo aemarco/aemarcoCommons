@@ -44,7 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Debugging\ClickOnceSetting.cs" />
     <Compile Include="Interop\Impersonator.cs" />
     <Compile Include="Interop\OSVersionInfoClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -65,5 +64,6 @@
       <Version>4.7.0</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

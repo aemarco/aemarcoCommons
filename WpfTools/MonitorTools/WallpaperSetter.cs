@@ -11,7 +11,7 @@ using System.Windows.Forms;
 using Toolbox.Interop;
 using Toolbox.MonitorTools;
 
-namespace ToolboxOld.Wallpaper
+namespace WpfTools.MonitorTools
 {
     public class WallpaperSetter
     {

@@ -1,6 +1,6 @@
 ﻿using System.Configuration;
 
-namespace ToolboxOld.Debugging
+namespace Toolbox.SyncTools
 {
     public static class ClickOnceSetting
     {
