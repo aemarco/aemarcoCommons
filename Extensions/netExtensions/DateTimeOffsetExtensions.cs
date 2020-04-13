@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Extensions.netExtensions
 {
@@ -27,7 +29,17 @@ namespace Extensions.netExtensions
         }
 
 
-
+        public static async Task WaitTill(this DateTimeOffset target, CancellationToken token)
+        {
+            token.ThrowIfCancellationRequested();
+            if (target.IsInFuture())
+            {
+                var toWait = target - DateTimeOffset.Now;
+                try { await Task.Delay(toWait, token); }
+                catch (TaskCanceledException) { }
+            }
+            token.ThrowIfCancellationRequested();
+        }
 
     }
 }
