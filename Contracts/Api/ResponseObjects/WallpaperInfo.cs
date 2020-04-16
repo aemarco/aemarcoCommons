@@ -58,6 +58,10 @@
         /// </summary>
         public bool IsFavorite { get; set; }
         /// <summary>
+        /// is true if this wallpaper is blacklisted by the user
+        /// </summary>
+        public bool IsBlacklisted { get; set; }
+        /// <summary>
         /// if true, information sourced from cache
         /// </summary>
         public bool FromCache { get; set; }
