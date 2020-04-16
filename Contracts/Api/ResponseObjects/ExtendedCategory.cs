@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Contracts.Api.ResponseObjects
 {
@@ -20,9 +21,11 @@ namespace Contracts.Api.ResponseObjects
         /// Icon as a Base64 string (only root categories)
         /// </summary>
         public string Icon { get; set; }
+        
         /// <summary>
         /// List of Subcategories
         /// </summary>
+        [Obsolete]
         public List<ExtendedCategory> SubCategories { get; set; }
         /// <summary>
         /// true if this category is a root category

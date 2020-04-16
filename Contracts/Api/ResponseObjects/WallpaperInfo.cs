@@ -57,9 +57,9 @@
         /// is true if this wallpaper is favorized by the user
         /// </summary>
         public bool IsFavorite { get; set; }
-
-
-
+        /// <summary>
+        /// if true, information sourced from cache
+        /// </summary>
         public bool FromCache { get; set; }
         
     }

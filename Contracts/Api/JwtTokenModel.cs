@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Globalization;
+using Contracts.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace Contracts.Api
 {
-    public class JwtTokenModel
+    public class JwtTokenModel : IUserInfo
     {
         [JsonProperty("iat")]
         [JsonConverter(typeof(SecondEpochConverter))]

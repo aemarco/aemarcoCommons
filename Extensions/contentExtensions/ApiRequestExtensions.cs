@@ -11,9 +11,9 @@ namespace Extensions.contentExtensions
         public static double? ToMinRatio(this WallpaperFilterRequest request)
         {
             if (request.MinRatio.HasValue) return request.MinRatio.Value;
-            else if (request.DesiredWidth is int dWidth && request.DesiredHeight is int dHeight)
+            else if (request.DesiredWidth.HasValue && request.DesiredHeight.HasValue)
             {
-                var rect = new Size(dWidth, dHeight);
+                var rect = new Size(request.DesiredWidth.Value, request.DesiredHeight.Value);
                 return rect.ToMinRatio(request.PercentTopBottomCutAllowed);
             }
             return null;
@@ -22,9 +22,9 @@ namespace Extensions.contentExtensions
         public static double? ToMaxRatio(this WallpaperFilterRequest request)
         {
             if (request.MaxRatio.HasValue) return request.MaxRatio.Value;
-            else if (request.DesiredWidth is int dWidth && request.DesiredHeight is int dHeight)
+            else if (request.DesiredWidth.HasValue && request.DesiredHeight.HasValue)
             {
-                var rect = new Size(dWidth, dHeight);
+                var rect = new Size(request.DesiredWidth.Value, request.DesiredHeight.Value);
                 return rect.ToMaxRatio(request.PercentLeftRightCutAllowed);
             }
             return null;
