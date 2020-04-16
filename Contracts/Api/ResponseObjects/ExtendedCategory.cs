@@ -25,7 +25,6 @@ namespace Contracts.Api.ResponseObjects
         /// <summary>
         /// List of Subcategories
         /// </summary>
-        [Obsolete]
         public List<ExtendedCategory> SubCategories { get; set; }
         /// <summary>
         /// true if this category is a root category
