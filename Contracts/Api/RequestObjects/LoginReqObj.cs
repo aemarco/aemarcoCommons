@@ -21,6 +21,7 @@ namespace Contracts.Api.RequestObjects
 
         public string WindowsUser { get; set; } = Environment.UserName;
 
+        [Obsolete]
         public string ToJson()
         {
             return JsonConvert.SerializeObject(this, Formatting.Indented);

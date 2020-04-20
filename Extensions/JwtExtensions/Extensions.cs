@@ -64,6 +64,7 @@ namespace Extensions.JwtExtensions
         /// <returns>true only if still valid and should be renewed</returns>
         public static bool ShouldBeRenewed(this JwtTokenModel model, int percentTillRenewal = 70)
         {
+            if (model == null) return false;
             if (!model.StillValid()) return false;
 
             var durationSeconds = (model.ValidUntil - model.IssuedAt).TotalSeconds;
@@ -80,6 +81,7 @@ namespace Extensions.JwtExtensions
         /// <returns>true only if still valid and should be renewed</returns>
         public static bool ShouldBeRenewed(this JwtTokenModel model, TimeSpan minimumDuration)
         {
+            if (model == null) return false;
             if (!model.StillValid()) return false;
             return !model.ValidUntil.IsInFuture(minimumDuration);
         }

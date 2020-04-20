@@ -9,6 +9,7 @@ namespace Contracts.Messages
         public DateTimeOffset Timestamp { get; set; }
         public string Environment { get; set; }
         public string App { get; set; }
+        public string User { get; set; }
         public string Source { get; set; }
         public LogLevel LogLevel { get; set; }
         public string Message { get; set; }
