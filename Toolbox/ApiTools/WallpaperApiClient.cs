@@ -18,6 +18,12 @@ namespace Toolbox.ApiTools
 {
     public class WallpaperApiClient
     {
+        private const string TokenEndpoint = "/Api/token";
+        private const string CategoriesListEndpoint = "/Api/Category/CategoriesList";
+        private const string UpdateBlacklistEndpoint = "/Api/User/UpdateBlacklist";
+        private const string UpdateFavoriteEndpoint = "/Api/User/UpdateFavorite";
+        private const string SubmitLogsEndpoint = "/Api/User/SubmitLogs";
+
         #region ctor
 
         private readonly HttpClient _client;
@@ -26,8 +32,6 @@ namespace Toolbox.ApiTools
         public WallpaperApiClient(IWallpaperApiClientSettings wallpaperApiClientSettings)
         {
             _wallpaperApiClientSettings = wallpaperApiClientSettings;
-
-
             _client = new HttpClient
             {
                 BaseAddress = new Uri(_wallpaperApiClientSettings.BaseAddress)
@@ -56,29 +60,12 @@ namespace Toolbox.ApiTools
             return await SetToken();
         }
 
-
-        public async Task SubmitLogs(
-            List<LogMessage> logs,
-            Action onSuccess = null,
-            Action<Exception, HttpStatusCode?> onFailure = null)
-        {
-            if (await Post(
-                    "/Api/User/SubmitLogs", 
-                    logs, 
-                    OnUnwantedResult("Submit logs failed", onFailure))
-                .ConfigureAwait(false))
-            {
-                onSuccess?.Invoke();
-            }
-        }
-
-
         public async Task<List<ExtendedCategory>> GetCategories(
             Action<Exception, HttpStatusCode?> onFailure = null)
         {
             var result =
                 await GetAndDeserialize<List<ExtendedCategory>>(
-                        "/Api/Category", 
+                        CategoriesListEndpoint, 
                         OnUnwantedResult("Get Categories failed", onFailure))
                     .ConfigureAwait(false);
             return result;
@@ -92,7 +79,7 @@ namespace Toolbox.ApiTools
             Action<Exception, HttpStatusCode?> onFailure = null)
         {
             if (await Post(
-                    $"/Api/User/UpdateBlacklist?wallId={id}&blacklisted={blacklisted}",
+                    $"{UpdateBlacklistEndpoint}?wallId={id}&blacklisted={blacklisted}",
                     null, 
                     OnUnwantedResult("Update Blacklist failed", onFailure))
                 .ConfigureAwait(false))
@@ -108,7 +95,7 @@ namespace Toolbox.ApiTools
             Action<Exception, HttpStatusCode?> onFailure = null)
         {
             if (await Post(
-                    $"/Api/User/UpdateFavorite?wallId={id}&favorite={favorite}", 
+                    $"{UpdateFavoriteEndpoint}?wallId={id}&favorite={favorite}", 
                     null, 
                     OnUnwantedResult("Update Favorite failed", onFailure))
                 .ConfigureAwait(false))
@@ -117,6 +104,21 @@ namespace Toolbox.ApiTools
             }
         }
 
+
+        public async Task SubmitLogs(
+            List<LogMessage> logs,
+            Action onSuccess = null,
+            Action<Exception, HttpStatusCode?> onFailure = null)
+        {
+            if (await Post(
+                    SubmitLogsEndpoint, 
+                    logs, 
+                    OnUnwantedResult("Submit logs failed", onFailure))
+                .ConfigureAwait(false))
+            {
+                onSuccess?.Invoke();
+            }
+        }
 
 
         #endregion
@@ -147,7 +149,7 @@ namespace Toolbox.ApiTools
             HttpResponseMessage response = null;
             try
             {
-                var request = CreateRequest(HttpMethod.Post, "/token", loginRequest);
+                var request = CreateRequest(HttpMethod.Post, TokenEndpoint, loginRequest);
                 response = await InvokeAsync(request);
                 
                 response.EnsureSuccessStatusCode();
