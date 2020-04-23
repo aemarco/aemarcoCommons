@@ -140,7 +140,7 @@ namespace Toolbox.ApiTools
         {
             loginRequest ??= new LoginReqObj
             {
-                Token = _wallpaperApiClientSettings.Token,
+                Token = _wallpaperApiClientSettings.Token ?? string.Empty,
                 Email = _wallpaperApiClientSettings.TokenInfo?.Email,
                 Password = null,
                 RememberMe = false,
