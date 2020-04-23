@@ -23,6 +23,7 @@ namespace Toolbox.ApiTools
         private const string UpdateBlacklistEndpoint = "/Api/User/UpdateBlacklist";
         private const string UpdateFavoriteEndpoint = "/Api/User/UpdateFavorite";
         private const string SubmitLogsEndpoint = "/Api/User/SubmitLogs";
+        private const string ResolveWallpaperFilterRequestEndpoint = "/Api/Wallpaper/ResolveWallpaperFilterRequest";
 
         #region ctor
 
@@ -121,6 +122,19 @@ namespace Toolbox.ApiTools
         }
 
 
+        public Task<WallpaperFilterResponse> ResolveWallpaperFilterRequest(
+            WallpaperFilterRequest request, 
+            Action<Exception, HttpStatusCode?> onFailure = null)
+        {
+            var result = PostAndDeserialize<WallpaperFilterResponse>(
+                ResolveWallpaperFilterRequestEndpoint, 
+                    request, 
+                    OnUnwantedResult("Resolve WallpaperFilter Request failed", onFailure));
+
+            return result;
+        }
+
+
         #endregion
 
         #region Medium Level
@@ -187,6 +201,28 @@ namespace Toolbox.ApiTools
                 return default;
             }
         }
+
+        private async Task<T> PostAndDeserialize<T>(string path, object reqContent, Action<Exception, HttpStatusCode?> onFailure = null)
+        {
+
+            HttpResponseMessage response = null;
+            try
+            {
+                await EnsureValidToken().ConfigureAwait(false);
+                var request = CreateRequest(HttpMethod.Post, path, reqContent);
+                response = await InvokeAsync(request).ConfigureAwait(false);
+
+                response.EnsureSuccessStatusCode();
+                var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                return JsonConvert.DeserializeObject<T>(content);
+            }
+            catch (Exception ex)
+            {
+                onFailure?.Invoke(ex, response?.StatusCode);
+                return default;
+            }
+        }
+
 
         private async Task<bool> Post(string path, object content, Action<Exception, HttpStatusCode?> onFailure = null)
         {
