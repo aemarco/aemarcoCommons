@@ -154,10 +154,9 @@ namespace Toolbox.ApiTools
         {
             loginRequest ??= new LoginReqObj
             {
-                Token = _wallpaperApiClientSettings.Token ?? string.Empty,
+                Token = _wallpaperApiClientSettings.Token ?? null,
                 Email = _wallpaperApiClientSettings.TokenInfo?.Email,
                 Password = null,
-                RememberMe = false,
                 WindowsUser = Environment.UserName
             };
             HttpResponseMessage response = null;
