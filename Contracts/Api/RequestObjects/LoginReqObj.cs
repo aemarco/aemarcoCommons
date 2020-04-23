@@ -7,19 +7,40 @@ namespace Contracts.Api.RequestObjects
 {
     public class LoginReqObj
     {
-
-        [DataType(DataType.Password)]
+        /// <summary>
+        /// still valid token allows token renewal
+        /// </summary>
         public string Token { get; set; }
 
+
+        /// <summary>
+        /// email of the user to issue a token for
+        /// </summary>
+        [Required]
         [EmailAddress]
         public string Email { get; set; }
 
-        [DataType(DataType.Password)]
+
+        /// <summary>
+        /// password of the user to issue a token for
+        /// </summary>
+        [Required]
         public string Password { get; set; }
 
-        public bool RememberMe { get; set; } = false;
-
+        /// <summary>
+        /// username which being used on client machine
+        /// </summary>
+        [Required]
         public string WindowsUser { get; set; } = Environment.UserName;
+
+
+
+
+
+
+
+        [Obsolete]
+        public bool RememberMe { get; set; }
 
         [Obsolete]
         public string ToJson()

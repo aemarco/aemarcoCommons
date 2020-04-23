@@ -38,7 +38,7 @@
         /// </summary>
         public string Category { get; set; }
         /// <summary>
-        /// Adult level between 0 and 100
+        /// Adult level between 0 and 100, 0 = noTits, 100 moreThanTits
         /// </summary>
         public int AdultLevel { get; set; }
         /// <summary>
@@ -50,11 +50,11 @@
         /// </summary>
         public int Height { get; set; }
         /// <summary>
-        /// "," seperated tags (entirely free text stuff)
+        /// comma separated tags
         /// </summary>
         public string Tagstring { get; set; }
         /// <summary>
-        /// is true if this wallpaper is favorized by the user
+        /// is true if this wallpaper is a user favorite
         /// </summary>
         public bool IsFavorite { get; set; }
         /// <summary>
@@ -62,7 +62,7 @@
         /// </summary>
         public bool IsBlacklisted { get; set; }
         /// <summary>
-        /// if true, information sourced from cache
+        /// if true when sourced from cache
         /// </summary>
         public bool FromCache { get; set; }
         

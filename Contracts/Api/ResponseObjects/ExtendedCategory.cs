@@ -6,7 +6,7 @@ namespace Contracts.Api.ResponseObjects
     public class ExtendedCategory
     {
         /// <summary>
-        /// Id of the category, refered to in filters etc.
+        /// Id of the category, referred to in filters etc.
         /// </summary>
         public int Id { get; set; }
         /// <summary>
@@ -23,7 +23,7 @@ namespace Contracts.Api.ResponseObjects
         public string Icon { get; set; }
         
         /// <summary>
-        /// List of Subcategories
+        /// List of Subcategories (only if tree version is requested)
         /// </summary>
         public List<ExtendedCategory> SubCategories { get; set; }
         /// <summary>

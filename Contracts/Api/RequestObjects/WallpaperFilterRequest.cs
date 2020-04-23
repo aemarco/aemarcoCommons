@@ -1,4 +1,5 @@
 ﻿
+using System;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -19,10 +20,11 @@ namespace Contracts.Api.RequestObjects
         /// <summary>
         /// Id of the user to resolve, used for FSK and Favorites
         /// </summary>
+        [Obsolete]
         public string UserId { get; set; }
         /// <summary>
         /// defines how many results are desired for this request,
-        /// irrelevant for Signature
+        /// defaults to 1, max being 100
         /// </summary>
         public int DesiredAmount { get; set; } = 1;
 
@@ -33,11 +35,13 @@ namespace Contracts.Api.RequestObjects
 
 
         /// <summary>
-        /// minimal desired ratio ex. 16/9 monitor is 1.77... so minimum supposed to be lower 
+        /// minimal desired ratio ex. 16/9 monitor is 1.77... so minimum supposed to be lower,
+        /// is an alternative to DesiredWidth and DesiredHeight
         /// </summary>
         public double? MinRatio { get; set; }
         /// <summary>
-        /// maximal desired ratio ex. 16/9 monitor is 1.77... so maximum supposed to be higher 
+        /// maximal desired ratio ex. 16/9 monitor is 1.77... so maximum supposed to be higher
+        /// is an alternative to DesiredWidth and DesiredHeight
         /// </summary>
         public double? MaxRatio { get; set; }
         /// <summary>
@@ -49,33 +53,35 @@ namespace Contracts.Api.RequestObjects
         /// </summary>
         public int? DesiredHeight { get; set; }
         /// <summary>
-        /// only applies wehn DesiredWidth and DesiredHeight is used
+        /// how may percent do we allow to cut horizontally, defaults to 20, min 0, max 50
+        /// only applies when DesiredWidth and DesiredHeight is used
         /// </summary>
         [Range(0, 50)]
         public int PercentLeftRightCutAllowed { get; set; } = 20;
         /// <summary>
-        /// only applies wehn DesiredWidth and DesiredHeight is used
+        /// how many percent do we allow to cut vertically, defaults to 10, min 0, max 50
+        /// only applies when DesiredWidth and DesiredHeight is used
         /// </summary>
         [Range(0, 50)]
         public int PercentTopBottomCutAllowed { get; set; } = 10;
         // <summary>
-        /// List of Ids of desired Categories
+        /// List of Ids for desired Categories
         /// </summary>
         public List<int> CategoryIds { get; set; }
         /// <summary>
-        /// minimum Adult Level 0...100, defines lower limit
+        /// minimum Adult Limit 0...100, defines lower limit
         /// </summary>
         public int MinAdult { get; set; }
         /// <summary>
-        /// maximu Adult Level 0...100, defines upper limit
+        /// maximum Adult Limit 0...100, defines upper limit
         /// </summary>
         public int MaxAdult { get; set; }
         /// <summary>
-        /// space seperatet Search terms (slow) ex. "BMW Cabrio" will be AND
+        /// space separated Search terms (slow) ex. "BMW Cabrio" will be AND
         /// </summary>
         public string Search { get; set; }
         /// <summary>
-        /// picture width * height must be higher than is value
+        /// picture width * height must be at least this value
         /// </summary>
         public double MinPixels { get; set; }
         /// <summary>
@@ -84,12 +90,12 @@ namespace Contracts.Api.RequestObjects
         public List<string> Extensions { get; set; }
 
         /// <summary>
-        /// filter down to a specific girl
+        /// filter down to a specific girl id
         /// </summary>
         public int? GirlId { get; set; }
 
         /// <summary>
-        /// true means that results beeing filtered to pictures marked as favorites for current user
+        /// true means that results being filtered down to pictures marked as favorites for given user
         /// </summary>
         public bool FavoritesOnly { get; set; }
 

@@ -2,7 +2,13 @@
 {
     public class ExtendedGirl
     {
+        /// <summary>
+        /// id of the girl, so it can be referred to
+        /// </summary>
         public int Id { get; set; }
+        /// <summary>
+        /// girls display name
+        /// </summary>
         public string DisplayName { get; set; }
 
     }
