@@ -24,7 +24,6 @@ namespace Contracts.Api.RequestObjects
         /// <summary>
         /// password of the user to issue a token for
         /// </summary>
-        [Required]
         public string Password { get; set; }
 
         /// <summary>
