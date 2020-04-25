@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Drawing;
 
-namespace Extensions.netExtensions
+namespace Extensions.PictureExtensions
 {
-    public static class SizeExtensions
+    public static class RatioExtensions
     {
         /// <summary>
         /// minRatio means that the picture is currently not wide enough, hence needs cutting at top and bottom.
@@ -13,7 +13,6 @@ namespace Extensions.netExtensions
         /// <param name="targetSize">width and height</param>
         /// <param name="percentTopBottomCutAllowed">total allowed percentage to be cut at top and bottom</param>
         /// <returns>minimum ratio</returns>
-        [Obsolete("Use PictureExtensions instead")]
         public static double ToMinRatio(this Size targetSize, int percentTopBottomCutAllowed)
         {
             if (targetSize.Width <= 0 || targetSize.Height <= 0)
@@ -26,7 +25,6 @@ namespace Extensions.netExtensions
             return Math.Round(targetSize.Width / maxHeight, 2);
         }
 
-        [Obsolete("Use PictureExtensions instead")]
         public static double ToMaxRatio(this Size targetSize, int percentLeftRightCutAllowed)
         {
             if (targetSize.Width <= 0 || targetSize.Height <= 0)
@@ -43,9 +41,5 @@ namespace Extensions.netExtensions
             
             return Math.Round(maxRatio, 2);
         }
-
-
-       
-
     }
 }

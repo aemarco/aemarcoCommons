@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
-namespace Extensions.netExtensions
+namespace Extensions.TimeExtensions
 {
-    public static class TimespanExtensions
+    public static class FormattingExtensions
     {
+
         public static string ToNiceTimespanString(this TimeSpan ts, int significantDigits = 2, string zeroValue = "Now")
         {
             if (significantDigits == 0)
@@ -12,7 +14,7 @@ namespace Extensions.netExtensions
                 return ts.ToString();
             }
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             if (significantDigits > 0 && ts.Days > 0)
             {
                 sb.Append($"{ts.Days} days ");
@@ -38,6 +40,11 @@ namespace Extensions.netExtensions
             }
             return sb.ToString();
         }
+
+
+
+
+
 
     }
 }

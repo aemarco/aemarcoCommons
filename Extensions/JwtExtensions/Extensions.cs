@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using Contracts.Api;
-using Extensions.netExtensions;
+using Extensions.TimeExtensions;
 using Newtonsoft.Json;
 
 namespace Extensions.JwtExtensions
@@ -53,7 +53,7 @@ namespace Extensions.JwtExtensions
         /// <returns></returns>
         public static bool StillValid(this JwtTokenModel model)
         {
-            return model?.ValidUntil.IsInFuture(TimeSpan.FromMinutes(1)) ?? false;
+            return model?.ValidUntil.IsFuture() ?? false;
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace Extensions.JwtExtensions
             var durationSeconds = (model.ValidUntil - model.IssuedAt).TotalSeconds;
             var renewalAt = model.IssuedAt.AddSeconds(durationSeconds / 100 * percentTillRenewal);
 
-            return !renewalAt.IsInFuture();
+            return renewalAt.IsPast();
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace Extensions.JwtExtensions
         {
             if (model == null) return false;
             if (!model.StillValid()) return false;
-            return !model.ValidUntil.IsInFuture(minimumDuration);
+            return !model.ValidUntil.StillIsFuture(minimumDuration);
         }
     }
 }

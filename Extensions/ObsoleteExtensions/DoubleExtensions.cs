@@ -1,9 +1,12 @@
 ﻿using System;
 
+// ReSharper disable once CheckNamespace
 namespace Extensions.netExtensions
 {
     public static class DoubleTools
     {
+
+        [Obsolete("Use NumberExtensions instead")]
         public static double LimitToRange(
             this double value, double inclusiveMinimum, double inclusiveMaximum)
         {
@@ -12,6 +15,7 @@ namespace Extensions.netExtensions
         }
 
 
+        [Obsolete("Use NumberExtensions instead")]
         public static bool IsNearlyEqual(this double number, double compareValue, double epsilon = 0.0000001d)
         {
             const double minNormal = 2.2250738585072014E-308d;

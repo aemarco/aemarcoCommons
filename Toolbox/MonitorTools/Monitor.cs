@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
-using Extensions.netExtensions;
 using Toolbox.PictureTools;
+using Extensions.PictureExtensions;
+using Extensions.NumberExtensions;
 
 namespace Toolbox.MonitorTools
 {

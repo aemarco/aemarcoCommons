@@ -1,7 +1,8 @@
 ﻿using Contracts.Api.RequestObjects;
 using System.Drawing;
 using System.Linq;
-using Extensions.netExtensions;
+using Extensions.PictureExtensions;
+
 
 namespace Extensions.contentExtensions
 {

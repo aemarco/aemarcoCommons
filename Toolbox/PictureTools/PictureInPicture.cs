@@ -1,5 +1,5 @@
 ﻿using System.Drawing;
-using Extensions.netExtensions;
+using Extensions.NumberExtensions;
 
 namespace Toolbox.PictureTools
 {
