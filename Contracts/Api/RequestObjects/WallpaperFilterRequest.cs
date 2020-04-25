@@ -64,7 +64,7 @@ namespace Contracts.Api.RequestObjects
         /// </summary>
         [Range(0, 50)]
         public int PercentTopBottomCutAllowed { get; set; } = 10;
-        // <summary>
+        /// <summary>
         /// List of Ids for desired Categories
         /// </summary>
         public List<int> CategoryIds { get; set; }
