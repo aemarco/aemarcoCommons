@@ -1,11 +1,11 @@
 ﻿using System;
-using Extensions.netExtensions;
+using Extensions.TimeExtensions;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace ExtensionsTests.netExtensionTests
+namespace ExtensionsTests.TimeExtensionsTests
 {
-    public class DateTimeOffsetExtensionsTests
+    public class ComparisonExtensionsTests
     {
 
         [TestCase(5, 6, true)]

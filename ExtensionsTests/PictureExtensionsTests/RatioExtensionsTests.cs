@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Drawing;
-using Extensions.netExtensions;
+using Extensions.PictureExtensions;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace ExtensionsTests.netExtensionTests
+namespace ExtensionsTests.PictureExtensionsTests
 {
-    public class SizeExtensionsTests
+    public class RatioExtensionsTests
     {
         [TestCase(1920,1080,20,1.42)] //picture 1920 * 1350
         [TestCase(1920, 1080, 10, 1.6)] //picture 1920 * 1200

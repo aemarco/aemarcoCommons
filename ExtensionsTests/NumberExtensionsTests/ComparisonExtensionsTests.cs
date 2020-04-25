@@ -1,10 +1,10 @@
-﻿using Extensions.netExtensions;
+﻿using Extensions.NumberExtensions;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace ExtensionsTests.netExtensionTests
+namespace ExtensionsTests.NumberExtensionsTests
 {
-    public class DoubleExtensionsTests
+    public class ComparisonExtensionsTests
     {
 
 
