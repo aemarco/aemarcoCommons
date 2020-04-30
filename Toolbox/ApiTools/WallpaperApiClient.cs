@@ -22,7 +22,8 @@ namespace Toolbox.ApiTools
         private const string CategoriesListEndpoint = "/Api/Category/CategoriesList";
         private const string UpdateBlacklistEndpoint = "/Api/User/UpdateBlacklist";
         private const string UpdateFavoriteEndpoint = "/Api/User/UpdateFavorite";
-        private const string SubmitLogsEndpoint = "/Api/User/SubmitLogs";
+        private const string GetLogSettingEndpoint = "/Api/Log/GetLogSetting";
+        private const string SubmitLogsEndpoint = "/Api/Log/SubmitLogs";
         private const string ResolveWallpaperFilterRequestEndpoint = "/Api/Wallpaper/ResolveWallpaperFilterRequest";
 
         #region ctor
@@ -103,6 +104,20 @@ namespace Toolbox.ApiTools
             {
                 onSuccess?.Invoke();
             }
+        }
+
+
+        public async Task<LogSetting> GetLogSetting(
+            string environment, 
+            string app,
+            Action<Exception, HttpStatusCode?> onFailure = null)
+        {
+            var result =
+                await GetAndDeserialize<LogSetting>(
+                        $"{GetLogSettingEndpoint}?environment={environment}&app={app}", 
+                        OnUnwantedResult("Get LogSetting failed", onFailure))
+                    .ConfigureAwait(false);
+            return result;
         }
 
 
