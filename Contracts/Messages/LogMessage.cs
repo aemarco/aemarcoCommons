@@ -24,6 +24,7 @@ namespace Contracts.Messages
         public string App { get; set; }
         /// <summary>
         /// email of the user, "tom.turbo@gmail.com"
+        /// leave this null, if its submitted to Api
         /// </summary>
         public string User { get; set; }
         /// <summary>
