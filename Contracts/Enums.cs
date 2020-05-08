@@ -1,7 +1,4 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-
-namespace Contracts
+﻿namespace Contracts
 {
 
     /// <summary>

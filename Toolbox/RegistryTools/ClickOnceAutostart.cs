@@ -1,79 +1,86 @@
 ﻿using System;
+using Contracts.Interfaces;
 
 namespace Toolbox.RegistryTools
 {
-    public class ClickOnceAutostart
+    public class ClickOnceAutostart : ISingleton
     {
-        #region ctor
-
-        private readonly string _publisherName;
-        private readonly string _appName;
-
-        private const string AUTOSTARTPATH = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
-        private readonly string _apprefLocation;
-
-        public ClickOnceAutostart(string publisherName, string appName)
+        
+        private string _appName;
+        public string AppName
         {
-            if (string.IsNullOrWhiteSpace(publisherName))
-                throw new ArgumentException("Publisher must be known", nameof(publisherName));
-            if (string.IsNullOrWhiteSpace(appName))
-                throw new ArgumentException("Appname must be known", nameof(appName));
-
-
-            //appname needed for autostart
-            _publisherName = publisherName;
-            _appName = appName;
-
-
-            //location needed for autostart
-            _apprefLocation = $"{Environment.GetFolderPath(Environment.SpecialFolder.Programs)}\\{_publisherName}\\" +
-                $"{_appName}.appref-ms";
-
-            //auto-change of autostart path based on key
-            EnsureCorrectPathInAutostart();
-        }
-
-        private void EnsureCorrectPathInAutostart()
-        {
-            string path = RegistryEditor.GetUserValue(AUTOSTARTPATH, _appName)?.ToString();
-            if (path != null && path != _apprefLocation)
+            get => _appName;
+            set
             {
-                RegistryEditor.SetUserValue(AUTOSTARTPATH, _appName, _apprefLocation);
+                if (value == _appName) return;
+
+                _appName = value;
+                UpdateAppref();
             }
         }
 
-        #endregion
 
-        #region props
+        private string _publisher;
+        public string Publisher
+        {
+            get => _publisher;
+            set
+            {
+                if (value == _publisher) return;
+
+
+                _publisher = value;
+                UpdateAppref();
+            }
+        }
+
+
+        private bool _valid = false;
+        private const string AutostartPath = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
+        private string _apprefLocation;
+        private void UpdateAppref()
+        {
+            if (string.IsNullOrWhiteSpace(_appName) ||
+                string.IsNullOrWhiteSpace(_publisher)) return;
+
+
+            //location needed for autostart
+            _apprefLocation = $"{Environment.GetFolderPath(Environment.SpecialFolder.Programs)}\\" +
+                              $"{_publisher}\\{_appName}.appref-ms";
+            _valid = true;
+
+            //auto-change of autostart path based on key
+            var path = RegistryEditor.GetUserValue(AutostartPath, _appName)?.ToString();
+            if (path != null && path != _apprefLocation)
+            {
+                RegistryEditor.SetUserValue(AutostartPath, _appName, _apprefLocation);
+            }
+        }
 
         public bool AppAutostarted
         {
             get
             {
-                var path = RegistryEditor.GetUserValue(AUTOSTARTPATH, _appName)?.ToString();
+                if (!_valid) return false;
+
+                var path = RegistryEditor.GetUserValue(AutostartPath, _appName)?.ToString();
                 return path != null && path == _apprefLocation;
             }
             set
             {
+                if (!_valid) return;
 
                 switch (value)
                 {
                     case false:
-                        RegistryEditor.DeleteUserValue(AUTOSTARTPATH, _appName);
+                        RegistryEditor.DeleteUserValue(AutostartPath, _appName);
                         break;
                     case true:
-                        RegistryEditor.SetUserValue(AUTOSTARTPATH, _appName, _apprefLocation);
+                        RegistryEditor.SetUserValue(AutostartPath, _appName, _apprefLocation);
                         break;
                 }
 
             }
         }
-
-
-        #endregion
-
-
-
-
     }
 }

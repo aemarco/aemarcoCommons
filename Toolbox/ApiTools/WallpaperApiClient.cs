@@ -1,22 +1,22 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Authentication;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Contracts.Api.RequestObjects;
 using Contracts.Api.ResponseObjects;
+using Contracts.Interfaces;
 using Contracts.Messages;
 using Extensions.JwtExtensions;
 using Newtonsoft.Json;
 
 namespace Toolbox.ApiTools
 {
-    public class WallpaperApiClient
+    // ReSharper disable once ClassNeverInstantiated.Global
+    public class WallpaperApiClient : ISingleton
     {
         private const string TokenEndpoint = "/Api/token";
         private const string CategoriesListEndpoint = "/Api/Category/CategoriesList";
