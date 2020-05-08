@@ -2,6 +2,8 @@
 
 namespace Contracts.Attributes
 {
+
+    [Obsolete]
     public sealed class VersionAttribute : Attribute
     {
         public VersionAttribute(string version)

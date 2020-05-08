@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace Contracts.Messages
 {
@@ -58,7 +59,7 @@ namespace Contracts.Messages
 
 
 
-        //conveniance
+        //convenience
         [JsonIgnore]
         public string Exception
         {

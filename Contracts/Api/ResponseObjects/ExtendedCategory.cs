@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace Contracts.Api.ResponseObjects
 {
@@ -29,22 +32,31 @@ namespace Contracts.Api.ResponseObjects
         /// true if this category is a root category
         /// </summary>
         public bool IsMainCategory { get; set; }
+        
+        
         /// <summary>
         /// true if this category is adult relevant
         /// </summary>
         //logic
-        public bool FSK_Relevat
-        {
-            get
-            {
-                //TODO: nicht gerade der hingucker.... (All und "" sind irrelevant?)
-                return
-                  CategoryString.StartsWith("Girls") ||
-                  CategoryString.StartsWith("Men") ||
-                  CategoryString == string.Empty ||
-                  CategoryString == "All";
-            }
-        }
+        [Obsolete]
+        // ReSharper disable once IdentifierTypo
+        // ReSharper disable once InconsistentNaming
+        public bool FSK_Relevat =>
+            
+            CategoryString.StartsWith("Girls") ||
+            CategoryString.StartsWith("Men") ||
+            CategoryString == string.Empty ||
+            CategoryString == "All";
+
+
+
+        /// <summary>
+        /// true if this category is adult relevant
+        /// </summary>
+#pragma warning disable 612
+        public bool FskRelevant => FSK_Relevat;
+#pragma warning restore 612
+
 
     }
 }

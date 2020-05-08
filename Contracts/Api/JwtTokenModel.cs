@@ -3,6 +3,7 @@ using System.Globalization;
 using Contracts.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace Contracts.Api
 {

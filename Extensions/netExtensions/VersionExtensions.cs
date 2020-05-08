@@ -8,14 +8,15 @@ namespace Extensions.netExtensions
     {
         public static void ToTextFile(this Version version, string filePath)
         {
-            File.WriteAllText(filePath, JsonConvert.SerializeObject(version, Formatting.Indented));
+            File.WriteAllText(filePath, version.ToString());
         }
 
-        public static Version ToVersionFromTextFile(this FileInfo file, Version defaultResult = null)
+
+        public static Version ToVersionFromTextFile(this FileInfo file, string defaultVersion = "1.0.0.0")
         {
             return (file.Exists)
-                ? JsonConvert.DeserializeObject<Version>(File.ReadAllText(file.FullName))
-                : defaultResult;
+                ? Version.Parse(File.ReadAllText(file.FullName))
+                : Version.Parse(defaultVersion);
         }
     }
 }

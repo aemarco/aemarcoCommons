@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace Contracts.Api.ResponseObjects
 {
+    // ReSharper disable once ClassNeverInstantiated.Global
     public class WallpaperFilterResponse
     {
         /// <summary>
@@ -19,6 +21,7 @@ namespace Contracts.Api.ResponseObjects
         /// <summary>
         /// desired amount of wallpapers
         /// </summary>
+        // ReSharper disable once CollectionNeverUpdated.Global
         public List<WallpaperInfo> Wallpapers { get; set; } = new List<WallpaperInfo>();
 
     }

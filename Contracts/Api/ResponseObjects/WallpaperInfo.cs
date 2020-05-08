@@ -1,4 +1,6 @@
-﻿namespace Contracts.Api.ResponseObjects
+﻿// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+namespace Contracts.Api.ResponseObjects
 {
     public class WallpaperInfo
     {
