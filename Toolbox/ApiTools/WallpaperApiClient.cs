@@ -20,6 +20,7 @@ namespace Toolbox.ApiTools
     {
         private const string TokenEndpoint = "/Api/token";
         private const string CategoriesListEndpoint = "/Api/Category/CategoriesList";
+        private const string FindGirlsBySearchEndpoint = "/Api/Girl/FindBySearch";
         private const string UpdateBlacklistEndpoint = "/Api/User/UpdateBlacklist";
         private const string UpdateFavoriteEndpoint = "/Api/User/UpdateFavorite";
         private const string GetLogSettingEndpoint = "/Api/Log/GetLogSetting";
@@ -72,6 +73,22 @@ namespace Toolbox.ApiTools
                     .ConfigureAwait(false);
             return result;
         }
+
+
+        public async Task<List<ExtendedGirl>> FindGirlsBySearch(
+            string search,  
+            Action<Exception, HttpStatusCode?> onFailure = null)
+        {
+            var result =
+                await PostAndDeserialize<List<ExtendedGirl>>(
+                    $"{FindGirlsBySearchEndpoint}?search={search}",
+                    null,
+                    OnUnwantedResult("Failed to search for Girls", onFailure))
+                    .ConfigureAwait(false);
+
+            return result;
+        }
+
 
 
         public async Task UpdateBlacklist(
