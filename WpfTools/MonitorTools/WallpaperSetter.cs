@@ -33,9 +33,9 @@ namespace WpfTools.MonitorTools
         ///  AllowFillForceCut (default): Like AllowFill, otherwise Fit with allowed cutting 
         /// </param>
         // ReSharper disable once MemberCanBeProtected.Global
-        public WallpaperSetter(WallpaperMode wallMode)
+        public WallpaperSetter(WallpaperMode wallMode, string wallLocation)
         {
-            _defaultBackgroundFile = new FileInfo("CurrentWallpaper.jpg").FullName;
+            _defaultBackgroundFile = wallLocation;
             _wallMode = wallMode;
 
             _monitors = GetMonitors().ToList();
