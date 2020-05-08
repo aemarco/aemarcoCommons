@@ -20,6 +20,11 @@ namespace Toolbox.SerializationTools
 
         #region Handling entries
 
+        public T GetEntry(string key)
+        {
+            return Storage.ContainsKey(key) ? Storage[key] : null;
+        }
+
         public void AddOrUpdateEntry(string key, T entry)
         {
             if (!Storage.ContainsKey(key))
