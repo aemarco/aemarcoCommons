@@ -1,5 +1,8 @@
 ﻿// ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
+
+using System.Collections.Generic;
+
 namespace Contracts.Api.ResponseObjects
 {
     public class WallpaperInfo
@@ -55,6 +58,10 @@ namespace Contracts.Api.ResponseObjects
         /// comma separated tags
         /// </summary>
         public string Tagstring { get; set; }
+        /// <summary>
+        /// List of Girl Id´s which are in the picture
+        /// </summary>
+        public List<int> GirlIds { get; set; } = new List<int>();
         /// <summary>
         /// is true if this wallpaper is a user favorite
         /// </summary>
