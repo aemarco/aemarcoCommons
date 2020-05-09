@@ -1,9 +1,10 @@
-﻿
-using System;
+﻿using System;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace Contracts.Api.RequestObjects
 {
@@ -27,7 +28,12 @@ namespace Contracts.Api.RequestObjects
         /// defaults to 1, max being 100
         /// </summary>
         public int DesiredAmount { get; set; } = 1;
-
+        /// <summary>
+        /// defines a target quota for favorites between 0..100
+        /// 0 means no increased chance of favorites
+        /// 100 means it will always be favorites
+        /// </summary>
+        public int FavoritePushQuota { get; set; } = 0;
 
         #endregion
 
