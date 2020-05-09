@@ -21,6 +21,7 @@ namespace Toolbox.ApiTools
         private const string TokenEndpoint = "/Api/token";
         private const string CategoriesListEndpoint = "/Api/Category/CategoriesList";
         private const string FindGirlsBySearchEndpoint = "/Api/Girl/FindBySearch";
+        private const string GetAllGirlEndpoint = "/Api/Girl/GetAll";
         private const string UpdateBlacklistEndpoint = "/Api/User/UpdateBlacklist";
         private const string UpdateFavoriteEndpoint = "/Api/User/UpdateFavorite";
         private const string GetLogSettingEndpoint = "/Api/Log/GetLogSetting";
@@ -63,33 +64,39 @@ namespace Toolbox.ApiTools
             return await SetToken();
         }
 
-        public async Task<List<ExtendedCategory>> GetCategories(
+        public Task<List<ExtendedCategory>> GetCategories(
             Action<Exception, HttpStatusCode?> onFailure = null)
         {
             var result =
-                await GetAndDeserialize<List<ExtendedCategory>>(
-                        CategoriesListEndpoint, 
-                        OnUnwantedResult("Get Categories failed", onFailure))
-                    .ConfigureAwait(false);
+                 GetAndDeserialize<List<ExtendedCategory>>(
+                    CategoriesListEndpoint,
+                    OnUnwantedResult("Get Categories failed", onFailure));
+                    
             return result;
         }
 
 
-        public async Task<List<ExtendedGirl>> FindGirlsBySearch(
+        public Task<List<ExtendedGirl>> FindGirlsBySearch(
             string search,  
             Action<Exception, HttpStatusCode?> onFailure = null)
         {
             var result =
-                await PostAndDeserialize<List<ExtendedGirl>>(
-                    $"{FindGirlsBySearchEndpoint}?search={search}",
-                    null,
-                    OnUnwantedResult("Failed to search for Girls", onFailure))
-                    .ConfigureAwait(false);
+                PostAndDeserialize<List<ExtendedGirl>>(
+                        $"{FindGirlsBySearchEndpoint}?search={search}",
+                        OnUnwantedResult("Failed to search for Girls", onFailure));
 
             return result;
         }
 
-
+        public Task<List<ExtendedGirl>> GetAllGirls(
+            Action<Exception, HttpStatusCode?> onFailure = null)
+        {
+            var result =
+                GetAndDeserialize<List<ExtendedGirl>>(
+                    GetAllGirlEndpoint,
+                    OnUnwantedResult("Failed to get Girls", onFailure));
+            return result;
+        }
 
         public async Task UpdateBlacklist(
             int id, 
@@ -124,16 +131,15 @@ namespace Toolbox.ApiTools
         }
 
 
-        public async Task<LogSetting> GetLogSetting(
+        public Task<LogSetting> GetLogSetting(
             string environment, 
             string app,
             Action<Exception, HttpStatusCode?> onFailure = null)
         {
             var result =
-                await GetAndDeserialize<LogSetting>(
-                        $"{GetLogSettingEndpoint}?environment={environment}&app={app}", 
-                        OnUnwantedResult("Get LogSetting failed", onFailure))
-                    .ConfigureAwait(false);
+                GetAndDeserialize<LogSetting>(
+                    $"{GetLogSettingEndpoint}?environment={environment}&app={app}",
+                    OnUnwantedResult("Get LogSetting failed", onFailure));
             return result;
         }
 
