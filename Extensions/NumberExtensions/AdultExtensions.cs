@@ -1,17 +1,23 @@
 ﻿using System;
 using System.Text;
 
-namespace Extensions.contentExtensions
+namespace Extensions.NumberExtensions
 {
     public static class AdultExtensions
     {
+
+        public static string ToAdultStringFromDisplayAdult(this int adultLevel, int userMax = 39)
+        {
+            return adultLevel.ToRealAdult(userMax).ToAdultString();
+        }
+
         public static string ToAdultString(this int adultLevel)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             if (adultLevel >= 101)
             {
-                sb.Append("Unbekannt");
+                sb.Append("Unknown");
             }
             else if (adultLevel >= 90)
             {
@@ -31,11 +37,11 @@ namespace Extensions.contentExtensions
             }
             else if (adultLevel >= 50)
             {
-                sb.Append("Erotik+");
+                sb.Append("Erotic+");
             }
             else if (adultLevel >= 40)
             {
-                sb.Append("Erotik");
+                sb.Append("Erotic");
             }
             else if (adultLevel >= 30)
             {
@@ -59,7 +65,7 @@ namespace Extensions.contentExtensions
         public static int ToDisplayAdult(this int adultLevel, int userMax)
         {
             var userRange = (userMax <= 100) ? 100 : 101;
-            int result = (int)Math.Round((1.0 * adultLevel / userMax) * userRange);
+            var result = (int)Math.Round((1.0 * adultLevel / userMax) * userRange);
             return result;
         }
 
@@ -72,7 +78,7 @@ namespace Extensions.contentExtensions
             if (displayAdult > userRange) displayAdult = userRange;
 
 
-            int result = (int)Math.Round((1.0 * displayAdult / userRange) * userMax);
+            var result = (int)Math.Round((1.0 * displayAdult / userRange) * userMax);
             return result;
         }
 

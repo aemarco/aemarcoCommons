@@ -1,7 +1,7 @@
-using Extensions.contentExtensions;
+using Extensions.NumberExtensions;
 using NUnit.Framework;
 
-namespace ExtensionsTests.contentExtensionsTests
+namespace ExtensionsTests.NumberExtensionsTests
 {
     public class AdultExtensionsTests
     {
