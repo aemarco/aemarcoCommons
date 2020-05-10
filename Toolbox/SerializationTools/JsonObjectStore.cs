@@ -6,6 +6,7 @@ using System.Linq;
 
 namespace Toolbox.SerializationTools
 {
+    [Obsolete("use JsonTypeToFileStore instead")]
     public class JsonObjectStore<T>
         where T : class
     {
