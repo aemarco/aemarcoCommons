@@ -7,7 +7,7 @@ using Newtonsoft.Json.Converters;
 
 namespace Contracts.Api
 {
-    public class JwtTokenModel : IUserInfo
+    public class JwtTokenModel
     {
         [JsonProperty("iat")]
         [JsonConverter(typeof(SecondEpochConverter))]

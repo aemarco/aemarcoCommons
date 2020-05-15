@@ -35,6 +35,9 @@ namespace Toolbox.SerializationTools
         public void SaveChanges()
         {
             Instance.TimestampSaved = DateTimeOffset.Now;
+            var di = new FileInfo(Instance.Filepath).Directory;
+            if (!di!.Exists) di.Create();
+
             File.WriteAllText(Instance.Filepath, JsonConvert.SerializeObject(Instance, Formatting.Indented));
         }
 
