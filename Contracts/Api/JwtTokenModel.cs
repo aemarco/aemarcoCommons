@@ -23,8 +23,6 @@ namespace Contracts.Api
         public string SecurityStamp { get; set; }
         public int AdultLevel { get; set; }
         
-        [Obsolete]
-        public bool IsSupervisor { get; set; }
 
         public bool RoleAdmin { get; set; }
         public bool RoleWallEdit { get; set; }
