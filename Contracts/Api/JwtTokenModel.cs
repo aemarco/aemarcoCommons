@@ -22,7 +22,16 @@ namespace Contracts.Api
         [JsonProperty("stamp")]
         public string SecurityStamp { get; set; }
         public int AdultLevel { get; set; }
+        
+        [Obsolete]
         public bool IsSupervisor { get; set; }
+
+        public bool RoleAdmin { get; set; }
+        public bool RoleWallEdit { get; set; }
+        public bool RoleGirlEdit { get; set; }
+        public bool RoleVideoShow { get; set; }
+        public bool RoleVideoEdit { get; set; }
+        public bool RoleWallchangerUser { get; set; }
     }
 
     public class SecondEpochConverter : DateTimeConverterBase
