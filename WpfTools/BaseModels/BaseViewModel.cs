@@ -1,6 +1,6 @@
 ﻿namespace WpfTools.BaseModels
 {
-    public class BaseViewModel : BaseNotifier
+    public class BaseViewModel : BaseNotifier, IBaseViewModel
     {
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace WpfTools.BaseModels
@@ -29,6 +30,8 @@ namespace WpfTools.BaseModels
             else
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        [Obsolete]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             NotifyPropertyChanged(propertyName);

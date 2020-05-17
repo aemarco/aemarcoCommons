@@ -6,6 +6,5 @@ namespace Toolbox.ApiTools
     {
         string BaseAddress { get; }
         string Token { get; set; }
-        JwtTokenModel TokenInfo { get; }
     }
 }

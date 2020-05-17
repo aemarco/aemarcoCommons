@@ -5,7 +5,9 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Authentication;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using Contracts.Api;
 using Contracts.Api.RequestObjects;
 using Contracts.Api.ResponseObjects;
 using Contracts.Interfaces;
@@ -32,7 +34,6 @@ namespace Toolbox.ApiTools
 
         private readonly HttpClient _client;
         private readonly IWallpaperApiClientSettings _wallpaperApiClientSettings;
-
         public WallpaperApiClient(IWallpaperApiClientSettings wallpaperApiClientSettings)
         {
             _wallpaperApiClientSettings = wallpaperApiClientSettings;
@@ -46,6 +47,11 @@ namespace Toolbox.ApiTools
 
         #region High Level
 
+        private JwtTokenModel _tokenInfo;
+        public JwtTokenModel TokenInfo => _tokenInfo ??= _wallpaperApiClientSettings.Token.ToJwtTokenModel();
+        public HttpClient Client => _client;
+
+
         public async Task Login(LoginReqObj loginRequest, Func<Task> onSuccess = null)
         {
             var result = await SetToken(loginRequest);
@@ -58,18 +64,20 @@ namespace Toolbox.ApiTools
         public async Task<bool> RefreshSessionStatus()
         {
             //not logged in
-            if (!(_wallpaperApiClientSettings.TokenInfo.StillValid())) return false;
+            if (!(TokenInfo.StillValid())) return false;
 
             //renew token
             return await SetToken();
         }
 
         public Task<List<ExtendedCategory>> GetCategories(
-            Action<Exception, HttpStatusCode?> onFailure = null)
+            Action<Exception, HttpStatusCode?> onFailure = null, 
+            CancellationToken cancellationToken = new CancellationToken())
         {
             var result =
                  GetAndDeserialize<List<ExtendedCategory>>(
                     CategoriesListEndpoint,
+                    cancellationToken,
                     OnUnwantedResult("Get Categories failed", onFailure));
                     
             return result;
@@ -78,22 +86,26 @@ namespace Toolbox.ApiTools
 
         public Task<List<ExtendedGirl>> FindGirlsBySearch(
             string search,  
-            Action<Exception, HttpStatusCode?> onFailure = null)
+            Action<Exception, HttpStatusCode?> onFailure = null, 
+            CancellationToken cancellationToken = new CancellationToken())
         {
             var result =
                 PostAndDeserialize<List<ExtendedGirl>>(
                         $"{FindGirlsBySearchEndpoint}?search={search}",
-                        OnUnwantedResult("Failed to search for Girls", onFailure));
+                        OnUnwantedResult("Failed to search for Girls", onFailure),
+                        cancellationToken);
 
             return result;
         }
 
         public Task<List<ExtendedGirl>> GetAllGirls(
-            Action<Exception, HttpStatusCode?> onFailure = null)
+            Action<Exception, HttpStatusCode?> onFailure = null, 
+            CancellationToken cancellationToken = new CancellationToken())
         {
             var result =
                 GetAndDeserialize<List<ExtendedGirl>>(
                     GetAllGirlEndpoint,
+                    cancellationToken,
                     OnUnwantedResult("Failed to get Girls", onFailure));
             return result;
         }
@@ -107,6 +119,7 @@ namespace Toolbox.ApiTools
             if (await Post(
                     $"{UpdateBlacklistEndpoint}?wallId={id}&blacklisted={blacklisted}",
                     null, 
+                    CancellationToken.None,
                     OnUnwantedResult("Update Blacklist failed", onFailure))
                 .ConfigureAwait(false))
             {
@@ -123,6 +136,7 @@ namespace Toolbox.ApiTools
             if (await Post(
                     $"{UpdateFavoriteEndpoint}?wallId={id}&favorite={favorite}", 
                     null, 
+                    CancellationToken.None,
                     OnUnwantedResult("Update Favorite failed", onFailure))
                 .ConfigureAwait(false))
             {
@@ -134,11 +148,13 @@ namespace Toolbox.ApiTools
         public Task<LogSetting> GetLogSetting(
             string environment, 
             string app,
-            Action<Exception, HttpStatusCode?> onFailure = null)
+            Action<Exception, HttpStatusCode?> onFailure = null, 
+            CancellationToken cancellationToken = new CancellationToken())
         {
             var result =
                 GetAndDeserialize<LogSetting>(
                     $"{GetLogSettingEndpoint}?environment={environment}&app={app}",
+                    cancellationToken,
                     OnUnwantedResult("Get LogSetting failed", onFailure));
             return result;
         }
@@ -152,6 +168,7 @@ namespace Toolbox.ApiTools
             if (await Post(
                     SubmitLogsEndpoint, 
                     logs, 
+                    CancellationToken.None,
                     OnUnwantedResult("Submit logs failed", onFailure))
                 .ConfigureAwait(false))
             {
@@ -162,11 +179,13 @@ namespace Toolbox.ApiTools
 
         public Task<WallpaperFilterResponse> ResolveWallpaperFilterRequest(
             WallpaperFilterRequest request, 
-            Action<Exception, HttpStatusCode?> onFailure = null)
+            Action<Exception, HttpStatusCode?> onFailure = null, 
+            CancellationToken cancellationToken = new CancellationToken())
         {
             var result = PostAndDeserialize<WallpaperFilterResponse>(
                 ResolveWallpaperFilterRequestEndpoint, 
-                    request, 
+                    request,
+                    cancellationToken,
                     OnUnwantedResult("Resolve WallpaperFilter Request failed", onFailure));
 
             return result;
@@ -193,7 +212,7 @@ namespace Toolbox.ApiTools
             loginRequest ??= new LoginReqObj
             {
                 Token = _wallpaperApiClientSettings.Token ?? null,
-                Email = _wallpaperApiClientSettings.TokenInfo?.Email,
+                Email = TokenInfo?.Email,
                 Password = null,
                 WindowsUser = Environment.UserName
             };
@@ -201,10 +220,11 @@ namespace Toolbox.ApiTools
             try
             {
                 var request = CreateRequest(HttpMethod.Post, TokenEndpoint, loginRequest);
-                response = await InvokeAsync(request);
+                response = await InvokeAsync(request, CancellationToken.None);
                 
                 response.EnsureSuccessStatusCode();
                 _wallpaperApiClientSettings.Token = await response.Content.ReadAsStringAsync();
+                _tokenInfo = null;
                 return true;
             }
             catch
@@ -212,13 +232,14 @@ namespace Toolbox.ApiTools
                 if (response?.StatusCode == HttpStatusCode.BadRequest)
                 {
                     _wallpaperApiClientSettings.Token = string.Empty;
+                    _tokenInfo = null;
                 }
                 return false;
             }
         }
 
 
-        private async Task<T> GetAndDeserialize<T>(string path, Action<Exception, HttpStatusCode?> onFailure = null)
+        private async Task<T> GetAndDeserialize<T>(string path, CancellationToken cancellationToken, Action<Exception, HttpStatusCode?> onFailure = null)
         {
 
             HttpResponseMessage response = null;
@@ -226,7 +247,7 @@ namespace Toolbox.ApiTools
             {
                 await EnsureValidToken().ConfigureAwait(false);
                 var request = CreateRequest(HttpMethod.Get, path);
-                response = await InvokeAsync(request).ConfigureAwait(false);
+                response = await InvokeAsync(request, cancellationToken).ConfigureAwait(false);
 
                 response.EnsureSuccessStatusCode();
                 var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -239,7 +260,7 @@ namespace Toolbox.ApiTools
             }
         }
 
-        private async Task<T> PostAndDeserialize<T>(string path, object reqContent, Action<Exception, HttpStatusCode?> onFailure = null)
+        private async Task<T> PostAndDeserialize<T>(string path, object reqContent, CancellationToken cancellationToken, Action<Exception, HttpStatusCode?> onFailure = null)
         {
 
             HttpResponseMessage response = null;
@@ -247,7 +268,7 @@ namespace Toolbox.ApiTools
             {
                 await EnsureValidToken().ConfigureAwait(false);
                 var request = CreateRequest(HttpMethod.Post, path, reqContent);
-                response = await InvokeAsync(request).ConfigureAwait(false);
+                response = await InvokeAsync(request,cancellationToken).ConfigureAwait(false);
 
                 response.EnsureSuccessStatusCode();
                 var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -261,7 +282,7 @@ namespace Toolbox.ApiTools
         }
 
 
-        private async Task<bool> Post(string path, object content, Action<Exception, HttpStatusCode?> onFailure = null)
+        private async Task<bool> Post(string path, object content, CancellationToken cancellationToken, Action<Exception, HttpStatusCode?> onFailure = null)
         {
             HttpResponseMessage response = null;
             try
@@ -269,7 +290,7 @@ namespace Toolbox.ApiTools
                 await EnsureValidToken().ConfigureAwait(false);
 
                 var request = CreateRequest(HttpMethod.Post, path, content);
-                response = await InvokeAsync(request).ConfigureAwait(false);
+                response = await InvokeAsync(request, cancellationToken).ConfigureAwait(false);
                 
                 response.EnsureSuccessStatusCode();
                 return true;
@@ -289,12 +310,12 @@ namespace Toolbox.ApiTools
         private async Task EnsureValidToken()
         {
             //ensure token still valid
-            if (!_wallpaperApiClientSettings.TokenInfo.StillValid())
+            if (!TokenInfo.StillValid())
             {
                 throw new AuthenticationException("Invalid Token");
             }
 
-            if (_wallpaperApiClientSettings.TokenInfo.ShouldBeRenewed(30))
+            if (TokenInfo.ShouldBeRenewed(30))
             {
                 //renew token
                 if (!await SetToken().ConfigureAwait(false))
@@ -303,7 +324,6 @@ namespace Toolbox.ApiTools
                 }
             }
         }
-
         private HttpRequestMessage CreateRequest(HttpMethod method, string path, object content = null)
         {
             var request = new HttpRequestMessage(method, path);
@@ -315,11 +335,11 @@ namespace Toolbox.ApiTools
             return request;
         }
 
-        private async Task<HttpResponseMessage> InvokeAsync(HttpRequestMessage request)
+        private async Task<HttpResponseMessage> InvokeAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             _client.DefaultRequestHeaders.Clear();
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _wallpaperApiClientSettings.Token);
-            var response = await _client.SendAsync(request)
+            var response = await _client.SendAsync(request, cancellationToken)
                 .ConfigureAwait(false);
             return response;
         }

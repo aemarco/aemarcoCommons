@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ConfigurationTools\**" />
+    <EmbeddedResource Remove="ConfigurationTools\**" />
+    <None Remove="ConfigurationTools\**" />
+    <Page Remove="ConfigurationTools\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Autofac" Version="5.1.2" />
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.0.8" NoWarn="NU1701" />
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="3.1.0" />
@@ -25,10 +32,6 @@
     <Compile Update="Controls\SliderMenuItem.xaml.cs">
       <DependentUpon>SliderMenuItem.xaml</DependentUpon>
     </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ConfigurationTools\" />
   </ItemGroup>
 
 </Project>
