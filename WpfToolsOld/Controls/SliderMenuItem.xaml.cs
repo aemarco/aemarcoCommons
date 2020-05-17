@@ -7,6 +7,7 @@ using System.Windows.Controls.Primitives;
 
 namespace WpfToolsOld.Controls
 {
+    [Obsolete]
     public partial class SliderMenuItem : MenuItem
     {
         private const double ThumbHeight = 11.0d;

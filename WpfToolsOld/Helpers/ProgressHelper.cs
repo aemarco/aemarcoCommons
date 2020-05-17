@@ -2,6 +2,8 @@
 
 namespace WpfToolsOld.Helpers
 {
+
+    [Obsolete]
     public class ProgressHelper
     {
         private int _countDone;

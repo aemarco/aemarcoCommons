@@ -1,8 +1,10 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace WpfToolsOld.BaseModels
 {
+    [Obsolete]
     public class BaseNotifier : IBaseNotifier
     {
         protected bool NotifyPropertyChangedSync { get; set; } = true;     

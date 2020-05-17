@@ -1,7 +1,9 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace WpfToolsOld.Helpers
 {
+    [Obsolete]
     public static class MessageBoxHelper
     {
         //dissabled per default delivers default Result

@@ -8,6 +8,7 @@ namespace WpfToolsOld.Converters
 {
 
     [ValueConversion(typeof(TimeSpan?), typeof(string))]
+    [Obsolete]
     public class TimespanToStringConverter : IValueConverter
     {
         /// <summary>

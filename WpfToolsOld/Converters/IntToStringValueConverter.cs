@@ -9,6 +9,7 @@ namespace WpfToolsOld.Converters
     /// Two-way converter from int to string
     /// </summary>
     [ValueConversion(typeof(int), typeof(string))]
+    [Obsolete]
     public class IntToStringValueConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

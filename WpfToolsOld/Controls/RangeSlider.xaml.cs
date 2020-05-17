@@ -7,6 +7,7 @@ namespace WpfToolsOld.Controls
     /// <summary>
     /// Interaktionslogik für RangeSlider.xaml
     /// </summary>
+    [Obsolete]
     public partial class RangeSlider : UserControl
     {
         public RangeSlider()

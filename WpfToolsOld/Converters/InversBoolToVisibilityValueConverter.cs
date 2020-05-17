@@ -9,6 +9,7 @@ namespace WpfToolsOld.Converters
     /// Two-way converter from bool to Visibility // false means visible 
     /// </summary>
     [ValueConversion(typeof(bool), typeof(Visibility))]
+    [Obsolete]
     public class InversBoolToVisibilityValueConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

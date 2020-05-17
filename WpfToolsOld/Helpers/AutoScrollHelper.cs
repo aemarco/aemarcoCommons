@@ -1,8 +1,10 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace WpfToolsOld.Helpers
 {
+    [Obsolete]
     public static class AutoScrollHelper
     {
         public static bool GetAutoScroll(DependencyObject obj)

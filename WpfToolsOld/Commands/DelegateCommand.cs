@@ -6,6 +6,7 @@ namespace WpfToolsOld.Commands
     /// <summary>
     /// Simplistic delegate command .
     /// </summary>
+    [Obsolete]
     public class DelegateCommand : ICommand
     {
         public Action CommandAction { get; set; }

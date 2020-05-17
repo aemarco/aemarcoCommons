@@ -9,6 +9,7 @@ namespace WpfToolsOld.Converters
     /// Two-way converter from double to string
     /// </summary>
     [ValueConversion(typeof(double), typeof(string))]
+    [Obsolete]
     public class DoubleToStringValueConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

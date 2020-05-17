@@ -2,6 +2,8 @@
 
 namespace WpfToolsOld.Helpers
 {
+
+    [Obsolete]
     public class ProgressEventArgs : EventArgs
     {
         public ProgressEventArgs(double percent, int done, int total)

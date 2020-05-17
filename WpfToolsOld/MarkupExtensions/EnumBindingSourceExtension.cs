@@ -3,6 +3,8 @@ using System.Windows.Markup;
 
 namespace WpfToolsOld.MarkupExtensions
 {
+
+    [Obsolete]
     public class EnumBindingSourceExtension : MarkupExtension
     {
         private Type _enumType;

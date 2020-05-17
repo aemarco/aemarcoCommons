@@ -5,6 +5,7 @@ using System.Reflection;
 
 namespace WpfToolsOld.Converters
 {
+    [Obsolete]
     public class EnumTypeConverter : EnumConverter
     {
         public EnumTypeConverter(Type type)
