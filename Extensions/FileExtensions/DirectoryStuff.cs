@@ -17,7 +17,7 @@ namespace Extensions.FileExtensions
         private static readonly string[] _ignoredFiles = 
         {
             "desktop.ini",
-            "Thumbs.db",
+            "thumbs.db",
         };
 
         private static readonly string[] _ignoredExtensions = 
@@ -44,8 +44,8 @@ namespace Extensions.FileExtensions
                 
                 // delete from bottom up
                 if (!new DirectoryInfo(path).GetFiles("*", SearchOption.AllDirectories).Any(x =>
-                    !_ignoredFiles.Contains(x.Name) &&
-                    !_ignoredFiles.Contains(x.Extension.ToLower())))
+                    !_ignoredFiles.Contains(x.Name.ToLower()) ||
+                    !_ignoredExtensions.Contains(x.Extension.ToLower())))
                 {
                     Directory.Delete(path, true);
                 }
