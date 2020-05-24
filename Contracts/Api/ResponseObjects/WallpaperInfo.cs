@@ -12,7 +12,7 @@ namespace Contracts.Api.ResponseObjects
         /// <summary>
         /// Id in database
         /// </summary>
-        public int Id { get; set; }
+        public int Id { get; set; } = -1;
         /// <summary>
         /// url pointing to my original file
         /// </summary>
@@ -37,7 +37,7 @@ namespace Contracts.Api.ResponseObjects
         /// <summary>
         /// Id of the Category (see Extended Category)
         /// </summary>
-        public int CategoryId { get; set; }
+        public int CategoryId { get; set; } = -1;
         /// <summary>
         /// Full category path ex. "Vehicle_Cars" (see CategoryString in Extended Category)
         /// </summary>
@@ -45,15 +45,15 @@ namespace Contracts.Api.ResponseObjects
         /// <summary>
         /// Adult level between 0 and 100, 0 = noTits, 100 moreThanTits
         /// </summary>
-        public int AdultLevel { get; set; }
+        public int AdultLevel { get; set; } = -1;
         /// <summary>
         /// Width of the original
         /// </summary>
-        public int Width { get; set; }
+        public int Width { get; set; } = -1;
         /// <summary>
         /// Height of the original
         /// </summary>
-        public int Height { get; set; }
+        public int Height { get; set; } = -1;
         /// <summary>
         /// comma separated tags
         /// </summary>
