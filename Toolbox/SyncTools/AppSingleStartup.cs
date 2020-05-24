@@ -4,6 +4,7 @@ using System.Threading;
 
 namespace Toolbox.SyncTools
 {
+    // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
     public class AppSingleStartup : IDisposable
     {
 
@@ -13,6 +14,7 @@ namespace Toolbox.SyncTools
         /// uses provided name
         /// </summary>
         /// <param name="name"></param>
+        // ReSharper disable once MemberCanBePrivate.Global
         public AppSingleStartup(string name)
         {
             Name = name;
@@ -22,7 +24,7 @@ namespace Toolbox.SyncTools
         /// uses Manifest Name
         /// </summary>
         public AppSingleStartup()
-            : this(Assembly.GetEntryAssembly().ManifestModule.Name)
+            : this(Assembly.GetEntryAssembly()!.ManifestModule.Name)
         {
 
         }
@@ -42,9 +44,9 @@ namespace Toolbox.SyncTools
                 throw new ArgumentException("Name of starting App needs to be specified.", nameof(Name));
 
 
-            _mutex = new Mutex(true, Name, out bool _owned);
-            if (!_owned) Dispose();
-            return _owned;
+            _mutex = new Mutex(true, Name, out var owned);
+            if (!owned) Dispose();
+            return owned;
         }
 
         #region IDisposable
