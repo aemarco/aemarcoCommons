@@ -37,7 +37,7 @@ public ICommand ExitApplicationCommand
 
 Converter Usage:
 
-xmlns:conv="clr-namespace:Toolbox.WpfTools.Converters;assembly=aemarcoToolbox"
+xmlns:conv="clr-namespace:WpfTools.Converters;assembly=WpfTools"
 
 <Window.Resources>
 	<conv:DoubleToStringValueConverter x:Key="DoubleToStringValueConverter" />

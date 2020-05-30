@@ -11,6 +11,7 @@ namespace Toolbox.SerializationTools
     {
         public JsonTypeToFileStore()
         {
+            //determine where file should be
             var file = new T().Filepath;
             //loads store from file possibly, but defaults back to new store
             if (File.Exists(file))
