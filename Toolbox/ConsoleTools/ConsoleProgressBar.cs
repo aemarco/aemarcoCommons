@@ -5,7 +5,7 @@ namespace Toolbox.ConsoleTools
     public abstract class ConsoleProgressBar
     {
 
-        public abstract void UpdateProgress(int done, int total);
+        public abstract void UpdateProgress(long done, long total);
 
         ConsoleColor _background = Console.BackgroundColor;
         ConsoleColor _foreground = Console.ForegroundColor;
@@ -20,7 +20,7 @@ namespace Toolbox.ConsoleTools
             Console.ForegroundColor = _foreground;
         }
 
-        protected void DrawProgressLine(int done, int total)
+        protected void DrawProgressLine(long done, long total)
         {
 
             while (true)
@@ -63,8 +63,10 @@ namespace Toolbox.ConsoleTools
                     //draw totals
                     Console.CursorLeft = endPos + 1;
 
-                    int prog = (total > 0) ? done * 100 / total : 0;
-                    Console.WriteLine($"  {prog.ToString().PadLeft(3)} %");
+                    var progressString = done > 0
+                        ? $"{(int)(done * 100 / total)}".PadLeft(3)
+                        : "0".PadLeft(3);
+                    Console.WriteLine($"  {progressString} %");
                     break;
                 }
                 catch
@@ -93,7 +95,7 @@ namespace Toolbox.ConsoleTools
         }
 
 
-        public override void UpdateProgress(int done, int total)
+        public override void UpdateProgress(long done, long total)
         {
             //remember
             RememberColors();
@@ -123,7 +125,7 @@ namespace Toolbox.ConsoleTools
 
     public class ConsoleInlineProgressBar : ConsoleProgressBar
     {
-        public override void UpdateProgress(int done, int total)
+        public override void UpdateProgress(long done, long total)
         {
             if (Console.CursorLeft > 0) Console.WriteLine();
             RememberColors();
