@@ -126,7 +126,7 @@ namespace WpfTools.MonitorTools
         protected async Task<Image> GetImage(string file, HttpClient client = null)
         {
             //external http client will have priority
-            client = client ?? _client;
+            client ??= _client;
             if (file.StartsWith("http"))
             {
                 var resp = await client.GetAsync(file, HttpCompletionOption.ResponseHeadersRead);

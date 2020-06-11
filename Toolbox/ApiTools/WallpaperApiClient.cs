@@ -29,6 +29,7 @@ namespace Toolbox.ApiTools
         private const string GetLogSettingEndpoint = "/Api/Log/GetLogSetting";
         private const string SubmitLogsEndpoint = "/Api/Log/SubmitLogs";
         private const string ResolveWallpaperFilterRequestEndpoint = "/Api/Wallpaper/ResolveWallpaperFilterRequest";
+        private const string SubmitNewWallpaperUrlEndpoint = "/Api/Wallpaper/SubmitNewWallpaperUrl";
 
         #region ctor
 
@@ -92,8 +93,9 @@ namespace Toolbox.ApiTools
             var result =
                 PostAndDeserialize<List<ExtendedGirl>>(
                         $"{FindGirlsBySearchEndpoint}?search={search}",
-                        OnUnwantedResult("Failed to search for Girls", onFailure),
-                        cancellationToken);
+                        null,
+                        cancellationToken,
+                        OnUnwantedResult("Failed to search for Girls", onFailure));
 
             return result;
         }
@@ -192,6 +194,23 @@ namespace Toolbox.ApiTools
         }
 
 
+        public async Task<WallpaperInfo> SubmitNewWallpaperUrl(
+            string url,
+            Action<Exception, HttpStatusCode?> onFailure = null)
+        {
+            var base64Url = Convert.ToBase64String(Encoding.UTF8.GetBytes(url));
+            var result = await
+                PostAndDeserialize<WallpaperInfo>(
+                    $"{SubmitNewWallpaperUrlEndpoint}?base64Url={base64Url}",
+                    null,
+                    CancellationToken.None,
+                    onFailure)
+                    .ConfigureAwait(false);
+            return result;
+        }
+
+
+
         #endregion
 
         #region Medium Level
@@ -211,7 +230,7 @@ namespace Toolbox.ApiTools
         {
             loginRequest ??= new LoginReqObj
             {
-                Token = _wallpaperApiClientSettings.Token ?? null,
+                Token = _wallpaperApiClientSettings.Token,
                 Email = TokenInfo?.Email,
                 Password = null,
                 WindowsUser = Environment.UserName
