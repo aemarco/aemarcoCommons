@@ -45,16 +45,28 @@ namespace Contracts.Messages
         public int AdultLevel { get; set; } = -1;
         /// <summary>
         /// Specifies a name for either the file or the album.
+        /// File: defaults back to take the name from the file
+        /// Album: defaults back to take the name from the folder
         /// </summary>
         public string Name { get; set; }
         /// <summary>
-        /// Specify a category, which is being set on Wallpapers / Albums
+        /// Specify a category, which is being set on Wallpapers
+        /// Wallpaper: Set directly on wallpaper
+        /// Album: Set on all wallpapers
         /// </summary>
         public int CategoryId { get; set; }
         /// <summary>
         /// Specify a category, which is being set on Videos
+        /// Video: Set directly on video,
+        /// Album: Set on all videos
         /// </summary>
         public int VideoCategoryId { get; set; }
+        /// <summary>
+        /// Specify the ranking, which is being set on Videos
+        /// Video: Set directly on video,
+        /// Album: Set on all videos
+        /// </summary>
+        public int? VideoRanking { get; set; }
 
     }
 }
