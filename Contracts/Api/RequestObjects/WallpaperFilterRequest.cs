@@ -19,11 +19,6 @@ namespace Contracts.Api.RequestObjects
         /// </summary>
         public string Name { get; set; }
         /// <summary>
-        /// Id of the user to resolve, used for FSK and Favorites
-        /// </summary>
-        [Obsolete]
-        public string UserId { get; set; }
-        /// <summary>
         /// defines how many results are desired for this request,
         /// defaults to 1, max being 100
         /// </summary>
