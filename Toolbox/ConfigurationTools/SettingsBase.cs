@@ -19,11 +19,12 @@ namespace Toolbox.ConfigurationTools
         protected SettingsBase(IConfiguration root, IConfiguration section)
         {
             section.GetSection(this.GetType().Name).Bind(this);
+            // ReSharper disable once VirtualMemberCallInConstructor
             HandleStringPlaceholders(root);
         }
 
 
-        private void HandleStringPlaceholders(IConfiguration root)
+        protected virtual void HandleStringPlaceholders(IConfiguration root)
         { 
             foreach (var propInfo in this.GetType().GetProperties()
                 .Where(x => x.PropertyType == typeof(string))

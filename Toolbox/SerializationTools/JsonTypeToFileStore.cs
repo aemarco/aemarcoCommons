@@ -42,13 +42,14 @@ namespace Toolbox.SerializationTools
             File.WriteAllText(Instance.Filepath, JsonConvert.SerializeObject(Instance, Formatting.Indented));
         }
 
-        public void CommitReset()
+        public T CommitReset()
         {
             Instance = new T()
             {
                 TimestampCreated = DateTimeOffset.Now
             };
             SaveChanges();
+            return Instance;
         }
 
         public void Dispose()

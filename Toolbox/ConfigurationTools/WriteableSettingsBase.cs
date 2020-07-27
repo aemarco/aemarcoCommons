@@ -1,25 +1,33 @@
-﻿using System;
+﻿using System.ComponentModel;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
 namespace Toolbox.ConfigurationTools
 {
-    public class WriteableSettingsBase : SettingsBase
+    public abstract class WriteableSettingsBase : SettingsBase
     {
-        [JsonIgnore]
-        // ReSharper disable once MemberCanBeProtected.Global
-        public virtual string Filepath => throw new NotImplementedException();
 
+        //ensure derived class defines location to be saved to
+        [JsonIgnore] 
+        protected abstract string Filepath { get; }
+    
         protected WriteableSettingsBase(IConfiguration root)
             : base(root)
         { }
 
-        public void SaveChanges()
-        {
-            var sb = new StringBuilder();
+        //ensure Placeholders getting ignored
+        protected override void HandleStringPlaceholders(IConfiguration root) { }
 
+
+        public virtual void SaveChanges()
+        {
+            if (string.IsNullOrWhiteSpace(Filepath)) return;
+
+
+            var sb = new StringBuilder();
             sb.Append($"{{\"{GetType().Name}\": ");
             sb.Append(JsonConvert.SerializeObject(this, Formatting.Indented));
             sb.Append("}");

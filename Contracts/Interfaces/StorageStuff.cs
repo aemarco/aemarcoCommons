@@ -7,7 +7,7 @@ namespace Contracts.Interfaces
         where T : class, ITypeToFileValue, new()
     {
         T Instance { get; }
-        void CommitReset();
+        T CommitReset();
         void SaveChanges();
     }
 

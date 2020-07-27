@@ -24,5 +24,6 @@ namespace Contracts.Api.ResponseObjects
         // ReSharper disable once CollectionNeverUpdated.Global
         public List<WallpaperInfo> Wallpapers { get; set; } = new List<WallpaperInfo>();
 
+        
     }
 }
