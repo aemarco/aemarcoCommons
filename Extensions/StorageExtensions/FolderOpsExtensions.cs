@@ -8,21 +8,28 @@ namespace Extensions.StorageExtensions
     public static class FolderOpsExtensions
     {
 
-        public static void MoveToFolder(this DirectoryInfo dir, string targetPath, bool overwrite = false, Action<long,long> progress = null)
+        public static void MoveToFolder(this DirectoryInfo source, string targetPath, bool overwrite = false, Action<long,long> progress = null)
         {
             long done = 0;
-            var total = dir.GetFiles("*", SearchOption.AllDirectories).Sum(x => x.Length);
+            var total = source.GetFiles("*", SearchOption.AllDirectories).Sum(x => x.Length);
             
-            DoOperation(false, dir, targetPath, overwrite, progress, ref done, ref total);
-            dir.Delete(true);
+            DoOperation(false, source, targetPath, overwrite, progress, ref done, ref total);
+            source.Delete(true);
         }
 
 
-        public static void CopyToFolder(this DirectoryInfo dir, string targetPath, bool overwrite = false, Action<long,long> progress = null)
+        /// <summary>
+        /// Copy the entire folder as a subfolder for given targetPath
+        /// </summary>
+        /// <param name="source">Directory to copy</param>
+        /// <param name="targetPath">Directory to put the copied folder in</param>
+        /// <param name="overwrite">Existing files should be overwritten</param>
+        /// <param name="progress">will be called to report progress</param>
+        public static void CopyToFolder(this DirectoryInfo source, string targetPath, bool overwrite = false, Action<long,long> progress = null)
         {
             long done = 0;
-            var total = dir.GetFiles("*", SearchOption.AllDirectories).Sum(x => x.Length);
-            DoOperation(true, dir, targetPath, overwrite, progress, ref done, ref total);
+            var total = source.GetFiles("*", SearchOption.AllDirectories).Sum(x => x.Length);
+            DoOperation(true, source, targetPath, overwrite, progress, ref done, ref total);
         }
 
         public static void DeleteAllContent(this DirectoryInfo dir)
@@ -73,19 +80,19 @@ namespace Extensions.StorageExtensions
 
 
         // ReSharper disable once SuggestBaseTypeForParameter
-        private static void DoOperation(bool copy, DirectoryInfo dir, string targetPath, bool overwrite, Action<long,long> progress, ref long done, ref long total)
+        private static void DoOperation(bool copy, DirectoryInfo source, string targetPath, bool overwrite, Action<long,long> progress, ref long done, ref long total)
         {
-            var destDirectory = Path.Combine(targetPath, dir.Name);
+            var destDirectory = Path.Combine(targetPath, source.Name);
             if (!Directory.Exists(destDirectory)) Directory.CreateDirectory(destDirectory);
 
 
-            var theDirectories = Directory.GetDirectories(dir.FullName).Select(x => new DirectoryInfo(x));
+            var theDirectories = Directory.GetDirectories(source.FullName).Select(x => new DirectoryInfo(x));
             foreach (var curDir in theDirectories)
             {
                 DoOperation(copy, curDir, destDirectory, overwrite, progress, ref done, ref total);
             }
 
-            var theFilesInCurrentDir = Directory.GetFiles(dir.FullName).Select(x => new FileInfo(x));
+            var theFilesInCurrentDir = Directory.GetFiles(source.FullName).Select(x => new FileInfo(x));
             foreach(var currentFile in theFilesInCurrentDir)
             {
                 var length = currentFile.Length;
