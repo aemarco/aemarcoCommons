@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Reflection;
 using System.Windows;
 using Autofac;
-using Microsoft.Extensions.Configuration;
 using Toolbox.ConfigurationTools;
 using Toolbox.SerializationTools;
 
