@@ -8,17 +8,10 @@ namespace Contracts
         // ReSharper disable IdentifierTypo
         // ReSharper disable MemberCanBePrivate.Global
 
-
-        /// <summary>
-        /// use Group 1 for Header, Group 2 for Payload, Group 3 for Signature
-        /// </summary>
-        public const string JwtRegex = @"([A-Za-z0-9-_+\/=]+)\.([A-Za-z0-9-_+\/=]+)\.([A-Za-z0-9-_+\/=]+)$";
-
-
         //wallpaper
         public const string ChangerEmail = "aeChanger@normal.com";
         public const string ChangerUserId = "52dbf093-b08c-411e-9e1d-8b31135e4707";
-        public const string Watermark = "aemarco.myds.me";
+        
 
         //video
         public const int TimeUntilVideoViewCoutsAsPlayedSeconds = 15;
