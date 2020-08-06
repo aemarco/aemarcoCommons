@@ -3,7 +3,7 @@ using Contracts.Interfaces;
 
 namespace Toolbox.RegistryTools
 {
-    public class ClickOnceAutostart : ISingleton
+    public class ClickOnceAutostart
     {
         
         private string _appName;
