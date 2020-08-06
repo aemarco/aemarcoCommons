@@ -55,17 +55,18 @@ namespace Extensions.netExtensions
         /// </summary>
         /// <param name="file">file to await for</param>
         /// <returns>true if file is accessible and exists</returns>
-        public static async Task<bool> WaitForExclusiveAcces(this FileInfo file)
+        public static async Task<bool> WaitForExclusiveAccess(this FileInfo file)
         {
-            return await file.WaitForExclusiveAcces(CancellationToken.None);
+            return await file.WaitForExclusiveAccess(CancellationToken.None);
         }
 
         /// <summary>
         /// await till File can be exclusively accessed
         /// </summary>
         /// <param name="file">file to await for</param>
+        /// <param name="token">abort</param>
         /// <returns>true if file is accessible and exists</returns>
-        public static async Task<bool> WaitForExclusiveAcces(this FileInfo file, CancellationToken token)
+        public static async Task<bool> WaitForExclusiveAccess(this FileInfo file, CancellationToken token)
         {
             while (file.IsFileLocked())
             {
