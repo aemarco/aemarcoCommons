@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using Autofac;
+using Microsoft.Extensions.Configuration;
 using Toolbox.ConfigurationTools;
 using Toolbox.SerializationTools;
 
@@ -21,6 +22,27 @@ namespace WpfTools
 
     public static class DiExtensions
     {
+
+
+
+
+        public static IConfigurationBuilder ConfigAppsettings(this IConfigurationBuilder builder)
+        {
+            var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
+            return builder
+                .AddJsonFile("appsettings.json", false, true)
+                .AddJsonFile($"appsettings.{environmentName}.json", true, true);
+        }
+
+
+
+
+
+
+
+
+
+
 
         /// <summary>
         /// Call this, to register
