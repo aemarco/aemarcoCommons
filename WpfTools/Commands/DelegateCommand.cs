@@ -10,7 +10,6 @@ namespace WpfTools.Commands
     {
         public Action CommandAction { get; set; }
         public Action<object> ObjectCommandAction { get; set; }
-
         public Func<bool> CanExecuteFunc { get; set; }
 
         public void Execute(object parameter)

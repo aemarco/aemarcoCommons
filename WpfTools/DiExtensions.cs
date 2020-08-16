@@ -4,6 +4,7 @@ using Autofac;
 using Microsoft.Extensions.Configuration;
 using Toolbox.ConfigurationTools;
 using Toolbox.SerializationTools;
+using WpfTools.Commands;
 
 namespace WpfTools
 {
@@ -22,10 +23,6 @@ namespace WpfTools
 
     public static class DiExtensions
     {
-
-
-
-
         public static IConfigurationBuilder ConfigAppsettings(this IConfigurationBuilder builder)
         {
             var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
@@ -33,16 +30,6 @@ namespace WpfTools
                 .AddJsonFile("appsettings.json", false, true)
                 .AddJsonFile($"appsettings.{environmentName}.json", true, true);
         }
-
-
-
-
-
-
-
-
-
-
 
         /// <summary>
         /// Call this, to register
@@ -83,6 +70,9 @@ namespace WpfTools
                 .AsSelf()
                 .AsImplementedInterfaces()
                 .InstancePerDependency();
+
+            builder.RegisterGeneric(typeof(OpenWindowCommand<>));
+            builder.RegisterGeneric(typeof(OpenDialogCommand<>));
 
             return builder;
         }
