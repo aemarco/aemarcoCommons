@@ -9,7 +9,7 @@ namespace WpfTools.Converters
     /// Two-way converter from double to string
     /// </summary>
     [ValueConversion(typeof(double), typeof(string))]
-    public class DoubleToStringValueConverter : IValueConverter
+    public class DoubleToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -24,7 +24,7 @@ namespace WpfTools.Converters
             {
                 if (parameter is string strParameter && !String.IsNullOrWhiteSpace(strParameter))
                 {
-                    var p = new DoubleToStringValueConverterParameter(strParameter);
+                    var p = new DoubleToStringConverterParameter(strParameter);
                     if (p.Min != null && resultDouble < p.Min)
                         return DependencyProperty.UnsetValue;
                     if (p.Max != null && resultDouble > p.Max)
@@ -37,10 +37,10 @@ namespace WpfTools.Converters
         }
     }
 
-    internal class DoubleToStringValueConverterParameter
+    internal class DoubleToStringConverterParameter
     {
 
-        public DoubleToStringValueConverterParameter(string parameters)
+        public DoubleToStringConverterParameter(string parameters)
         {
             // min=0.1,max=100
             CultureInfo culture = CultureInfo.InvariantCulture;

@@ -31,6 +31,7 @@ namespace WpfTools.MonitorTools
         ///  AllowFill: Decides automatically between Fill and Fit based on allowed cutting
         ///  AllowFillForceCut (default): Like AllowFill, otherwise Fit with allowed cutting 
         /// </param>
+        /// <param name="wallLocation"></param>
         // ReSharper disable once MemberCanBeProtected.Global
         public WallpaperSetter(WallpaperMode wallMode, string wallLocation)
         {

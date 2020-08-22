@@ -10,7 +10,7 @@ namespace WpfTools.Converters
     /// One-way converter from System.Drawing.Image to System.Windows.Media.ImageSource
     /// </summary>
     [ValueConversion(typeof(System.Drawing.Image), typeof(System.Windows.Media.ImageSource))]
-    public class ImageConverter : IValueConverter
+    public class ImageToImageSourceConverter : IValueConverter
     {
         public object Convert(object value, Type targetType,
             object parameter, CultureInfo culture)

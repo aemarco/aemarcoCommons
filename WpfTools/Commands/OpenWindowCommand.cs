@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
-using WpfTools.BaseModels;
+﻿using WpfTools.BaseModels;
 
 namespace WpfTools.Commands
 {

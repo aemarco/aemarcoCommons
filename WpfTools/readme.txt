@@ -1,6 +1,21 @@
 
-Commands Usage:
+Resource Usage:
 
+//add reference to Resource File, so Converters can by used as Static resource with Typename
+<ResourceDictionary>
+	<ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary Source="pack://application:,,,/WpfTools;component/Resources.xaml"/>
+		</ResourceDictionary>
+	</ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>
+
+
+//in xaml
+<TextBlock Visibility="{Binding SexAutoVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+
+
+Commands Usage:
 
 //in xaml
 <MenuItem Header="Exit" Command="{Binding ExitApplicationCommand}" />
@@ -30,21 +45,7 @@ public ICommand ExitApplicationCommand
 }
 
 
-
-
-
-
-
-Converter Usage:
-
-xmlns:conv="clr-namespace:WpfTools.Converters;assembly=WpfTools"
-
-<Window.Resources>
-	<conv:DoubleToStringValueConverter x:Key="DoubleToStringValueConverter" />
-	<conv:BoolToVisibilityValueConverter x:Key="BoolToVisibilityValueConverter" />
-</Window.Resources>
-
-
+EnumConverter Usage:
 
 //in xaml
 <ComboBox SelectedItem="{Binding Path=ConfigurationHandler.Category}"/>
@@ -65,8 +66,10 @@ TypeDescriptor.GetConverter(Category.All).ConvertTo(Category.All, typeof(string)
 
 
 
+
+
+
 Markup Extension Usage:
 
 xmlns:exts="clr-namespace:WpfTools.MarkupExtensions;assembly=WpfTools"
-
  <ComboBox ItemsSource="{Binding Source={exts:EnumBindingSource {x:Type help:Category}}}" />

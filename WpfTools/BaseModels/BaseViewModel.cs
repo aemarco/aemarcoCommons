@@ -1,6 +1,4 @@
-﻿using System;
-using System.Windows.Input;
-using WpfTools.Commands;
+﻿using WpfTools.Commands;
 
 namespace WpfTools.BaseModels
 {

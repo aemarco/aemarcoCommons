@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Net;
-using System.Text;
 using Extensions.netExtensions;
 
 namespace Extensions.FileExtensions

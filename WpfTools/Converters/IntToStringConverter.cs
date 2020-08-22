@@ -6,25 +6,23 @@ using System.Windows.Data;
 namespace WpfTools.Converters
 {
     /// <summary>
-    /// Two-way converter from bool to Visibility // false means visible 
+    /// Two-way converter from int to string
     /// </summary>
-    [ValueConversion(typeof(bool), typeof(Visibility))]
-    public class InversBoolToVisibilityValueConverter : IValueConverter
+    [ValueConversion(typeof(int), typeof(string))]
+    public class IntToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((bool)value)
-                return Visibility.Collapsed;
-            else
-                return Visibility.Visible;
+            int intType = (int)value;
+            return intType.ToString();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             string strValue = value as string;
-            if (Enum.TryParse<Visibility>(strValue, out Visibility result))
+            if (int.TryParse(strValue, out int resultInt))
             {
-                return result;
+                return resultInt;
             }
             return DependencyProperty.UnsetValue;
         }

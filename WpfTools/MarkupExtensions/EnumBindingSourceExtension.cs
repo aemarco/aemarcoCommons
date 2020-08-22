@@ -37,13 +37,13 @@ namespace WpfTools.MarkupExtensions
             if (_enumType == null)
                 throw new InvalidOperationException("The EnumType must be specified.");
 
-            Type actualEnumType = Nullable.GetUnderlyingType(_enumType) ?? _enumType;
-            Array enumValues = Enum.GetValues(actualEnumType);
+            var actualEnumType = Nullable.GetUnderlyingType(_enumType) ?? _enumType;
+            var enumValues = Enum.GetValues(actualEnumType);
 
             if (actualEnumType == _enumType)
                 return enumValues;
 
-            Array tempArray = Array.CreateInstance(actualEnumType, enumValues.Length + 1);
+            var tempArray = Array.CreateInstance(actualEnumType, enumValues.Length + 1);
             enumValues.CopyTo(tempArray, 1);
             return tempArray;
         }

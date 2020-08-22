@@ -1,0 +1,12 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converters="clr-namespace:WpfTools.Converters">
+
+    <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    <converters:BoolToVisibilityInversConverter x:Key="BoolToVisibilityInversConverter" />
+    <converters:DoubleToStringConverter x:Key="DoubleToStringConverter" />
+    <converters:ImageToImageSourceConverter x:Key="ImageToImageSourceConverter" />
+    <converters:IntToStringConverter x:Key="IntToStringConverter" />
+    <converters:TimespanToStringConverter x:Key="TimespanToStringConverter" />
+    
+</ResourceDictionary>
