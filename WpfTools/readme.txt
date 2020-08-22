@@ -2,13 +2,11 @@
 Resource Usage:
 
 //add reference to Resource File, so Converters can by used as Static resource with Typename
-<ResourceDictionary>
+ <ResourceDictionary>
 	<ResourceDictionary.MergedDictionaries>
 		<ResourceDictionary Source="pack://application:,,,/WpfTools;component/Resources.xaml"/>
-		</ResourceDictionary>
 	</ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
-
 
 //in xaml
 <TextBlock Visibility="{Binding SexAutoVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
