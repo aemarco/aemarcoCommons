@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Configuration;
 
-namespace Extensions.netExtensions
+namespace Extensions.TextExtensions
 {
     public static class ConfigurationExtensions
     {
@@ -17,7 +17,7 @@ namespace Extensions.netExtensions
                 foreach (Match match in Regex.Matches(currentValue, Pattern))
                 {
                     var search = match.Groups[1].Value;
-                    var newValue = root.SearchValue(search, false);
+                    var newValue = root.SearchValue(search, false, root);
                     if (newValue == null) throw new Exception($"Cant resolve placeholder {search}");
 
                     currentValue = currentValue.Replace(match.Value, newValue);

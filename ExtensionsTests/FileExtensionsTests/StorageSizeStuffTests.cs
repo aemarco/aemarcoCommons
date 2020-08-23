@@ -1,9 +1,9 @@
-﻿using Extensions.contentExtensions;
+﻿using Extensions.FileExtensions;
 using NUnit.Framework;
 
-namespace ExtensionsTests.contentExtensionsTests
+namespace ExtensionsTests.FileExtensionsTests
 {
-    class StoreSizeExtensionTests
+    public class StorageSizeStuffTests
     {
 
 

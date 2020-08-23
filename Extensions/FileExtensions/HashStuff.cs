@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Net;
+using Extensions.CryptoExtensions;
 using Extensions.netExtensions;
 
 namespace Extensions.FileExtensions

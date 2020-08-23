@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Extensions.netExtensions;
+using Extensions.TextExtensions;
 using Microsoft.Extensions.Configuration;
 
 // ReSharper disable ClassNeverInstantiated.Global

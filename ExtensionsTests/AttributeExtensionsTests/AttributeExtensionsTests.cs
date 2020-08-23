@@ -1,15 +1,17 @@
-﻿using Extensions.netExtensions;
+﻿using System;
+using Extensions.AttributeExtensions;
 using FluentAssertions;
 using NUnit.Framework;
-using System;
 
-namespace ExtensionsTests.netExtensionTests
+namespace ExtensionsTests.AttributeExtensionsTests
 {
 
 
     public class AttributeExtensionsTests
     {
 
+
+        //with enums
         [TestCase(TestEnum.Test1, "111")]
         [TestCase(TestEnum.Test2, "222")]
         [TestCase(TestEnum.Test3, "333")]

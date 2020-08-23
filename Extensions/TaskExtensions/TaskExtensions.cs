@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
+
 #nullable enable
 
-namespace Extensions.netExtensions
+namespace Extensions.TaskExtensions
 {
     public static class TaskExtensions
     {

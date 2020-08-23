@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using Extensions.FileExtensions;
 using Extensions.netExtensions;
 
 namespace Extensions.StorageExtensions

@@ -6,10 +6,6 @@ namespace Extensions.netExtensions
 {
     public static class OwinExtensions
     {
-
-
-
-
         public static T GetClaimValue<T>(this IPrincipal principal, string type, T defaultValue = default)
         {
             if (principal?.Identity == null) return defaultValue;

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 
-namespace Extensions.contentExtensions
+namespace Extensions.FileExtensions
 {
-    public static class StorageSizeExtensions
+    public static class StorageSizeStuff
     {
 
         public static long ConvertFromTo(this int value, string sourceUnit, string targetUnit)

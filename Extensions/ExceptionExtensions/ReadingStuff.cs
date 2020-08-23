@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Extensions.netExtensions
+namespace Extensions.ExceptionExtensions
 {
-    public static class ExceptionExtensions
+    public static class ReadingStuff
     {
 
         public static Exception Unpack(this Exception exception)

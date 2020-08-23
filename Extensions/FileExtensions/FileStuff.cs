@@ -1,10 +1,12 @@
 ﻿using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Extensions.CryptoExtensions;
+using Extensions.netExtensions;
 
-namespace Extensions.netExtensions
+namespace Extensions.FileExtensions
 {
-    public static class FileInfoExtensions
+    public static class FileStuff
     {
 
 
