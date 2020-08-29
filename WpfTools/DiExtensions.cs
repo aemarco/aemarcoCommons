@@ -74,8 +74,12 @@ namespace WpfTools
             builder.RegisterGeneric(typeof(OpenWindowCommand<>));
             builder.RegisterGeneric(typeof(OpenDialogCommand<>));
 
+            builder.RegisterBuildCallback(rootScope => RootScope = rootScope);
+
             return builder;
         }
+
+        internal static ILifetimeScope RootScope { get; private set; }
 
     }
 

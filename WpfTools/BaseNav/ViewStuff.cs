@@ -3,17 +3,24 @@ using WpfTools.Commands;
 
 namespace WpfTools.BaseNav
 {
+
+    //user controls
     public interface INavView //inherit in specific interface for view
     {
         object DataContext { get; set; }
 
     }
+
+    //view models
     public interface INavViewModel : IBaseViewModel //inherit in specific interface for view model, inherit from BaseNaveViewModel
     {
         INavWindowViewModel Window { get; set; }
         INavView View { get; set; }
-       
+        string Title { get; }
     }
+
+
+
 
     public abstract class BaseNavViewModel : BaseViewModel, INavViewModel
     {
@@ -23,8 +30,13 @@ namespace WpfTools.BaseNav
             View.DataContext = this;
         }
 
-        public INavWindowViewModel Window { get; set; }
+        
         public INavView View { get; set; }
+
+
+        public INavWindowViewModel Window { get; set; }
+
+        public virtual string Title => null;
 
 
         public override DelegateCommand CloseCommand
@@ -33,10 +45,10 @@ namespace WpfTools.BaseNav
             {
                 return new DelegateCommand()
                 {
-                   CommandAction = () =>
-                   {
-                       Window.Window.Close();
-                   }
+                    CommandAction = () =>
+                    {
+                        Window?.Window?.Close();
+                    }
                 };
             }
         }
