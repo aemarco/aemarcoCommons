@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Extensions.CryptoExtensions;
-using Extensions.netExtensions;
 
 namespace Extensions.FileExtensions
 {

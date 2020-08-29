@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using Extensions.FileExtensions;
-using Extensions.netExtensions;
 using Newtonsoft.Json;
 
 namespace Toolbox.SerializationTools

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WpfTools.BaseNav
+﻿namespace WpfTools.BaseNav
 {
     //windows
     public interface INavMainWindow : INavWindow { } //implement this in the main window
