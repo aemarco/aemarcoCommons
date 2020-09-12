@@ -48,7 +48,8 @@ namespace WpfTools
             //* Toolbox stuff
             builder.RegisterAssemblyTypes(AppDomain.CurrentDomain.GetAssemblies())
                 .Where(t => t.IsSubclassOf(typeof(SettingsBase)))
-                .AsSelf();
+                .AsSelf()
+                .AsImplementedInterfaces();
             builder.RegisterGeneric(typeof(JsonTypeToFileStore<>))
                 .AsImplementedInterfaces()
                 .SingleInstance();
