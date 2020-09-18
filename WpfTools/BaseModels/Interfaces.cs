@@ -19,7 +19,6 @@ namespace aemarcoCommons.WpfTools.BaseModels
 
         [Obsolete]
         void Close();
-
     }
 
 
