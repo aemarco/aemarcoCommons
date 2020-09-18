@@ -18,9 +18,14 @@ namespace aemarcoCommons.Toolbox.ConfigurationTools
         /// If ProtectedAttribute is used, define Iv and Key for Cryptography
         /// </summary>
         public string Key { get; set; }
+        /// <summary>
+        /// If ProtectedAttribute is used, define Password instead of Key and Iv
+        /// </summary>
+        public string Password { get; set; }
+
 
         /// <summary>
-        /// If set, Decryption in Skipped during initialisation of Setting-Classes
+        /// If set, Decryption in Skipped during initialization of Setting-Classes
         /// </summary>
         public bool SkipDecrypt { get; set; }
 

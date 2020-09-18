@@ -26,7 +26,9 @@ namespace aemarcoCommons.Toolbox.CryptoTools
             var keyBytes = password.GetBytes(KeySize / 8);
             using var symmetricKey = new RijndaelManaged
             {
-                BlockSize = 256, Mode = CipherMode.CBC, Padding = PaddingMode.PKCS7
+                BlockSize = 256, 
+                Mode = CipherMode.CBC, 
+                Padding = PaddingMode.PKCS7
             };
             using var encryptor = symmetricKey.CreateEncryptor(keyBytes, ivStringBytes);
             using var memoryStream = new MemoryStream();
@@ -58,7 +60,9 @@ namespace aemarcoCommons.Toolbox.CryptoTools
             var keyBytes = password.GetBytes(KeySize / 8);
             using var symmetricKey = new RijndaelManaged
             {
-                BlockSize = 256, Mode = CipherMode.CBC, Padding = PaddingMode.PKCS7
+                BlockSize = 256, 
+                Mode = CipherMode.CBC, 
+                Padding = PaddingMode.PKCS7
             };
             using var decryptor = symmetricKey.CreateDecryptor(keyBytes, ivStringBytes);
             using var memoryStream = new MemoryStream(cipherTextBytes);

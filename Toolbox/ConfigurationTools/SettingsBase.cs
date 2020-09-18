@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using aemarcoCommons.Toolbox.CryptoTools;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json.Linq;
@@ -40,13 +41,19 @@ namespace aemarcoCommons.Toolbox.ConfigurationTools
 
 
             //decrypt all Protected Properties
-            if (Options != null &&
-                !Options.SkipDecrypt &&
-                !string.IsNullOrWhiteSpace(Options.Iv) &&
-                !string.IsNullOrWhiteSpace(Options.Key))
+            if (Options != null && !Options.SkipDecrypt)
             {
-                this.ProtectedTransformObject(x => 
-                    CryptoStuff.Decrypt(x, Options.Iv, Options.Key));
+                if (string.IsNullOrWhiteSpace(Options.Password))
+                {
+                    this.ProtectedTransformObject(x=>
+                        TextCipher.Decrypt(x, Options.Password));
+                }
+                else if (!string.IsNullOrWhiteSpace(Options.Key) &&
+                         !string.IsNullOrWhiteSpace(Options.Iv))
+                {
+                    this.ProtectedTransformObject(x =>
+                        CryptoStuff.Decrypt(x, Options.Iv, Options.Key));
+                }
             }
         }
 
@@ -63,12 +70,19 @@ namespace aemarcoCommons.Toolbox.ConfigurationTools
             filePath ??= type.GetSavePathForSetting(Options.SettingsSaveDirectory);
 
             //encrypt all Protected Properties
-            if (Options != null && 
-                !string.IsNullOrWhiteSpace(Options.Iv) &&
-                !string.IsNullOrWhiteSpace(Options.Key))
+            if (Options != null)
             {
-                this.ProtectedTransformObject(x => 
-                    CryptoStuff.Encrypt(x, Options.Iv, Options.Key));
+                if (string.IsNullOrWhiteSpace(Options.Password))
+                {
+                    this.ProtectedTransformObject(x =>
+                        TextCipher.Encrypt(x, Options.Password));
+                }
+                else if (!string.IsNullOrWhiteSpace(Options.Key) &&
+                         !string.IsNullOrWhiteSpace(Options.Iv))
+                {
+                    this.ProtectedTransformObject(x =>
+                        CryptoStuff.Encrypt(x, Options.Iv, Options.Key));
+                }
             }
 
             //save the stuff
