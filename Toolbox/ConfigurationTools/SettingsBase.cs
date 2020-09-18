@@ -43,7 +43,7 @@ namespace aemarcoCommons.Toolbox.ConfigurationTools
             //decrypt all Protected Properties
             if (Options != null && !Options.SkipDecrypt)
             {
-                if (string.IsNullOrWhiteSpace(Options.Password))
+                if (!string.IsNullOrWhiteSpace(Options.Password))
                 {
                     this.ProtectedTransformObject(x=>
                         TextCipher.Decrypt(x, Options.Password));
@@ -72,7 +72,7 @@ namespace aemarcoCommons.Toolbox.ConfigurationTools
             //encrypt all Protected Properties
             if (Options != null)
             {
-                if (string.IsNullOrWhiteSpace(Options.Password))
+                if (!string.IsNullOrWhiteSpace(Options.Password))
                 {
                     this.ProtectedTransformObject(x =>
                         TextCipher.Encrypt(x, Options.Password));
