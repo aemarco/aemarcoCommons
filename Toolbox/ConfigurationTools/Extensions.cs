@@ -65,7 +65,10 @@ namespace aemarcoCommons.Toolbox.ConfigurationTools
         /// <returns>absolute file path to the saved configuration file</returns>
         public static string GetSavePathForSetting(this Type type, string saveDirectory)
         {
-            return Path.Combine(saveDirectory, $"appsettings.{type.Name}.json");
+            var fileName = $"appsettings.{type.Name}.json";
+            return string.IsNullOrWhiteSpace(saveDirectory)
+                ? fileName
+                : Path.Combine(saveDirectory, fileName);
         }
 
 

@@ -62,12 +62,11 @@ namespace aemarcoCommons.Toolbox.ConfigurationTools
         /// Save this Configuration.
         /// SettingsSaveDirectory should be defined if no filePath is given.
         /// </summary>
-        /// <param name="filePath">optional file Path to save to</param>
-        public void Save(string filePath = null)
+        public string Save()
         {
             //decide for a filePath
             var type = GetType();
-            filePath ??= type.GetSavePathForSetting(Options.SettingsSaveDirectory);
+            var filePath = type.GetSavePathForSetting(Options.SettingsSaveDirectory);
 
             //encrypt all Protected Properties
             if (Options != null)
@@ -96,6 +95,7 @@ namespace aemarcoCommons.Toolbox.ConfigurationTools
             }
 
             File.WriteAllText(filePath,obj.ToString());
+            return filePath;
         }
     }
 }
