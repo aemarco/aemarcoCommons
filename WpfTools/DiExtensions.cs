@@ -56,6 +56,13 @@ namespace aemarcoCommons.WpfTools
 
 
             //* WpfTools stuff
+            //--> windows getting registered
+            builder.RegisterAssemblyTypes(AppDomain.CurrentDomain.GetAssemblies())
+                .Where(t => t.IsSubclassOf(typeof(Window)))
+                .AsSelf()
+                .AsImplementedInterfaces()
+                .InstancePerDependency();
+            //--stuff get registered which implement interfaces (overrides window registrations)
             builder.RegisterAssemblyTypes(AppDomain.CurrentDomain.GetAssemblies())
                 .Where(t => typeof(ISingleton).IsAssignableFrom(t))
                 .AsSelf()
@@ -66,11 +73,7 @@ namespace aemarcoCommons.WpfTools
                 .AsSelf()
                 .AsImplementedInterfaces()
                 .InstancePerDependency();
-            builder.RegisterAssemblyTypes(AppDomain.CurrentDomain.GetAssemblies())
-                .Where(t => t.IsSubclassOf(typeof(Window)))
-                .AsSelf()
-                .AsImplementedInterfaces()
-                .InstancePerDependency();
+            
 
             builder.RegisterGeneric(typeof(OpenWindowCommand<>));
             builder.RegisterGeneric(typeof(OpenDialogCommand<>));
