@@ -36,3 +36,4 @@ steps:
     projects: '**/*Tests.csproj'
     arguments: '--collect "Code coverage"'
     testRunTitle: 'dotnet test all'
+
