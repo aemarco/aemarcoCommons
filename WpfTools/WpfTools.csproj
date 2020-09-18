@@ -5,14 +5,36 @@
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <LangVersion>latest</LangVersion>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
+
+
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>aemarcoWpfTools</PackageId>
+    <PackageVersion>$(AssemblyVersion)</PackageVersion>
+    <Authors>aemarco</Authors>
+    <Company>aemarco</Company>
+    <Product>aemarcoWpfTools</Product>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/aemarco/aemarcoCommons</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/aemarco/aemarcoCommons</RepositoryUrl>
+    <Description>c# wpf tools collection</Description>
+    <PackageTags>WpfTools</PackageTags>
+    <PackageIcon>toolbox.png</PackageIcon>
+
    
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="ConfigurationTools\**" />
-    <EmbeddedResource Remove="ConfigurationTools\**" />
+
     <None Remove="ConfigurationTools\**" />
-    <Page Remove="ConfigurationTools\**" />
+    <None Include="..\LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\toolbox.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

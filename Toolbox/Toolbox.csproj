@@ -1,8 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>latest</LangVersion>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
+
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>aemarcoToolbox</PackageId>
+    <PackageVersion>$(AssemblyVersion)</PackageVersion>
+    <Authors>aemarco</Authors>
+    <Company>aemarco</Company>
+    <Product>aemarcoToolbox</Product>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/aemarco/aemarcoCommons</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/aemarco/aemarcoCommons</RepositoryUrl>
+    <Description>c# tools collection</Description>
+    <PackageTags>Toolbox</PackageTags>
+    <PackageIcon>toolbox.png</PackageIcon>
+    
+    
+
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,6 +27,17 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Extensions\Extensions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\toolbox.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

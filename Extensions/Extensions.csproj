@@ -1,15 +1,35 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>latest</LangVersion>
-   
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
+
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>aemarcoExtensions</PackageId>
+    <PackageVersion>$(AssemblyVersion)</PackageVersion>
+    <Authors>aemarco</Authors>
+    <Company>aemarco</Company>
+    <Product>aemarcoExtensions</Product>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/aemarco/aemarcoCommons</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/aemarco/aemarcoCommons</RepositoryUrl>
+    <Description>frequently used c# extension methods</Description>
+    <PackageTags>Extensions</PackageTags>
+    <PackageIcon>toolbox.png</PackageIcon>
+
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="contentExtensions\**" />
-    <EmbeddedResource Remove="contentExtensions\**" />
-    <None Remove="contentExtensions\**" />
+
+    <None Include="..\LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\toolbox.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+
   </ItemGroup>
 
   <ItemGroup>
