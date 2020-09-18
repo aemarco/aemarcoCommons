@@ -1,5 +1,4 @@
-﻿using Extensions.AttributeExtensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -7,10 +6,11 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Toolbox.Interop;
-using Toolbox.MonitorTools;
+using aemarcoCommons.Extensions.AttributeExtensions;
+using aemarcoCommons.Toolbox.Interop;
+using aemarcoCommons.Toolbox.MonitorTools;
 
-namespace WpfTools.MonitorTools
+namespace aemarcoCommons.WpfTools.MonitorTools
 {
     public class WallpaperSetter
     {

@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace Extensions.CryptoExtensions
+namespace aemarcoCommons.Extensions.CryptoExtensions
 {
     public static class Base64Stuff
     {

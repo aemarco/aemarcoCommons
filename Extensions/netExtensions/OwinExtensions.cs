@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using System.Security.Principal;
 
-namespace Extensions.netExtensions
+namespace aemarcoCommons.Extensions.netExtensions
 {
     public static class OwinExtensions
     {

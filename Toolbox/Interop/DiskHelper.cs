@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace Toolbox.Interop
+namespace aemarcoCommons.Toolbox.Interop
 {
     [Obsolete("Use \"DriveInfo\" instead.")]
     public static class DiskHelper

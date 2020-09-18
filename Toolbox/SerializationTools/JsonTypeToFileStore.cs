@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
-using Extensions.FileExtensions;
+using aemarcoCommons.Extensions.FileExtensions;
 using Newtonsoft.Json;
 
-namespace Toolbox.SerializationTools
+namespace aemarcoCommons.Toolbox.SerializationTools
 {
     public class JsonTypeToFileStore<T> : ITypeToFileStore<T>
         where T : class, ITypeToFileValue, new()

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Toolbox.SchedulerTools
+namespace aemarcoCommons.Toolbox.SchedulerTools
 {
     [Flags]
     public enum SchedulingOptions

@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
-using Extensions.NumberExtensions;
+using aemarcoCommons.Extensions.NumberExtensions;
 
-namespace Toolbox.PictureTools
+namespace aemarcoCommons.Toolbox.PictureTools
 {
     public class PictureInPicture
     {

@@ -1,7 +1,6 @@
 ﻿using System;
 
-
-namespace Toolbox.SerializationTools
+namespace aemarcoCommons.Toolbox.SerializationTools
 {
     public abstract class BaseTypeToFileValue : ITypeToFileValue
     {

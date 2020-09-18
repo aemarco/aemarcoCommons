@@ -1,9 +1,9 @@
-﻿using Extensions.TimeExtensions;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Windows.Data;
+using aemarcoCommons.Extensions.TimeExtensions;
 
-namespace WpfTools.Converters
+namespace aemarcoCommons.WpfTools.Converters
 {
 
     [ValueConversion(typeof(TimeSpan?), typeof(string))]

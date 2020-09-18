@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace WpfTools.Converters
+namespace aemarcoCommons.WpfTools.Converters
 {
     /// <summary>
     /// Two-way converter from bool to Visibility // false means visible 

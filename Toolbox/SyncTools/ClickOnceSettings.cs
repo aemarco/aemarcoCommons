@@ -1,6 +1,6 @@
 ﻿using System.Configuration;
 
-namespace Toolbox.SyncTools
+namespace aemarcoCommons.Toolbox.SyncTools
 {
     public static class ClickOnceSetting
     {

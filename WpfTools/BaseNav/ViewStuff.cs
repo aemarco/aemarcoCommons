@@ -1,7 +1,7 @@
-﻿using WpfTools.BaseModels;
-using WpfTools.Commands;
+﻿using aemarcoCommons.WpfTools.BaseModels;
+using aemarcoCommons.WpfTools.Commands;
 
-namespace WpfTools.BaseNav
+namespace aemarcoCommons.WpfTools.BaseNav
 {
 
     //user controls

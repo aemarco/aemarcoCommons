@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Reflection;
 
-namespace Extensions.StorageExtensions
+namespace aemarcoCommons.Extensions.StorageExtensions
 {
     public static class ReflectionStuff
     {

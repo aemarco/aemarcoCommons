@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace WpfTools.Commands
+namespace aemarcoCommons.WpfTools.Commands
 {
     /// <summary>
     /// Simplistic delegate command .

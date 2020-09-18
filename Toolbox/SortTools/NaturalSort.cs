@@ -3,7 +3,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace Toolbox.SortTools
+namespace aemarcoCommons.Toolbox.SortTools
 {
     [SuppressUnmanagedCodeSecurity]
     internal static class SafeNativeMethods

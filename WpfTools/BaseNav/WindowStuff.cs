@@ -1,9 +1,9 @@
 ﻿using System;
+using aemarcoCommons.WpfTools.BaseModels;
+using aemarcoCommons.WpfTools.Commands;
 using Autofac;
-using WpfTools.BaseModels;
-using WpfTools.Commands;
 
-namespace WpfTools.BaseNav
+namespace aemarcoCommons.WpfTools.BaseNav
 {
 
     //windows

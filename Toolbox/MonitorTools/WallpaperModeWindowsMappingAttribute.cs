@@ -1,7 +1,7 @@
 ﻿using System;
-using Toolbox.Interop;
+using aemarcoCommons.Toolbox.Interop;
 
-namespace Toolbox.MonitorTools
+namespace aemarcoCommons.Toolbox.MonitorTools
 {
     public sealed class WallpaperModeWindowsMappingAttribute : Attribute
     {

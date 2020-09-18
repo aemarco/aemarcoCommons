@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
-using Toolbox.PictureTools;
-using Extensions.PictureExtensions;
-using Extensions.NumberExtensions;
+using aemarcoCommons.Extensions.NumberExtensions;
+using aemarcoCommons.Extensions.PictureExtensions;
+using aemarcoCommons.Toolbox.PictureTools;
 
-namespace Toolbox.MonitorTools
+namespace aemarcoCommons.Toolbox.MonitorTools
 {
     public class Monitor : PictureInPicture
     {

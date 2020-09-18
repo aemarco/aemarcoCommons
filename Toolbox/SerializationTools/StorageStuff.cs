@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace Toolbox.SerializationTools
+namespace aemarcoCommons.Toolbox.SerializationTools
 {
     public interface ITypeToFileStore<out T> : IDisposable
         where T : class, ITypeToFileValue, new()

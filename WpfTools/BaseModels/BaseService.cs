@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using Extensions.AttributeExtensions;
+using aemarcoCommons.Extensions.AttributeExtensions;
 
-namespace WpfTools.BaseModels
+namespace aemarcoCommons.WpfTools.BaseModels
 {
     public class BaseService : BaseNotifier, IBaseService
     {

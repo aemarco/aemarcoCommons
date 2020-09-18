@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace WpfTools.Helpers
+namespace aemarcoCommons.WpfTools.Helpers
 {
     public enum AutoScrollHelperMode
     {

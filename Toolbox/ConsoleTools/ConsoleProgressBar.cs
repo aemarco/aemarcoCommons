@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Toolbox.ConsoleTools
+namespace aemarcoCommons.Toolbox.ConsoleTools
 {
     public abstract class ConsoleProgressBar
     {

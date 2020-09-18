@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
 
-namespace Toolbox.SerializationTools
+namespace aemarcoCommons.Toolbox.SerializationTools
 {
     [Obsolete("use JsonTypeToFileStore instead")]
     public class JsonObjectStore<T>

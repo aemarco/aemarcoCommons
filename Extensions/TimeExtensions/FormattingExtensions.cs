@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace Extensions.TimeExtensions
+namespace aemarcoCommons.Extensions.TimeExtensions
 {
     public static class FormattingExtensions
     {

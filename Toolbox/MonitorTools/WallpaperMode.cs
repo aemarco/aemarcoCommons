@@ -1,6 +1,6 @@
-﻿using Toolbox.Interop;
+﻿using aemarcoCommons.Toolbox.Interop;
 
-namespace Toolbox.MonitorTools
+namespace aemarcoCommons.Toolbox.MonitorTools
 {
     public enum WallpaperMode
     {

@@ -1,42 +1,87 @@
-﻿using System.Linq;
-using Extensions.TextExtensions;
+﻿using System;
+using System.IO;
+using System.Linq;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Primitives;
+using Newtonsoft.Json.Linq;
 
-// ReSharper disable ClassNeverInstantiated.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable MemberCanBePrivate.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-
-namespace Toolbox.ConfigurationTools
+namespace aemarcoCommons.Toolbox.ConfigurationTools
 {
-    
     public abstract class SettingsBase
     {
-        protected SettingsBase(IConfiguration root)
-            :this(root, root)
-        { }
-
-        protected SettingsBase(IConfiguration root, IConfiguration section)
+        internal static IConfigurationRoot ConfigRoot { get; set; }
+        internal static ConfigurationOptions Options { get; set; }
+       
+        protected SettingsBase()
         {
-            section.GetSection(this.GetType().Name).Bind(this);
-            // ReSharper disable once VirtualMemberCallInConstructor
-            HandleStringPlaceholders(root);
+            if (ConfigRoot == null || Options == null) return;
+
+            Init();
+            ChangeToken.OnChange(ConfigRoot.GetReloadToken, Init);
+        }
+
+        private string _sectionPath;
+        private void Init()
+        {
+            var type = GetType();
+            //use path defined in attribute if specified
+            if (Attribute.GetCustomAttribute(type, typeof(SettingPathAttribute)) is SettingPathAttribute pathAttribute)
+                _sectionPath = pathAttribute.Path;
+            //use typename if nothing is specified
+            else
+                _sectionPath = type.Name;
+
+
+            //read current values from IConfiguration
+            if (string.IsNullOrWhiteSpace(_sectionPath))
+                ConfigRoot.Bind(this);
+            else
+                ConfigRoot.GetSection(_sectionPath).Bind(this);
+
+
+            //decrypt all Protected Properties
+            if (Options != null &&
+                !Options.SkipDecrypt &&
+                !string.IsNullOrWhiteSpace(Options.Iv) &&
+                !string.IsNullOrWhiteSpace(Options.Key))
+            {
+                this.ProtectedTransformObject(x => 
+                    CryptoStuff.Decrypt(x, Options.Iv, Options.Key));
+            }
         }
 
 
-        protected virtual void HandleStringPlaceholders(IConfiguration root)
-        { 
-            foreach (var propInfo in this.GetType().GetProperties()
-                .Where(x => x.PropertyType == typeof(string))
-                .Where(x => x.CanRead && x.CanWrite))
+        /// <summary>
+        /// Save this Configuration.
+        /// SettingsSaveDirectory should be defined if no filePath is given.
+        /// </summary>
+        /// <param name="filePath">optional file Path to save to</param>
+        public void Save(string filePath = null)
+        {
+            //decide for a filePath
+            var type = GetType();
+            filePath ??= type.GetSavePathForSetting(Options.SettingsSaveDirectory);
+
+            //encrypt all Protected Properties
+            if (Options != null && 
+                !string.IsNullOrWhiteSpace(Options.Iv) &&
+                !string.IsNullOrWhiteSpace(Options.Key))
             {
-                var currentValue = (string)propInfo.GetValue(this);
-                var resolved = currentValue.ResolvePlaceholders(root);
-                if (currentValue != resolved)
-                {
-                    propInfo.SetValue(this, resolved);
-                }
+                this.ProtectedTransformObject(x => 
+                    CryptoStuff.Encrypt(x, Options.Iv, Options.Key));
             }
+
+            //save the stuff
+            var obj = JObject.FromObject(this);
+            //use defined path if not root
+            if (!string.IsNullOrWhiteSpace(_sectionPath))
+            {
+                obj = _sectionPath.Split(':')
+                    .Reverse()
+                    .Aggregate(obj, (current, section) => new JObject {{section, current}});
+            }
+
+            File.WriteAllText(filePath,obj.ToString());
         }
     }
 }

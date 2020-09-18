@@ -4,7 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Windows.Data;
 
-namespace WpfTools.Converters
+namespace aemarcoCommons.WpfTools.Converters
 {
     /// <summary>
     /// One-way converter from System.Drawing.Image to System.Windows.Media.ImageSource

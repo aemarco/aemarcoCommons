@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
 
-namespace WpfTools.Converters
+namespace aemarcoCommons.WpfTools.Converters
 {
     public class EnumTypeConverter : EnumConverter
     {

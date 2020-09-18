@@ -1,8 +1,8 @@
 ﻿using System.IO;
-using Extensions.FileExtensions;
+using aemarcoCommons.Extensions.FileExtensions;
 using Newtonsoft.Json;
 
-namespace Extensions.StorageExtensions
+namespace aemarcoCommons.Extensions.StorageExtensions
 {
     public static class JsonStoreExtensions
     {

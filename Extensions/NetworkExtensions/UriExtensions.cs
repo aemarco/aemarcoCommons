@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 
-namespace Extensions.NetworkExtensions
+namespace aemarcoCommons.Extensions.NetworkExtensions
 {
     public static class UriExtensions
     {

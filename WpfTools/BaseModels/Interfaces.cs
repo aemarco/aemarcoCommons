@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
-using WpfTools.Commands;
+using aemarcoCommons.WpfTools.Commands;
 
-namespace WpfTools.BaseModels
+namespace aemarcoCommons.WpfTools.BaseModels
 {
     public interface IBaseNotifier : INotifyPropertyChanged { }
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Toolbox.CryptoTools
+namespace aemarcoCommons.Toolbox.CryptoTools
 {
     public static class TextCipher
     {

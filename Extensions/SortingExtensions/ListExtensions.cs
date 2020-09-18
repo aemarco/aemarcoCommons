@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Extensions.SortingExtensions
+namespace aemarcoCommons.Extensions.SortingExtensions
 {
     public static class ListExtensions
     {

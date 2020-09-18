@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Markup;
 
-namespace WpfTools.MarkupExtensions
+namespace aemarcoCommons.WpfTools.MarkupExtensions
 {
     public class EnumBindingSourceExtension : MarkupExtension
     {

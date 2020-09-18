@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace WpfTools.Controls
+namespace aemarcoCommons.WpfTools.Controls
 {
     /// <summary>
     /// Interaktionslogik für RangeSlider.xaml

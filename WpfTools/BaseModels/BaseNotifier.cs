@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace WpfTools.BaseModels
+namespace aemarcoCommons.WpfTools.BaseModels
 {
     public class BaseNotifier : IBaseNotifier
     {

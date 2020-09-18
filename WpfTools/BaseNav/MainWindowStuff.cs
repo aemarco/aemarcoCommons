@@ -1,4 +1,4 @@
-﻿namespace WpfTools.BaseNav
+﻿namespace aemarcoCommons.WpfTools.BaseNav
 {
     //windows
     public interface INavMainWindow : INavWindow { } //implement this in the main window

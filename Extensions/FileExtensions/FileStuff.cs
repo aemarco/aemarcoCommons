@@ -1,9 +1,10 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Extensions.CryptoExtensions;
+using aemarcoCommons.Extensions.CryptoExtensions;
 
-namespace Extensions.FileExtensions
+namespace aemarcoCommons.Extensions.FileExtensions
 {
     public static class FileStuff
     {
@@ -114,6 +115,14 @@ namespace Extensions.FileExtensions
             return stream.ToBase64HashString();
         }
 
-
+        public static Process OpenFile(this FileInfo file)
+        {
+            var result = Process.Start(
+                new ProcessStartInfo(file.FullName)
+                {
+                    UseShellExecute = true
+                });
+            return result;
+        }
     }
 }

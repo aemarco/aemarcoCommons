@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
 
-namespace Extensions.TextExtensions
+namespace aemarcoCommons.Extensions.TextExtensions
 {
     public static class RegexExtensions
     {

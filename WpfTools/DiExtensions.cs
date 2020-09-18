@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Windows;
+using Toolbox.ConfigurationTools;
+using aemarcoCommons.Toolbox.SerializationTools;
+using aemarcoCommons.WpfTools.Commands;
 using Autofac;
 using Microsoft.Extensions.Configuration;
-using Toolbox.ConfigurationTools;
-using Toolbox.SerializationTools;
-using WpfTools.Commands;
 
-namespace WpfTools
+namespace aemarcoCommons.WpfTools
 {
 
     /// <summary>

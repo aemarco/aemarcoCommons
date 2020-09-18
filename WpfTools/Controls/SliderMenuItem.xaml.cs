@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
-namespace WpfTools.Controls
+namespace aemarcoCommons.WpfTools.Controls
 {
     public partial class SliderMenuItem : MenuItem
     {

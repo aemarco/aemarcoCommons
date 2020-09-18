@@ -1,7 +1,7 @@
 ﻿using System.Windows;
-using WpfTools.BaseModels;
+using aemarcoCommons.WpfTools.BaseModels;
 
-namespace WpfTools.Helpers
+namespace aemarcoCommons.WpfTools.Helpers
 {
     /// <summary>
     /// Can be attached to a window, so it can be closed by the view model (needs to inherit BaseViewModel)

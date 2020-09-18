@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Toolbox.Interop
+namespace aemarcoCommons.Toolbox.Interop
 {
     public static class ConsoleHelper
     {

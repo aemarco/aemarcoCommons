@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace Toolbox.CommandTools
+namespace aemarcoCommons.Toolbox.CommandTools
 {
 
     public static class CommandTool

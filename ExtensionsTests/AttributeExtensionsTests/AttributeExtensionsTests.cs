@@ -1,5 +1,5 @@
 ﻿using System;
-using Extensions.AttributeExtensions;
+using aemarcoCommons.Extensions.AttributeExtensions;
 using FluentAssertions;
 using NUnit.Framework;
 

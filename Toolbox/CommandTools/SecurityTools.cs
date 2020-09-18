@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace Toolbox.CommandTools
+namespace aemarcoCommons.Toolbox.CommandTools
 {
     public static class SecurityTools
     {

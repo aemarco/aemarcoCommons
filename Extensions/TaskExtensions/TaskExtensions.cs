@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 #nullable enable
 
-namespace Extensions.TaskExtensions
+namespace aemarcoCommons.Extensions.TaskExtensions
 {
     public static class TaskExtensions
     {

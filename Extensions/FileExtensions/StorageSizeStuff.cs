@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Extensions.FileExtensions
+namespace aemarcoCommons.Extensions.FileExtensions
 {
     public static class StorageSizeStuff
     {

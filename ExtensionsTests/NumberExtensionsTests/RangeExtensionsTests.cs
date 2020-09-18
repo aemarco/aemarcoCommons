@@ -1,4 +1,4 @@
-﻿using Extensions.NumberExtensions;
+﻿using aemarcoCommons.Extensions.NumberExtensions;
 using FluentAssertions;
 using NUnit.Framework;
 

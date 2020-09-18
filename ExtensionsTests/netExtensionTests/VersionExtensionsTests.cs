@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using Extensions.netExtensions;
+using aemarcoCommons.Extensions.netExtensions;
 using FluentAssertions;
 using NUnit.Framework;
 

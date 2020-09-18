@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:converters="clr-namespace:WpfTools.Converters">
+                    xmlns:converters="clr-namespace:aemarcoCommons.WpfTools.Converters">
 
     <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     <converters:BoolToVisibilityInversConverter x:Key="BoolToVisibilityInversConverter" />

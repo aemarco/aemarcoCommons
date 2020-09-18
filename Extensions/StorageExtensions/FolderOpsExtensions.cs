@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using Extensions.FileExtensions;
+using aemarcoCommons.Extensions.FileExtensions;
 
-namespace Extensions.StorageExtensions
+namespace aemarcoCommons.Extensions.StorageExtensions
 {
     public static class FolderOpsExtensions
     {

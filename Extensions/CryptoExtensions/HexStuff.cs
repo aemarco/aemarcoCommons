@@ -3,7 +3,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Extensions.CryptoExtensions
+namespace aemarcoCommons.Extensions.CryptoExtensions
 {
     public static class HexStuff
     {

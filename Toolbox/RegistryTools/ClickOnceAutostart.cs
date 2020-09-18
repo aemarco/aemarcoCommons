@@ -1,7 +1,6 @@
 ﻿using System;
 
-
-namespace Toolbox.RegistryTools
+namespace aemarcoCommons.Toolbox.RegistryTools
 {
     public class ClickOnceAutostart
     {

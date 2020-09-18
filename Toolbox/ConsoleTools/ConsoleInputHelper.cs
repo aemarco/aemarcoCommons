@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Toolbox.ConsoleTools
+namespace aemarcoCommons.Toolbox.ConsoleTools
 {
     public static class ConsoleInputHelper
     {

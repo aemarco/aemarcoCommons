@@ -1,6 +1,6 @@
 ﻿using Microsoft.Win32;
 
-namespace Toolbox.RegistryTools
+namespace aemarcoCommons.Toolbox.RegistryTools
 {
     public static class RegistryEditor
     {

@@ -3,9 +3,9 @@ using System.IO;
 using System.IO.Pipes;
 using System.Threading;
 using System.Threading.Tasks;
-using Extensions.TaskExtensions;
+using aemarcoCommons.Extensions.TaskExtensions;
 
-namespace Toolbox.Pipes
+namespace aemarcoCommons.Toolbox.Pipes
 {
     public class MessageBasedPipeServer
     {

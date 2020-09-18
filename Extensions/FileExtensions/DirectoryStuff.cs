@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 
-namespace Extensions.FileExtensions
+namespace aemarcoCommons.Extensions.FileExtensions
 {
     public static class DirectoryStuff
     {

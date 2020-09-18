@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Security.Cryptography;
 
-namespace Extensions.CryptoExtensions
+namespace aemarcoCommons.Extensions.CryptoExtensions
 {
     public static class ByteStuff
     {

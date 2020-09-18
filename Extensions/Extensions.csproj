@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>latest</LangVersion>
-    <AssemblyVersion>1.0.1.0</AssemblyVersion>
+    <AssemblyVersion>1.0.2.0</AssemblyVersion>
 
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>aemarcoExtensions</PackageId>
@@ -16,6 +16,7 @@
     <Description>frequently used c# extension methods</Description>
     <PackageTags>Extensions</PackageTags>
     <PackageIcon>toolbox.png</PackageIcon>
+    <RootNamespace>aemarcoCommons.Extensions</RootNamespace>
 
   </PropertyGroup>
 

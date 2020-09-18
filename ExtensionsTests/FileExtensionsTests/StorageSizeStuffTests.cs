@@ -1,4 +1,4 @@
-﻿using Extensions.FileExtensions;
+﻿using aemarcoCommons.Extensions.FileExtensions;
 using NUnit.Framework;
 
 namespace ExtensionsTests.FileExtensionsTests

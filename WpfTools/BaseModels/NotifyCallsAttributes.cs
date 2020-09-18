@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WpfTools.BaseModels
+namespace aemarcoCommons.WpfTools.BaseModels
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
     public class NotifyCallsMethodAttribute : Attribute

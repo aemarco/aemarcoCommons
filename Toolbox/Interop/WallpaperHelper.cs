@@ -1,10 +1,10 @@
-﻿using Extensions.AttributeExtensions;
-using Microsoft.Win32;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using aemarcoCommons.Extensions.AttributeExtensions;
+using Microsoft.Win32;
 
-namespace Toolbox.Interop
+namespace aemarcoCommons.Toolbox.Interop
 {
     public static class WallpaperHelper
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Extensions.AttributeExtensions
+namespace aemarcoCommons.Extensions.AttributeExtensions
 {
     public static class ReadingExtensions
     {

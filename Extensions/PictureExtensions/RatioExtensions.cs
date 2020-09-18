@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace Extensions.PictureExtensions
+namespace aemarcoCommons.Extensions.PictureExtensions
 {
     public static class RatioExtensions
     {

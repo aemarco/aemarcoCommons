@@ -1,6 +1,6 @@
-﻿using WpfTools.Commands;
+﻿using aemarcoCommons.WpfTools.Commands;
 
-namespace WpfTools.BaseModels
+namespace aemarcoCommons.WpfTools.BaseModels
 {
     public class BaseViewModel : BaseNotifier, IBaseViewModel
     {

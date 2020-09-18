@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="contentExtensionsTests\**" />
+    <EmbeddedResource Remove="contentExtensionsTests\**" />
+    <None Remove="contentExtensionsTests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
     <PackageReference Include="nunit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.16.1">
@@ -18,10 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Extensions\Extensions.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="contentExtensionsTests\" />
   </ItemGroup>
 
 </Project>

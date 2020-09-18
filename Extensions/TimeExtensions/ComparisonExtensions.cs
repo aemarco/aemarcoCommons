@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Extensions.TimeExtensions
+namespace aemarcoCommons.Extensions.TimeExtensions
 {
     public static class ComparisonExtensions
     {

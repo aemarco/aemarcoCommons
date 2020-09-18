@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Threading;
 
-namespace Toolbox.SyncTools
+namespace aemarcoCommons.Toolbox.SyncTools
 {
     // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
     public class AppSingleStartup : IDisposable

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Extensions.NumberExtensions
+namespace aemarcoCommons.Extensions.NumberExtensions
 {
     public static class RangeExtensions
     {

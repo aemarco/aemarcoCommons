@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Drawing;
-using Extensions.PictureExtensions;
+using aemarcoCommons.Extensions.PictureExtensions;
 using FluentAssertions;
 using NUnit.Framework;
 

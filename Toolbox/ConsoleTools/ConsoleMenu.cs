@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Toolbox.ConsoleTools
+namespace aemarcoCommons.Toolbox.ConsoleTools
 {
     public class ConsoleMenu<T>
     {

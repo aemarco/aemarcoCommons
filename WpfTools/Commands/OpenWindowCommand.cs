@@ -1,6 +1,6 @@
-﻿using WpfTools.BaseModels;
+﻿using aemarcoCommons.WpfTools.BaseModels;
 
-namespace WpfTools.Commands
+namespace aemarcoCommons.WpfTools.Commands
 {
     public class OpenWindowCommand<T> : DelegateCommand where T : IWindow
     {

@@ -1,8 +1,8 @@
 ﻿using System.IO;
 using System.Net;
-using Extensions.CryptoExtensions;
+using aemarcoCommons.Extensions.CryptoExtensions;
 
-namespace Extensions.FileExtensions
+namespace aemarcoCommons.Extensions.FileExtensions
 {
     public static class HashStuff
     {

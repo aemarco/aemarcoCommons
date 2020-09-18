@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Configuration;
 
-namespace Extensions.TextExtensions
+namespace aemarcoCommons.Extensions.TextExtensions
 {
     public static class ConfigurationExtensions
     {

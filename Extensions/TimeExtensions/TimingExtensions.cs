@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Extensions.TimeExtensions
+namespace aemarcoCommons.Extensions.TimeExtensions
 {
     public static class TimingExtensions
     {

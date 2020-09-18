@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Extensions.StorageExtensions
+namespace aemarcoCommons.Extensions.StorageExtensions
 {
     public static class FileOpsExtensions
     {
