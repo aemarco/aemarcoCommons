@@ -3,7 +3,7 @@ using System.Windows;
 
 namespace aemarcoCommons.WpfTools.Commands
 {
-    public class OpenDialogCommand<T> : DelegateCommand where T : Window
+    public class OpenDialogCommand<T> : DelegateCommand where T : IWindow
     {
         public OpenDialogCommand(T window)
         {
