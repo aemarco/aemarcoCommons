@@ -5,7 +5,9 @@
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <LangVersion>latest</LangVersion>
-    <AssemblyVersion>1.0.5.0</AssemblyVersion>
+    <RootNamespace>aemarcoCommons.WpfTools</RootNamespace>
+    <AssemblyName>aemarcoCommons.WpfTools</AssemblyName>
+    <AssemblyVersion>1.0.9.0</AssemblyVersion>
 
 
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -20,9 +22,7 @@
     <Description>c# wpf tools collection</Description>
     <PackageTags>WpfTools</PackageTags>
     <PackageIcon>toolbox.png</PackageIcon>
-    <RootNamespace>aemarcoCommons.WpfTools</RootNamespace>
-
-   
+    
   </PropertyGroup>
 
   <ItemGroup>

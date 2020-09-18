@@ -2,7 +2,9 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>latest</LangVersion>
-    <AssemblyVersion>1.0.5.0</AssemblyVersion>
+    <RootNamespace>aemarcoCommons.Toolbox</RootNamespace>
+    <AssemblyName>aemarcoCommons.Toolbox</AssemblyName>
+    <AssemblyVersion>1.0.9.0</AssemblyVersion>
 
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>aemarcoToolbox</PackageId>
@@ -16,7 +18,6 @@
     <Description>c# tools collection</Description>
     <PackageTags>Toolbox</PackageTags>
     <PackageIcon>toolbox.png</PackageIcon>
-    <RootNamespace>aemarcoCommons.Toolbox</RootNamespace>
     
     
 

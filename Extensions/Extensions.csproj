@@ -2,7 +2,9 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>latest</LangVersion>
-    <AssemblyVersion>1.0.5.0</AssemblyVersion>
+    <RootNamespace>aemarcoCommons.Extensions</RootNamespace>
+    <AssemblyName>aemarcoCommons.Extensions</AssemblyName>
+    <AssemblyVersion>1.0.9.0</AssemblyVersion>
 
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>aemarcoExtensions</PackageId>
@@ -16,8 +18,7 @@
     <Description>frequently used c# extension methods</Description>
     <PackageTags>Extensions</PackageTags>
     <PackageIcon>toolbox.png</PackageIcon>
-    <RootNamespace>aemarcoCommons.Extensions</RootNamespace>
-
+   
   </PropertyGroup>
 
   <ItemGroup>
