@@ -5,8 +5,15 @@ namespace aemarcoCommons.Toolbox.ConfigurationTools
 {
     public class ConfigurationOptions
     {
+        public ConfigurationOptions()
+        {
+            SettingsSaveDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        }
+
         /// <summary>
         /// If Save() is being used on any Settings-Class, define a directory where stuff gets saved
+        /// - defaults to app directory
+        /// - set null to disable saving stuff
         /// </summary>
         public string SettingsSaveDirectory { get; set; }
 

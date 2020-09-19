@@ -41,5 +41,18 @@ namespace aemarcoCommons.Extensions.PictureExtensions
             
             return Math.Round(maxRatio, 2);
         }
+
+        public static double ToMinRatio(this Rectangle rectangle, int percentTopBottomCutAllowed)
+        {
+            return new Size(rectangle.Width, rectangle.Height).ToMinRatio(percentTopBottomCutAllowed);
+        }
+
+        public static double ToMaxRatio(this Rectangle rectangle, int percentLeftRightCutAllowed)
+        {
+            return new Size(rectangle.Width, rectangle.Height).ToMaxRatio(percentLeftRightCutAllowed);
+        }
+
+
+
     }
 }

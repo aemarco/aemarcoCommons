@@ -65,36 +65,20 @@ namespace aemarcoCommons.Toolbox.ConfigurationTools
         /// <returns>absolute file path to the saved configuration file</returns>
         public static string GetSavePathForSetting(this Type type, string saveDirectory)
         {
-            var fileName = $"appsettings.{type.Name}.json";
+            _ = saveDirectory ?? throw new ApplicationException("Saving disabled. To enable don´t set SettingsSaveDirectory to null");
+            if (!Directory.Exists(saveDirectory)) Directory.CreateDirectory(saveDirectory);
+
+
+            var fileMiddleName = type.Name;
+            //use path defined in attribute if specified
+            if (Attribute.GetCustomAttribute(type, typeof(SettingPathAttribute)) is SettingPathAttribute pathAttribute &&
+                !string.IsNullOrWhiteSpace(pathAttribute.Path))
+                fileMiddleName = pathAttribute.Path.Replace(':', '_');
+            var fileName = $"savedSettings.{fileMiddleName}.json";
+
             return string.IsNullOrWhiteSpace(saveDirectory)
                 ? fileName
                 : Path.Combine(saveDirectory, fileName);
-        }
-
-
-        /// <summary>
-        /// Performs string transformations on given objects string properties with ProtectedAttribute defined
-        /// </summary>
-        /// <param name="obj">object which needs transformation</param>
-        /// <param name="transform">transformation which should be performed</param>
-        internal static void ProtectedTransformObject(this object obj, Func<string, string> transform)
-        {
-            foreach (var propInfo in obj.GetType().GetProperties()
-                .Where(x => Attribute.IsDefined(x, typeof(ProtectedAttribute)))
-                .Where(x => x.PropertyType == typeof(string))
-                .Where(x => x.CanRead && x.CanWrite))
-            {
-                propInfo.SetValue(
-                    obj,
-                    transform((string)propInfo.GetValue(obj)));
-            }
-
-            foreach (var propInfo in obj.GetType().GetProperties()
-                .Where(x => x.PropertyType.IsClass && x.PropertyType != typeof(string)))
-            {
-                propInfo.GetValue(obj)
-                    .ProtectedTransformObject(transform);
-            }
         }
 
     }
