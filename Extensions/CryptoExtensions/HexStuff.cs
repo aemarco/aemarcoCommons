@@ -18,28 +18,5 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
             }
             return sb.ToString();
         }
-
-        
-
-
-
-        [Obsolete("refactor this shit")]
-        public static string GetMD5Hash(this string textToHash)
-        {
-            // Use input string to calculate MD5 hash
-            using var md5 = MD5.Create();
-            var inputBytes = Encoding.ASCII.GetBytes(textToHash);
-            var hashBytes = md5.ComputeHash(inputBytes);
-
-            // Convert the byte array to hexadecimal string
-            var sb = new StringBuilder();
-            foreach (var hashByte in hashBytes)
-            {
-                sb.Append(hashByte.ToString("X2"));
-            }
-            return sb.ToString();
-        }
-
-
     }
 }

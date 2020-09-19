@@ -29,7 +29,6 @@ namespace aemarcoCommons.Extensions.AttributeExtensions
             return obj.GetType().GetAttribute<T>(memberName);
         }
 
-
         public static bool HasAttribute<T>(this object obj, string memberName = null)
             where T : Attribute
         {
@@ -50,7 +49,7 @@ namespace aemarcoCommons.Extensions.AttributeExtensions
             //get attribute on member
             else
             {
-                return (IEnumerable<T>) type.GetMember(memberName).FirstOrDefault()?.GetCustomAttributes(typeof(T));
+                return (IEnumerable<T>) type.GetMember(memberName).FirstOrDefault()?.GetCustomAttributes(typeof(T)) ?? new List<T>();
             }
         }
 
@@ -61,7 +60,6 @@ namespace aemarcoCommons.Extensions.AttributeExtensions
         }
 
 
-        //with enums
         public static T GetAttribute<T>(this Enum value)
             where T : Attribute
         {
