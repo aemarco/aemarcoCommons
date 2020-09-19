@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows;
-using Toolbox.ConfigurationTools;
+using aemarcoCommons.Toolbox.ConfigurationTools;
 using aemarcoCommons.Toolbox.SerializationTools;
 using aemarcoCommons.WpfTools.Commands;
 using Autofac;
@@ -46,10 +46,6 @@ namespace aemarcoCommons.WpfTools
             builder.RegisterType<Random>().SingleInstance();
 
             //* Toolbox stuff
-            builder.RegisterAssemblyTypes(AppDomain.CurrentDomain.GetAssemblies())
-                .Where(t => t.IsSubclassOf(typeof(SettingsBase)))
-                .AsSelf()
-                .AsImplementedInterfaces();
             builder.RegisterGeneric(typeof(JsonTypeToFileStore<>))
                 .AsImplementedInterfaces()
                 .SingleInstance();
