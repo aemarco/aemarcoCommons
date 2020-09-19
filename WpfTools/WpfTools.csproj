@@ -1,13 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
+  <Import Project="..\SolutionInfo.proj" />
+
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
-    <LangVersion>latest</LangVersion>
     <RootNamespace>aemarcoCommons.WpfTools</RootNamespace>
     <AssemblyName>aemarcoCommons.WpfTools</AssemblyName>
-    <AssemblyVersion>1.0.17.0</AssemblyVersion>
+ 
 
 
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>

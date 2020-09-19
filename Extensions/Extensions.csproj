@@ -1,10 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\SolutionInfo.proj" />
+
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <RootNamespace>aemarcoCommons.Extensions</RootNamespace>
     <AssemblyName>aemarcoCommons.Extensions</AssemblyName>
-    <AssemblyVersion>1.0.17.0</AssemblyVersion>
+    
 
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>aemarcoExtensions</PackageId>
@@ -20,7 +23,6 @@
     <PackageIcon>toolbox.png</PackageIcon>
    
   </PropertyGroup>
-
   <ItemGroup>
 
     <None Include="..\LICENSE.md">
