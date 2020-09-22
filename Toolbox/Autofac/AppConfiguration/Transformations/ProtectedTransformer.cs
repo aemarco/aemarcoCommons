@@ -27,6 +27,10 @@ namespace aemarcoCommons.Toolbox.Autofac.AppConfiguration.Transformations
 
         public override string PerformReadTransformation(string currentValue, PropertyInfo propertyInfo, IConfigurationRoot configRoot)
         {
+            //don´t attempt to decrypt empty strings
+            if (string.IsNullOrWhiteSpace(currentValue)) return currentValue;
+
+
             //password must be specified
             var _ = _password ?? throw new ArgumentException("No Password provided for Cryptography");
 
@@ -39,6 +43,10 @@ namespace aemarcoCommons.Toolbox.Autofac.AppConfiguration.Transformations
 
         public override string PerformWriteTransformation(string currentValue, PropertyInfo propertyInfo, IConfigurationRoot configRoot)
         {
+            //don´t attempt to decrypt empty strings
+            if (string.IsNullOrWhiteSpace(currentValue)) return currentValue;
+
+
             //password must be specified
             var _ = _password ?? throw new ArgumentException("No Password provided for Cryptography");
 
