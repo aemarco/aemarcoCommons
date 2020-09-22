@@ -1,14 +1,11 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using Autofac;
 using Microsoft.Extensions.Configuration;
-
-namespace aemarcoCommons.Toolbox.ConfigurationTools
+namespace aemarcoCommons.Toolbox.Autofac.AppConfiguration
 {
-    public static class Extensions
+    public static class AutofacExtensions
     {
-
         /// <summary>
         /// Register all necessary stuff to the Builder, so Setting-Classes can be injected later
         /// </summary>
@@ -23,7 +20,11 @@ namespace aemarcoCommons.Toolbox.ConfigurationTools
             //set options
             var toolConfig = new ConfigurationOptions();
             options?.Invoke(toolConfig);
-            SettingsBase.Options = toolConfig;
+
+            //register options
+            builder.RegisterInstance(toolConfig)
+                .AsSelf()
+                .SingleInstance();
 
             //register all settings classes
             builder.RegisterAssemblyTypes(AppDomain.CurrentDomain.GetAssemblies())
@@ -41,6 +42,7 @@ namespace aemarcoCommons.Toolbox.ConfigurationTools
                     .Where(x => x.IsSubclassOf(typeof(SettingsBase))))
                 {
                     var filePath = type.GetSavePathForSetting(toolConfig.SettingsSaveDirectory);
+                    //those files get registered even if not exist (may avoid problems with reloading :)
                     configBuilder.AddJsonFile(filePath, true, true);
                 }
             }
@@ -51,35 +53,15 @@ namespace aemarcoCommons.Toolbox.ConfigurationTools
                 .As<IConfiguration>()
                 .As<IConfigurationRoot>()
                 .SingleInstance();
-            SettingsBase.ConfigRoot = rootConfig;
+
+            builder.RegisterBuildCallback(scope =>
+            {
+                SettingsBase.RootScope = scope;
+            });
 
             return builder;
         }
 
-
-        /// <summary>
-        /// Gather absolute file Path which the type get saved to
-        /// </summary>
-        /// <param name="type">type for which the file Path should be returned</param>
-        /// <param name="saveDirectory">directory path (same as provided in options)</param>
-        /// <returns>absolute file path to the saved configuration file</returns>
-        public static string GetSavePathForSetting(this Type type, string saveDirectory)
-        {
-            _ = saveDirectory ?? throw new ApplicationException("Saving disabled. To enable don´t set SettingsSaveDirectory to null");
-            if (!Directory.Exists(saveDirectory)) Directory.CreateDirectory(saveDirectory);
-
-
-            var fileMiddleName = type.Name;
-            //use path defined in attribute if specified
-            if (Attribute.GetCustomAttribute(type, typeof(SettingPathAttribute)) is SettingPathAttribute pathAttribute &&
-                !string.IsNullOrWhiteSpace(pathAttribute.Path))
-                fileMiddleName = pathAttribute.Path.Replace(':', '_');
-            var fileName = $"savedSettings.{fileMiddleName}.json";
-
-            return string.IsNullOrWhiteSpace(saveDirectory)
-                ? fileName
-                : Path.Combine(saveDirectory, fileName);
-        }
 
     }
 }

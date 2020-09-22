@@ -6,7 +6,7 @@ using System.Text;
 
 namespace aemarcoCommons.Toolbox.CryptoTools
 {
-    public static class TextCipher
+    public static class PasswordTextCipher
     {
         // This constant is used to determine the key size of the encryption algorithm in bits.
         // We divide this by 8 within the code below to get the equivalent number of bytes.

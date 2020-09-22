@@ -2,12 +2,12 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace aemarcoCommons.Toolbox.ConfigurationTools
+namespace aemarcoCommons.Toolbox.CryptoTools
 {
     /// <summary>
     /// Cryptography tooling 
     /// </summary>
-    internal static class CryptoStuff
+    public static class AesTextCipher
     {
         public static string Encrypt(string input, string iv, string key)
         {

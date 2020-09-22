@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows;
-using aemarcoCommons.Toolbox.ConfigurationTools;
 using aemarcoCommons.Toolbox.SerializationTools;
 using aemarcoCommons.WpfTools.Commands;
 using Autofac;
