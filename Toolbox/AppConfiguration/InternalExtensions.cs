@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace aemarcoCommons.Toolbox.Autofac.AppConfiguration
+namespace aemarcoCommons.Toolbox.AppConfiguration
 {
     internal static class InternalExtensions
     {

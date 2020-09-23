@@ -2,7 +2,7 @@
 using aemarcoCommons.Extensions.TextExtensions;
 using Microsoft.Extensions.Configuration;
 
-namespace aemarcoCommons.Toolbox.Autofac.AppConfiguration.Transformations
+namespace aemarcoCommons.Toolbox.AppConfiguration.Transformations
 {
     public class PlaceholderTransformation: StringTransformerBase
     {

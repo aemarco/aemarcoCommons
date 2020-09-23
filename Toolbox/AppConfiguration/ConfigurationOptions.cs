@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using aemarcoCommons.Toolbox.Autofac.AppConfiguration.Transformations;
+using aemarcoCommons.Toolbox.AppConfiguration.Transformations;
 
-namespace aemarcoCommons.Toolbox.Autofac.AppConfiguration
+namespace aemarcoCommons.Toolbox.AppConfiguration
 {
     public class ConfigurationOptions
     {

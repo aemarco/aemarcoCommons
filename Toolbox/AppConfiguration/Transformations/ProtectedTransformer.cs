@@ -3,7 +3,7 @@ using System.Reflection;
 using aemarcoCommons.Toolbox.CryptoTools;
 using Microsoft.Extensions.Configuration;
 
-namespace aemarcoCommons.Toolbox.Autofac.AppConfiguration.Transformations
+namespace aemarcoCommons.Toolbox.AppConfiguration.Transformations
 {
 
     /// <summary>
@@ -19,7 +19,8 @@ namespace aemarcoCommons.Toolbox.Autofac.AppConfiguration.Transformations
     public class ProtectedTransformer : StringTransformerBase
     {
         private readonly string _password;
-        public ProtectedTransformer(string password)
+        public ProtectedTransformer(
+            string password)
         {
             _password = password;
         }

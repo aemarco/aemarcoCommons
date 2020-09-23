@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.Configuration;
 
-namespace aemarcoCommons.Toolbox.Autofac.AppConfiguration.Transformations
+namespace aemarcoCommons.Toolbox.AppConfiguration.Transformations
 {
     public abstract class StringTransformerBase
     {

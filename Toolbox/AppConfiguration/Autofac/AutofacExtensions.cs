@@ -2,7 +2,8 @@
 using System.Linq;
 using Autofac;
 using Microsoft.Extensions.Configuration;
-namespace aemarcoCommons.Toolbox.Autofac.AppConfiguration
+
+namespace aemarcoCommons.Toolbox.AppConfiguration.Autofac
 {
     public static class AutofacExtensions
     {

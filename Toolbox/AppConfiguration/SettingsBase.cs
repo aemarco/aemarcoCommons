@@ -1,13 +1,13 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using aemarcoCommons.Toolbox.Autofac.AppConfiguration.Transformations;
+using aemarcoCommons.Toolbox.AppConfiguration.Transformations;
 using Autofac;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json.Linq;
 
-namespace aemarcoCommons.Toolbox.Autofac.AppConfiguration
+namespace aemarcoCommons.Toolbox.AppConfiguration
 {
     /// <summary>
     /// Custom Path in IConfiguration
