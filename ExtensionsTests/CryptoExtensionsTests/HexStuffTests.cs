@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using aemarcoCommons.Extensions.AttributeExtensions;
-using aemarcoCommons.Extensions.CryptoExtensions;
+﻿using aemarcoCommons.Extensions.CryptoExtensions;
 using FluentAssertions;
 using NUnit.Framework;
 

@@ -1,5 +1,4 @@
 ﻿using aemarcoCommons.WpfTools.BaseModels;
-using System.Windows;
 
 namespace aemarcoCommons.WpfTools.Commands
 {
