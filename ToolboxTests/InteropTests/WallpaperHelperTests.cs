@@ -8,6 +8,8 @@ namespace ToolboxTests.InteropTests
     public class WallpaperHelperTests
     {
         static string WideImage => $"{AppDomain.CurrentDomain.BaseDirectory}Resources\\1680_525.jpg";
+        // ReSharper disable once UnusedMember.Local
+        // ReSharper disable once ArrangeTypeMemberModifiers
         static string HighImage => $"{AppDomain.CurrentDomain.BaseDirectory}Resources\\840_1050.jpg";
 
         [Test]
