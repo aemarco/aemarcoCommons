@@ -8,5 +8,5 @@
     <converters:ImageToImageSourceConverter x:Key="ImageToImageSourceConverter" />
     <converters:IntToStringConverter x:Key="IntToStringConverter" />
     <converters:TimespanToStringConverter x:Key="TimespanToStringConverter" />
-    
+    <converters:ObjectToJsonConverter x:Key="ObjectToJsonConverter" />
 </ResourceDictionary>
