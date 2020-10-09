@@ -87,7 +87,7 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
         public string Save()
         {
             //decide for a filePath
-            var filePath = _type.GetSavePathForSetting(_options.SettingsSaveDirectory);
+            var filePath = _type.GetSavePathForSetting(_options);
 
 
             //ApplyWriteTransformations in reverse order

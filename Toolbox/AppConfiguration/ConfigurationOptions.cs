@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using aemarcoCommons.Toolbox.AppConfiguration.Transformations;
 
 namespace aemarcoCommons.Toolbox.AppConfiguration
@@ -9,6 +10,15 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
         public ConfigurationOptions()
         {
             SettingsSaveDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            GetFileNameForSettingsClass = type =>
+            {
+                var fileMiddleName = type.Name;
+                //use path defined in attribute if specified
+                if (Attribute.GetCustomAttribute(type, typeof(SettingPathAttribute)) is SettingPathAttribute pathAttribute &&
+                    !string.IsNullOrWhiteSpace(pathAttribute.Path))
+                    fileMiddleName = pathAttribute.Path.Replace(':', '_');
+                return $"savedSettings.{fileMiddleName}.json";
+            };
         }
 
         /// <summary>
@@ -20,6 +30,10 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
         // ReSharper disable once MemberCanBePrivate.Global
         public string SettingsSaveDirectory { get; set; }
 
+        /// <summary>
+        /// If set, that function will be called to determine the filename for given settings type
+        /// </summary>
+        public Func<Type, string> GetFileNameForSettingsClass { get; set; }
 
         /// <summary>
         /// provide a list of transformations which will be called

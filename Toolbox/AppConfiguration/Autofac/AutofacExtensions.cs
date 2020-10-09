@@ -42,7 +42,7 @@ namespace aemarcoCommons.Toolbox.AppConfiguration.Autofac
                     .SelectMany(x => x.GetTypes())
                     .Where(x => x.IsSubclassOf(typeof(SettingsBase))))
                 {
-                    var filePath = type.GetSavePathForSetting(toolConfig.SettingsSaveDirectory);
+                    var filePath = type.GetSavePathForSetting(toolConfig);
                     //those files get registered even if not exist (may avoid problems with reloading :)
                     configBuilder.AddJsonFile(filePath, true, true);
                 }
