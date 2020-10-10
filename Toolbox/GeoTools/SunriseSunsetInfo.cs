@@ -38,8 +38,6 @@ namespace aemarcoCommons.Toolbox.GeoTools
         public DateTimeOffset AstronomicalTwilightEnd { get; set; }
     }
 
-
-
     public class TimeSpanSecondsConverter : JsonConverter<TimeSpan>
     {
         public override void WriteJson(JsonWriter writer, TimeSpan value, JsonSerializer serializer)
@@ -54,7 +52,6 @@ namespace aemarcoCommons.Toolbox.GeoTools
         }
     }
 
-
     internal class SunriseSunsetResponse
     {
         [JsonProperty("results")]
@@ -64,7 +61,6 @@ namespace aemarcoCommons.Toolbox.GeoTools
         [JsonProperty("status")]
         public string Status { get; set; }
     }
-
 
     internal static class SunriseSunsetExtensions
     {

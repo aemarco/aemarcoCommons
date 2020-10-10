@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net.Http;
 using System.Threading.Tasks;
 using aemarcoCommons.Toolbox.GeoTools;
 using FluentAssertions;
@@ -15,11 +14,7 @@ namespace ToolboxTests.GeoTools
         [SetUp]
         public void Init()
         {
-            _service = new GeoService(new HttpClient())
-            {
-                NumberOfCachedSunriseSunsetInfos = 2,
-                MinIntervalOfIpInfoUpdate = TimeSpan.FromMinutes(1)
-            };
+            _service = new GeoService();
         }
 
         #region IpInfo

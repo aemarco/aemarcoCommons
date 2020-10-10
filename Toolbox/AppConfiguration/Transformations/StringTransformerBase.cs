@@ -12,6 +12,7 @@ namespace aemarcoCommons.Toolbox.AppConfiguration.Transformations
         /// </summary>
         /// <param name="currentValue">value which comes from previous transformation or from IConfiguration</param>
         /// <param name="propertyInfo"></param>
+        /// <param name="configRoot"></param>
         /// <returns></returns>
         public abstract string PerformReadTransformation(string currentValue, PropertyInfo propertyInfo, IConfigurationRoot configRoot);
 
@@ -20,6 +21,7 @@ namespace aemarcoCommons.Toolbox.AppConfiguration.Transformations
         /// </summary>
         /// <param name="currentValue">value which comes from previous transformation or from SettingsObject</param>
         /// <param name="propertyInfo"></param>
+        /// <param name="configRoot"></param>
         /// <returns></returns>
         public abstract string PerformWriteTransformation(string currentValue, PropertyInfo propertyInfo, IConfigurationRoot configRoot);
 

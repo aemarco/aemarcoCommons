@@ -30,7 +30,6 @@ namespace aemarcoCommons.Toolbox.MonitorTools
 
         #region private
 
-       
         private void TrySetFromPreviousImage(string backgroundFile)
         {
             // ReSharper disable once InvertIf
@@ -38,16 +37,14 @@ namespace aemarcoCommons.Toolbox.MonitorTools
             {
                 try
                 {
-                    using (var old = new Bitmap(backgroundFile))
+                    using var old = new Bitmap(backgroundFile);
+                    if (old.Width >= (TargetArea.X + TargetArea.Width) &&
+                        old.Height >= (TargetArea.Y + TargetArea.Height))
                     {
-                        if (old.Width >= (TargetArea.X + TargetArea.Width) &&
-                            old.Height >= (TargetArea.Y + TargetArea.Height))
-                        {
-                            SetPicture(new Bitmap(old.Clone(TargetArea, old.PixelFormat)));
-                            return;
-                        }
-                        throw new FileLoadException("Image size not compatible.");
+                        SetPicture(new Bitmap(old.Clone(TargetArea, old.PixelFormat)));
+                        return;
                     }
+                    throw new FileLoadException("Image size not compatible.");
                 }
                 catch //TODO Virtual screen throws exception when barely in range
                 {

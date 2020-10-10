@@ -23,11 +23,9 @@ namespace aemarcoCommons.Toolbox.Interop
             var attr = style.GetAttribute<WindowsWallpaperStyleValuesAttribute>();
             if (attr != null)
             {
-                using (var key = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop", true))
-                {
-                    key?.SetValue("WallpaperStyle", attr.WallpaperStyle);
-                    key?.SetValue("TileWallpaper", attr.TileWallpaper);
-                }
+                using var key = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop", true);
+                key?.SetValue("WallpaperStyle", attr.WallpaperStyle);
+                key?.SetValue("TileWallpaper", attr.TileWallpaper);
             }
             var success = SystemParametersInfo(SetWallpaperOperation, 0, filePath, UpdateIniFile | SendWinIniChange);
             if (success) return;

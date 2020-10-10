@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using aemarcoCommons.Toolbox.GeoTools;
 using aemarcoCommons.Toolbox.SerializationTools;
 using aemarcoCommons.WpfTools.Commands;
 using Autofac;
@@ -48,6 +49,10 @@ namespace aemarcoCommons.WpfTools
             builder.RegisterGeneric(typeof(JsonTypeToFileStore<>))
                 .AsImplementedInterfaces()
                 .SingleInstance();
+           
+            builder.RegisterType<GeoService>();
+            builder.RegisterType<GeoServiceSettings>().AsImplementedInterfaces();
+
 
 
             //* WpfTools stuff

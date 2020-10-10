@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 using aemarcoCommons.Toolbox.AppConfiguration.Transformations;
 
 namespace aemarcoCommons.Toolbox.AppConfiguration

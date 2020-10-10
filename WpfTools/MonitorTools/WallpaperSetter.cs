@@ -12,34 +12,32 @@ using aemarcoCommons.Toolbox.MonitorTools;
 
 namespace aemarcoCommons.WpfTools.MonitorTools
 {
-    public class WallpaperSetter
+    public class WallpaperSetter : ISingleton
     {
         #region ctor
 
         public const string VirtualScreenName = "Virtual";
-        private readonly string _defaultBackgroundFile;
-        private WallpaperMode _wallMode;
+        private readonly IWallpaperSetterSettings _wallpaperSetterSettings;
+        private readonly IHttpClientFactory _httpClientFactory;
         private readonly List<Monitor> _monitors;
-        private readonly HttpClient _client;
+
 
         /// <summary>
         /// Use this Instance to handle setting Wallpapers
         /// </summary>
-        /// <param name="wallMode">
-        ///  Fit: Places the Wallpaper as big as possible without cutting (black bars)
-        ///  Fill: Cuts as much needed to fill the screen
-        ///  AllowFill: Decides automatically between Fill and Fit based on allowed cutting
-        ///  AllowFillForceCut (default): Like AllowFill, otherwise Fit with allowed cutting 
-        /// </param>
-        /// <param name="wallLocation"></param>
+        /// <param name="wallpaperSetterSettings"></param>
+        /// <param name="httpClientFactory"></param>
         // ReSharper disable once MemberCanBeProtected.Global
-        public WallpaperSetter(WallpaperMode wallMode, string wallLocation)
+        public WallpaperSetter(
+            IWallpaperSetterSettings wallpaperSetterSettings,
+            IHttpClientFactory httpClientFactory)
         {
-            _defaultBackgroundFile = wallLocation;
-            _wallMode = wallMode;
+            _wallpaperSetterSettings = wallpaperSetterSettings;
+            _httpClientFactory = httpClientFactory;
+           
 
             _monitors = GetMonitors().ToList();
-            _client = new HttpClient();
+           
         }
 
         private IEnumerable<Monitor> GetMonitors()
@@ -60,7 +58,7 @@ namespace aemarcoCommons.WpfTools.MonitorTools
                 screen.Bounds.Width,
                 screen.Bounds.Height);
 
-            return new Monitor(targetRectangle, screen.DeviceName, _defaultBackgroundFile, _wallMode);
+            return new Monitor(targetRectangle, screen.DeviceName, _wallpaperSetterSettings.WallpaperFilePath, _wallpaperSetterSettings.WallpaperMode);
         }
 
         private Monitor CreateVirtualMonitor()
@@ -70,7 +68,7 @@ namespace aemarcoCommons.WpfTools.MonitorTools
                 Screen.AllScreens.Min(x => x.Bounds.Y),
                 SystemInformation.VirtualScreen.Width,
                 SystemInformation.VirtualScreen.Height);
-            var virtualMon = new Monitor(allScreenRect, VirtualScreenName, _defaultBackgroundFile, _wallMode);
+            var virtualMon = new Monitor(allScreenRect, VirtualScreenName, _wallpaperSetterSettings.WallpaperFilePath, _wallpaperSetterSettings.WallpaperMode);
             return virtualMon;
         }
 
@@ -84,12 +82,12 @@ namespace aemarcoCommons.WpfTools.MonitorTools
         // ReSharper disable once MemberCanBeProtected.Global
         public WallpaperMode WallpaperMode
         {
-            get => _wallMode;
+            get => _wallpaperSetterSettings.WallpaperMode;
             set
             {
-                if (value == _wallMode) return;
+                if (value == _wallpaperSetterSettings.WallpaperMode) return;
 
-                _wallMode = value;
+                _wallpaperSetterSettings.WallpaperMode = value;
                 foreach (var mon in _monitors)
                     mon.WallpaperMode = value;
             }
@@ -119,30 +117,28 @@ namespace aemarcoCommons.WpfTools.MonitorTools
                         }
                     }
                 }
-                virtualScreenBitmap.Save(_defaultBackgroundFile, ImageFormat.Jpeg);
+                virtualScreenBitmap.Save(_wallpaperSetterSettings.WallpaperFilePath, ImageFormat.Jpeg);
             }
-            WallpaperHelper.SetWallpaper(_defaultBackgroundFile, WindowsWallpaperStyle.Tile);
+            WallpaperHelper.SetWallpaper(_wallpaperSetterSettings.WallpaperFilePath, WindowsWallpaperStyle.Tile);
         }
 
-        protected async Task<Image> GetImage(string file, HttpClient client = null)
+        protected async Task<Image> GetImage(string fileOrUrl, HttpClient client = null)
         {
             //external http client will have priority
-            client ??= _client;
-            if (file.StartsWith("http"))
+            client ??= _httpClientFactory.CreateClient(nameof(WallpaperSetter));
+            if (fileOrUrl.StartsWith("http"))
             {
-                var resp = await client.GetAsync(file, HttpCompletionOption.ResponseHeadersRead);
+                var resp = await client.GetAsync(fileOrUrl, HttpCompletionOption.ResponseHeadersRead);
                 resp.EnsureSuccessStatusCode();
 
-                using (var stream = await resp.Content.ReadAsStreamAsync())
-                {
-                    var img = Image.FromStream(stream);
-                    return img;
-                }
+                await using var stream = await resp.Content.ReadAsStreamAsync();
+                return Image.FromStream(stream);
+                
             }
             else
             {
-                using (var bmpTemp = new Bitmap(file))
-                    return new Bitmap(bmpTemp);
+                using var bmpTemp = new Bitmap(fileOrUrl);
+                return new Bitmap(bmpTemp);
             }
         }
 
@@ -158,7 +154,7 @@ namespace aemarcoCommons.WpfTools.MonitorTools
         /// <param name="file">Wallpaper to set</param>
         public void SetSameWallOnEveryScreen(string file)
         {
-            var attr = _wallMode.GetAttribute<WallpaperModeWindowsMappingAttribute>();
+            var attr = _wallpaperSetterSettings.WallpaperMode.GetAttribute<WallpaperModeWindowsMappingAttribute>();
             WallpaperHelper.SetWallpaper(file, attr.WindowsWallpaperStyle);
         }
 
@@ -240,7 +236,7 @@ namespace aemarcoCommons.WpfTools.MonitorTools
                 {
                     var scr = Screen.AllScreens.FirstOrDefault(x => x.DeviceName == screens[i]);
                     if (scr == null) continue;
-                    mon = new Monitor(scr.Bounds, scr.DeviceName, _defaultBackgroundFile, _wallMode);
+                    mon = new Monitor(scr.Bounds, scr.DeviceName, _wallpaperSetterSettings.WallpaperFilePath, _wallpaperSetterSettings.WallpaperMode);
                     _monitors.Add(mon);
                 }
                 mon.SetWallpaper(images[i]);
