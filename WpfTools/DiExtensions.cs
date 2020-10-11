@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using aemarcoCommons.Toolbox;
 using aemarcoCommons.Toolbox.GeoTools;
 using aemarcoCommons.Toolbox.SerializationTools;
 using aemarcoCommons.WpfTools.Commands;
@@ -41,19 +42,11 @@ namespace aemarcoCommons.WpfTools
         /// <returns>builder with registrations</returns>
         public static ContainerBuilder SetupWpfTools(this ContainerBuilder builder)
         {
+            builder.SetupToolbox();
+
             //* some common stuff
             builder.RegisterInstance(Application.Current.Dispatcher);
             builder.RegisterType<Random>().SingleInstance();
-
-            //* Toolbox stuff
-            builder.RegisterGeneric(typeof(JsonTypeToFileStore<>))
-                .AsImplementedInterfaces()
-                .SingleInstance();
-           
-            builder.RegisterType<GeoService>();
-            builder.RegisterType<GeoServiceSettings>().AsImplementedInterfaces();
-
-
 
             //* WpfTools stuff
             //--> windows getting registered
@@ -82,6 +75,14 @@ namespace aemarcoCommons.WpfTools
 
             return builder;
         }
+
+        
+
+
+
+
+
+
 
         internal static ILifetimeScope RootScope { get; private set; }
 
