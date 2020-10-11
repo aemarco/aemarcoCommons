@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Windows;
 using aemarcoCommons.Toolbox;
-using aemarcoCommons.Toolbox.GeoTools;
-using aemarcoCommons.Toolbox.SerializationTools;
 using aemarcoCommons.WpfTools.Commands;
 using Autofac;
 using Microsoft.Extensions.Configuration;
@@ -43,6 +41,8 @@ namespace aemarcoCommons.WpfTools
         public static ContainerBuilder SetupWpfTools(this ContainerBuilder builder)
         {
             builder.SetupToolbox();
+
+           
 
             //* some common stuff
             builder.RegisterInstance(Application.Current.Dispatcher);
