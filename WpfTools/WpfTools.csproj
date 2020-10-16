@@ -44,6 +44,8 @@
     
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.0.8" NoWarn="NU1701" />
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.19041.1" />
+
   </ItemGroup>
 
   <ItemGroup>
