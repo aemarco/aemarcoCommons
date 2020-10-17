@@ -64,7 +64,10 @@ namespace aemarcoCommons.Extensions.TextExtensions
         }
 
 
-
+        public static string ToFriendlyFilename(this string fileName)
+        {
+            return Regex.Replace(fileName, @"[^A-Za-z0-9_\.~]+", "-");
+        }
 
 
 
