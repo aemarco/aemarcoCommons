@@ -14,7 +14,7 @@ namespace aemarcoCommons.Toolbox.AppConfiguration.Autofac
         /// <param name="configBuilder">config builder used for registrations</param>
         /// <param name="options">optional configuration for certain features</param>
         /// <returns>given builder, so that it can be chained</returns>
-        public static ContainerBuilder AddConfigurationUtils(this ContainerBuilder builder,
+        public static IConfigurationRoot AddConfigurationUtils(this ContainerBuilder builder,
             IConfigurationBuilder configBuilder,
             Action<ConfigurationOptions> options = null)
         {
@@ -60,7 +60,7 @@ namespace aemarcoCommons.Toolbox.AppConfiguration.Autofac
                 SettingsBase.RootScope = scope;
             });
 
-            return builder;
+            return rootConfig;
         }
 
 
