@@ -12,6 +12,7 @@ namespace aemarcoCommons.Toolbox.SchedulerTools
     /// - 
     /// 
     /// </summary>
+    [Obsolete]
     public class Scheduler
     {
 
