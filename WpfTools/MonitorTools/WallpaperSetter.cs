@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.Versioning;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using aemarcoCommons.Extensions.AttributeExtensions;
@@ -123,6 +124,8 @@ namespace aemarcoCommons.WpfTools.MonitorTools
             virtualScreenBitmap.Save(_wallpaperSetterSettings.VirtualWallpaperFilePath, ImageFormat.Jpeg);
             WallpaperHelper.SetWallpaper(_wallpaperSetterSettings.VirtualWallpaperFilePath, WindowsWallpaperStyle.Tile);
         }
+
+        [SupportedOSPlatform("windows10.0.10240")]
         private void SetLockScreenBackgroundImage()
         {
             //get the right lock screen object, and draw a image for it
@@ -216,8 +219,8 @@ namespace aemarcoCommons.WpfTools.MonitorTools
             if (files == null) throw new ArgumentNullException(nameof(files));
             if (screens.Contains(null)) throw new ArgumentNullException($"inside {nameof(screens)}");
             if (files.Contains(null)) throw new ArgumentNullException($"inside {nameof(files)}");
-            if (screens.Count == 0) throw new ArgumentException(nameof(screens));
-            if (screens.Count != files.Count) throw new ArgumentException(nameof(files));
+            if (screens.Count == 0) throw new ArgumentException("no screens to set", nameof(screens));
+            if (screens.Count != files.Count) throw new ArgumentException("screen count does not match files count", nameof(files));
 
 
             var images = new List<Image>();
@@ -241,8 +244,8 @@ namespace aemarcoCommons.WpfTools.MonitorTools
             if (images == null) throw new ArgumentNullException(nameof(images));
             if (screens.Contains(null)) throw new ArgumentNullException($"inside {nameof(screens)}");
             if (images.Contains(null)) throw new ArgumentNullException($"inside {nameof(images)}");
-            if (screens.Count == 0) throw new ArgumentException(nameof(screens));
-            if (screens.Count != images.Count) throw new ArgumentException(nameof(images));
+            if (screens.Count == 0) throw new ArgumentException("no screens to set", nameof(screens));
+            if (screens.Count != images.Count) throw new ArgumentException("screen count does not match images count", nameof(images));
 
             for (var i = 0; i < screens.Count; i++)
             {
@@ -254,9 +257,15 @@ namespace aemarcoCommons.WpfTools.MonitorTools
                 SetVirtualBackgroundImage();
             else if (Screen.AllScreens.Any(screen => screens.Contains(screen.DeviceName)))
                 SetCombinedBackgroundImage();
-            
+
+            // ReSharper disable once InvertIf
             if (screens.Any(x => x == LockScreenName))
+            {
+                //if (!OperatingSystem.IsWindows() || !OperatingSystem.IsWindowsVersionAtLeast(10, 0, 10240))
+                //    throw new Exception("Setting Lock-Screen not supported");
                 SetLockScreenBackgroundImage();
+            }
+                
         }
 
         #endregion

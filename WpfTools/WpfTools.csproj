@@ -1,9 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\SolutionInfo.proj" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+        
+    <TargetFramework>net5.0-windows10.0.19041.0</TargetFramework>
+    <SupportedOSPlatform>windows10</SupportedOSPlatform>
     <LangVersion>latest</LangVersion>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
@@ -27,8 +29,8 @@
     
   </PropertyGroup>
 
-  <ItemGroup>
 
+  <ItemGroup>
     <None Remove="ConfigurationTools\**" />
     <None Include="..\LICENSE.md">
       <Pack>True</Pack>
@@ -40,12 +42,12 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    
-    <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.0.8" NoWarn="NU1701" />
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="3.1.0" />
-    <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.19041.1" />
 
+
+
+
+  <ItemGroup>
+    <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.0.8" NoWarn="NU1701" />
   </ItemGroup>
 
   <ItemGroup>
