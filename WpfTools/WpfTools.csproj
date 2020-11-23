@@ -4,7 +4,7 @@
 
   <PropertyGroup>
         
-    <TargetFramework>net5.0-windows10.0.19041.0</TargetFramework>
+    <TargetFrameworks>net5.0-windows10.0.19041.0;netcoreapp3.1</TargetFrameworks>
     <SupportedOSPlatform>windows10</SupportedOSPlatform>
     <LangVersion>latest</LangVersion>
     <UseWPF>true</UseWPF>
@@ -43,17 +43,6 @@
   </ItemGroup>
 
 
-
-
-
-  <ItemGroup>
-    <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.0.8" NoWarn="NU1701" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Toolbox\Toolbox.csproj" />
-  </ItemGroup>
-
   <ItemGroup>
     <Compile Update="Controls\RangeSlider.xaml.cs">
       <DependentUpon>RangeSlider.xaml</DependentUpon>
@@ -61,6 +50,22 @@
     <Compile Update="Controls\SliderMenuItem.xaml.cs">
       <DependentUpon>SliderMenuItem.xaml</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\Toolbox\Toolbox.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.0.8" NoWarn="NU1701" />
+  </ItemGroup>
+
+
+  <!-- Conditionally obtain references for the SDK.Contracts when targeting netcore3.1-->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">
+    <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.19041.1" />	
   </ItemGroup>
 
 </Project>
