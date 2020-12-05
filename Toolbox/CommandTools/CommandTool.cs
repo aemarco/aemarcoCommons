@@ -36,17 +36,17 @@ namespace aemarcoCommons.Toolbox.CommandTools
             }
         }
 
-        public static void OpenFileOrFolder(string path)
+        public static Process OpenFileOrFolder(string path)
         {
-#pragma warning disable IDE0067 // Objekte verwerfen, bevor Bereich verloren geht
-            _ = new Process
+            var result = new Process
             {
                 StartInfo = new ProcessStartInfo(path)
                 {
                     UseShellExecute = true
                 }
-            }.Start();
-#pragma warning restore IDE0067 // Objekte verwerfen, bevor Bereich verloren geht
+            }; 
+            result.Start();
+            return result;
         }
 
 
