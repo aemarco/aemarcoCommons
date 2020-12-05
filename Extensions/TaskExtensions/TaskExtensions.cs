@@ -72,11 +72,6 @@ namespace aemarcoCommons.Extensions.TaskExtensions
             in bool continueOnCapturedContext = false) where TException : Exception =>
             HandleSafeFireAndForget(task, continueOnCapturedContext, onException);
 
-       
-
-       
-#pragma warning disable RECS0165 // Asynchronous methods should return a Task instead of void
-
         private static async void HandleSafeFireAndForget<TException>(ValueTask valueTask, bool continueOnCapturedContext,
             Action<TException>? onException) where TException : Exception
         {
@@ -108,8 +103,6 @@ namespace aemarcoCommons.Extensions.TaskExtensions
                     throw;
             }
         }
-
-#pragma warning restore RECS0165 // Asynchronous methods should return a Task instead of void
 
         private static void HandleException<TException>(in TException exception, in Action<TException>? onException)
             where TException : Exception

@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Xml.Linq;
 
 namespace aemarcoCommons.Extensions.TextExtensions
 {
@@ -10,7 +11,10 @@ namespace aemarcoCommons.Extensions.TextExtensions
         }
 
 
-
+        public static bool IsAbsoluteUri(this string uri)
+        {
+            return Uri.TryCreate(uri, UriKind.Absolute, out _);
+        }
 
     }
 }
