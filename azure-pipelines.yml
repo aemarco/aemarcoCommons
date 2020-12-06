@@ -45,3 +45,5 @@ steps:
     packagesToPush: '**/*.nupkg;!**/*.symbols.nupkg'
     nuGetFeedType: 'external'
     publishFeedCredentials: 'NugetKey'
+    allowPackageConflicts: true
+
