@@ -10,7 +10,6 @@
    
 
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageId>aemarcoToolbox</PackageId>
     <PackageVersion>$(AssemblyVersion)</PackageVersion>
     <Authors>aemarco</Authors>
