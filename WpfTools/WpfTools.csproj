@@ -15,6 +15,7 @@
 
 
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageId>aemarcoWpfTools</PackageId>
     <PackageVersion>$(AssemblyVersion)</PackageVersion>
     <Authors>aemarco</Authors>

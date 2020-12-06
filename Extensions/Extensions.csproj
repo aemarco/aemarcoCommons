@@ -10,6 +10,7 @@
     
 
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageId>aemarcoExtensions</PackageId>
     <PackageVersion>$(AssemblyVersion)</PackageVersion>
     <Authors>aemarco</Authors>
