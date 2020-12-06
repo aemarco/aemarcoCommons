@@ -45,8 +45,7 @@ steps:
     packagesToPush: '**/*.nupkg;!**/*.symbols.nupkg'
     nuGetFeedType: 'external'
     publishFeedCredentials: 'NugetKey'
-    allowPackageConflicts: true
-
+    
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)'
