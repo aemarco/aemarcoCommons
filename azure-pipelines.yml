@@ -47,3 +47,14 @@ steps:
     publishFeedCredentials: 'NugetKey'
     allowPackageConflicts: true
 
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '\'
+    Contents: '**/*.nupkg'
+    TargetFolder: '''$(Build.ArtifactStagingDirectory)''
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: 
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
