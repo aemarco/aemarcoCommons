@@ -39,18 +39,13 @@ steps:
     testRunTitle: 'dotnet test all'
 
 
-- task: NuGetCommand@2
-  inputs:
-    command: 'push'
-    packagesToPush: '**/*.nupkg;!**/*.symbols.nupkg'
-    nuGetFeedType: 'external'
-    publishFeedCredentials: 'NugetKey'
-    
+
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)'
     Contents: '**/*.nupkg'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    flattenFolders: true
 
 - task: PublishBuildArtifacts@1
   inputs:
