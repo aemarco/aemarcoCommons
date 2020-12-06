@@ -50,7 +50,7 @@ steps:
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)'
     Contents: '**/*.nupkg'
-    TargetFolder: '''$(Build.ArtifactStagingDirectory)''
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: PublishBuildArtifacts@1
   inputs:
