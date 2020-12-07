@@ -5,13 +5,13 @@
   <PropertyGroup>
         
     <TargetFrameworks>net5.0-windows10.0.19041.0;netcoreapp3.1</TargetFrameworks>
-    <SupportedOSPlatform>windows10</SupportedOSPlatform>
+    <SupportedOSPlatformVersion>10.0</SupportedOSPlatformVersion>
+    
     <LangVersion>latest</LangVersion>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <RootNamespace>aemarcoCommons.WpfTools</RootNamespace>
     <AssemblyName>aemarcoCommons.WpfTools</AssemblyName>
- 
 
 
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -29,6 +29,10 @@
     
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <DebugType>embedded</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
 
   <ItemGroup>
     <None Remove="ConfigurationTools\**" />

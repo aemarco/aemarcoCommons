@@ -23,6 +23,12 @@
     <PackageIcon>toolbox.png</PackageIcon>
    
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <DebugType>embedded</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
   <ItemGroup>
 
     <None Include="..\LICENSE.md">

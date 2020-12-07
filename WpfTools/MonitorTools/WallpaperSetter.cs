@@ -8,8 +8,6 @@ using System.Net.Http;
 using System.Runtime.Versioning;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Threading;
-using Windows.UI.Core;
 using aemarcoCommons.Extensions.AttributeExtensions;
 using aemarcoCommons.Toolbox.Interop;
 using aemarcoCommons.Toolbox.MonitorTools;
@@ -22,7 +20,6 @@ namespace aemarcoCommons.WpfTools.MonitorTools
 
         public const string VirtualScreenName = "Virtual";
         public const string LockScreenName = nameof(LockScreen);
-        private readonly Dispatcher _staDispatcher;
         private readonly IWallpaperSetterSettings _wallpaperSetterSettings;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly List<IWallpaperRealEstate> _monitors;
@@ -31,20 +28,15 @@ namespace aemarcoCommons.WpfTools.MonitorTools
         /// <summary>
         /// Use this Instance to handle setting Wallpapers
         /// </summary>
-        /// <param name="staDispatcher"></param>
         /// <param name="wallpaperSetterSettings"></param>
         /// <param name="httpClientFactory"></param>
         // ReSharper disable once MemberCanBeProtected.Global
         public WallpaperSetter(
-            Dispatcher staDispatcher,
             IWallpaperSetterSettings wallpaperSetterSettings,
             IHttpClientFactory httpClientFactory)
         {
-            _staDispatcher = staDispatcher;
             _wallpaperSetterSettings = wallpaperSetterSettings;
             _httpClientFactory = httpClientFactory;
-           
-
             _monitors = GetMonitors().ToList();
         }
 
@@ -131,8 +123,10 @@ namespace aemarcoCommons.WpfTools.MonitorTools
             WallpaperHelper.SetWallpaper(_wallpaperSetterSettings.VirtualWallpaperFilePath, WindowsWallpaperStyle.Tile);
         }
 
-        //[SupportedOSPlatform("windows10.0.10240")]
-        private  Task SetLockScreenBackgroundImage()
+#if NET5_0
+        [SupportedOSPlatform("windows10.0.10240")]
+#endif
+        private async Task SetLockScreenBackgroundImage()
         {
             //get the right lock screen object, and draw a image for it
             var mon = _monitors.First(x => x.DeviceName == LockScreenName);
@@ -144,13 +138,8 @@ namespace aemarcoCommons.WpfTools.MonitorTools
             virtualScreenBitmap.Save(_wallpaperSetterSettings.LockScreenFilePath, ImageFormat.Jpeg);
 
             //use win api to set the lock screen
-            _staDispatcher.Invoke(() =>
-            {
-                using var stream = File.OpenRead(_wallpaperSetterSettings.LockScreenFilePath);
-                Windows.System.UserProfile.LockScreen.SetImageStreamAsync(stream.AsRandomAccessStream()).GetAwaiter().GetResult();
-            });
-
-            return Task.CompletedTask;
+            await using var stream = File.OpenRead(_wallpaperSetterSettings.LockScreenFilePath);
+            await Windows.System.UserProfile.LockScreen.SetImageStreamAsync(stream.AsRandomAccessStream());
         }
 
         protected async Task<Image> GetImage(string fileOrUrl, HttpClient client = null)
@@ -251,7 +240,8 @@ namespace aemarcoCommons.WpfTools.MonitorTools
         /// </summary>
         /// <param name="screens">Screen Device names</param>
         /// <param name="images">Image to set on those screens</param>
-        // ReSharper disable once MemberCanBeProtected.Global
+       
+        // ReSharper disable once MemberCanBePrivate.Global
         public async Task SetWallsForScreens(List<string> screens, List<Image> images)
         {
             if (screens == null) throw new ArgumentNullException(nameof(screens));
@@ -271,15 +261,18 @@ namespace aemarcoCommons.WpfTools.MonitorTools
                 SetVirtualBackgroundImage();
             else if (Screen.AllScreens.Any(screen => screens.Contains(screen.DeviceName)))
                 SetCombinedBackgroundImage();
-
+            
+#if NET5_0
             // ReSharper disable once InvertIf
-            if (screens.Any(x => x == LockScreenName))
+            if (screens.Any(x => x == LockScreenName) && OperatingSystem.IsWindowsVersionAtLeast(10,0,10240))
             {
-                //if (!OperatingSystem.IsWindows() || !OperatingSystem.IsWindowsVersionAtLeast(10, 0, 10240))
-                //    throw new Exception("Setting Lock-Screen not supported");
                 await SetLockScreenBackgroundImage()
                     .ConfigureAwait(false);
-            }
+            }  
+            
+#else
+            await Task.Delay(0).ConfigureAwait(false);
+#endif
                 
         }
 
