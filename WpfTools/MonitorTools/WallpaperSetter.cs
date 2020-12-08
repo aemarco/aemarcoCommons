@@ -242,6 +242,7 @@ namespace aemarcoCommons.WpfTools.MonitorTools
         /// <param name="images">Image to set on those screens</param>
        
         // ReSharper disable once MemberCanBePrivate.Global
+        // ReSharper disable once MemberCanBeProtected.Global
         public async Task SetWallsForScreens(List<string> screens, List<Image> images)
         {
             if (screens == null) throw new ArgumentNullException(nameof(screens));
@@ -261,19 +262,15 @@ namespace aemarcoCommons.WpfTools.MonitorTools
                 SetVirtualBackgroundImage();
             else if (Screen.AllScreens.Any(screen => screens.Contains(screen.DeviceName)))
                 SetCombinedBackgroundImage();
-            
+            if (screens.Any(x => x == LockScreenName)
 #if NET5_0
-            // ReSharper disable once InvertIf
-            if (screens.Any(x => x == LockScreenName) && OperatingSystem.IsWindowsVersionAtLeast(10,0,10240))
-            {
-                await SetLockScreenBackgroundImage()
-                    .ConfigureAwait(false);
-            }  
             
-#else
-            await Task.Delay(0).ConfigureAwait(false);
+                && OperatingSystem.IsWindowsVersionAtLeast(10,0,10240)
 #endif
+            )
                 
+                await SetLockScreenBackgroundImage()
+                        .ConfigureAwait(false);
         }
 
         #endregion
