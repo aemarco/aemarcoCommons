@@ -2,6 +2,9 @@
 using System.Globalization;
 using System.Windows.Data;
 using aemarcoCommons.Extensions.TimeExtensions;
+using Humanizer;
+using Humanizer.Localisation;
+
 
 namespace aemarcoCommons.WpfTools.Converters
 {
@@ -15,12 +18,11 @@ namespace aemarcoCommons.WpfTools.Converters
 
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            TimeSpan? val = (TimeSpan?)value;
-            if (val.HasValue)
-                return val.Value.ToNiceTimespanString(2, "None");
-            else
-                return "None";
+        { 
+            var val = (TimeSpan?)value;
+            return !val.HasValue 
+                ? "Unknown" 
+                : val.Value.Humanize(2, collectionSeparator: " ", minUnit: TimeUnit.Second);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

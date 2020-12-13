@@ -64,6 +64,7 @@
 
   <ItemGroup>
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.0.8" NoWarn="NU1701" />
+    <PackageReference Include="Humanizer.Core" Version="2.8.26" />
   </ItemGroup>
 
 

@@ -6,6 +6,7 @@ namespace aemarcoCommons.Extensions.TimeExtensions
     public static class FormattingExtensions
     {
 
+        [Obsolete("Use nuget 'Humanizer' instead")]
         public static string ToNiceTimespanString(this TimeSpan ts, int significantDigits = 2, string zeroValue = "Now")
         {
             if (significantDigits == 0)
