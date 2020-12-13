@@ -1,12 +1,14 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using aemarcoCommons.Extensions.FileExtensions;
 using Newtonsoft.Json;
 
-namespace aemarcoCommons.Extensions.StorageExtensions
+namespace aemarcoCommons.Toolbox.SerializationTools
 {
-    public static class JsonStoreExtensions
+    public static class JsonExtensions
     {
-
         public static T StoreFromFile<T>(this string filePath) 
             where T: new()
         {
@@ -27,7 +29,5 @@ namespace aemarcoCommons.Extensions.StorageExtensions
         {
             File.WriteAllText(filePath, JsonConvert.SerializeObject(store, Formatting.Indented));
         }
-
-
     }
 }
