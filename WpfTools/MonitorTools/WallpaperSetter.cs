@@ -84,7 +84,7 @@ namespace aemarcoCommons.WpfTools.MonitorTools
 
 
         public IEnumerable<IWallpaperRealEstate> WallpaperTargets => _monitors.ToList();
-
+        public IWallpaperSetterSettings Settings => _wallpaperSetterSettings;
 
 
         #endregion
