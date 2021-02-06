@@ -2,6 +2,7 @@
 using aemarcoCommons.WpfTools.BaseModels;
 using aemarcoCommons.WpfTools.Commands;
 using Autofac;
+using Autofac.Core;
 
 namespace aemarcoCommons.WpfTools.BaseNav
 {
@@ -18,7 +19,7 @@ namespace aemarcoCommons.WpfTools.BaseNav
     public interface INavWindowViewModel : IBaseViewModel //inherit this for other window view models
     {
         INavWindow Window { get; set; }
-        void ShowViewFor<T>() where T : INavViewModel;
+        void ShowViewFor<T>(params Parameter[] p) where T : INavViewModel;
         INavViewModel ViewViewModel { get; set; }
         string Title { get; }
         INavView View { get; set; }
@@ -44,9 +45,9 @@ namespace aemarcoCommons.WpfTools.BaseNav
         public INavWindow Window { get; set; }
         
         //so that we can navigate
-        public void ShowViewFor<T>() where T : INavViewModel
+        public void ShowViewFor<T>(params Parameter[] p) where T : INavViewModel
         {
-            ViewViewModel = Resolve<T>();
+            ViewViewModel = Resolve<T>(p);
             //set reference so that navigation view models can access this window view model
             ViewViewModel.Window = this;
 
@@ -74,10 +75,11 @@ namespace aemarcoCommons.WpfTools.BaseNav
         /// <summary>
         /// Resolve requested INavViewModel. Override if DiExtension is not used!
         /// </summary>
+        /// <param name="p">Parameters To Pass to the Constructor</param>
         /// <typeparam name="T">Interface of view model to resolve</typeparam>
         /// <returns>requested view model</returns>
-        protected virtual T Resolve<T>() where T : INavViewModel => DiExtensions.RootScope != null
-                ? DiExtensions.RootScope.Resolve<T>()
+        protected virtual T Resolve<T>(params Parameter[] p) where T : INavViewModel => DiExtensions.RootScope != null
+                ? DiExtensions.RootScope.Resolve<T>(p)
                 : throw new NotImplementedException("Override Resolve to resolve INavViewModel´s");
 
 
