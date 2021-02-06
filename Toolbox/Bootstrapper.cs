@@ -1,4 +1,5 @@
-﻿using aemarcoCommons.Toolbox.GeoTools;
+﻿using System;
+using aemarcoCommons.Toolbox.GeoTools;
 using aemarcoCommons.Toolbox.SerializationTools;
 using Autofac;
 
@@ -8,6 +9,9 @@ namespace aemarcoCommons.Toolbox
     {
         public static ContainerBuilder SetupToolbox(this ContainerBuilder builder)
         {
+
+            builder.RegisterType<Random>().As<Random>().SingleInstance();
+
             //* Toolbox stuff
             builder.RegisterGeneric(typeof(JsonTypeToFileStore<>))
                 .AsImplementedInterfaces()
