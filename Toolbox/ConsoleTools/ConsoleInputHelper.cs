@@ -168,10 +168,7 @@ namespace aemarcoCommons.Toolbox.ConsoleTools
             {
                 new ConsoleMenuItem<DirectoryInfo>("..", x =>
                 {
-                    if (x != null)
-                        path = PathSelector(x.FullName);
-                    else
-                        path = DriveSelector();
+                    path = x != null ? PathSelector(x.FullName) : DriveSelector();
                 }, dir.Parent)
             };
 
@@ -205,9 +202,8 @@ namespace aemarcoCommons.Toolbox.ConsoleTools
             Console.Clear();
 
             var driveItems = new List<ConsoleMenuItem<DriveInfo>>();
-            foreach (var drive in DriveInfo.GetDrives().Where(x =>
-                x.IsReady
-                ))
+            foreach (var drive in DriveInfo.GetDrives()
+                .Where(x => x.IsReady))
             {
                 var temp = drive;
                 driveItems.Add(new ConsoleMenuItem<DriveInfo>(temp.Name, x =>
