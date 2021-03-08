@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System.Net;
+using System.Net.Sockets;
 using System.Runtime.InteropServices;
 
 namespace aemarcoCommons.Toolbox.CommandTools
@@ -35,7 +37,6 @@ namespace aemarcoCommons.Toolbox.CommandTools
                 }
             }
         }
-
         public static Process OpenFileOrFolder(string path)
         {
             var result = new Process
@@ -50,5 +51,15 @@ namespace aemarcoCommons.Toolbox.CommandTools
         }
 
 
+
+        public static int GetRandomUnusedPort()
+        {
+            var listener = new TcpListener(IPAddress.Loopback, 0);
+            listener.Start();
+            var port = ((IPEndPoint)listener.LocalEndpoint).Port;
+            listener.Stop();
+            return port;
+        }
+        
     }
 }
