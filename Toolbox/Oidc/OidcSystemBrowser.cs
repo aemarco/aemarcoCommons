@@ -33,21 +33,25 @@ namespace aemarcoCommons.Toolbox.Oidc
                 if (options.StartUrl.Contains("endsession"))
                 {
                     return string.IsNullOrWhiteSpace(result)
-                        ? new BrowserResult { Response = result, ResultType = BrowserResultType.Success }
-                        : new BrowserResult { ResultType = BrowserResultType.UnknownError, Error = result };
+                        ? new BrowserResult {Response = result, ResultType = BrowserResultType.Success}
+                        : new BrowserResult {ResultType = BrowserResultType.UnknownError, Error = result};
                 }
 
                 return string.IsNullOrWhiteSpace(result)
-                    ? new BrowserResult { ResultType = BrowserResultType.UnknownError, Error = "Empty response."}
-                    : new BrowserResult { Response = result, ResultType = BrowserResultType.Success};
+                    ? new BrowserResult {ResultType = BrowserResultType.UnknownError, Error = "Empty response."}
+                    : new BrowserResult {Response = result, ResultType = BrowserResultType.Success};
             }
             catch (TaskCanceledException ex)
             {
-                return new BrowserResult { ResultType = BrowserResultType.Timeout, Error = ex.Message};
+                return new BrowserResult {ResultType = BrowserResultType.Timeout, Error = ex.Message};
             }
             catch (Exception ex)
             {
-                return new BrowserResult { ResultType = BrowserResultType.UnknownError, Error = ex.Message};
+                return new BrowserResult {ResultType = BrowserResultType.UnknownError, Error = ex.Message};
+            }
+            finally
+            {
+                await listener.CloseListener();
             }
         }
     }
@@ -98,6 +102,9 @@ namespace aemarcoCommons.Toolbox.Oidc
             });
         }
 
+
+
+
         public void Dispose()
         {
             Task.Run(async () =>
@@ -137,6 +144,11 @@ namespace aemarcoCommons.Toolbox.Oidc
             return _source.Task;
         }
 
+        public async Task CloseListener()
+        {
+            await Task.Delay(500);
+            await _host.StopAsync();
+        }
         
     }
 }
