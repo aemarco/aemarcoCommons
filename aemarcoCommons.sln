@@ -25,6 +25,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_sln", "_sln", "{F8C81839-6
 		toolbox.png = toolbox.png
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebTools", "WebTools\WebTools.csproj", "{8D683B88-39A5-4FBC-AB50-7866EF955B90}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{FAC45454-9828-4EA8-8965-C8CB8BCF81D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAC45454-9828-4EA8-8965-C8CB8BCF81D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FAC45454-9828-4EA8-8965-C8CB8BCF81D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D683B88-39A5-4FBC-AB50-7866EF955B90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D683B88-39A5-4FBC-AB50-7866EF955B90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D683B88-39A5-4FBC-AB50-7866EF955B90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D683B88-39A5-4FBC-AB50-7866EF955B90}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
