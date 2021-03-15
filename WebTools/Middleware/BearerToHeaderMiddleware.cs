@@ -33,7 +33,7 @@ namespace aemarcoCommons.WebTools.Middleware
                 var items = context.Request.Query
                     .SelectMany(x => x.Value, (col, value) => new KeyValuePair<string, string>(col.Key, value))
                     .ToList();
-                items.RemoveAll(x => x.Key.Equals("access_token", StringComparison.InvariantCultureIgnoreCase));
+                items.RemoveAll(x => x.Key.Equals("access_token", StringComparison.OrdinalIgnoreCase));
                 context.Request.QueryString = new QueryBuilder(items).ToQueryString();
                 context.Request.Headers.Add("Authorization", $"Bearer {token}");
 
