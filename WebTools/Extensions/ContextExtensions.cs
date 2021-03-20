@@ -27,7 +27,7 @@ namespace aemarcoCommons.WebTools.Extensions
 
         public static string GetAccessToken(this HttpContext context)
         {
-            var token = context?.Request.Headers[HeaderNames.Authorization].ToString();
+            var token = context.Request.Headers[HeaderNames.Authorization].ToString();
             return token;
         }
     }

@@ -1,4 +1,7 @@
-﻿using System;
+﻿using aemarcoCommons.Extensions.AttributeExtensions;
+using aemarcoCommons.Toolbox.Interop;
+using aemarcoCommons.Toolbox.MonitorTools;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -8,9 +11,6 @@ using System.Net.Http;
 using System.Runtime.Versioning;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using aemarcoCommons.Extensions.AttributeExtensions;
-using aemarcoCommons.Toolbox.Interop;
-using aemarcoCommons.Toolbox.MonitorTools;
 
 namespace aemarcoCommons.WpfTools.MonitorTools
 {
@@ -133,7 +133,7 @@ namespace aemarcoCommons.WpfTools.MonitorTools
             using Image virtualScreenBitmap = new Bitmap(mon.Width, mon.Height);
             using var virtualScreenGraphic = Graphics.FromImage(virtualScreenBitmap);
             mon.DrawToGraphics(virtualScreenGraphic);
-            
+
             //save the image to hd
             virtualScreenBitmap.Save(_wallpaperSetterSettings.LockScreenFilePath, ImageFormat.Jpeg);
 
@@ -142,18 +142,17 @@ namespace aemarcoCommons.WpfTools.MonitorTools
             await Windows.System.UserProfile.LockScreen.SetImageStreamAsync(stream.AsRandomAccessStream());
         }
 
-        protected async Task<Image> GetImage(string fileOrUrl, HttpClient client = null)
+        protected async Task<Image> GetImage(string fileOrUrl)
         {
-            //external http client will have priority
-            client ??= _httpClientFactory.CreateClient(nameof(WallpaperSetter));
             if (fileOrUrl.StartsWith("http"))
             {
-                var resp = await client.GetAsync(fileOrUrl, HttpCompletionOption.ResponseHeadersRead);
+                var resp = await _httpClientFactory.CreateClient(nameof(WallpaperSetter))
+                    .GetAsync(fileOrUrl, HttpCompletionOption.ResponseHeadersRead);
                 resp.EnsureSuccessStatusCode();
 
                 await using var stream = await resp.Content.ReadAsStreamAsync();
                 return Image.FromStream(stream);
-                
+
             }
             else
             {
@@ -240,7 +239,7 @@ namespace aemarcoCommons.WpfTools.MonitorTools
         /// </summary>
         /// <param name="screens">Screen Device names</param>
         /// <param name="images">Image to set on those screens</param>
-       
+
         // ReSharper disable once MemberCanBePrivate.Global
         // ReSharper disable once MemberCanBeProtected.Global
         public async Task SetWallsForScreens(List<string> screens, List<Image> images)
@@ -257,18 +256,18 @@ namespace aemarcoCommons.WpfTools.MonitorTools
                 var mon = _monitors.First(x => x.DeviceName == screens[i]);
                 mon.SetWallpaper(images[i]);
             }
-            
+
             if (screens.Any(x => x == VirtualScreenName))
                 SetVirtualBackgroundImage();
             else if (Screen.AllScreens.Any(screen => screens.Contains(screen.DeviceName)))
                 SetCombinedBackgroundImage();
             if (screens.Any(x => x == LockScreenName)
 #if NET5_0
-            
-                && OperatingSystem.IsWindowsVersionAtLeast(10,0,10240)
+
+                && OperatingSystem.IsWindowsVersionAtLeast(10, 0, 10240)
 #endif
             )
-                
+
                 await SetLockScreenBackgroundImage()
                         .ConfigureAwait(false);
         }
