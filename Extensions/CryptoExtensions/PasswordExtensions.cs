@@ -4,10 +4,14 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace aemarcoCommons.Toolbox.CryptoTools
+namespace aemarcoCommons.Extensions.CryptoExtensions
 {
-    public static class PasswordTextCipher
+    public static class PasswordExtensions
     {
+        public static string ToPasswordCipherText(this string plainText, string password) => Encrypt(plainText, password);
+        public static string ToPasswordPlainText(this string cipherText, string password) => Decrypt(cipherText, password);
+
+
         // This constant is used to determine the key size of the encryption algorithm in bits.
         // We divide this by 8 within the code below to get the equivalent number of bytes.
         private const int KeySize = 128;
@@ -15,19 +19,19 @@ namespace aemarcoCommons.Toolbox.CryptoTools
         // This constant determines the number of iterations for the password bytes generation function.
         private const int DerivationIterations = 1000;
 
-        public static string Encrypt(string plainText, string passPhrase)
+        private static string Encrypt(string plainText, string passPhrase)
         {
             // Salt and IV is randomly generated each time, but is prepended to encrypted cipher text
             // so that the same Salt and IV values can be used when decrypting.  
             var saltStringBytes = GenerateRandomEntropy();
             var ivStringBytes = GenerateRandomEntropy();
             var plainTextBytes = Encoding.UTF8.GetBytes(plainText);
-            using var password = new Rfc2898DeriveBytes(passPhrase, saltStringBytes, DerivationIterations);
-            var keyBytes = password.GetBytes(KeySize / 8);
+            using var pwd = new Rfc2898DeriveBytes(passPhrase, saltStringBytes, DerivationIterations);
+            var keyBytes = pwd.GetBytes(KeySize / 8);
             using var symmetricKey = new RijndaelManaged
             {
-                BlockSize = 128, 
-                Mode = CipherMode.CBC, 
+                BlockSize = 128,
+                Mode = CipherMode.CBC,
                 Padding = PaddingMode.PKCS7
             };
             using var encryptor = symmetricKey.CreateEncryptor(keyBytes, ivStringBytes);
@@ -44,7 +48,7 @@ namespace aemarcoCommons.Toolbox.CryptoTools
             return Convert.ToBase64String(cipherTextBytes);
         }
 
-        public static string Decrypt(string cipherText, string passPhrase)
+        private static string Decrypt(string cipherText, string passPhrase)
         {
             // Get the complete stream of bytes that represent:
             // [32 bytes of Salt] + [32 bytes of IV] + [n bytes of CipherText]
@@ -60,8 +64,8 @@ namespace aemarcoCommons.Toolbox.CryptoTools
             var keyBytes = password.GetBytes(KeySize / 8);
             using var symmetricKey = new RijndaelManaged
             {
-                BlockSize = 128, 
-                Mode = CipherMode.CBC, 
+                BlockSize = 128,
+                Mode = CipherMode.CBC,
                 Padding = PaddingMode.PKCS7
             };
             using var decryptor = symmetricKey.CreateDecryptor(keyBytes, ivStringBytes);

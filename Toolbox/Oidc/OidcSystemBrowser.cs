@@ -1,31 +1,41 @@
-﻿using IdentityModel.OidcClient.Browser;
+﻿using aemarcoCommons.Extensions.NetworkExtensions;
+using IdentityModel.OidcClient.Browser;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
+using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using aemarcoCommons.Toolbox.CommandTools;
 
 namespace aemarcoCommons.Toolbox.Oidc
 {
     public class OidcSystemBrowser : IBrowser
     {
-       
+
         private readonly int _port;
         public OidcSystemBrowser(int? port = null)
         {
-            _port = port ?? CommandTool.GetRandomUnusedPort();
+            _port = port ?? GetRandomUnusedPort();
         }
-        
+        private static int GetRandomUnusedPort()
+        {
+            var listener = new TcpListener(IPAddress.Loopback, 0);
+            listener.Start();
+            var port = ((IPEndPoint)listener.LocalEndpoint).Port;
+            listener.Stop();
+            return port;
+        }
+
         public string RedirectUri => $"http://127.0.0.1:{_port}/";
-        
+
         public async Task<BrowserResult> InvokeAsync(BrowserOptions options, CancellationToken cancellationToken = new())
         {
             using var listener = new LoopbackHttpListener(options.EndUrl);
-            CommandTool.OpenBrowser(options.StartUrl);
+            new Uri(options.StartUrl).OpenInBrowser();
             try
             {
                 var result = await listener.WaitForCallbackAsync(options.Timeout);
@@ -33,21 +43,21 @@ namespace aemarcoCommons.Toolbox.Oidc
                 if (options.StartUrl.Contains("endsession"))
                 {
                     return string.IsNullOrWhiteSpace(result)
-                        ? new BrowserResult {Response = result, ResultType = BrowserResultType.Success}
-                        : new BrowserResult {ResultType = BrowserResultType.UnknownError, Error = result};
+                        ? new BrowserResult { Response = result, ResultType = BrowserResultType.Success }
+                        : new BrowserResult { ResultType = BrowserResultType.UnknownError, Error = result };
                 }
 
                 return string.IsNullOrWhiteSpace(result)
-                    ? new BrowserResult {ResultType = BrowserResultType.UnknownError, Error = "Empty response."}
-                    : new BrowserResult {Response = result, ResultType = BrowserResultType.Success};
+                    ? new BrowserResult { ResultType = BrowserResultType.UnknownError, Error = "Empty response." }
+                    : new BrowserResult { Response = result, ResultType = BrowserResultType.Success };
             }
             catch (TaskCanceledException ex)
             {
-                return new BrowserResult {ResultType = BrowserResultType.Timeout, Error = ex.Message};
+                return new BrowserResult { ResultType = BrowserResultType.Timeout, Error = ex.Message };
             }
             catch (Exception ex)
             {
-                return new BrowserResult {ResultType = BrowserResultType.UnknownError, Error = ex.Message};
+                return new BrowserResult { ResultType = BrowserResultType.UnknownError, Error = ex.Message };
             }
             finally
             {
@@ -89,12 +99,12 @@ namespace aemarcoCommons.Toolbox.Oidc
                         ctx.Response.StatusCode = 415;
                         break;
                     case "POST":
-                    {
-                        using var sr = new StreamReader(ctx.Request.Body, Encoding.UTF8);
-                        var body = await sr.ReadToEndAsync();
-                        SetResult(body, ctx, "Success");
-                        break;
-                    }
+                        {
+                            using var sr = new StreamReader(ctx.Request.Body, Encoding.UTF8);
+                            var body = await sr.ReadToEndAsync();
+                            SetResult(body, ctx, "Success");
+                            break;
+                        }
                     default:
                         ctx.Response.StatusCode = 405;
                         break;
@@ -149,6 +159,6 @@ namespace aemarcoCommons.Toolbox.Oidc
             await Task.Delay(500);
             await _host.StopAsync();
         }
-        
+
     }
 }

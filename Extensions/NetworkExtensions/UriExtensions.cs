@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 
 namespace aemarcoCommons.Extensions.NetworkExtensions
 {
@@ -46,6 +48,35 @@ namespace aemarcoCommons.Extensions.NetworkExtensions
             {
                 // Don't forget to close your response.
                 response?.Close();
+            }
+        }
+
+        public static void OpenInBrowser(this Uri uri)
+        {
+            try
+            {
+                Process.Start(uri.AbsoluteUri);
+            }
+            catch
+            {
+                // hack because of this: https://github.com/dotnet/corefx/issues/10361
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    var url = uri.AbsoluteUri.Replace("&", "^&");
+                    Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    Process.Start("xdg-open", uri.AbsoluteUri);
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    Process.Start("open", uri.AbsoluteUri);
+                }
+                else
+                {
+                    throw;
+                }
             }
         }
 

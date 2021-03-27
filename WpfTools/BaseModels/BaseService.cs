@@ -1,13 +1,13 @@
-﻿using System;
+﻿using aemarcoCommons.Extensions.AttributeExtensions;
+using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using aemarcoCommons.Extensions.AttributeExtensions;
 
 namespace aemarcoCommons.WpfTools.BaseModels
 {
     public class BaseService : BaseNotifier, IBaseService
     {
-        protected override void NotifyPropertyChanged([CallerMemberName]string propertyName = null)
+        protected override void NotifyPropertyChanged([CallerMemberName] string propertyName = null)
         {
             base.NotifyPropertyChanged(propertyName);
 
@@ -25,7 +25,7 @@ namespace aemarcoCommons.WpfTools.BaseModels
                 if (!(GetType()
                     .GetField(eventAttribute.EventName, BindingFlags.Instance | BindingFlags.NonPublic)
                     ?.GetValue(this) is MulticastDelegate multiDelegate)) continue;
-                
+
                 foreach (var eventHandler in multiDelegate.GetInvocationList())
                 {
                     eventHandler.Method.Invoke(

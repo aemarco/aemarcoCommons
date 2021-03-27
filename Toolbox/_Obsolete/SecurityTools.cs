@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+// ReSharper disable All
 
 namespace aemarcoCommons.Toolbox.CommandTools
 {
+    [Obsolete("Use aemarcoCommons.Toolbox.SecurityTools.VirusScanService instead. ATTENTION new method does not delete unsave files")]
     public static class SecurityTools
     {
         public static VirusScanResult ScanFile(string filePath)
@@ -37,7 +39,7 @@ namespace aemarcoCommons.Toolbox.CommandTools
     }
 
 
-
+    [Obsolete("Use aemarcoCommons.Toolbox.SecurityTools.VirusScanResult instead.")]
     public class VirusScanResult
     {
 
@@ -48,7 +50,7 @@ namespace aemarcoCommons.Toolbox.CommandTools
         }
 
         public VirusScanResult(string filePath, bool isSafe, string message)
-            :this(filePath, true)
+            : this(filePath, true)
         {
             IsSafe = isSafe;
             Message = message;
@@ -56,7 +58,7 @@ namespace aemarcoCommons.Toolbox.CommandTools
 
 
         public VirusScanResult(string filePath, Exception exception)
-            :this(filePath, false)
+            : this(filePath, false)
         {
             Exception = exception;
         }
@@ -69,4 +71,6 @@ namespace aemarcoCommons.Toolbox.CommandTools
         public string Message { get; }
         public Exception Exception { get; }
     }
+
+
 }

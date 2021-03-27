@@ -1,7 +1,9 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
+// ReSharper disable All
 
 namespace aemarcoCommons.Toolbox.CommandTools
 {
@@ -9,6 +11,7 @@ namespace aemarcoCommons.Toolbox.CommandTools
     public static class CommandTool
     {
 
+        [Obsolete("Use aemarcoCommons.Extensions.NetworkExtensions instead.")]
         public static void OpenBrowser(string url)
         {
             try
@@ -37,6 +40,9 @@ namespace aemarcoCommons.Toolbox.CommandTools
                 }
             }
         }
+
+
+        [Obsolete("Use aemarcoCommons.Extensions.FileExtensions instead.")]
         public static Process OpenFileOrFolder(string path)
         {
             var result = new Process
@@ -45,13 +51,13 @@ namespace aemarcoCommons.Toolbox.CommandTools
                 {
                     UseShellExecute = true
                 }
-            }; 
+            };
             result.Start();
             return result;
         }
 
 
-
+        [Obsolete]
         public static int GetRandomUnusedPort()
         {
             var listener = new TcpListener(IPAddress.Loopback, 0);
@@ -60,6 +66,6 @@ namespace aemarcoCommons.Toolbox.CommandTools
             listener.Stop();
             return port;
         }
-        
+
     }
 }

@@ -1,7 +1,7 @@
-﻿using System;
-using System.Reflection;
-using aemarcoCommons.Toolbox.CryptoTools;
+﻿using aemarcoCommons.Extensions.CryptoExtensions;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Reflection;
 
 namespace aemarcoCommons.Toolbox.AppConfiguration.Transformations
 {
@@ -37,8 +37,8 @@ namespace aemarcoCommons.Toolbox.AppConfiguration.Transformations
 
 
             //skip if not a protected string, otherwise decrypt
-            return Attribute.IsDefined(propertyInfo, typeof(ProtectedAttribute)) 
-                ? PasswordTextCipher.Decrypt(currentValue, _password)
+            return Attribute.IsDefined(propertyInfo, typeof(ProtectedAttribute))
+                ? currentValue.ToPasswordPlainText(_password)
                 : currentValue;
         }
 
@@ -53,8 +53,8 @@ namespace aemarcoCommons.Toolbox.AppConfiguration.Transformations
 
 
             //skip if not a protected string, otherwise decrypt
-            return Attribute.IsDefined(propertyInfo, typeof(ProtectedAttribute)) 
-                ? PasswordTextCipher.Encrypt(currentValue, _password)
+            return Attribute.IsDefined(propertyInfo, typeof(ProtectedAttribute))
+                ? currentValue.ToPasswordCipherText(_password)
                 : currentValue;
         }
     }

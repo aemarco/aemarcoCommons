@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
+// ReSharper disable All
 
 namespace aemarcoCommons.Toolbox.CryptoTools
 {
-    /// <summary>
-    /// Cryptography tooling 
-    /// </summary>
+    [Obsolete]
     public static class AesTextCipher
     {
         public static string Encrypt(string input, string iv, string key)

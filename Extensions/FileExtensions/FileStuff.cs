@@ -1,8 +1,8 @@
-﻿using System.Diagnostics;
+﻿using aemarcoCommons.Extensions.CryptoExtensions;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using aemarcoCommons.Extensions.CryptoExtensions;
 
 namespace aemarcoCommons.Extensions.FileExtensions
 {
@@ -108,7 +108,7 @@ namespace aemarcoCommons.Extensions.FileExtensions
 
         public static string Base64HashFromFile(this FileInfo file)
         {
-            if (!File.Exists(file.FullName)) 
+            if (!File.Exists(file.FullName))
                 throw new FileNotFoundException();
 
             using Stream stream = File.OpenRead(file.FullName);

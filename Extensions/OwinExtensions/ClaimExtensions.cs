@@ -2,20 +2,20 @@
 using System.Security.Claims;
 using System.Security.Principal;
 
-namespace aemarcoCommons.Extensions.netExtensions
+namespace aemarcoCommons.Extensions.OwinExtensions
 {
     public static class OwinExtensions
     {
         public static T GetClaimValue<T>(this IPrincipal principal, string type, T defaultValue = default)
         {
             if (principal?.Identity == null) return defaultValue;
-            
-            var identity = (ClaimsIdentity) principal.Identity;
+
+            var identity = (ClaimsIdentity)principal.Identity;
             object value = identity.FindFirst(type)?.Value;
 
             if (value == null) return defaultValue;
-           
-            return (T) Convert.ChangeType(value, typeof(T));
+
+            return (T)Convert.ChangeType(value, typeof(T));
         }
 
         public static string GetClaimValue(this IPrincipal principal, string type, string defaultValue = default)

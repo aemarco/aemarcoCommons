@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace aemarcoCommons.Extensions.netExtensions
+namespace aemarcoCommons.Extensions.VersionExtensions
 {
     public static class VersionExtensions
     {

@@ -1,14 +1,14 @@
-﻿using System.IO;
-using aemarcoCommons.Extensions.netExtensions;
+﻿using aemarcoCommons.Extensions.VersionExtensions;
 using FluentAssertions;
 using NUnit.Framework;
+using System.IO;
 
 namespace ExtensionsTests.netExtensionTests
 {
     public class VersionExtensionsTests
     {
-        
-        
+
+
         //[Test]
         //public void DoesCompleteCircle()
         //{
@@ -31,7 +31,7 @@ namespace ExtensionsTests.netExtensionTests
         [Test]
         public void ToVersionReturnsCorrectDefault()
         {
-            
+
             var result = new FileInfo("notThere.json")
                 .ToVersionFromTextFile("2.3.4.5");
 
