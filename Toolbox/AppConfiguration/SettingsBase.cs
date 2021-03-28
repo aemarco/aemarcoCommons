@@ -1,11 +1,10 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using aemarcoCommons.Toolbox.AppConfiguration.Transformations;
-using Autofac;
+﻿using aemarcoCommons.Toolbox.AppConfiguration.Transformations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json.Linq;
+using System;
+using System.IO;
+using System.Linq;
 
 namespace aemarcoCommons.Toolbox.AppConfiguration
 {
@@ -24,61 +23,37 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
         }
     }
 
-
-
     /// <summary>
     /// Inherit this class in your setting classes
     /// </summary>
     public abstract class SettingsBase
     {
-        internal static ILifetimeScope RootScope { get; set; }
+        internal static IConfigurationRoot ConfigurationRoot { get; set; }
+        internal static ConfigurationOptions ConfigurationOptions { get; set; }
 
-       
-
-        private readonly IConfigurationRoot _configRoot;
-        private readonly ConfigurationOptions _options;
-        private readonly Type _type;
-        
         protected SettingsBase()
         {
-            _type = GetType();
-
-            if (RootScope == null) return;
-
-            _configRoot = RootScope.Resolve<IConfigurationRoot>();
-            _options = RootScope.Resolve<ConfigurationOptions>();
-            
+            if (ConfigurationRoot == null || ConfigurationOptions == null) return;
 
             Init();
-            ChangeToken.OnChange(_configRoot.GetReloadToken, Init);
+            ChangeToken.OnChange(ConfigurationRoot.GetReloadToken, Init);
         }
 
-        private string _sectionPath;
         private void Init()
         {
-            //use path defined in attribute if specified
-            if (Attribute.GetCustomAttribute(_type, typeof(SettingPathAttribute)) is SettingPathAttribute pathAttribute)
-                _sectionPath = pathAttribute.Path;
-            //use typename if nothing is specified
-            else
-                _sectionPath = _type.Name;
-
-
+            var sectionPath = GetType().GetSectionPath();
             //read current values from IConfiguration
-            if (string.IsNullOrWhiteSpace(_sectionPath))
-                _configRoot.Bind(this);
+            if (string.IsNullOrWhiteSpace(sectionPath))
+                ConfigurationRoot.Bind(this);
             else
-                _configRoot.GetSection(_sectionPath).Bind(this);
-
-
+                ConfigurationRoot.GetSection(sectionPath).Bind(this);
 
             //ApplyReadTransformations
-            foreach (var transformation in _options.StringTransformations)
+            foreach (var transformation in ConfigurationOptions.StringTransformations)
             {
-                StringTransformerBase.TransformObject(this, _configRoot, transformation.PerformReadTransformation);
+                StringTransformerBase.TransformObject(this, ConfigurationRoot, transformation.PerformReadTransformation);
             }
         }
-
 
         /// <summary>
         /// Save this Configuration.
@@ -86,29 +61,31 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
         /// </summary>
         public string Save()
         {
-            //decide for a filePath
-            var filePath = _type.GetSavePathForSetting(_options);
+            var type = GetType();
 
+            //decide for a filePath
+            var filePath = type.GetSavePathForSetting(ConfigurationOptions);
+            var sectionPath = type.GetSectionPath();
 
             //ApplyWriteTransformations in reverse order
-            var transformations = _options.StringTransformations;
+            var transformations = ConfigurationOptions.StringTransformations.ToList();
             transformations.Reverse();
             foreach (var transformation in transformations)
             {
-                StringTransformerBase.TransformObject(this, _configRoot, transformation.PerformWriteTransformation);
+                StringTransformerBase.TransformObject(this, ConfigurationRoot, transformation.PerformWriteTransformation);
             }
-           
+
             //save the stuff
             var obj = JObject.FromObject(this);
             //use defined path if not root
-            if (!string.IsNullOrWhiteSpace(_sectionPath))
+            if (!string.IsNullOrWhiteSpace(sectionPath))
             {
-                obj = _sectionPath.Split(':')
+                obj = sectionPath.Split(':')
                     .Reverse()
-                    .Aggregate(obj, (current, section) => new JObject {{section, current}});
+                    .Aggregate(obj, (current, section) => new JObject { { section, current } });
             }
 
-            File.WriteAllText(filePath,obj.ToString());
+            File.WriteAllText(filePath, obj.ToString());
             return filePath;
         }
     }

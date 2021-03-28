@@ -1,10 +1,10 @@
-﻿using System;
+﻿using aemarcoCommons.Extensions.TimeExtensions;
+using System;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using aemarcoCommons.Extensions.TimeExtensions;
 
 namespace aemarcoCommons.Toolbox.GeoTools
 {
@@ -27,9 +27,9 @@ namespace aemarcoCommons.Toolbox.GeoTools
             _httpClientFactory = httpClientFactory;
         }
 
-       
+
         public GeoService()
-            :this(new GeoServiceSettings())
+            : this(new GeoServiceSettings())
         { }
 
         public GeoService(IGeoServiceSettings geoServiceSettings)
@@ -55,22 +55,24 @@ namespace aemarcoCommons.Toolbox.GeoTools
                     return _lastIpInfo;
                 }
 
-                using var response = await GeoClient.GetAsync("http://checkip.dyndns.org");
-                response.EnsureSuccessStatusCode();
+                using (var response = await GeoClient.GetAsync("http://checkip.dyndns.org"))
+                {
+                    response.EnsureSuccessStatusCode();
 
-                var info = await response.Content.ReadAsStringAsync();
-                if (string.IsNullOrWhiteSpace(info)) return null;
+                    var info = await response.Content.ReadAsStringAsync();
+                    if (string.IsNullOrWhiteSpace(info)) return null;
 
-                var match = Regex.Match(info, @"(?:\d{1,3}.){3}.\d{1,3}");
+                    var match = Regex.Match(info, @"(?:\d{1,3}.){3}.\d{1,3}");
 
-                var result = match.Success
-                    ? match.Value
-                    : null;
+                    var result = match.Success
+                        ? match.Value
+                        : null;
 
-                _lastIpInfo = result;
-                _lastInInfoTimestamp = DateTimeOffset.Now;
+                    _lastIpInfo = result;
+                    _lastInInfoTimestamp = DateTimeOffset.Now;
 
-                return result;
+                    return result;
+                }
             }
             catch
             {
@@ -84,14 +86,15 @@ namespace aemarcoCommons.Toolbox.GeoTools
         #region SunriseSunset
 
         private readonly ConcurrentDictionary<string, SunriseSunsetInfo> _sunriseSunsetResponses = new ConcurrentDictionary<string, SunriseSunsetInfo>();
-        
+
         public async Task<SunriseSunsetInfo> GetSunriseSunsetInfoInfo(
             float latitude,
             float longitude,
             DateTimeOffset? date = null,
             bool throwExceptions = false)
         {
-            date ??= DateTimeOffset.Now; //2020-10-03
+            if (date == null) date = DateTimeOffset.Now; //2020-10-03
+
             var query = $"lat={latitude}&lng={longitude}&date={date.Value.Date:yyyy-MM-dd}&formatted=0";
 
             //return cached result if already present
@@ -99,19 +102,21 @@ namespace aemarcoCommons.Toolbox.GeoTools
 
             try
             {
-                using var response = await GeoClient.GetAsync($"https://api.sunrise-sunset.org/json?{query}");
-                response.EnsureSuccessStatusCode();
+                using (var response = await GeoClient.GetAsync($"https://api.sunrise-sunset.org/json?{query}"))
+                {
+                    response.EnsureSuccessStatusCode();
 
 
-                var info = await response.Content.ReadAsAsync<SunriseSunsetResponse>();
-                var result = info.ToInfo(throwExceptions);
+                    var info = await response.Content.ReadAsAsync<SunriseSunsetResponse>();
+                    var result = info.ToInfo(throwExceptions);
 
-                //remember 10 result, so we don´t ask to often
-                _sunriseSunsetResponses.TryAdd(query, result);
-                while (_sunriseSunsetResponses.Count > _geoServiceSettings.NumberOfCachedSunriseSunsetInfos && 
-                       _sunriseSunsetResponses.TryRemove(_sunriseSunsetResponses.Keys.First(), out _)) { }
+                    //remember 10 result, so we don´t ask to often
+                    _sunriseSunsetResponses.TryAdd(query, result);
+                    while (_sunriseSunsetResponses.Count > _geoServiceSettings.NumberOfCachedSunriseSunsetInfos &&
+                           _sunriseSunsetResponses.TryRemove(_sunriseSunsetResponses.Keys.First(), out _)) { }
 
-                return result;
+                    return result;
+                }
             }
             catch
             {

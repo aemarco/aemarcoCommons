@@ -1,8 +1,8 @@
-﻿using System;
+﻿using aemarcoCommons.Extensions.AttributeExtensions;
+using Microsoft.Win32;
+using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
-using aemarcoCommons.Extensions.AttributeExtensions;
-using Microsoft.Win32;
 
 namespace aemarcoCommons.Toolbox.Interop
 {
@@ -23,14 +23,16 @@ namespace aemarcoCommons.Toolbox.Interop
             var attr = style.GetAttribute<WindowsWallpaperStyleValuesAttribute>();
             if (attr != null)
             {
-                using var key = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop", true);
-                key?.SetValue("WallpaperStyle", attr.WallpaperStyle);
-                key?.SetValue("TileWallpaper", attr.TileWallpaper);
+                using (var key = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop", true))
+                {
+                    key?.SetValue("WallpaperStyle", attr.WallpaperStyle);
+                    key?.SetValue("TileWallpaper", attr.TileWallpaper);
+                }
             }
             var success = SystemParametersInfo(SetWallpaperOperation, 0, filePath, UpdateIniFile | SendWinIniChange);
             if (success) return;
-            
-            
+
+
             var error = Marshal.GetLastWin32Error();
             throw new Win32Exception(error);
         }

@@ -1,10 +1,10 @@
-﻿using System;
+﻿using IdentityModel.OidcClient;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
-using IdentityModel.OidcClient;
 
 namespace aemarcoCommons.Toolbox.Oidc
 {
@@ -17,14 +17,14 @@ namespace aemarcoCommons.Toolbox.Oidc
         string AccessToken { get; set; }
         string RefreshToken { get; set; }
     }
-    
+
     /// <summary>
     /// this handler can be chained in a HttpClient, so that we try to gather a new access token when we encounter 401 responses.
     /// if this handler returns a 401, means that the access token + refresh token are no more usable
     /// </summary>
     public class OidcTokenRenewalHandler : DelegatingHandler
     {
-        private readonly SemaphoreSlim _lock = new(1, 1);
+        private readonly SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
         private readonly OidcClient _oidcClient;
         private readonly ISessionHandler _sessionHandler;
 
@@ -32,13 +32,13 @@ namespace aemarcoCommons.Toolbox.Oidc
         private TimeSpan Timeout { get; } = TimeSpan.FromSeconds(5);
 
         public OidcTokenRenewalHandler(
-            OidcClient oidcClient, 
+            OidcClient oidcClient,
             ISessionHandler sessionHandler)
         {
             _oidcClient = oidcClient ?? throw new ArgumentNullException(nameof(oidcClient));
             _sessionHandler = sessionHandler ?? throw new ArgumentNullException(nameof(sessionHandler));
         }
-        
+
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             //if we have no access token, we try to get one with refresh
@@ -51,19 +51,19 @@ namespace aemarcoCommons.Toolbox.Oidc
                     RequestMessage = request
                 };
             }
-            
+
             //so seems we have a access token, so try to use it
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _sessionHandler.AccessToken);
             var response = await base.SendAsync(request, cancellationToken)
                 .ConfigureAwait(false);
-            
+
 
             if (response.StatusCode != HttpStatusCode.Unauthorized)
             {
                 //happy path
                 return response;
             }
-            
+
             //if we get 401, we try to refresh the access token
             if (!await RefreshTokensAsync(cancellationToken))
             {
@@ -73,14 +73,14 @@ namespace aemarcoCommons.Toolbox.Oidc
 
 
             response.Dispose(); // This 401 response will not be used for anything so is disposed to unblock the socket.
-            
+
             //we refreshed the token, so we try the same request once more
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _sessionHandler.AccessToken);
             return await base.SendAsync(request, cancellationToken)
                 .ConfigureAwait(false);
         }
 
-       
+
         protected override void Dispose(bool disposing)
         {
             if (disposing && !_disposed)

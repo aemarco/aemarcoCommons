@@ -4,50 +4,49 @@ using System.Linq;
 
 namespace aemarcoCommons.Toolbox.ConsoleTools
 {
-    public class ConsoleMenu<T>
+    public class ConsoleMenu
     {
-        private ConsoleMenuItem[] _menuItems;
-        readonly string _Description;
-        private int _SelectedItemIndex = 0;
-        private bool _ItemIsSelcted = false;
+        private readonly ConsoleMenuItem[] _menuItems;
+        private readonly string _description;
+        private int _selectedItemIndex;
+        private bool _itemIsSelected;
 
         public ConsoleMenu(string description, IEnumerable<ConsoleMenuItem> menuItems)
         {
             _menuItems = menuItems.ToArray();
-            _Description = description;
+            _description = description;
         }
 
         public void RunConsoleMenu()
         {
-            if (!string.IsNullOrEmpty(_Description))
+            if (!string.IsNullOrEmpty(_description))
             {
-                Console.WriteLine($"{_Description}: {Environment.NewLine}");
+                Console.WriteLine($"{_description}: {Environment.NewLine}");
             }
 
-            StartConsoleDrawindLoopUntilInputIsMade();
+            StartConsoleDrawInLoopUntilInputIsMade();
 
 
-            _ItemIsSelcted = false;
-            _menuItems[_SelectedItemIndex].Execute();
+            _itemIsSelected = false;
+            _menuItems[_selectedItemIndex].Execute();
         }
 
-        private void StartConsoleDrawindLoopUntilInputIsMade()
+        private void StartConsoleDrawInLoopUntilInputIsMade()
         {
-            int topOffset = Console.CursorTop;
-            int bottomOffset = 0;
-            ConsoleKeyInfo kb;
+            var topOffset = Console.CursorTop;
+            var bottomOffset = 0;
             Console.CursorVisible = false;
 
 
-            while (!_ItemIsSelcted)
+            while (!_itemIsSelected)
             {
-                for (int i = 0; i < _menuItems.Length; i++)
+                for (var i = 0; i < _menuItems.Length; i++)
                 {
-                    WriteConsoleItem(i, _SelectedItemIndex);
+                    WriteConsoleItem(i, _selectedItemIndex);
                 }
 
                 bottomOffset = Console.CursorTop;
-                kb = Console.ReadKey(true);
+                var kb = Console.ReadKey(true);
                 HandleKeyPress(kb.Key);
 
                 //Reset the cursor to the top of the screen
@@ -61,26 +60,27 @@ namespace aemarcoCommons.Toolbox.ConsoleTools
 
         private void HandleKeyPress(ConsoleKey pressedKey)
         {
+            // ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
             switch (pressedKey)
             {
                 case ConsoleKey.UpArrow:
-                    _SelectedItemIndex = (_SelectedItemIndex == 0) ? _menuItems.Length - 1 : _SelectedItemIndex - 1;
+                    _selectedItemIndex = (_selectedItemIndex == 0) ? _menuItems.Length - 1 : _selectedItemIndex - 1;
                     CheckForUnselectable(pressedKey);
                     break;
 
                 case ConsoleKey.DownArrow:
-                    _SelectedItemIndex = (_SelectedItemIndex == _menuItems.Length - 1) ? 0 : _SelectedItemIndex + 1;
+                    _selectedItemIndex = (_selectedItemIndex == _menuItems.Length - 1) ? 0 : _selectedItemIndex + 1;
                     CheckForUnselectable(pressedKey);
                     break;
 
                 case ConsoleKey.Enter:
-                    _ItemIsSelcted = true;
+                    _itemIsSelected = true;
                     break;
             }
         }
         private void CheckForUnselectable(ConsoleKey pressedKey)
         {
-            if (_menuItems[_SelectedItemIndex].GetType() == typeof(ConsoleMenuSeperator))
+            if (_menuItems[_selectedItemIndex].GetType() == typeof(ConsoleMenuSeparator))
             {
                 HandleKeyPress(pressedKey);
             }
@@ -94,10 +94,10 @@ namespace aemarcoCommons.Toolbox.ConsoleTools
                 Console.ForegroundColor = ConsoleColor.Black;
             }
 
-            string text = this._menuItems[itemIndex].Name;
-            if (_menuItems[itemIndex].GetType() == typeof(ConsoleMenuSeperator))
+            var text = _menuItems[itemIndex].Label;
+            if (_menuItems[itemIndex].GetType() == typeof(ConsoleMenuSeparator))
             {
-                text = text.PadRight(_menuItems.Max(x => x.Name.Length), _menuItems[itemIndex].Name[0]);
+                text = text.PadRight(_menuItems.Max(x => x.Label.Length), _menuItems[itemIndex].Label[0]);
             }
             Console.WriteLine(" {0,-20}", text);
             Console.ResetColor();
@@ -107,37 +107,20 @@ namespace aemarcoCommons.Toolbox.ConsoleTools
 
     public abstract class ConsoleMenuItem
     {
-        public ConsoleMenuItem(string label)
+        protected ConsoleMenuItem(string label)
         {
-            Name = label;
+            Label = label;
         }
-        public string Name { get; set; }
-
-
+        public string Label { get; }
         public virtual void Execute() { }
     }
+
     public class ConsoleMenuItem<T> : ConsoleMenuItem
     {
+        // ReSharper disable once MemberCanBePrivate.Global
         public Action<T> CallBack { get; set; }
+        // ReSharper disable once MemberCanBePrivate.Global
         public T UnderlyingObject { get; set; }
-
-        public override int GetHashCode()
-        {
-            return Name.GetHashCode() ^ UnderlyingObject.GetHashCode();
-        }
-        public override bool Equals(object obj)
-        {
-            // Check for null values and compare run - time types.
-            if (obj == null || GetType() != obj.GetType())
-                return false;
-
-            var item = (ConsoleMenuItem<T>)obj;
-            return item.GetHashCode() == this.GetHashCode();
-        }
-        public override string ToString()
-        {
-            return $"{Name} (data: {UnderlyingObject.ToString()})";
-        }
 
         public ConsoleMenuItem(string label, Action<T> callback, T underlyingObject)
             : base(label)
@@ -152,11 +135,10 @@ namespace aemarcoCommons.Toolbox.ConsoleTools
         }
     }
 
-    public class ConsoleMenuSeperator : ConsoleMenuItem
+    public class ConsoleMenuSeparator : ConsoleMenuItem
     {
-        public ConsoleMenuSeperator(Char seperatorChar = '-')
-            : base(seperatorChar.ToString())
-        {
-        }
+        public ConsoleMenuSeparator(char separatorChar = '-')
+            : base(separatorChar.ToString())
+        { }
     }
 }

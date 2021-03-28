@@ -4,11 +4,10 @@ namespace aemarcoCommons.Toolbox.ConsoleTools
 {
     public abstract class ConsoleProgressBar
     {
-
         public abstract void UpdateProgress(long done, long total);
 
-        ConsoleColor _background = Console.BackgroundColor;
-        ConsoleColor _foreground = Console.ForegroundColor;
+        private ConsoleColor _background = Console.BackgroundColor;
+        private ConsoleColor _foreground = Console.ForegroundColor;
         protected void RememberColors()
         {
             _background = Console.BackgroundColor;

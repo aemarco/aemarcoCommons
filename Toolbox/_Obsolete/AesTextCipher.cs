@@ -13,7 +13,7 @@ namespace aemarcoCommons.Toolbox.CryptoTools
             if (input == null) return null;
 
             var plainTextBytes = Encoding.ASCII.GetBytes(input);
-            using var aes = new AesCryptoServiceProvider
+            using (var aes = new AesCryptoServiceProvider
             {
                 BlockSize = 128,
                 KeySize = 256,
@@ -21,10 +21,14 @@ namespace aemarcoCommons.Toolbox.CryptoTools
                 IV = Encoding.ASCII.GetBytes(iv),
                 Padding = PaddingMode.PKCS7,
                 Mode = CipherMode.CBC
-            };
-            using var crypto = aes.CreateEncryptor(aes.Key, aes.IV);
-            var encrypted = crypto.TransformFinalBlock(plainTextBytes, 0, plainTextBytes.Length);
-            return Convert.ToBase64String(encrypted);
+            })
+            {
+                using (var crypto = aes.CreateEncryptor(aes.Key, aes.IV))
+                {
+                    var encrypted = crypto.TransformFinalBlock(plainTextBytes, 0, plainTextBytes.Length);
+                    return Convert.ToBase64String(encrypted);
+                }
+            }
         }
 
 
@@ -34,7 +38,7 @@ namespace aemarcoCommons.Toolbox.CryptoTools
 
 
             var encryptedBytes = Convert.FromBase64String(input);
-            using var aes = new AesCryptoServiceProvider
+            using (var aes = new AesCryptoServiceProvider
             {
                 BlockSize = 128,
                 KeySize = 256,
@@ -42,12 +46,14 @@ namespace aemarcoCommons.Toolbox.CryptoTools
                 IV = Encoding.ASCII.GetBytes(iv),
                 Padding = PaddingMode.PKCS7,
                 Mode = CipherMode.CBC
-            };
-            using var crypto = aes.CreateDecryptor(aes.Key, aes.IV);
-            var secret = crypto.TransformFinalBlock(encryptedBytes, 0, encryptedBytes.Length);
-            return Encoding.ASCII.GetString(secret);
+            })
+            {
+                using (var crypto = aes.CreateDecryptor(aes.Key, aes.IV))
+                {
+                    var secret = crypto.TransformFinalBlock(encryptedBytes, 0, encryptedBytes.Length);
+                    return Encoding.ASCII.GetString(secret);
+                }
+            }
         }
-
-
     }
 }

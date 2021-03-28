@@ -111,8 +111,10 @@ namespace aemarcoCommons.Extensions.FileExtensions
             if (!File.Exists(file.FullName))
                 throw new FileNotFoundException();
 
-            using Stream stream = File.OpenRead(file.FullName);
-            return stream.ToBase64HashString();
+            using (Stream stream = File.OpenRead(file.FullName))
+            {
+                return stream.ToBase64HashString();
+            }
         }
 
         public static Process OpenFile(this FileInfo file)

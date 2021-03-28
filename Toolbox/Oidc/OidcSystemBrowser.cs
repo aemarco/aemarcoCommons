@@ -32,36 +32,38 @@ namespace aemarcoCommons.Toolbox.Oidc
 
         public string RedirectUri => $"http://127.0.0.1:{_port}/";
 
-        public async Task<BrowserResult> InvokeAsync(BrowserOptions options, CancellationToken cancellationToken = new())
+        public async Task<BrowserResult> InvokeAsync(BrowserOptions options, CancellationToken cancellationToken = new CancellationToken())
         {
-            using var listener = new LoopbackHttpListener(options.EndUrl);
-            new Uri(options.StartUrl).OpenInBrowser();
-            try
+            using (var listener = new LoopbackHttpListener(options.EndUrl))
             {
-                var result = await listener.WaitForCallbackAsync(options.Timeout);
-
-                if (options.StartUrl.Contains("endsession"))
+                new Uri(options.StartUrl).OpenInBrowser();
+                try
                 {
-                    return string.IsNullOrWhiteSpace(result)
-                        ? new BrowserResult { Response = result, ResultType = BrowserResultType.Success }
-                        : new BrowserResult { ResultType = BrowserResultType.UnknownError, Error = result };
-                }
+                    var result = await listener.WaitForCallbackAsync(options.Timeout);
 
-                return string.IsNullOrWhiteSpace(result)
-                    ? new BrowserResult { ResultType = BrowserResultType.UnknownError, Error = "Empty response." }
-                    : new BrowserResult { Response = result, ResultType = BrowserResultType.Success };
-            }
-            catch (TaskCanceledException ex)
-            {
-                return new BrowserResult { ResultType = BrowserResultType.Timeout, Error = ex.Message };
-            }
-            catch (Exception ex)
-            {
-                return new BrowserResult { ResultType = BrowserResultType.UnknownError, Error = ex.Message };
-            }
-            finally
-            {
-                await listener.CloseListener();
+                    if (options.StartUrl.Contains("endsession"))
+                    {
+                        return string.IsNullOrWhiteSpace(result)
+                            ? new BrowserResult { Response = result, ResultType = BrowserResultType.Success }
+                            : new BrowserResult { ResultType = BrowserResultType.UnknownError, Error = result };
+                    }
+
+                    return string.IsNullOrWhiteSpace(result)
+                        ? new BrowserResult { ResultType = BrowserResultType.UnknownError, Error = "Empty response." }
+                        : new BrowserResult { Response = result, ResultType = BrowserResultType.Success };
+                }
+                catch (TaskCanceledException ex)
+                {
+                    return new BrowserResult { ResultType = BrowserResultType.Timeout, Error = ex.Message };
+                }
+                catch (Exception ex)
+                {
+                    return new BrowserResult { ResultType = BrowserResultType.UnknownError, Error = ex.Message };
+                }
+                finally
+                {
+                    await listener.CloseListener();
+                }
             }
         }
     }
@@ -70,10 +72,11 @@ namespace aemarcoCommons.Toolbox.Oidc
     {
         private const string AutoClose = @"<!DOCTYPE html><html><body>{{{message}}}<script>window.addEventListener('load',function(){close();});</script></body></html>";
         private readonly IWebHost _host;
-        private readonly TaskCompletionSource<string> _source = new();
+        private readonly TaskCompletionSource<string> _source;
 
         public LoopbackHttpListener(string url)
         {
+            _source = new TaskCompletionSource<string>();
             _host = new WebHostBuilder()
                 .UseKestrel()
                 .UseUrls(url)
@@ -100,10 +103,12 @@ namespace aemarcoCommons.Toolbox.Oidc
                         break;
                     case "POST":
                         {
-                            using var sr = new StreamReader(ctx.Request.Body, Encoding.UTF8);
-                            var body = await sr.ReadToEndAsync();
-                            SetResult(body, ctx, "Success");
-                            break;
+                            using (var sr = new StreamReader(ctx.Request.Body, Encoding.UTF8))
+                            {
+                                var body = await sr.ReadToEndAsync();
+                                SetResult(body, ctx, "Success");
+                                break;
+                            }
                         }
                     default:
                         ctx.Response.StatusCode = 405;

@@ -13,12 +13,15 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
         /// <returns>hashed bytes</returns>
         public static byte[] ToHashBytes(this Stream stream)
         {
-            using var md5 = MD5.Create();
-            return md5.ComputeHash(stream);
+            using (var md5 = MD5.Create())
+            {
+                return md5.ComputeHash(stream);
+            }
+
         }
 
 
 
-       
+
     }
 }

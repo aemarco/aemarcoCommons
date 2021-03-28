@@ -19,7 +19,7 @@ namespace aemarcoCommons.Extensions.TextExtensions
                                       RegexOptions.None, TimeSpan.FromMilliseconds(200));
 
                 // Examines the domain part of the email and normalizes it.
-                static string DomainMapper(Match match)
+                string DomainMapper(Match match)
                 {
                     // Use IdnMapping class to convert Unicode domain names.
                     var idn = new IdnMapping();
@@ -46,7 +46,7 @@ namespace aemarcoCommons.Extensions.TextExtensions
                     @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-0-9a-z]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$",
                     RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250)) &&
                        // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-                       new MailAddress(email) is { };
+                       new MailAddress(email) is MailAddress _;
             }
             catch (RegexMatchTimeoutException)
             {

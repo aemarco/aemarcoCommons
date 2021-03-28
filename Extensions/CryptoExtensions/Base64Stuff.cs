@@ -14,8 +14,10 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
         /// <returns>base 64 hash string</returns>
         public static string ToBase64HashString(this string textToHash)
         {
-            using var ms = new MemoryStream(Encoding.UTF8.GetBytes(textToHash));
-            return ms.ToBase64HashString();
+            using (var ms = new MemoryStream(Encoding.UTF8.GetBytes(textToHash)))
+            {
+                return ms.ToBase64HashString();
+            };
         }
 
 

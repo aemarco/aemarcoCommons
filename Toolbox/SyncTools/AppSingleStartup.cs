@@ -24,7 +24,7 @@ namespace aemarcoCommons.Toolbox.SyncTools
         /// uses Manifest Name
         /// </summary>
         public AppSingleStartup()
-            : this(Assembly.GetEntryAssembly()!.ManifestModule.Name)
+            : this(Assembly.GetEntryAssembly().ManifestModule.Name)
         {
 
         }

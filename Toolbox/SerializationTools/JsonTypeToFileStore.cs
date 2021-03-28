@@ -1,7 +1,7 @@
-﻿using System;
-using System.IO;
-using aemarcoCommons.Extensions.FileExtensions;
+﻿using aemarcoCommons.Extensions.FileExtensions;
 using Newtonsoft.Json;
+using System;
+using System.IO;
 
 namespace aemarcoCommons.Toolbox.SerializationTools
 {
@@ -24,10 +24,11 @@ namespace aemarcoCommons.Toolbox.SerializationTools
                     new FileInfo(file).TryDelete();
                 }
             }
-            Instance ??= new T()
-            {
-                TimestampCreated = DateTimeOffset.Now
-            };
+            if (Instance is null)
+                Instance = new T()
+                {
+                    TimestampCreated = DateTimeOffset.Now
+                };
         }
 
         public T Instance { get; private set; }
@@ -36,7 +37,7 @@ namespace aemarcoCommons.Toolbox.SerializationTools
         {
             Instance.TimestampSaved = DateTimeOffset.Now;
             var di = new FileInfo(Instance.Filepath).Directory;
-            if (!di!.Exists) di.Create();
+            if (!di.Exists) di.Create();
 
             File.WriteAllText(Instance.Filepath, JsonConvert.SerializeObject(Instance, Formatting.Indented));
         }

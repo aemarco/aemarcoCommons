@@ -1,7 +1,7 @@
-﻿using System;
+﻿using aemarcoCommons.Toolbox.PictureTools;
+using System;
 using System.Drawing;
 using System.IO;
-using aemarcoCommons.Toolbox.PictureTools;
 
 namespace aemarcoCommons.Toolbox.MonitorTools
 {
@@ -12,7 +12,7 @@ namespace aemarcoCommons.Toolbox.MonitorTools
 
         private readonly IWallpaperRealEstateSettings _monitorSettings;
         public Monitor(Rectangle rect, string deviceName, string sourceFile, IWallpaperRealEstateSettings monitorSettings)
-            :base(rect)
+            : base(rect)
         {
             if (string.IsNullOrWhiteSpace(deviceName))
                 throw new NullReferenceException("Screen could not be initialized");
@@ -31,14 +31,16 @@ namespace aemarcoCommons.Toolbox.MonitorTools
             {
                 try
                 {
-                    using var old = new Bitmap(sourceFile);
-                    if (old.Width >= (TargetArea.X + TargetArea.Width) &&
-                        old.Height >= (TargetArea.Y + TargetArea.Height))
+                    using (var old = new Bitmap(sourceFile))
                     {
-                        SetPicture(new Bitmap(old.Clone(TargetArea, old.PixelFormat)));
-                        return;
+                        if (old.Width >= (TargetArea.X + TargetArea.Width) &&
+                            old.Height >= (TargetArea.Y + TargetArea.Height))
+                        {
+                            SetPicture(new Bitmap(old.Clone(TargetArea, old.PixelFormat)));
+                            return;
+                        }
+                        //throw new FileLoadException("Image size not compatible.");
                     }
-                    //throw new FileLoadException("Image size not compatible.");
                 }
                 catch //TODO Virtual screen throws exception when barely in range
                 {
@@ -56,10 +58,10 @@ namespace aemarcoCommons.Toolbox.MonitorTools
 
         public void SetWallpaper(Image wall) =>
             SetWallpaper(
-                wall, 
-                _monitorSettings.WallpaperMode, 
-                _monitorSettings.PercentTopBottomCutAllowed, 
+                wall,
+                _monitorSettings.WallpaperMode,
+                _monitorSettings.PercentTopBottomCutAllowed,
                 _monitorSettings.PercentLeftRightCutAllowed);
-        
+
     }
 }

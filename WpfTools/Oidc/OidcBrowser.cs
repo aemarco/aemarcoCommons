@@ -1,9 +1,9 @@
-﻿using System;
+﻿using IdentityModel.OidcClient.Browser;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using IdentityModel.OidcClient.Browser;
 
 namespace aemarcoCommons.WpfTools.Oidc
 {
@@ -54,7 +54,7 @@ namespace aemarcoCommons.WpfTools.Oidc
                 }
             };
 
-            window.Closing += (_, _) =>
+            window.Closing += (s, e) =>
             {
                 signal.Release();
             };
@@ -64,10 +64,10 @@ namespace aemarcoCommons.WpfTools.Oidc
             webBrowser.Source = new Uri(_options.StartUrl);
 
             await signal.WaitAsync(cancellationToken);
-            
+
             return result;
         }
-        
+
         private bool BrowserIsNavigatingToRedirectUri(Uri uri)
         {
             return uri.AbsoluteUri.StartsWith(_options.EndUrl);

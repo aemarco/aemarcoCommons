@@ -1,6 +1,6 @@
-﻿using System.IO;
+﻿using aemarcoCommons.Extensions.CryptoExtensions;
+using System.IO;
 using System.Net;
-using aemarcoCommons.Extensions.CryptoExtensions;
 
 namespace aemarcoCommons.Extensions.FileExtensions
 {
@@ -13,10 +13,12 @@ namespace aemarcoCommons.Extensions.FileExtensions
         /// <returns>base 64 hash string</returns>
         public static string HashTheThing(this string location)
         {
-            using var stream = location.StartsWith("http") 
-                ? new WebClient().OpenRead(location) 
-                : File.OpenRead(location);
-            return stream.ToBase64HashString();
+            using (var stream = location.StartsWith("http")
+                ? new WebClient().OpenRead(location)
+                : File.OpenRead(location))
+            {
+                return stream.ToBase64HashString();
+            }
         }
 
 

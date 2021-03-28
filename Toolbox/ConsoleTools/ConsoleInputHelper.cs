@@ -194,14 +194,14 @@ namespace aemarcoCommons.Toolbox.ConsoleTools
 
             if (abortable)
             {
-                items.Add(new ConsoleMenuSeperator());
+                items.Add(new ConsoleMenuSeparator());
                 items.Add(new ConsoleMenuItem<T>("Abort", x =>
                 {
                     result = x;
                 }, null));
             }
 
-            var menu = new ConsoleMenu<T>(header, items);
+            var menu = new ConsoleMenu(header, items);
             menu.RunConsoleMenu();
 
             return result;
@@ -254,14 +254,14 @@ namespace aemarcoCommons.Toolbox.ConsoleTools
             }
 
             //select
-            dirItems.Add(new ConsoleMenuSeperator());
+            dirItems.Add(new ConsoleMenuSeparator());
             dirItems.Add(new ConsoleMenuItem<DirectoryInfo>("Select", x =>
             {
                 path = x.FullName;
 
             }, dir));
 
-            var menu = new ConsoleMenu<DirectoryInfo>(dir.FullName, dirItems);
+            var menu = new ConsoleMenu(dir.FullName, dirItems);
             menu.RunConsoleMenu();
 
             return path;
@@ -291,15 +291,15 @@ namespace aemarcoCommons.Toolbox.ConsoleTools
                 }, temp));
             }
 
-            if (servers is not null && servers.ToList() is var list && list.Count > 0)
+            if (servers != null && servers.ToList() is var list && list.Count > 0)
             {
-                driveItems.Add(new ConsoleMenuSeperator());
+                driveItems.Add(new ConsoleMenuSeparator());
                 driveItems.Add(new ConsoleMenuItem<DriveInfo>("Network", _ =>
                 {
                     path = ShareSelector(list) ?? DriveSelector(list);
                 }, null));
             }
-            var menu = new ConsoleMenu<DriveInfo>("Drives", driveItems);
+            var menu = new ConsoleMenu("Drives", driveItems);
             menu.RunConsoleMenu();
 
             return path;
@@ -350,7 +350,7 @@ namespace aemarcoCommons.Toolbox.ConsoleTools
             }
             if (shares.Count == 0) return path;
 
-            var menu = new ConsoleMenu<DirectoryInfo>($"{server} shares", shares);
+            var menu = new ConsoleMenu($"{server} shares", shares);
             menu.RunConsoleMenu();
             return path;
         }

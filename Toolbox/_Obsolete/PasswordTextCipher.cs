@@ -25,26 +25,36 @@ namespace aemarcoCommons.Toolbox.CryptoTools
             var saltStringBytes = GenerateRandomEntropy();
             var ivStringBytes = GenerateRandomEntropy();
             var plainTextBytes = Encoding.UTF8.GetBytes(plainText);
-            using var password = new Rfc2898DeriveBytes(passPhrase, saltStringBytes, DerivationIterations);
-            var keyBytes = password.GetBytes(KeySize / 8);
-            using var symmetricKey = new RijndaelManaged
+            using (var pwd = new Rfc2898DeriveBytes(passPhrase, saltStringBytes, DerivationIterations))
             {
-                BlockSize = 128,
-                Mode = CipherMode.CBC,
-                Padding = PaddingMode.PKCS7
-            };
-            using var encryptor = symmetricKey.CreateEncryptor(keyBytes, ivStringBytes);
-            using var memoryStream = new MemoryStream();
-            using var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write);
-            cryptoStream.Write(plainTextBytes, 0, plainTextBytes.Length);
-            cryptoStream.FlushFinalBlock();
-            // Create the final bytes as a concatenation of the random salt bytes, the random iv bytes and the cipher bytes.
-            var cipherTextBytes = saltStringBytes;
-            cipherTextBytes = cipherTextBytes.Concat(ivStringBytes).ToArray();
-            cipherTextBytes = cipherTextBytes.Concat(memoryStream.ToArray()).ToArray();
-            memoryStream.Close();
-            cryptoStream.Close();
-            return Convert.ToBase64String(cipherTextBytes);
+                var keyBytes = pwd.GetBytes(KeySize / 8);
+                using (var symmetricKey = new RijndaelManaged
+                {
+                    BlockSize = 128,
+                    Mode = CipherMode.CBC,
+                    Padding = PaddingMode.PKCS7
+                })
+                {
+                    using (var encryptor = symmetricKey.CreateEncryptor(keyBytes, ivStringBytes))
+                    {
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
+                            {
+                                cryptoStream.Write(plainTextBytes, 0, plainTextBytes.Length);
+                                cryptoStream.FlushFinalBlock();
+                                // Create the final bytes as a concatenation of the random salt bytes, the random iv bytes and the cipher bytes.
+                                var cipherTextBytes = saltStringBytes;
+                                cipherTextBytes = cipherTextBytes.Concat(ivStringBytes).ToArray();
+                                cipherTextBytes = cipherTextBytes.Concat(memoryStream.ToArray()).ToArray();
+                                memoryStream.Close();
+                                cryptoStream.Close();
+                                return Convert.ToBase64String(cipherTextBytes);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public static string Decrypt(string cipherText, string passPhrase)
@@ -59,32 +69,43 @@ namespace aemarcoCommons.Toolbox.CryptoTools
             // Get the actual cipher text bytes by removing the first 64 bytes from the cipherText string.
             var cipherTextBytes = cipherTextBytesWithSaltAndIv.Skip((KeySize / 8) * 2).Take(cipherTextBytesWithSaltAndIv.Length - ((KeySize / 8) * 2)).ToArray();
 
-            using var password = new Rfc2898DeriveBytes(passPhrase, saltStringBytes, DerivationIterations);
-            var keyBytes = password.GetBytes(KeySize / 8);
-            using var symmetricKey = new RijndaelManaged
+            using (var password = new Rfc2898DeriveBytes(passPhrase, saltStringBytes, DerivationIterations))
             {
-                BlockSize = 128,
-                Mode = CipherMode.CBC,
-                Padding = PaddingMode.PKCS7
-            };
-            using var decryptor = symmetricKey.CreateDecryptor(keyBytes, ivStringBytes);
-            using var memoryStream = new MemoryStream(cipherTextBytes);
-            using var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read);
-            var plainTextBytes = new byte[cipherTextBytes.Length];
-            var decryptedByteCount = cryptoStream.Read(plainTextBytes, 0, plainTextBytes.Length);
-            memoryStream.Close();
-            cryptoStream.Close();
-            return Encoding.UTF8.GetString(plainTextBytes, 0, decryptedByteCount);
+                var keyBytes = password.GetBytes(KeySize / 8);
+                using (var symmetricKey = new RijndaelManaged
+                {
+                    BlockSize = 128,
+                    Mode = CipherMode.CBC,
+                    Padding = PaddingMode.PKCS7
+                })
+                {
+                    using (var decryptor = symmetricKey.CreateDecryptor(keyBytes, ivStringBytes))
+                    {
+                        using (var memoryStream = new MemoryStream(cipherTextBytes))
+                        {
+                            using (var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
+                            {
+                                var plainTextBytes = new byte[cipherTextBytes.Length];
+                                var decryptedByteCount = cryptoStream.Read(plainTextBytes, 0, plainTextBytes.Length);
+                                memoryStream.Close();
+                                cryptoStream.Close();
+                                return Encoding.UTF8.GetString(plainTextBytes, 0, decryptedByteCount);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private static byte[] GenerateRandomEntropy()
         {
             var randomBytes = new byte[KeySize / 8];
-            using var rngCsp = new RNGCryptoServiceProvider();
-            // Fill the array with cryptographically secure random bytes.
-            rngCsp.GetBytes(randomBytes);
-            return randomBytes;
-
+            using (var rngCsp = new RNGCryptoServiceProvider())
+            {
+                // Fill the array with cryptographically secure random bytes.
+                rngCsp.GetBytes(randomBytes);
+                return randomBytes;
+            }
         }
     }
 }

@@ -1,12 +1,28 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.IO;
 using System.Text.RegularExpressions;
-using Microsoft.Extensions.Configuration;
 
 namespace aemarcoCommons.Toolbox.AppConfiguration
 {
     internal static class InternalExtensions
     {
+
+        /// <summary>
+        /// Resolves the section path in IConfigurationRoot
+        /// </summary>
+        /// <param name="type">type for which to resole</param>
+        /// <returns>defined path</returns>
+        internal static string GetSectionPath(this Type type)
+        {
+            //use path defined in attribute if specified
+            if (Attribute.GetCustomAttribute(type, typeof(SettingPathAttribute)) is SettingPathAttribute pathAttribute)
+                return pathAttribute.Path;
+            //use typename if nothing is specified
+            else
+                return type.Name;
+        }
+
         /// <summary>
         /// Gather absolute file Path which the type get saved to
         /// </summary>
@@ -24,8 +40,8 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
             return Path.Combine(saveDirectory, getFileName(type));
         }
 
-        
-        
+
+
         /// <summary>
         /// Searches for {{{placeholder}}}, and replaces that with resolved value
         /// </summary>
@@ -48,10 +64,10 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
                     currentValue = currentValue.Replace(match.Value, newValue);
                 }
             }
-            
+
             return currentValue;
         }
-        
+
         /// <summary>
         /// Searches given config section for given key, and returns it´s value, which can´t be a placeholder to itself
         /// </summary>

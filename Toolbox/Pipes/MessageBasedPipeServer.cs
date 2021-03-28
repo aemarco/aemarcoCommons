@@ -1,9 +1,9 @@
-﻿using System;
+﻿using aemarcoCommons.Extensions.TaskExtensions;
+using System;
 using System.IO;
 using System.IO.Pipes;
 using System.Threading;
 using System.Threading.Tasks;
-using aemarcoCommons.Extensions.TaskExtensions;
 
 namespace aemarcoCommons.Toolbox.Pipes
 {
@@ -23,16 +23,19 @@ namespace aemarcoCommons.Toolbox.Pipes
 
         private void CreateNamedPipeServer()
         {
-            using var pipeServer = new NamedPipeServerStream(_pipeName, PipeDirection.In, 1, PipeTransmissionMode.Message);
-            while (true)
+            using (var pipeServer =
+                new NamedPipeServerStream(_pipeName, PipeDirection.In, 1, PipeTransmissionMode.Message))
             {
-                pipeServer.WaitForConnection();
+                while (true)
+                {
+                    pipeServer.WaitForConnection();
 
-                var reader = new StreamReader(pipeServer);
-                var message = reader.ReadLine();
-                pipeServer.Disconnect();
+                    var reader = new StreamReader(pipeServer);
+                    var message = reader.ReadLine();
+                    pipeServer.Disconnect();
 
-                HandleAsMessage(message);
+                    HandleAsMessage(message);
+                }
             }
             // ReSharper disable once FunctionNeverReturns
         }
@@ -51,20 +54,26 @@ namespace aemarcoCommons.Toolbox.Pipes
         public static void SendMessageToPipe(this string message, string targetMachine, string pipeName)
         {
             if (string.IsNullOrWhiteSpace(message)) return;
-            using var namedPipeClientStream = new NamedPipeClientStream(targetMachine, pipeName, PipeDirection.Out);
-            try
+            using (var namedPipeClientStream = new NamedPipeClientStream(targetMachine, pipeName, PipeDirection.Out))
             {
-                namedPipeClientStream.Connect(TimeSpan.FromSeconds(3).Milliseconds);
-                using var writer = new StreamWriter(namedPipeClientStream)
+                try
                 {
-                    AutoFlush = true
-                };
-                writer.WriteLine(message);
+                    namedPipeClientStream.Connect(TimeSpan.FromSeconds(3).Milliseconds);
+                    using (var writer = new StreamWriter(namedPipeClientStream)
+                    {
+                        AutoFlush = true
+                    })
+                    {
+                        writer.WriteLine(message);
+                    }
+                }
+                catch
+                {
+                    // ignored
+                }
+
             }
-            catch
-            {
-                // ignored
-            }
+
         }
 
     }

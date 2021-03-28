@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
-using Autofac;
+﻿using Autofac;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Linq;
 
-namespace aemarcoCommons.Toolbox.AppConfiguration.Autofac
+namespace aemarcoCommons.Toolbox.AppConfiguration
 {
     public static class AutofacExtensions
     {
@@ -57,7 +57,8 @@ namespace aemarcoCommons.Toolbox.AppConfiguration.Autofac
 
             builder.RegisterBuildCallback(scope =>
             {
-                SettingsBase.RootScope = scope;
+                SettingsBase.ConfigurationRoot = scope.Resolve<IConfigurationRoot>();
+                SettingsBase.ConfigurationOptions = scope.Resolve<ConfigurationOptions>();
             });
 
             return rootConfig;

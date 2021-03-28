@@ -7,14 +7,16 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
     {
         public static string ToHexHashString(this string textToHash)
         {
-            using var ms = new MemoryStream(Encoding.UTF8.GetBytes(textToHash));
-            var hash = ms.ToHashBytes();
-            var sb = new StringBuilder();
-            foreach (var b in hash)
+            using (var ms = new MemoryStream(Encoding.UTF8.GetBytes(textToHash)))
             {
-                sb.Append(b.ToString("X2"));
+                var hash = ms.ToHashBytes();
+                var sb = new StringBuilder();
+                foreach (var b in hash)
+                {
+                    sb.Append(b.ToString("X2"));
+                }
+                return sb.ToString();
             }
-            return sb.ToString();
         }
     }
 }
