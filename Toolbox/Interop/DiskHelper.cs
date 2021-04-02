@@ -5,7 +5,6 @@ using System.Security;
 
 namespace aemarcoCommons.Toolbox.Interop
 {
-    [Obsolete("Use \"DriveInfo\" instead.")]
     public static class DiskHelper
     {
         #region Diskspace

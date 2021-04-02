@@ -6,14 +6,14 @@ namespace aemarcoCommons.Extensions.FileExtensions
     public static class StorageSizeStuff
     {
 
-        public static long ConvertFromTo(this int value, string sourceUnit, string targetUnit)
+        public static decimal ConvertFromTo(this int value, string sourceUnit, string targetUnit)
         {
             return ((long)value).ConvertFromTo(sourceUnit, targetUnit);
         }
 
-        public static long ConvertFromTo(this long value, string sourceUnit, string targetUnit)
+        public static decimal ConvertFromTo(this long value, string sourceUnit, string targetUnit)
         {
-            var result = value;
+            var result = Convert.ToDecimal(value);
             string[] sizes = { "B", "KB", "MB", "GB", "TB" };
 
             sourceUnit = sourceUnit.ToUpper();
@@ -36,13 +36,6 @@ namespace aemarcoCommons.Extensions.FileExtensions
             }
             return result;
         }
-
-
-
-
-
-
-
 
 
     }
