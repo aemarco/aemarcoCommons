@@ -32,6 +32,7 @@
   </PropertyGroup>
 
 
+
   <ItemGroup>
     <PackageReference Include="Autofac" Version="5.1.2" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="6.0.0" />
@@ -68,10 +69,6 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="AppConfiguration\Autofac\" />
   </ItemGroup>
 
 </Project>

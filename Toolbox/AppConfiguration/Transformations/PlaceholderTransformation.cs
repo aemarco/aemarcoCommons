@@ -1,9 +1,9 @@
-﻿using System.Reflection;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
+using System.Reflection;
 
 namespace aemarcoCommons.Toolbox.AppConfiguration.Transformations
 {
-    public class PlaceholderTransformation: StringTransformerBase
+    public class PlaceholderTransformation : StringTransformerBase
     {
         public override string PerformReadTransformation(string currentValue, PropertyInfo propertyInfo, IConfigurationRoot configRoot)
         {
@@ -11,7 +11,7 @@ namespace aemarcoCommons.Toolbox.AppConfiguration.Transformations
             return resolved;
         }
 
-        public override string PerformWriteTransformation(string currentValue, PropertyInfo propertyInfo, IConfigurationRoot configRoot) => 
+        public override string PerformWriteTransformation(string currentValue, PropertyInfo propertyInfo, IConfigurationRoot configRoot) =>
             currentValue;
     }
 }

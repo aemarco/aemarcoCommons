@@ -4,9 +4,9 @@
 namespace aemarcoCommons.Toolbox.ConsoleTools
 {
 
+    [Obsolete("Use aemarcoCommons.ConsoleTools.PowerConsole instead.")]
     public static class ConsoleCommands
     {
-        [Obsolete("Use aemarcoCommons.ConsoleTools.PowerConsole instead.")]
         public static void ClearCurrentConsoleLine()
         {
             var currentLineCursor = Console.CursorTop;
