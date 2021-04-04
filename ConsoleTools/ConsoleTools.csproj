@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\SolutionInfo.proj" />
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+
+    <RootNamespace>aemarcoCommons.ConsoleTools</RootNamespace>
+    <AssemblyName>aemarcoCommons.ConsoleTools</AssemblyName>
+
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>aemarcoConsoleTools</PackageId>
+    <PackageVersion>$(AssemblyVersion)</PackageVersion>
+    <Authors>aemarco</Authors>
+    <Company>aemarco</Company>
+    <Product>aemarcoConsoleTools</Product>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/aemarco/aemarcoCommons</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/aemarco/aemarcoCommons</RepositoryUrl>
+    <Description>c# console tools collection</Description>
+    <PackageTags>ConsoleTools</PackageTags>
+    <PackageIcon>toolbox.png</PackageIcon>
+
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <DebugType>embedded</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <None Include="..\LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\toolbox.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\Toolbox\Toolbox.csproj" />
+  </ItemGroup>
+
+
+
+
+
+</Project>
