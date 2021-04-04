@@ -1,6 +1,7 @@
 ﻿using System;
 
-namespace aemarcoCommons.Toolbox.ConsoleTools
+// ReSharper disable once CheckNamespace
+namespace aemarcoCommons.ConsoleTools
 {
     public abstract class ConsoleProgressBar
     {
@@ -89,8 +90,8 @@ namespace aemarcoCommons.Toolbox.ConsoleTools
         private int _contentHeight = 1;
         public int ContentHeight
         {
-            get { return _contentHeight; }
-            set { _contentHeight = value; }
+            get => _contentHeight;
+            set => _contentHeight = value;
         }
 
 
@@ -110,13 +111,16 @@ namespace aemarcoCommons.Toolbox.ConsoleTools
             RestoreColors();
             Console.SetCursorPosition(xPos, yPos);
 
-            //move content up
-            while (Console.CursorTop > Console.WindowHeight - 1 - _contentHeight)
+            if (OperatingSystem.IsWindows())
             {
-                Console.MoveBufferArea(0, 2, Console.WindowWidth, yPos, 0, 1);
-                Console.CursorTop--;
+                //move content up
+                while (Console.CursorTop > Console.WindowHeight - 1 - _contentHeight)
+                {
+                    Console.MoveBufferArea(0, 2, Console.WindowWidth, yPos, 0, 1);
+                    Console.CursorTop--;
+                }
+                Console.SetWindowPosition(0, 0);
             }
-            Console.SetWindowPosition(0, 0);
         }
 
 

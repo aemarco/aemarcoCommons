@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+// ReSharper disable All
 
 namespace aemarcoCommons.Toolbox.Interop
 {
+
+    [Obsolete("Use aemarcoCommons.ConsoleTools.PowerConsole instead.")]
     public static class ConsoleHelper
     {
 

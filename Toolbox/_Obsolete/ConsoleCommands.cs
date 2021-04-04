@@ -1,9 +1,12 @@
 ﻿using System;
+// ReSharper disable All
 
 namespace aemarcoCommons.Toolbox.ConsoleTools
 {
+
     public static class ConsoleCommands
     {
+        [Obsolete("Use aemarcoCommons.ConsoleTools.PowerConsole instead.")]
         public static void ClearCurrentConsoleLine()
         {
             var currentLineCursor = Console.CursorTop;
@@ -11,7 +14,5 @@ namespace aemarcoCommons.Toolbox.ConsoleTools
             Console.Write(new string(' ', Console.WindowWidth));
             Console.SetCursorPosition(0, currentLineCursor);
         }
-
-
     }
 }

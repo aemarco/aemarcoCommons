@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
-namespace aemarcoCommons.Toolbox.ConsoleTools
+// ReSharper disable once CheckNamespace
+namespace aemarcoCommons.ConsoleTools
 {
     public class ConsoleMenu
     {
@@ -104,7 +106,6 @@ namespace aemarcoCommons.Toolbox.ConsoleTools
         }
     }
 
-
     public abstract class ConsoleMenuItem
     {
         protected ConsoleMenuItem(string label)
@@ -113,27 +114,38 @@ namespace aemarcoCommons.Toolbox.ConsoleTools
         }
         public string Label { get; }
         public virtual void Execute() { }
+
     }
 
     public class ConsoleMenuItem<T> : ConsoleMenuItem
     {
-        // ReSharper disable once MemberCanBePrivate.Global
-        public Action<T> CallBack { get; set; }
-        // ReSharper disable once MemberCanBePrivate.Global
-        public T UnderlyingObject { get; set; }
+        private readonly Action<T> _callBack;
+        private readonly Func<T, Task> _asyncCallBack;
+        private readonly T _underlyingObject;
 
         public ConsoleMenuItem(string label, Action<T> callback, T underlyingObject)
             : base(label)
         {
-            CallBack = callback;
-            UnderlyingObject = underlyingObject;
+            _callBack = callback;
+            _underlyingObject = underlyingObject;
+        }
+
+        public ConsoleMenuItem(string label, Func<T, Task> callback, T underlyingObject)
+            : base(label)
+        {
+            _asyncCallBack = callback;
+            _underlyingObject = underlyingObject;
         }
 
         public override void Execute()
         {
-            CallBack(UnderlyingObject);
+            _callBack?.Invoke(_underlyingObject);
+            _asyncCallBack?.Invoke(_underlyingObject).GetAwaiter().GetResult();
         }
     }
+
+
+
 
     public class ConsoleMenuSeparator : ConsoleMenuItem
     {

@@ -3,9 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+// ReSharper disable All
 
 namespace aemarcoCommons.Toolbox.ConsoleTools
 {
+
+    [Obsolete("Use aemarcoCommons.ConsoleTools.PowerConsole instead.")]
     public static class ConsoleInputHelper
     {
 
@@ -59,6 +62,7 @@ namespace aemarcoCommons.Toolbox.ConsoleTools
         }
 
         #endregion
+
 
         #region int
 
@@ -143,6 +147,7 @@ namespace aemarcoCommons.Toolbox.ConsoleTools
         }
 
         #endregion
+
 
         #region class based selection
 
