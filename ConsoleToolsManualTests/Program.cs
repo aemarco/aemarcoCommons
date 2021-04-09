@@ -61,6 +61,7 @@ namespace ConsoleToolsManualTests
             AddTextTests(items);
             AddPathNavigationTests(items);
             AddNetworkNavigationTests(items);
+            AddProgressTests(items);
         }
 
 
@@ -102,7 +103,7 @@ namespace ConsoleToolsManualTests
         {
             items.Add(new ConsoleMenuItem<string>("Selection", _ =>
             {
-                var persons = new string[]
+                var persons = new[]
                 {
                     "Bob",
                     "Alice",
@@ -289,15 +290,16 @@ namespace ConsoleToolsManualTests
 
         private static void AddNetworkNavigationTests(ICollection<ConsoleMenuItem> items)
         {
-
-            if (Environment.MachineName.Equals("aemarco-MPC", StringComparison.OrdinalIgnoreCase))
+            if (OperatingSystem.IsWindows())
             {
                 items.Add(new ConsoleMenuItem<string>("NetworkNavigation", _ =>
                 {
+                    Console.WriteLine();
+                    var share = PowerConsole.EnsureTextInput("Input server name here", 3).ToUpper();
                     var root = new DirectoryInfo(Environment.CurrentDirectory).Root;
-                    Describe(@"Navigate to \\NAS\Home");
-                    var home = PowerConsole.PathSelector(root.FullName, new[] { "NAS" });
-                    if (home != @"\\NAS\home")
+                    Describe(@"Navigate to any share on given server");
+                    var home = PowerConsole.PathSelector(root.FullName, new[] { share });
+                    if (!home.StartsWith($"\\\\{share}\\"))
                     {
                         Describe("Test failed");
                         return;
@@ -305,11 +307,67 @@ namespace ConsoleToolsManualTests
 
                     Describe("Test successful");
                 }, null));
-
             }
         }
 
+        private static void AddProgressTests(ICollection<ConsoleMenuItem> items)
+        {
+            items.Add(new ConsoleMenuItem<string>("ConsoleTopProgress", async _ =>
+            {
+                Console.WriteLine();
 
+                // ReSharper disable StringLiteralTypo
+                var text = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Duis autem vel eum iriure";
+                // ReSharper restore StringLiteralTypo
+
+                var progress = new ConsoleTopProgressBar(4);
+                for (var i = 0; i < 25; i++)
+                {
+                    for (var y = 0; y < 4; y++)
+                    {
+                        var line = text.Substring(0, text.IndexOf(' ') + 1);
+                        if (line.Length >= 0 && text.Length > line.Length) text = text.Substring(line.Length);
+                        Console.WriteLine(line);
+                    }
+
+                    await Task.Delay(150);
+                    progress.UpdateProgress(i + 1, 25);
+                }
+                Describe("Test successful if you always saw the progress bar, and it reached 100%", false);
+            }, null));
+
+
+            items.Add(new ConsoleMenuItem<string>("ConsoleInlineProgress", async _ =>
+            {
+                Console.WriteLine();
+
+                var progress = new ConsoleInlineProgressBar();
+
+                for (var i = 0; i < 25; i++)
+                {
+                    await Task.Delay(150);
+                    progress.UpdateProgress(i + 1, 25);
+                }
+                Describe("Test successful if you see progress to 100% in multiple lines", false);
+            }, null));
+
+
+            items.Add(new ConsoleMenuItem<string>("ConsoleOneLineProgress", async _ =>
+            {
+                Console.WriteLine();
+
+                var progress = new ConsoleOneLineProgressBar();
+
+                for (var i = 0; i < 25; i++)
+                {
+                    await Task.Delay(150);
+                    progress.UpdateProgress(i + 1, 25);
+                }
+                Describe("Test successful if you see progress to 100% in one line", false);
+            }, null));
+
+
+        }
 
 
     }

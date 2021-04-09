@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Versioning;
 
 
 // ReSharper disable once CheckNamespace
@@ -88,11 +89,12 @@ namespace aemarcoCommons.ConsoleTools
                 }, temp));
             }
 
-            if (servers != null && servers.ToList() is var list && list.Count > 0)
+            if (OperatingSystem.IsWindows() && servers != null && servers.ToList() is var list && list.Count > 0)
             {
                 driveItems.Add(new ConsoleMenuSeparator());
                 driveItems.Add(new ConsoleMenuItem<DriveInfo>("Network", _ =>
                 {
+                    if (!OperatingSystem.IsWindows()) throw new NotImplementedException();
                     path = ShareSelector(list) ?? DriveSelector(list);
                 }, null));
             }
@@ -107,6 +109,7 @@ namespace aemarcoCommons.ConsoleTools
         /// </summary>
         /// <param name="servers">servers which can be selected</param>
         /// <returns></returns>
+        [SupportedOSPlatform("windows")]
         public static string ShareSelector(IEnumerable<string> servers)
         {
             var serverItems = servers.ToList();
@@ -128,6 +131,7 @@ namespace aemarcoCommons.ConsoleTools
         /// Selection of a share for given server
         /// </summary>
         /// <returns>unc path to share or null when no shares are available</returns>
+        [SupportedOSPlatform("windows")]
         public static string ShareSelector(string server)
         {
             Console.Clear();
