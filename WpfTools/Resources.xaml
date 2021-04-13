@@ -9,4 +9,6 @@
     <converters:IntToStringConverter x:Key="IntToStringConverter" />
     <converters:TimespanToStringConverter x:Key="TimespanToStringConverter" />
     <converters:ObjectToJsonConverter x:Key="ObjectToJsonConverter" />
+    <converters:MultiplyConverter x:Key="MultiplyConverter" />
+
 </ResourceDictionary>
