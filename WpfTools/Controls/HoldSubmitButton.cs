@@ -8,9 +8,10 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 
-
 namespace aemarcoCommons.WpfTools.Controls
 {
+    //https://www.youtube.com/watch?v=rWruXQkzVuU&t=148s
+
     public class HoldSubmitButton : Button
     {
         private CancellationTokenSource _cancellationTokenSource;
