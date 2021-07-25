@@ -1,5 +1,5 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace aemarcoCommons.Toolbox.SerializationTools
 {
@@ -12,9 +12,14 @@ namespace aemarcoCommons.Toolbox.SerializationTools
     }
 
     public interface ITypeToFileValue
-    { 
+    {
         [JsonIgnore]
         string Filepath { get; }
+        [JsonIgnore]
+        int CurrentVersion { get; }
+
+
+        int Version { get; set; }
         DateTimeOffset TimestampCreated { get; set; }
         DateTimeOffset TimestampSaved { get; set; }
     }

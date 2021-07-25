@@ -18,17 +18,21 @@ namespace aemarcoCommons.Toolbox.SerializationTools
                 try
                 {
                     Instance = JsonConvert.DeserializeObject<T>(File.ReadAllText(file));
+                    if (Instance.CurrentVersion != Instance.Version)
+                    {
+                        CommitReset();
+                    }
                 }
                 catch
                 {
                     new FileInfo(file).TryDelete();
                 }
             }
+
             if (Instance is null)
-                Instance = new T()
-                {
-                    TimestampCreated = DateTimeOffset.Now
-                };
+            {
+                CommitReset();
+            }
         }
 
         public T Instance { get; private set; }
@@ -46,8 +50,9 @@ namespace aemarcoCommons.Toolbox.SerializationTools
         {
             Instance = new T()
             {
-                TimestampCreated = DateTimeOffset.Now
+                TimestampCreated = DateTimeOffset.Now,
             };
+            Instance.Version = Instance.CurrentVersion; //save version we have
             SaveChanges();
             return Instance;
         }
