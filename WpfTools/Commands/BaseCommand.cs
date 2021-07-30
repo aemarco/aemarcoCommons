@@ -6,15 +6,16 @@ namespace aemarcoCommons.WpfTools.Commands
 {
     public abstract class BaseCommand : ICommand
     {
-        public event EventHandler? CanExecuteChanged;
-        protected virtual void OnCanExecuteChanged()
-        {
-            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
-        }
+        public abstract void Execute(object? parameter);
         public virtual bool CanExecute(object? parameter)
         {
             return true;
         }
-        public abstract void Execute(object? parameter);
+
+        public event EventHandler? CanExecuteChanged
+        {
+            add => CommandManager.RequerySuggested += value;
+            remove => CommandManager.RequerySuggested -= value;
+        }
     }
 }

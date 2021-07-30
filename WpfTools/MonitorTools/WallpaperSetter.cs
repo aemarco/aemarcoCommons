@@ -123,9 +123,8 @@ namespace aemarcoCommons.WpfTools.MonitorTools
             WallpaperHelper.SetWallpaper(_wallpaperSetterSettings.VirtualWallpaperFilePath, WindowsWallpaperStyle.Tile);
         }
 
-#if NET5_0
+
         [SupportedOSPlatform("windows10.0.10240")]
-#endif
         private async Task SetLockScreenBackgroundImage()
         {
             //get the right lock screen object, and draw a image for it
@@ -218,8 +217,8 @@ namespace aemarcoCommons.WpfTools.MonitorTools
         {
             if (screens == null) throw new ArgumentNullException(nameof(screens));
             if (files == null) throw new ArgumentNullException(nameof(files));
-            if (screens.Contains(null)) throw new ArgumentNullException($"inside {nameof(screens)}");
-            if (files.Contains(null)) throw new ArgumentNullException($"inside {nameof(files)}");
+            if (screens.Contains(null)) throw new ArgumentNullException(nameof(screens));
+            if (files.Contains(null)) throw new ArgumentNullException(nameof(files));
             if (screens.Count == 0) throw new ArgumentException("no screens to set", nameof(screens));
             if (screens.Count != files.Count) throw new ArgumentException("screen count does not match files count", nameof(files));
 
@@ -246,8 +245,8 @@ namespace aemarcoCommons.WpfTools.MonitorTools
         {
             if (screens == null) throw new ArgumentNullException(nameof(screens));
             if (images == null) throw new ArgumentNullException(nameof(images));
-            if (screens.Contains(null)) throw new ArgumentNullException($"inside {nameof(screens)}");
-            if (images.Contains(null)) throw new ArgumentNullException($"inside {nameof(images)}");
+            if (screens.Contains(null)) throw new ArgumentNullException(nameof(screens));
+            if (images.Contains(null)) throw new ArgumentNullException(nameof(images));
             if (screens.Count == 0) throw new ArgumentException("no screens to set", nameof(screens));
             if (screens.Count != images.Count) throw new ArgumentException("screen count does not match images count", nameof(images));
 
@@ -261,15 +260,11 @@ namespace aemarcoCommons.WpfTools.MonitorTools
                 SetVirtualBackgroundImage();
             else if (Screen.AllScreens.Any(screen => screens.Contains(screen.DeviceName)))
                 SetCombinedBackgroundImage();
-            if (screens.Any(x => x == LockScreenName)
-#if NET5_0
-
-                && OperatingSystem.IsWindowsVersionAtLeast(10, 0, 10240)
-#endif
-            )
-
+            if (screens.Any(x => x == LockScreenName) && OperatingSystem.IsWindowsVersionAtLeast(10, 0, 10240))
+            {
                 await SetLockScreenBackgroundImage()
-                        .ConfigureAwait(false);
+                    .ConfigureAwait(false);
+            }
         }
 
         #endregion

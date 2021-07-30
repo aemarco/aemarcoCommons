@@ -1,9 +1,11 @@
-﻿using System;
-using System.Windows;
-using aemarcoCommons.Toolbox;
+﻿using aemarcoCommons.Toolbox;
 using aemarcoCommons.WpfTools.Commands;
 using Autofac;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Serilog.Extensions.Logging;
+using System;
+using System.Windows;
 
 namespace aemarcoCommons.WpfTools
 {
@@ -12,7 +14,7 @@ namespace aemarcoCommons.WpfTools
     /// Implement to get the class being registered as SingleInstance
     /// </summary>
     public interface ISingleton { }
-    
+
     /// <summary>
     /// Implement to get the class being registered as InstancePerDependency
     /// </summary>
@@ -42,7 +44,7 @@ namespace aemarcoCommons.WpfTools
         {
             builder.SetupToolbox();
 
-           
+
 
             //* some common stuff
             builder.RegisterInstance(Application.Current.Dispatcher);
@@ -66,7 +68,7 @@ namespace aemarcoCommons.WpfTools
                 .AsSelf()
                 .AsImplementedInterfaces()
                 .InstancePerDependency();
-            
+
 
             builder.RegisterGeneric(typeof(OpenWindowCommand<>));
             builder.RegisterGeneric(typeof(OpenDialogCommand<>));
@@ -76,7 +78,18 @@ namespace aemarcoCommons.WpfTools
             return builder;
         }
 
-        
+        public static ContainerBuilder SetupSerilogAsILogger(this ContainerBuilder builder)
+        {//logging
+            //logging
+            builder.Register(_ => new LoggerFactory(new ILoggerProvider[] { new SerilogLoggerProvider() }))
+                .As<ILoggerFactory>()
+                .SingleInstance();
+            builder.RegisterGeneric(typeof(Logger<>))
+                .As(typeof(ILogger<>))
+                .SingleInstance();
+
+            return builder;
+        }
 
 
 

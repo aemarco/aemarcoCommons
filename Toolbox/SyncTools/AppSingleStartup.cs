@@ -24,10 +24,8 @@ namespace aemarcoCommons.Toolbox.SyncTools
         /// uses Manifest Name
         /// </summary>
         public AppSingleStartup()
-            : this(Assembly.GetEntryAssembly().ManifestModule.Name)
-        {
-
-        }
+            : this(Assembly.GetEntryAssembly()?.ManifestModule.Name)
+        { }
 
         #endregion
 
@@ -45,13 +43,14 @@ namespace aemarcoCommons.Toolbox.SyncTools
 
 
             _mutex = new Mutex(true, Name, out var owned);
+
             if (!owned) Dispose();
             return owned;
         }
 
         #region IDisposable
 
-        private bool _disposed = false;
+        private bool _disposed;
         public void Dispose()
         {
             Dispose(true);
