@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Linq;
 
+
 namespace aemarcoCommons.Toolbox.AppConfiguration
 {
     public static class AutofacExtensions
@@ -39,7 +40,17 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
             {
                 foreach (var type in AppDomain.CurrentDomain
                     .GetAssemblies()
-                    .SelectMany(x => x.GetTypes())
+                    .SelectMany(x =>
+                    {
+                        try
+                        {
+                            return x.GetTypes();
+                        }
+                        catch
+                        {
+                            return new Type[0];
+                        }
+                    })
                     .Where(x => x.IsSubclassOf(typeof(SettingsBase))))
                 {
                     var filePath = type.GetSavePathForSetting(toolConfig);

@@ -1,8 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using aemarcoCommons.Toolbox.GeoTools;
+﻿using aemarcoCommons.Toolbox.GeoTools;
 using FluentAssertions;
 using NUnit.Framework;
+using System.Threading.Tasks;
 
 namespace ToolboxTests.GeoTools
 {
@@ -53,21 +52,6 @@ namespace ToolboxTests.GeoTools
             result1.Should().BeSameAs(result2); //compare reference
         }
 
-        [Test]
-        public async Task GetSunriseSunsetInfo_ReturnsNull()
-        {
-            var result = await _service.GetSunriseSunsetInfoInfo(0f, 0f);
-            result.Should().BeNull();
-        }
-
-        
-        [Test]
-        public void GetSunriseSunsetInfo_Throws()
-        {
-            _service.Invoking(async x => await x.GetSunriseSunsetInfoInfo(0f, 0f, throwExceptions: true))
-                .Should()
-                .Throw<Exception>();
-        }
 
         #endregion
     }
