@@ -1,13 +1,34 @@
+<!--EXTERNAL_PROPERTIES: AssemblyVersion-->
 <Project Sdk="Microsoft.NET.Sdk">
-
   <Import Project="..\SolutionInfo.proj" />
 
+  <!-- project definition -->
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
 
     <RootNamespace>aemarcoCommons.ConsoleTools</RootNamespace>
     <AssemblyName>aemarcoCommons.ConsoleTools</AssemblyName>
+  </PropertyGroup>
 
+  <!-- project references -->
+  <ItemGroup>
+    <ProjectReference Include="..\Toolbox\Toolbox.csproj" />
+  </ItemGroup>
+
+  <!-- nuget references-->
+  <ItemGroup>
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
+    <PackageReference Include="Serilog.Enrichers.Environment" Version="2.1.3" />
+    <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
+    <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
+    <PackageReference Include="Serilog.Sinks.Seq" Version="5.0.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+  </ItemGroup>
+
+
+  <!-- nuget build-->
+  <PropertyGroup>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>aemarcoConsoleTools</PackageId>
     <PackageVersion>$(AssemblyVersion)</PackageVersion>
@@ -20,15 +41,8 @@
     <Description>c# console tools collection</Description>
     <PackageTags>ConsoleTools</PackageTags>
     <PackageIcon>toolbox.png</PackageIcon>
-
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)'=='Release'">
-    <DebugType>embedded</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-
-
   <ItemGroup>
     <None Include="..\LICENSE.md">
       <Pack>True</Pack>
@@ -39,25 +53,5 @@
       <PackagePath></PackagePath>
     </None>
   </ItemGroup>
-
-
-  <ItemGroup>
-    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
-    <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
-    <PackageReference Include="Serilog.Enrichers.Environment" Version="2.1.3" />
-    <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
-    <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
-    <PackageReference Include="Serilog.Sinks.Seq" Version="5.0.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <ProjectReference Include="..\Toolbox\Toolbox.csproj" />
-  </ItemGroup>
-
-
-
-
 
 </Project>

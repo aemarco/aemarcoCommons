@@ -17,7 +17,7 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
             using (var ms = new MemoryStream(Encoding.UTF8.GetBytes(textToHash)))
             {
                 return ms.ToBase64HashString();
-            };
+            }
         }
 
 

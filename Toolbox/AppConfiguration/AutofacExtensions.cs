@@ -48,7 +48,7 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
                         }
                         catch
                         {
-                            return new Type[0];
+                            return Type.EmptyTypes;
                         }
                     })
                     .Where(x => x.IsSubclassOf(typeof(SettingsBase))))

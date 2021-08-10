@@ -1,21 +1,51 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<!--EXTERNAL_PROPERTIES: AssemblyVersion-->
+<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\SolutionInfo.proj" />
 
-  <PropertyGroup>
-        
-    <UseWPF>true</UseWPF>
-    <UseWindowsForms>true</UseWindowsForms>
 
+  <!-- project definition -->
+  <PropertyGroup>
     <TargetFramework>net5.0-windows10.0.19041.0</TargetFramework>
     <SupportedOSPlatformVersion>10.0</SupportedOSPlatformVersion>
-    
-    
-   
+
     <RootNamespace>aemarcoCommons.WpfTools</RootNamespace>
     <AssemblyName>aemarcoCommons.WpfTools</AssemblyName>
 
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
 
+  <!-- project references -->
+  <ItemGroup>
+    <ProjectReference Include="..\Toolbox\Toolbox.csproj" />
+  </ItemGroup>
+
+  <!-- nuget references-->
+  <ItemGroup>
+    <PackageReference Include="FontAwesome.WPF" Version="4.7.0.9" NoWarn="NU1701" />
+    <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
+    <PackageReference Include="Humanizer.Core" Version="2.8.26" />
+
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
+    <PackageReference Include="Serilog.Enrichers.Environment" Version="2.1.3" />
+    <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
+    <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
+    <PackageReference Include="Serilog.Sinks.Seq" Version="5.0.0" />
+  </ItemGroup>
+
+  <!-- proj build-->
+  <ItemGroup>
+    <Compile Update="Controls\RangeSlider.xaml.cs">
+      <DependentUpon>RangeSlider.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Controls\SliderMenuItem.xaml.cs">
+      <DependentUpon>SliderMenuItem.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <!-- nuget build-->
+  <PropertyGroup>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>aemarcoWpfTools</PackageId>
     <PackageVersion>$(AssemblyVersion)</PackageVersion>
@@ -28,60 +58,17 @@
     <Description>c# wpf tools collection</Description>
     <PackageTags>WpfTools</PackageTags>
     <PackageIcon>toolbox.png</PackageIcon>
-    
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)'=='Release'">
-    <DebugType>embedded</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-
   <ItemGroup>
-    <None Include="..\LICENSE.md">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
+     <None Include="..\LICENSE.md">
+        <Pack>True</Pack>
+        <PackagePath></PackagePath>
+      </None>
     <None Include="..\toolbox.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Compile Update="Controls\RangeSlider.xaml.cs">
-      <DependentUpon>RangeSlider.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Controls\SliderMenuItem.xaml.cs">
-      <DependentUpon>SliderMenuItem.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <ProjectReference Include="..\Toolbox\Toolbox.csproj" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <PackageReference Include="FontAwesome.WPF" Version="4.7.0.9" NoWarn="NU1701" />
-    <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
-    <PackageReference Include="Humanizer.Core" Version="2.8.26" />
-
-    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
-    <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
-    <PackageReference Include="Serilog.Enrichers.Environment" Version="2.1.3" />
-    <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
-    <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
-    <PackageReference Include="Serilog.Sinks.Seq" Version="5.0.0" />
-
-    
-  </ItemGroup>
-
-
-  <!-- Conditionally obtain references for the SDK.Contracts when targeting netcore3.1-->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">
-    <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.19041.1" />	
   </ItemGroup>
 
 </Project>

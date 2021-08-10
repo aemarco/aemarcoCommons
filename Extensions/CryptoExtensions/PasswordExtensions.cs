@@ -8,10 +8,6 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
 {
     public static class PasswordExtensions
     {
-        public static string ToPasswordCipherText(this string plainText, string password) => Encrypt(plainText, password);
-        public static string ToPasswordPlainText(this string cipherText, string password) => Decrypt(cipherText, password);
-
-
         // This constant is used to determine the key size of the encryption algorithm in bits.
         // We divide this by 8 within the code below to get the equivalent number of bytes.
         private const int KeySize = 128;
@@ -19,7 +15,7 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
         // This constant determines the number of iterations for the password bytes generation function.
         private const int DerivationIterations = 1000;
 
-        private static string Encrypt(string plainText, string passPhrase)
+        public static string Encrypt(this string plainText, string passPhrase)
         {
             // Salt and IV is randomly generated each time, but is prepended to encrypted cipher text
             // so that the same Salt and IV values can be used when decrypting.  
@@ -58,7 +54,7 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
             }
         }
 
-        private static string Decrypt(string cipherText, string passPhrase)
+        public static string Decrypt(this string cipherText, string passPhrase)
         {
             // Get the complete stream of bytes that represent:
             // [32 bytes of Salt] + [32 bytes of IV] + [n bytes of CipherText]

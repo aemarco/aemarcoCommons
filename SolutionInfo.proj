@@ -1,14 +1,15 @@
 <Project>
+
+  <!-- assembly and nuget version we spit out -->
   <PropertyGroup>
-   
-
-
-
-    <AssemblyVersion>1.0.42.0</AssemblyVersion>
-   
-
-
-
+    <AssemblyVersion>1.0.43.0</AssemblyVersion>
   </PropertyGroup>
+
+  <!-- debug symbols are within the binary -->
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <DebugType>embedded</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
 </Project>
 
