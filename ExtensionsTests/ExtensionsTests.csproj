@@ -1,17 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <!-- project definition -->
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
+  <!-- project references -->
   <ItemGroup>
-    <Compile Remove="contentExtensionsTests\**" />
-    <EmbeddedResource Remove="contentExtensionsTests\**" />
-    <None Remove="contentExtensionsTests\**" />
+    <ProjectReference Include="..\Extensions\Extensions.csproj" />
   </ItemGroup>
 
+
+  <!-- nuget references-->
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
     <PackageReference Include="nunit" Version="3.12.0" />
@@ -22,8 +24,6 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Extensions\Extensions.csproj" />
-  </ItemGroup>
+
 
 </Project>

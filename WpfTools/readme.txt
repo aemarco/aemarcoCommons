@@ -9,7 +9,7 @@ Resource Usage:
 </ResourceDictionary>
 
 //in xaml
-<TextBlock Visibility="{Binding SexAutoVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
+<TextBlock Visibility="{Binding IsVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
 
 
@@ -71,3 +71,13 @@ Markup Extension Usage:
 
 xmlns:exts="clr-namespace:WpfTools.MarkupExtensions;assembly=WpfTools"
  <ComboBox ItemsSource="{Binding Source={exts:EnumBindingSource {x:Type help:Category}}}" />
+
+
+
+
+ https://github.com/XamlAnimatedGif/WpfAnimatedGif
+ https://github.com/charri/Font-Awesome-WPF/blob/master/README-WPF.md
+ https://github.com/hardcodet/wpf-notifyicon
+ https://github.com/Humanizr/Humanizer
+
+

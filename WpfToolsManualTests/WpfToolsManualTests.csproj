@@ -1,14 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <!-- project definition -->
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
+    
     <TargetFrameworks>net5.0-windows10.0.19041.0</TargetFrameworks>
     <SupportedOSPlatformVersion>10.0</SupportedOSPlatformVersion>
-
-
+    
+    <OutputType>WinExe</OutputType>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <!-- project references -->
   <ItemGroup>
     <ProjectReference Include="..\WpfTools\WpfTools.csproj" />
   </ItemGroup>
