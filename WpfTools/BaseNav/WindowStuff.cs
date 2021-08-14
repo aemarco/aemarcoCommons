@@ -1,59 +1,36 @@
-﻿using System;
-using aemarcoCommons.WpfTools.BaseModels;
+﻿using aemarcoCommons.WpfTools.BaseModels;
 using aemarcoCommons.WpfTools.Commands;
 using Autofac;
 using Autofac.Core;
+using System;
+using System.Windows;
 
 namespace aemarcoCommons.WpfTools.BaseNav
 {
-
-    //windows
-    public interface INavWindow //inherit this interface for other windows
-    {
-        object DataContext { get; set; }
-        void Close();
-    }
-
-
-    //view models
-    public interface INavWindowViewModel : IBaseViewModel //inherit this for other window view models
-    {
-        INavWindow Window { get; set; }
-        void ShowViewFor<T>(params Parameter[] p) where T : INavViewModel;
-        INavViewModel ViewViewModel { get; set; }
-        string Title { get; }
-        INavView View { get; set; }
-    }
-
-
-
-
-
-    public abstract class BaseNavWindowViewModel : BaseViewModel, INavWindowViewModel
+    public abstract class BaseNavWindowViewModel : BaseViewModel //inherit this in window view model
     {
         /// <summary>
         /// 
         /// </summary>
         /// <param name="window">window which uses this view model</param>
-        protected BaseNavWindowViewModel(INavWindow window)
+        protected BaseNavWindowViewModel(Window window)
         {
             Window = window;
             Window.DataContext = this;
         }
 
         //so that we can access the window belonging to this view model
-        public INavWindow Window { get; set; }
-        
+        public Window Window { get; set; }
+
         //so that we can navigate
         public void ShowViewFor<T>(params Parameter[] p) where T : INavViewModel
         {
             ViewViewModel = Resolve<T>(p);
             //set reference so that navigation view models can access this window view model
-            ViewViewModel.Window = this;
+            ViewViewModel.WindowViewModel = this;
 
             //Update View so navigation takes place
             View = ViewViewModel.View;
-
 
 
             NotifyPropertyChanged(nameof(ViewViewModel));
@@ -83,19 +60,13 @@ namespace aemarcoCommons.WpfTools.BaseNav
                 : throw new NotImplementedException("Override Resolve to resolve INavViewModel´s");
 
 
-        public override DelegateCommand CloseCommand
-        {
-            get
+        public override DelegateCommand CloseCommand =>
+            new()
             {
-                return new DelegateCommand()
+                CommandAction = () =>
                 {
-                    CommandAction = () =>
-                    {
-                        Window?.Close();
-                    }
-                };
-            }
-        }
-        
+                    Window?.Close();
+                }
+            };
     }
 }

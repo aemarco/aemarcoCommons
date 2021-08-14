@@ -14,7 +14,7 @@ namespace aemarcoCommons.WpfTools.BaseNav
     //view models
     public interface INavViewModel : IBaseViewModel //inherit in specific interface for view model, inherit from BaseNaveViewModel
     {
-        INavWindowViewModel Window { get; set; }
+        BaseNavWindowViewModel WindowViewModel { get; set; }
         INavView View { get; set; }
         string Title { get; }
     }
@@ -30,27 +30,22 @@ namespace aemarcoCommons.WpfTools.BaseNav
             View.DataContext = this;
         }
 
-        
+
         public INavView View { get; set; }
 
 
-        public INavWindowViewModel Window { get; set; }
+        public BaseNavWindowViewModel WindowViewModel { get; set; }
 
         public virtual string Title => null;
 
 
-        public override DelegateCommand CloseCommand
-        {
-            get
+        public override DelegateCommand CloseCommand =>
+            new()
             {
-                return new DelegateCommand()
+                CommandAction = () =>
                 {
-                    CommandAction = () =>
-                    {
-                        Window?.Window?.Close();
-                    }
-                };
-            }
-        }
+                    WindowViewModel?.Window?.Close();
+                }
+            };
     }
 }
