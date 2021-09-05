@@ -1,7 +1,7 @@
-﻿using System;
-using aemarcoCommons.Toolbox.GeoTools;
+﻿using aemarcoCommons.Toolbox.GeoTools;
 using aemarcoCommons.Toolbox.SerializationTools;
 using Autofac;
+using System;
 
 namespace aemarcoCommons.Toolbox
 {
@@ -10,13 +10,13 @@ namespace aemarcoCommons.Toolbox
         public static ContainerBuilder SetupToolbox(this ContainerBuilder builder)
         {
 
-            builder.RegisterType<Random>().As<Random>().SingleInstance();
+            builder.RegisterType<Random>().SingleInstance();
 
             //* Toolbox stuff
             builder.RegisterGeneric(typeof(JsonTypeToFileStore<>))
                 .AsImplementedInterfaces()
                 .SingleInstance();
-           
+
             builder.RegisterType<GeoService>();
             builder.RegisterType<GeoServiceSettings>().AsImplementedInterfaces();
 

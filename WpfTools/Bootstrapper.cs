@@ -1,7 +1,10 @@
 ﻿using aemarcoCommons.Toolbox;
 using aemarcoCommons.WpfTools.Commands;
+using aemarcoCommons.WpfTools.MonitorTools;
 using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog.Extensions.Logging;
 using System;
@@ -22,8 +25,12 @@ namespace aemarcoCommons.WpfTools
 
 
 
-    public static class DiExtensions
+    public static class Bootstrapper
     {
+
+        internal static ILifetimeScope RootScope { get; private set; }
+
+
         public static IConfigurationBuilder ConfigAppsettings(this IConfigurationBuilder builder)
         {
             var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
@@ -43,7 +50,7 @@ namespace aemarcoCommons.WpfTools
         public static ContainerBuilder SetupWpfTools(this ContainerBuilder builder)
         {
             builder.SetupToolbox();
-
+            var sc = new ServiceCollection();
 
 
             //* some common stuff
@@ -70,16 +77,23 @@ namespace aemarcoCommons.WpfTools
                 .InstancePerDependency();
 
 
+
+
             builder.RegisterGeneric(typeof(OpenWindowCommand<>));
             builder.RegisterGeneric(typeof(OpenDialogCommand<>));
+            sc.AddHttpClient();
+            sc.AddHttpClient(nameof(WallpaperSetter));
 
+
+
+            builder.Populate(sc);
             builder.RegisterBuildCallback(rootScope => RootScope = rootScope);
 
             return builder;
         }
 
         public static ContainerBuilder SetupSerilogAsILogger(this ContainerBuilder builder)
-        {//logging
+        {
             //logging
             builder.Register(_ => new LoggerFactory(new ILoggerProvider[] { new SerilogLoggerProvider() }))
                 .As<ILoggerFactory>()
@@ -90,14 +104,6 @@ namespace aemarcoCommons.WpfTools
 
             return builder;
         }
-
-
-
-
-
-
-
-        internal static ILifetimeScope RootScope { get; private set; }
 
     }
 

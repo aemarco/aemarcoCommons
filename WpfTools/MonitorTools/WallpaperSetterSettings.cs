@@ -1,6 +1,6 @@
-﻿using System;
+﻿using aemarcoCommons.Toolbox.MonitorTools;
+using System;
 using System.IO;
-using aemarcoCommons.Toolbox.MonitorTools;
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
@@ -31,8 +31,8 @@ namespace aemarcoCommons.WpfTools.MonitorTools
         /// path to store the LockScreen, defaults to "CurrentLockScreen.jpg"
         /// </summary>
         /// 
-        public string LockScreenFilePath { get; set; }  = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "CurrentLockScreen.jpg");
-    
+        public string LockScreenFilePath { get; set; } = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "CurrentLockScreen.jpg");
+
         /// <summary>
         /// defaults to AllowFillForceCut
         ///  Fit: Places the Wallpaper as big as possible without cutting (black bars)
@@ -51,5 +51,5 @@ namespace aemarcoCommons.WpfTools.MonitorTools
         /// Defines how many percent that pictures can be cut horizontally, defaults to 20
         /// </summary>
         public int PercentLeftRightCutAllowed { get; set; } = 20;
-    } 
+    }
 }

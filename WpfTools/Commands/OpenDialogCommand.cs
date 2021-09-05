@@ -9,7 +9,7 @@ namespace aemarcoCommons.WpfTools.Commands
         {
             CommandAction = () =>
             {
-                var wind = DiExtensions.RootScope.Resolve<T>();
+                var wind = Bootstrapper.RootScope.Resolve<T>();
                 wind.ShowDialog();
             };
         }

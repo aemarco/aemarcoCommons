@@ -55,8 +55,8 @@ namespace aemarcoCommons.WpfTools.BaseNav
         /// <param name="p">Parameters To Pass to the Constructor</param>
         /// <typeparam name="T">Interface of view model to resolve</typeparam>
         /// <returns>requested view model</returns>
-        protected virtual T Resolve<T>(params Parameter[] p) where T : INavViewModel => DiExtensions.RootScope != null
-                ? DiExtensions.RootScope.Resolve<T>(p)
+        protected virtual T Resolve<T>(params Parameter[] p) where T : INavViewModel => Bootstrapper.RootScope != null
+                ? Bootstrapper.RootScope.Resolve<T>(p)
                 : throw new NotImplementedException("Override Resolve to resolve INavViewModel´s");
 
 
