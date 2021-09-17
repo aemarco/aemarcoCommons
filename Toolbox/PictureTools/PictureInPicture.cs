@@ -1,15 +1,15 @@
-﻿using System;
-using System.Drawing;
-using aemarcoCommons.Extensions.NumberExtensions;
+﻿using aemarcoCommons.Extensions.NumberExtensions;
 using aemarcoCommons.Extensions.PictureExtensions;
 using aemarcoCommons.Toolbox.MonitorTools;
+using System;
+using System.Drawing;
 
 namespace aemarcoCommons.Toolbox.PictureTools
 {
     public class PictureInPicture
     {
         #region ctor
-        
+
         /// <summary>
         /// Allows to set a picture, and draw it to a Graphics object
         /// </summary>
@@ -27,64 +27,62 @@ namespace aemarcoCommons.Toolbox.PictureTools
 
         #region Setting the inner picture
 
-        protected void SetWallpaper(Image wall, WallpaperMode mode, int percentTopBottomCutAllowed, int percentLeftRightCutAllowed )
+        protected void SetWallpaper(Image wall, WallpaperMode mode, int percentTopBottomCutAllowed, int percentLeftRightCutAllowed)
         {
             bool CanBeSnapped(int width, int height)
             {
                 var minRatio = TargetArea.Size.ToMinRatio(percentTopBottomCutAllowed);
                 var maxRatio = TargetArea.Size.ToMaxRatio(percentLeftRightCutAllowed);
                 var imageRatio = 1.0 * width / height;
-            
+
                 return (imageRatio <= maxRatio && imageRatio >= minRatio);
             }
 
-            if (wall == null)
-            {
-                throw new NullReferenceException("Wallpaper can´t be null");
-            }
+            CurrentOriginal = wall ?? throw new NullReferenceException("Wallpaper can´t be null");
 
             switch (mode)
             {
                 case WallpaperMode.AllowFill:
-                {
-                    if (CanBeSnapped(wall.Width, wall.Height))
                     {
-                        SetSnappedWallpaper(wall);
+                        if (CanBeSnapped(wall.Width, wall.Height))
+                        {
+                            SetSnappedWallpaper(wall);
+                        }
+                        else
+                        {
+
+                            SetPicture(wall);
+                        }
+                        break;
                     }
-                    else
-                    {
-                            
-                        SetPicture(wall);
-                    }
-                    break;
-                }
                 case WallpaperMode.AllowFillForceCut:
-                {
-                    if (CanBeSnapped(wall.Width, wall.Height))
+                    {
+                        if (CanBeSnapped(wall.Width, wall.Height))
+                        {
+                            SetSnappedWallpaper(wall);
+                        }
+                        else
+                        {
+                            SetCutWallpaper(wall, percentTopBottomCutAllowed, percentLeftRightCutAllowed);
+                        }
+                        break;
+                    }
+                case WallpaperMode.Fit:
+                    {
+                        SetPicture(wall);
+                        break;
+                    }
+                case WallpaperMode.Fill:
                     {
                         SetSnappedWallpaper(wall);
+                        break;
                     }
-                    else
-                    {
-                        SetCutWallpaper(wall, percentTopBottomCutAllowed, percentLeftRightCutAllowed);
-                    }
-                    break;
-                }
-                case WallpaperMode.Fit:
-                {
-                    SetPicture(wall);
-                    break;
-                }
-                case WallpaperMode.Fill:
-                {
-                    SetSnappedWallpaper(wall);
-                    break;
-                }
                 default:
                     throw new NotImplementedException();
             }
         }
 
+        public Image CurrentOriginal { get; private set; }
 
         private Image _currentPicture;
 
@@ -100,7 +98,7 @@ namespace aemarcoCommons.Toolbox.PictureTools
                 _currentPicture = new Bitmap(image);
                 return;
             }
-            
+
             var heightRatio = TargetArea.Height / (double)image.Height;
             var widthRatio = TargetArea.Width / (double)image.Width;
 
@@ -109,7 +107,7 @@ namespace aemarcoCommons.Toolbox.PictureTools
             if (widthRatio.IsNearlyEqual(heightRatio))
             {
                 var img = new Bitmap(TargetArea.Width, TargetArea.Height);
-                Graphics.FromImage(img).DrawImage(image, 0,0, TargetArea.Width, TargetArea.Height);
+                Graphics.FromImage(img).DrawImage(image, 0, 0, TargetArea.Width, TargetArea.Height);
                 _currentPicture = img;
                 return;
             }
@@ -145,7 +143,7 @@ namespace aemarcoCommons.Toolbox.PictureTools
             var imageRatio = 1.0 * pictureToBeCut.Width / pictureToBeCut.Height;
 
             //shortcut, if ratio matches
-            
+
             if (imageRatio.IsNearlyEqual(targetRatio))
             {
                 SetPicture(pictureToBeCut);
@@ -180,7 +178,7 @@ namespace aemarcoCommons.Toolbox.PictureTools
         /// <param name="percentTopBottomCutAllowed"></param>
         private void SetCutWallpaper(Image pictureToBeCut, int percentTopBottomCutAllowed, int percentLeftRightCutAllowed)
         {
-            
+
             var targetRatio = 1.0 * TargetArea.Width / TargetArea.Height;
             var imageRatio = 1.0 * pictureToBeCut.Width / pictureToBeCut.Height;
 
@@ -205,7 +203,7 @@ namespace aemarcoCommons.Toolbox.PictureTools
                 rect.Y = (pictureToBeCut.Height - rect.Height) / 2;
             }
 
-            SetPicture( ((Bitmap)pictureToBeCut).Clone(rect, pictureToBeCut.PixelFormat));
+            SetPicture(((Bitmap)pictureToBeCut).Clone(rect, pictureToBeCut.PixelFormat));
         }
 
         #endregion

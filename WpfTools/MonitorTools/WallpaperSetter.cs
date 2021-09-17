@@ -1,6 +1,7 @@
 ﻿using aemarcoCommons.Extensions.AttributeExtensions;
 using aemarcoCommons.Toolbox.Interop;
 using aemarcoCommons.Toolbox.MonitorTools;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -14,7 +15,7 @@ using System.Windows.Forms;
 
 namespace aemarcoCommons.WpfTools.MonitorTools
 {
-    public class WallpaperSetter : ISingleton
+    public class WallpaperSetter : ISingleton, IDisposable
     {
         #region ctor
 
@@ -22,7 +23,7 @@ namespace aemarcoCommons.WpfTools.MonitorTools
         public const string LockScreenName = nameof(LockScreen);
         private readonly IWallpaperSetterSettings _wallpaperSetterSettings;
         private readonly IHttpClientFactory _httpClientFactory;
-        private readonly List<IWallpaperRealEstate> _monitors;
+        private List<IWallpaperRealEstate> _monitors;
 
 
         /// <summary>
@@ -38,7 +39,32 @@ namespace aemarcoCommons.WpfTools.MonitorTools
             _wallpaperSetterSettings = wallpaperSetterSettings;
             _httpClientFactory = httpClientFactory;
             _monitors = GetMonitors().ToList();
+
+            SystemEvents.DisplaySettingsChanged += SystemEvents_DisplaySettingsChanged;
         }
+
+        private void SystemEvents_DisplaySettingsChanged(object sender, EventArgs e)
+        {
+            var oldMons = _monitors;
+            _monitors = GetMonitors().ToList();
+            foreach (var re in _monitors
+                .Where(x => oldMons.Any(om => om.DeviceName == x.DeviceName && om.CurrentOriginal is not null)))
+            {
+                var oldMon = oldMons.First(x => x.DeviceName == re.DeviceName);
+                re.SetWallpaper(oldMon.CurrentOriginal);
+            }
+
+            switch (_lastMode)
+            {
+                case "Combined":
+                    SetCombinedBackgroundImage();
+                    break;
+                case "Virtual":
+                    SetVirtualBackgroundImage();
+                    break;
+            }
+        }
+
 
         private IEnumerable<IWallpaperRealEstate> GetMonitors()
         {
@@ -91,6 +117,7 @@ namespace aemarcoCommons.WpfTools.MonitorTools
 
         #region private
 
+        private string _lastMode = "Combined";
         private void SetCombinedBackgroundImage()
         {
 
@@ -109,6 +136,9 @@ namespace aemarcoCommons.WpfTools.MonitorTools
             //save the image to hd and set it
             virtualScreenBitmap.Save(_wallpaperSetterSettings.CombinedWallpaperFilePath, ImageFormat.Jpeg);
             WallpaperHelper.SetWallpaper(_wallpaperSetterSettings.CombinedWallpaperFilePath, WindowsWallpaperStyle.Tile);
+
+            //remember last mode for migration
+            _lastMode = "Combined";
         }
         private void SetVirtualBackgroundImage()
         {
@@ -121,6 +151,9 @@ namespace aemarcoCommons.WpfTools.MonitorTools
             //save the image to hd and set it
             virtualScreenBitmap.Save(_wallpaperSetterSettings.VirtualWallpaperFilePath, ImageFormat.Jpeg);
             WallpaperHelper.SetWallpaper(_wallpaperSetterSettings.VirtualWallpaperFilePath, WindowsWallpaperStyle.Tile);
+
+            //remember last mode for migration
+            _lastMode = "Virtual";
         }
 
 
@@ -139,6 +172,7 @@ namespace aemarcoCommons.WpfTools.MonitorTools
             //use win api to set the lock screen
             await using var stream = File.OpenRead(_wallpaperSetterSettings.LockScreenFilePath);
             await Windows.System.UserProfile.LockScreen.SetImageStreamAsync(stream.AsRandomAccessStream());
+
         }
 
         protected async Task<Image> GetImage(string fileOrUrl)
@@ -269,5 +303,30 @@ namespace aemarcoCommons.WpfTools.MonitorTools
 
         #endregion
 
+        #region IDisposable
+
+        // Public implementation of Dispose pattern callable by consumers.
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        // To detect redundant calls
+        private bool _disposed;
+
+        // Protected implementation of Dispose pattern.
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed) return;
+            if (disposing)
+            {
+                // Dispose managed state (managed objects).
+                SystemEvents.DisplaySettingsChanged -= SystemEvents_DisplaySettingsChanged;
+                _disposed = true;
+            }
+        }
+
+        #endregion
     }
 }

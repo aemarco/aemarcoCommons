@@ -10,5 +10,6 @@ namespace aemarcoCommons.Toolbox.MonitorTools
         void SetWallpaper(Image image);
         void DrawToGraphics(Graphics g);
 
+        Image CurrentOriginal { get; }
     }
 }
