@@ -27,7 +27,7 @@ namespace aemarcoCommons.Toolbox.PictureTools
 
         #region Setting the inner picture
 
-        protected void SetWallpaper(Image wall, WallpaperMode mode, int percentTopBottomCutAllowed, int percentLeftRightCutAllowed)
+        internal void SetWallpaper(Image wall, WallpaperMode mode, int percentTopBottomCutAllowed, int percentLeftRightCutAllowed)
         {
             bool CanBeSnapped(int width, int height)
             {

@@ -173,6 +173,9 @@ namespace aemarcoCommons.WpfTools.MonitorTools
             await using var stream = File.OpenRead(_wallpaperSetterSettings.LockScreenFilePath);
             await Windows.System.UserProfile.LockScreen.SetImageStreamAsync(stream.AsRandomAccessStream());
 
+           ////this shittyyyyy
+           // var f = await Windows.Storage.StorageFile.GetFileFromPathAsync(_wallpaperSetterSettings.LockScreenFilePath);
+           // await Windows.System.UserProfile.UserProfilePersonalizationSettings.Current.TrySetWallpaperImageAsync(f);
         }
 
         protected async Task<Image> GetImage(string fileOrUrl)
