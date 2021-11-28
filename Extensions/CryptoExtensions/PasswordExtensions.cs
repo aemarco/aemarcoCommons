@@ -82,7 +82,7 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
                     // Get the actual cipher text bytes by removing the first n bytes from the cipherText string.
                     var cipherTextBytes = cipherTextBytesWithSaltAndIv
                         .Skip(saltStringBytes.Length)
-                        .Skip( aesAlg.IV.Length)
+                        .Skip(aesAlg.IV.Length)
                         .Take(cipherTextBytesWithSaltAndIv.Length - saltStringBytes.Length -  aesAlg.IV.Length).ToArray();
 
                     // Create a decryptor to perform the stream transform.
