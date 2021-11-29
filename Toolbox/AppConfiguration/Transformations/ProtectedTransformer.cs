@@ -38,7 +38,7 @@ namespace aemarcoCommons.Toolbox.AppConfiguration.Transformations
 
             //skip if not a protected string, otherwise decrypt
             return Attribute.IsDefined(propertyInfo, typeof(ProtectedAttribute))
-                ? currentValue.Decrypt(_password)
+                ? currentValue.DecryptFromBase64(_password)
                 : currentValue;
         }
 
@@ -54,7 +54,7 @@ namespace aemarcoCommons.Toolbox.AppConfiguration.Transformations
 
             //skip if not a protected string, otherwise decrypt
             return Attribute.IsDefined(propertyInfo, typeof(ProtectedAttribute))
-                ? currentValue.Encrypt(_password)
+                ? currentValue.EncryptToBase64(_password)
                 : currentValue;
         }
     }
