@@ -78,7 +78,7 @@ namespace aemarcoCommons.Toolbox.PictureTools
                         break;
                     }
                 default:
-                    throw new NotImplementedException();
+                    throw new NotSupportedException("WallpaperMode not supported");
             }
         }
 
