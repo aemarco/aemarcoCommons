@@ -91,14 +91,15 @@ namespace aemarcoCommons.Toolbox.GeoTools
             float latitude,
             float longitude,
             DateTimeOffset? date = null,
-            bool throwExceptions = false)
+            bool throwExceptions = false,
+            bool byPassCache = false)
         {
             if (date == null) date = DateTimeOffset.Now; //2020-10-03
 
             var query = $"lat={latitude}&lng={longitude}&date={date.Value.Date:yyyy-MM-dd}&formatted=0";
 
             //return cached result if already present
-            if (_sunriseSunsetResponses.TryGetValue(query, out var cached)) return cached;
+            if (!byPassCache && _sunriseSunsetResponses.TryGetValue(query, out var cached)) return cached;
 
             try
             {
