@@ -10,3 +10,22 @@ Some Extensions, some Toolbox, some Console-, Wpf- and Web-Tools
 <a href=https://www.nuget.org/packages/aemarcoWebTools><img src="https://buildstats.info/nuget/aemarcoWebTools"> aemarcoWebTools </a><br/>
 
 
+<h1>aemarcoExtensions</h1>
+<p>Consists only of extension methods for common usages. Those extend .net types, or wrap minor functions</p>
+
+<h1>aemarcoToolbox</h1>
+<p>Depends on aemarcoExtensions. TBD</p>
+
+<h1>aemarcoConsoleTools</h1>
+<p>Depends on aemarcoToolbox. TBD</p>
+
+<h1>aemarcoWpfTools</h1>
+<p>Depends on aemarcoToolbox. TBD</p>
+
+<h1>aemarcoWebTools</h1>
+<p>Depends on aemarcoToolbox. TBD</p>
+
+
+
+
+
