@@ -36,7 +36,8 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
             if (ConfigurationRoot == null || ConfigurationOptions == null) return;
 
             Init();
-            ChangeToken.OnChange(ConfigurationRoot.GetReloadToken, Init);
+            if (ConfigurationOptions.WatchSavedFiles)
+                ChangeToken.OnChange(ConfigurationRoot.GetReloadToken, Init);
         }
 
         private void Init()
@@ -54,7 +55,7 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
                 StringTransformerBase.TransformObject(this, ConfigurationRoot, transformation.PerformReadTransformation);
             }
         }
-
+        
         /// <summary>
         /// Save this Configuration.
         /// SettingsSaveDirectory should be defined if no filePath is given.
@@ -62,6 +63,7 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
         public string Save()
         {
             var type = GetType();
+            var copyForSave = MemberwiseClone();
 
             //decide for a filePath
             var filePath = type.GetSavePathForSetting(ConfigurationOptions);
@@ -72,11 +74,11 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
             transformations.Reverse();
             foreach (var transformation in transformations)
             {
-                StringTransformerBase.TransformObject(this, ConfigurationRoot, transformation.PerformWriteTransformation);
+                StringTransformerBase.TransformObject(copyForSave, ConfigurationRoot, transformation.PerformWriteTransformation);
             }
 
             //save the stuff
-            var obj = JObject.FromObject(this);
+            var obj = JObject.FromObject(copyForSave);
             //use defined path if not root
             if (!string.IsNullOrWhiteSpace(sectionPath))
             {
@@ -86,6 +88,7 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
             }
 
             File.WriteAllText(filePath, obj.ToString());
+            
             return filePath;
         }
     }

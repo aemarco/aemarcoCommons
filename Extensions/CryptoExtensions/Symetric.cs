@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace aemarcoCommons.Extensions.CryptoExtensions
 {
@@ -17,7 +15,7 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
                     memory,
                     cryptoStream =>
                     {
-                        using (StreamWriter swEncrypt = new StreamWriter(cryptoStream))
+                        using (var swEncrypt = new StreamWriter(cryptoStream))
                         {
                             swEncrypt.Write(clearText);
                         }
@@ -27,9 +25,9 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
                 return result;
             }
         }
-        public static string DecryptFromBase64(this string cryptedbase64, string password)
+        public static string DecryptFromBase64(this string cryptedBase64, string password)
         {
-            var bytesToDecrpyt = Convert.FromBase64String(cryptedbase64);
+            var bytesToDecrpyt = Convert.FromBase64String(cryptedBase64);
             using (var memory = new MemoryStream(bytesToDecrpyt))
             {
                 string result = null;
@@ -38,7 +36,7 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
                     memory,
                     cryptoStream =>
                     {
-                        using (StreamReader srDecrypt = new StreamReader(cryptoStream))
+                        using (var srDecrypt = new StreamReader(cryptoStream))
                         {
                             result = srDecrypt.ReadToEnd();
                         }
@@ -114,13 +112,13 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
         #region internal logic
 
         //this internal logic encrypts stuff symetrical with aes with given pw and keysize
-        //the resuulting bytes are build up as following: salt + iv + keysize + data
+        //the resulting bytes are build up as following: salt + iv + key size + data
         
         private const int DerivationPasswordIterations = 10000;
 
         private static void Encrypt(string passPhrase, Stream destinationStream, Action<CryptoStream> writeAction, KeySize keySize)
         {
-            using (Aes aesAlg = Aes.Create())
+            using (var aesAlg = Aes.Create())
             {
                 var salt = GetRandomBytes(aesAlg.BlockSize);
                 destinationStream.Write(salt, 0, salt.Length);
@@ -137,7 +135,7 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
                     aesAlg.KeySize = ks;
                     aesAlg.Key = pwd.GetBytes(ks / 8);
 
-                    using (CryptoStream cryptoStream = new CryptoStream(
+                    using (var cryptoStream = new CryptoStream(
                             destinationStream, 
                             aesAlg.CreateEncryptor(), 
                             CryptoStreamMode.Write))
@@ -150,7 +148,7 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
 
         private static void Decrypt(string passPhrase, Stream sourceStream, Action<CryptoStream> readAction)
         {
-            using (Aes aesAlg = Aes.Create())
+            using (var aesAlg = Aes.Create())
             {
                 var salt = new byte[aesAlg.BlockSize / 8];
                 sourceStream.Read(salt, 0, salt.Length);
@@ -165,7 +163,7 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
                     aesAlg.KeySize = 64 * sourceStream.ReadByte();
                     var key = pwd.GetBytes(aesAlg.KeySize / 8);
 
-                    using (CryptoStream cryptoStream = new CryptoStream(
+                    using (var cryptoStream = new CryptoStream(
                             sourceStream,  
                             aesAlg.CreateDecryptor(key, iv),
                             CryptoStreamMode.Read))

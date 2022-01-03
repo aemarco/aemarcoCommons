@@ -1,11 +1,12 @@
 ﻿using aemarcoCommons.Extensions.NetworkExtensions;
 using IdentityModel.OidcClient.Browser;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
 using System.Net;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -77,6 +78,7 @@ namespace aemarcoCommons.Toolbox.Oidc
         public LoopbackHttpListener(string url)
         {
             _source = new TaskCompletionSource<string>();
+            
             _host = new WebHostBuilder()
                 .UseKestrel()
                 .UseUrls(url)
@@ -95,7 +97,7 @@ namespace aemarcoCommons.Toolbox.Oidc
                         var message = string.IsNullOrWhiteSpace(ctx.Request.QueryString.Value)
                             ? "Logout success"
                             : "Login success";
-                        SetResult(ctx.Request.QueryString.Value, ctx, message);
+                        await SetResult(ctx.Request.QueryString.Value, ctx, message);
                         break;
                     case "POST" when !ctx.Request.ContentType.Equals("application/x-www-form-urlencoded",
                         StringComparison.OrdinalIgnoreCase):
@@ -106,7 +108,7 @@ namespace aemarcoCommons.Toolbox.Oidc
                             using (var sr = new StreamReader(ctx.Request.Body, Encoding.UTF8))
                             {
                                 var body = await sr.ReadToEndAsync();
-                                SetResult(body, ctx, "Success");
+                                await SetResult(body, ctx, "Success");
                                 break;
                             }
                         }
@@ -129,14 +131,17 @@ namespace aemarcoCommons.Toolbox.Oidc
             });
         }
 
-        private void SetResult(string value, HttpContext ctx, string message)
+        private async Task SetResult(string value, HttpContext ctx, string message)
         {
             try
             {
+                var content = AutoClose.Replace("{{{message}}}", $"<h1>{message}</h1>");
                 ctx.Response.StatusCode = 200;
                 ctx.Response.ContentType = "text/html";
-                ctx.Response.WriteAsync(AutoClose.Replace("{{{message}}}", $"<h1>{message}</h1>"));
-                ctx.Response.Body.Flush();
+                ctx.Response.Headers.Add("Date", DateTimeOffset.UtcNow.ToString());
+                
+                await ctx.Response.WriteAsync(content);
+                await ctx.Response.Body.FlushAsync();
 
                 _source.TrySetResult(value);
             }
@@ -144,8 +149,8 @@ namespace aemarcoCommons.Toolbox.Oidc
             {
                 ctx.Response.StatusCode = 400;
                 ctx.Response.ContentType = "text/html";
-                ctx.Response.WriteAsync("<h1>Invalid request.</h1>");
-                ctx.Response.Body.Flush();
+                await ctx.Response.WriteAsync("<h1>Invalid request.</h1>");
+                await ctx.Response.Body.FlushAsync();
             }
         }
 

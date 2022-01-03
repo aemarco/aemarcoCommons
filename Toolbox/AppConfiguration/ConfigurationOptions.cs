@@ -47,7 +47,12 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
         /// </summary>
         // ReSharper disable once CollectionNeverQueried.Global
         // ReSharper disable once UnusedMember.Global
-        public List<Type> AdditionalRegistrations { get; } = new List<Type>(); 
+        public List<Type> AdditionalRegistrations { get; } = new List<Type>();
+
+        /// <summary>
+        /// Define if a file watcher should be added for configuration files
+        /// </summary>
+        public bool WatchSavedFiles { get; set; } = true;
 
     }
 }
