@@ -1,3 +1,4 @@
+using System.Runtime.Versioning;
 using System.Windows;
 using System.Windows.Markup;
 
@@ -11,6 +12,7 @@ using System.Windows.Markup;
 // app, or any theme specific resource dictionaries)
 )]
 
+[assembly: SupportedOSPlatform("windows")]
 
 [assembly: XmlnsPrefix("http://schemas.aemarco/wpf", "aem")]
 [assembly: XmlnsDefinition("http://schemas.aemarco/xaml", "aemarcoCommons.WpfTools.Controls")]
