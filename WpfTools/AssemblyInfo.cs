@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Windows.Markup;
 
 [assembly: ThemeInfo(
     ResourceDictionaryLocation.None, //where theme specific resource dictionaries are located
@@ -9,3 +10,11 @@ using System.Windows;
 //(used if a resource is not found in the page,
 // app, or any theme specific resource dictionaries)
 )]
+
+
+[assembly: XmlnsPrefix("http://schemas.aemarco/wpf", "aem")]
+[assembly: XmlnsDefinition("http://schemas.aemarco/xaml", "aemarcoCommons.WpfTools.Controls")]
+[assembly: XmlnsDefinition("http://schemas.aemarco/xaml", "aemarcoCommons.WpfTools.Converters")]
+[assembly: XmlnsDefinition("http://schemas.aemarco/xaml", "aemarcoCommons.WpfTools.Dialogs")]
+[assembly: XmlnsDefinition("http://schemas.aemarco/xaml", "aemarcoCommons.WpfTools.Helpers")]
+[assembly: XmlnsDefinition("http://schemas.aemarco/xaml", "aemarcoCommons.WpfTools.MarkupExtensions")]
