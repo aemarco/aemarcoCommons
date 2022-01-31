@@ -92,10 +92,12 @@ namespace aemarcoCommons.WpfTools
             return builder;
         }
 
-        public static ContainerBuilder SetupSerilogAsILogger(this ContainerBuilder builder)
+        public static ContainerBuilder SetupSerilogAsILogger(this ContainerBuilder builder, out ILoggerFactory factory)
         {
+            factory = new LoggerFactory(new ILoggerProvider[] { new SerilogLoggerProvider() });
+
             //logging
-            builder.Register(_ => new LoggerFactory(new ILoggerProvider[] { new SerilogLoggerProvider() }))
+            builder.RegisterInstance(factory)
                 .As<ILoggerFactory>()
                 .SingleInstance();
             builder.RegisterGeneric(typeof(Logger<>))

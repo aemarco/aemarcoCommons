@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
@@ -57,12 +58,15 @@ namespace aemarcoCommons.Extensions.TextExtensions
                 return false;
             }
         }
-
-        public static string GetNumberFromText(this string text)
+        
+        public static IEnumerable<long> GetNumbersFromText(this string text)
         {
-            return Regex.Match(text, @"\d+").Value;
+            var matches = Regex.Matches(text, @"\d+");
+            foreach (Match match in matches)
+            {
+                yield return long.Parse(match.Value);
+            }
         }
-
 
         public static string ToFriendlyFilename(this string fileName)
         {

@@ -27,6 +27,7 @@ namespace aemarcoCommons.Toolbox.PictureTools
 
         #region Setting the inner picture
 
+
         internal void SetWallpaper(Image wall, WallpaperMode mode, int percentTopBottomCutAllowed, int percentLeftRightCutAllowed)
         {
             bool CanBeSnapped(int width, int height)
@@ -38,6 +39,7 @@ namespace aemarcoCommons.Toolbox.PictureTools
                 return (imageRatio <= maxRatio && imageRatio >= minRatio);
             }
 
+            Timestamp = DateTimeOffset.Now;
             CurrentOriginal = wall ?? throw new NullReferenceException("Wallpaper can´t be null");
 
             switch (mode)
@@ -82,6 +84,7 @@ namespace aemarcoCommons.Toolbox.PictureTools
             }
         }
 
+        public DateTimeOffset Timestamp { get; private set; }
         public Image CurrentOriginal { get; private set; }
 
         private Image _currentPicture;

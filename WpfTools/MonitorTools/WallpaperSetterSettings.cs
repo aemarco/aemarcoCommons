@@ -13,10 +13,16 @@ namespace aemarcoCommons.WpfTools.MonitorTools
         string VirtualWallpaperFilePath { get; }
         string LockScreenFilePath { get; }
 
+        event EventHandler SplitSettingsChanged;
+        public int HorizontalSplit { get; set; }
+        public int VerticalSplit { get; set; }
+
     }
 
     public class WallpaperSetterSettings : ISingleton, IWallpaperSetterSettings
     {
+       
+
         /// <summary>
         /// path to store the Wallpaper, defaults to "CurrentCombinedWallpaper.jpg"
         /// </summary>
@@ -32,6 +38,44 @@ namespace aemarcoCommons.WpfTools.MonitorTools
         /// </summary>
         /// 
         public string LockScreenFilePath { get; set; } = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "CurrentLockScreen.jpg");
+        
+
+        public event EventHandler SplitSettingsChanged;
+        private int _horizontalSplit = 1;
+        /// <summary>
+        /// Number of Slices horizontally per Monitor 
+        /// </summary>
+        public int HorizontalSplit
+        {
+            get => _horizontalSplit;
+            set
+            {
+                if (_horizontalSplit == value)
+                    return;
+
+                _horizontalSplit = value;
+                SplitSettingsChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        private int _verticalSplit = 1;
+        /// <summary>
+        /// Number of Slices vertically per Monitor
+        /// </summary>
+        public int VerticalSplit 
+        {
+            get => _verticalSplit;
+            set
+            {
+                if (_verticalSplit == value)
+                    return;
+
+                _verticalSplit = value;
+                SplitSettingsChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+        
+
 
         /// <summary>
         /// defaults to AllowFillForceCut

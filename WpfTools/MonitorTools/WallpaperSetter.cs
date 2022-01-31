@@ -41,7 +41,10 @@ namespace aemarcoCommons.WpfTools.MonitorTools
             _monitors = GetMonitors().ToList();
 
             SystemEvents.DisplaySettingsChanged += SystemEvents_DisplaySettingsChanged;
+            _wallpaperSetterSettings.SplitSettingsChanged += Settings_SplitSettingsChanged;
         }
+
+       
 
         private void SystemEvents_DisplaySettingsChanged(object sender, EventArgs e)
         {
@@ -64,27 +67,63 @@ namespace aemarcoCommons.WpfTools.MonitorTools
                     break;
             }
         }
-
+        private void Settings_SplitSettingsChanged(object sender, EventArgs e)
+        {
+            _monitors = GetMonitors().ToList();
+        }
 
         private IEnumerable<IWallpaperRealEstate> GetMonitors()
         {
             foreach (var scr in Screen.AllScreens)
             {
-                yield return CreateMonitor(scr);
+                foreach (var split in CreateMonitor(scr))
+                {
+                    yield return split;
+                }
             }
 
             yield return CreateVirtualMonitor();
             yield return CreateLockScreen();
         }
-        private IWallpaperRealEstate CreateMonitor(Screen screen)
+        private IEnumerable<IWallpaperRealEstate> CreateMonitor(Screen screen)
         {
-            var targetRectangle = new Rectangle(
-                -Screen.AllScreens.Min(x => x.Bounds.X) + screen.Bounds.Left,
-                -Screen.AllScreens.Min(x => x.Bounds.Y) + screen.Bounds.Top,
-                screen.Bounds.Width,
-                screen.Bounds.Height);
+            var horDiv = _wallpaperSetterSettings.HorizontalSplit;
+            var verDiv = _wallpaperSetterSettings.VerticalSplit;
 
-            return new Monitor(targetRectangle, screen.DeviceName, _wallpaperSetterSettings.CombinedWallpaperFilePath, _wallpaperSetterSettings);
+            var count = 0;
+            for (var j = 0; j < verDiv; j++)
+            {
+                for (var i = 0; i < horDiv; i++)
+                {
+                    count++;
+                    var width = screen.Bounds.Width / horDiv;
+                    var height = screen.Bounds.Height / verDiv;
+
+                    var targetRectangle = new Rectangle(
+                        -Screen.AllScreens.Min(x => x.Bounds.X) + screen.Bounds.Left + (i * width),
+                        -Screen.AllScreens.Min(x => x.Bounds.Y) + screen.Bounds.Top + (j * height),
+                        width,
+                        height);
+
+                    var name = screen.DeviceName;
+                    if (horDiv > 1 || verDiv > 1)
+                    {
+                        name += $"_{count}";
+                    }
+                    yield return new Monitor(
+                        targetRectangle, 
+                        name, 
+                        _wallpaperSetterSettings.CombinedWallpaperFilePath, 
+                        _wallpaperSetterSettings);
+                }
+            }
+
+            //var targetRectangle = new Rectangle(
+            //    -Screen.AllScreens.Min(x => x.Bounds.X) + screen.Bounds.Left,
+            //    -Screen.AllScreens.Min(x => x.Bounds.Y) + screen.Bounds.Top,
+            //    screen.Bounds.Width,
+            //    screen.Bounds.Height);
+            //yield return new Monitor(targetRectangle, screen.DeviceName, _wallpaperSetterSettings.CombinedWallpaperFilePath, _wallpaperSetterSettings);
         }
         private IWallpaperRealEstate CreateVirtualMonitor()
         {
@@ -295,8 +334,9 @@ namespace aemarcoCommons.WpfTools.MonitorTools
 
             if (screens.Any(x => x == VirtualScreenName))
                 SetVirtualBackgroundImage();
-            else if (Screen.AllScreens.Any(screen => screens.Contains(screen.DeviceName)))
+            else
                 SetCombinedBackgroundImage();
+
             if (screens.Any(x => x == LockScreenName) && OperatingSystem.IsWindowsVersionAtLeast(10, 0, 10240))
             {
                 await SetLockScreenBackgroundImage()

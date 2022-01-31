@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace aemarcoCommons.Toolbox.MonitorTools
 {
@@ -10,6 +11,7 @@ namespace aemarcoCommons.Toolbox.MonitorTools
         void SetWallpaper(Image image);
         void DrawToGraphics(Graphics g);
 
+        DateTimeOffset Timestamp { get; }
         Image CurrentOriginal { get; }
     }
 }
