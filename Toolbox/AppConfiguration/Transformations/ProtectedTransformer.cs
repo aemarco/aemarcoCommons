@@ -15,7 +15,10 @@ namespace aemarcoCommons.Toolbox.AppConfiguration.Transformations
 
 
 
-    //TODO: Add some summary
+    /// <summary>
+    /// This Transformer decrypts config strings during read, and encrypts them during write
+    /// To use this, add it in the StringTransformations List, inside the AddConfigurationUtils options
+    /// </summary>
     public class ProtectedTransformer : StringTransformerBase
     {
         private readonly string _password;

@@ -43,7 +43,18 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
         private void Init()
         {
 
-            //TODO: Bin merges collections, so set defaults before re init
+            //TODO: Bind merges collections, grrrr
+            //https://github.com/dotnet/runtime/issues/46988
+
+            //problems:
+            //a: if multiple providers provide values for a collection, the values get added
+            //b: when having Config inside Config, Bind will be executed twice
+            //   Bind binds recursive, so the subConfig Constructor calls Init (bind#1) and then binds again below (bind#2)
+            //c: On the init call from Change token, existing element will be bound again
+
+            //idea for workaround:
+            // construct sub configs before binding (has correct values) and replace here after binding.
+            
 
             var sectionPath = GetType().GetSectionPath();
             //read current values from IConfiguration
@@ -58,18 +69,34 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
                 StringTransformerBase.TransformObject(this, ConfigurationRoot, transformation.PerformReadTransformation);
             }
         }
-        //TODO: Save Overload where directory and/or filename can be specified
+        
+
+       
         /// <summary>
-        /// Save this Configuration.
-        /// SettingsSaveDirectory should be defined if no filePath is given.
+        /// Save this Configuration. 
+        /// SettingsSaveDirectory should be defined when using this.
+        /// Settings saved in this manner, will be automatically loaded on next start of the app
         /// </summary>
+        /// <returns>the path were the config was saved</returns>
         public string Save()
+        {
+            var type = GetType();
+            var filePath = type.GetSavePathForSetting(ConfigurationOptions);
+            Save(filePath);
+            return filePath;
+        }
+
+        
+        /// <summary>
+        /// Export this configuration based on root level to a given file path
+        /// </summary>
+        /// <param name="filePath">file path to export to</param>
+        public void Save(string filePath)
         {
             var type = GetType();
             var copyForSave = MemberwiseClone();
 
-            //decide for a filePath
-            var filePath = type.GetSavePathForSetting(ConfigurationOptions);
+            //decide for a SectionPath
             var sectionPath = type.GetSectionPath();
 
             //ApplyWriteTransformations in reverse order
@@ -91,8 +118,6 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
             }
 
             File.WriteAllText(filePath, obj.ToString());
-            
-            return filePath;
         }
     }
 }

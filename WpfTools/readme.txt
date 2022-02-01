@@ -28,14 +28,10 @@ public ICommand ExitApplicationCommand
 	{
 		return new DelegateCommand
 		{
-			CanExecuteFunc = () => true,
-			CommandAction = () =>
+			CanExecuteFunc = x => true,
+			CommandAction = x =>
 			{
-				Application.Current.Shutdown();
-			},
-			ObjectCommandAction = (p) =>
-			{
-				var window = p as MainWindow;
+				var window = x as MainWindow;
 				window.Close();
 			}
 		};

@@ -1,4 +1,6 @@
 ﻿using aemarcoCommons.Toolbox.PictureTools;
+using Autofac;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Drawing;
 using System.IO;
@@ -39,14 +41,21 @@ namespace aemarcoCommons.Toolbox.MonitorTools
                             SetPicture(new Bitmap(old.Clone(TargetArea, old.PixelFormat)));
                             return;
                         }
-                        //throw new FileLoadException("Image size not compatible.");
+                        //if the previous file is not compatible in size, then we default without exception
                     }
                 }
-                catch //TODO Virtual screen throws exception when barely in range
+                catch (Exception ex)
                 {
                     File.Delete(sourceFile);
+
+                    if (Bootstrapper.RootScope != null && 
+                        Bootstrapper.RootScope.TryResolve(out ILogger<Monitor> logger))
+                    {
+                        logger.LogError(ex, "Could not reinitialize picture for monitor with Target area {targetArea}", TargetArea);
+                    }
                 }
             }
+            //defaults to a black image
             SetPicture(new Bitmap(TargetArea.Width, TargetArea.Height));
         }
 
