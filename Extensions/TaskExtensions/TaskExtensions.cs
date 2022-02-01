@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 
 namespace aemarcoCommons.Extensions.TaskExtensions
 {
+
+    //TODO: class name conflicts with System.Threading.Tasks
     public static class TaskExtensions
     {
         private static Action<Exception> _onException;

@@ -15,7 +15,7 @@ namespace aemarcoCommons.Toolbox.AppConfiguration.Transformations
 
 
 
-
+    //TODO: Add some summary
     public class ProtectedTransformer : StringTransformerBase
     {
         private readonly string _password;

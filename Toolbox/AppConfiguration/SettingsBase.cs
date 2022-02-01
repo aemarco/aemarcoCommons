@@ -42,6 +42,9 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
 
         private void Init()
         {
+
+            //TODO: Bin merges collections, so set defaults before re init
+
             var sectionPath = GetType().GetSectionPath();
             //read current values from IConfiguration
             if (string.IsNullOrWhiteSpace(sectionPath))
@@ -55,7 +58,7 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
                 StringTransformerBase.TransformObject(this, ConfigurationRoot, transformation.PerformReadTransformation);
             }
         }
-        
+        //TODO: Save Overload where directory and/or filename can be specified
         /// <summary>
         /// Save this Configuration.
         /// SettingsSaveDirectory should be defined if no filePath is given.

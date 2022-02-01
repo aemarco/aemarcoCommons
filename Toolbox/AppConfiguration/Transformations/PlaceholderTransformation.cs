@@ -3,6 +3,7 @@ using System.Reflection;
 
 namespace aemarcoCommons.Toolbox.AppConfiguration.Transformations
 {
+    //TODO: Add some summary how to use
     public class PlaceholderTransformation : StringTransformerBase
     {
         public override string PerformReadTransformation(string currentValue, PropertyInfo propertyInfo, IConfigurationRoot configRoot)
