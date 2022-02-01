@@ -42,7 +42,7 @@ namespace aemarcoCommons.WpfTools.BaseNav
         public override DelegateCommand CloseCommand =>
             new()
             {
-                CommandAction = () =>
+                CommandAction = _ =>
                 {
                     WindowViewModel?.Window?.Close();
                 }

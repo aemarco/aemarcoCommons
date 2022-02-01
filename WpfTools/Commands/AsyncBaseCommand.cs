@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 #nullable enable
 
 namespace aemarcoCommons.WpfTools.Commands
 {
-    public abstract class BaseCommand : ICommand
+    public abstract class AsyncBaseCommand : IAsyncCommand
     {
         public event EventHandler? CanExecuteChanged
         {
@@ -15,13 +16,17 @@ namespace aemarcoCommons.WpfTools.Commands
         {
             CommandManager.InvalidateRequerySuggested();
         }
-        
+
         public virtual bool CanExecute(object? parameter)
         {
             return true;
         }
         
-        public abstract void Execute(object? parameter);
+        public async void Execute(object? parameter)
+        {
+            await ExecuteAsync(parameter);
+        }
 
+        public abstract Task ExecuteAsync(object? parameter);
     }
 }

@@ -7,7 +7,7 @@ namespace aemarcoCommons.WpfTools.Commands
     {
         public OpenWindowCommand()
         {
-            CommandAction = () =>
+            CommandAction = _ =>
             {
                 var wind = Bootstrapper.RootScope.Resolve<T>();
                 wind.Show();

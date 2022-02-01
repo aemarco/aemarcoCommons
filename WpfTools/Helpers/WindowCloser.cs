@@ -26,7 +26,7 @@ namespace aemarcoCommons.WpfTools.Helpers
             {
                 //ensure data context implements IBaseViewModel
                 if (!(window.DataContext is IBaseViewModel vm)) return;
-                vm.CloseCommand.CommandAction = () => window.Close();
+                vm.CloseCommand.CommandAction = _ => window.Close();
             };
         }
     }

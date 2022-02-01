@@ -44,13 +44,13 @@ namespace aemarcoCommons.WpfTools.Dialogs
         {
             get
             {
-                return new DelegateCommand
+                return new AsyncDelegateCommand
                 {
-                    CanExecuteFunc = () => 
+                    CanExecuteFunc = _ => 
                         !string.IsNullOrWhiteSpace(Username) && 
                         !string.IsNullOrWhiteSpace(PasswordBox.Password) &&
                         !_currentlyLoggingIn,
-                    CommandAction = async () =>
+                    CommandAction = async _ =>
                     {
                         _currentlyLoggingIn = true;
                         NotifyPropertyChanged(nameof(LoginCommand));

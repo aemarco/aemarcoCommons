@@ -1,34 +1,24 @@
 ﻿using System;
-using System.Windows.Input;
+
+#nullable enable
 
 namespace aemarcoCommons.WpfTools.Commands
 {
     /// <summary>
     /// Simplistic delegate command .
     /// </summary>
-    public class DelegateCommand : ICommand
+    public class DelegateCommand : BaseCommand
     {
-        public Action CommandAction { get; set; }
-        public Action<object> ObjectCommandAction { get; set; }
-        public Func<bool> CanExecuteFunc { get; set; }
-
-        public void Execute(object parameter)
+        public Func<object?,bool>? CanExecuteFunc { get; set; }
+        public override bool CanExecute(object? parameter)
         {
-            if (CommandAction != null)
-                CommandAction();
-            else
-                ObjectCommandAction(parameter);
+            return CanExecuteFunc == null || CanExecuteFunc(parameter);
         }
 
-        public bool CanExecute(object parameter)
+        public Action<object?>? CommandAction { get; set; }
+        public override void Execute(object? parameter)
         {
-            return CanExecuteFunc == null || CanExecuteFunc();
-        }
-
-        public event EventHandler CanExecuteChanged
-        {
-            add => CommandManager.RequerySuggested += value;
-            remove => CommandManager.RequerySuggested -= value;
+            CommandAction?.Invoke(parameter);
         }
     }
 }
