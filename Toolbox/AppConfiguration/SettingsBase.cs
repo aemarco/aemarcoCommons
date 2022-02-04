@@ -3,8 +3,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace aemarcoCommons.Toolbox.AppConfiguration
 {
@@ -42,19 +44,38 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
 
         private void Init()
         {
-
-            //TODO: Bind merges collections, grrrr
-            //https://github.com/dotnet/runtime/issues/46988
-
+            
             //problems:
             //a: if multiple providers provide values for a collection, the values get added
-            //b: when having Config inside Config, Bind will be executed twice
+            //doubleMerge: when having Config inside Config, Bind will be executed twice
             //   Bind binds recursive, so the subConfig Constructor calls Init (bind#1) and then binds again below (bind#2)
             //c: On the init call from Change token, existing element will be bound again
+            //d: setting classes will be registered as singletons, but when using sub settings is used,
+            //   you will end up with separate instances despite registrations. To handle this correctly,
+            //   sub settings would need to be resolved from ioc, and set in this instance.
 
-            //idea for workaround:
+
+            #region doubleMerge
+
+            //create sub Settings by us here, so they will not get double bound here
+            //after binding below, the constructor of the sub class will bind, and then the binding here will bind it again
+            //so with merge behaviour of binding, values of array will be doubled
+            //https://github.com/dotnet/runtime/issues/46988
+
+            //idea for doubleMerge workaround:
             // construct sub configs before binding (has correct values) and replace here after binding.
+
+            var subSettings = new Dictionary<PropertyInfo, object>();
+            foreach (var propertyInfo in GetType().GetProperties()
+                         .Where(x => x.CanRead && x.CanWrite)
+                         .Where(x => typeof(SettingsBase).IsAssignableFrom(x.PropertyType)))
+            {
+                var subSetting = Activator.CreateInstance(propertyInfo.PropertyType);
+                subSettings.Add(propertyInfo, subSetting);
+            }
             
+            #endregion
+
 
             var sectionPath = GetType().GetSectionPath();
             //read current values from IConfiguration
@@ -68,6 +89,17 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
             {
                 StringTransformerBase.TransformObject(this, ConfigurationRoot, transformation.PerformReadTransformation);
             }
+
+            #region doubleMerge
+
+            //set back sub settings
+            foreach (var pair in subSettings)
+            {
+                pair.Key.SetValue(this, pair.Value);
+            }
+
+            #endregion
+
         }
         
 
@@ -89,6 +121,7 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
         
         /// <summary>
         /// Export this configuration based on root level to a given file path
+        /// given folder must already exist
         /// </summary>
         /// <param name="filePath">file path to export to</param>
         public void Save(string filePath)
