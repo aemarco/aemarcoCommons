@@ -6,7 +6,7 @@ namespace aemarcoCommons.Toolbox.ShellTools
 {
     public static class PowerShellHelper
     {
-        static PowerShellCommandResult Execute(string command, bool throwExceptions = true)
+        public static PowerShellCommandResult Execute(string command, bool throwExceptions = true)
         {
 
             var base64 = Convert.ToBase64String(Encoding.Unicode.GetBytes(command));
