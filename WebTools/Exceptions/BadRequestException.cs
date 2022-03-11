@@ -15,13 +15,14 @@ namespace aemarcoCommons.WebTools.Exceptions
         }
 
         /// <summary>
-        /// Exception based on parameter name
+        /// Exception based on general message, will be prefixed with Reason and put in ''
         /// </summary>
-        /// <param name="parameterName">name of the parameter</param>
-        public BadRequestException(string parameterName)
-            : base($"Reason ArgumentException '{parameterName}'")
+        /// <param name="message">parameter name or message</param>
+        public BadRequestException(string message)
+            : base($"Reason '{message}'")
         {
             
         }
+        
     }
 }

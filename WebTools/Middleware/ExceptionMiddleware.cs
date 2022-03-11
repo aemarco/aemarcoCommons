@@ -42,14 +42,16 @@ namespace aemarcoCommons.WebTools.Middleware
             if (ex is BadRequestException badRequestException)
             {
                 errorResponse = new ErrorResponse((int) HttpStatusCode.BadRequest, badRequestException.Message);
-                _logger.LogWarning(badRequestException, "BadRequest response {@errorResponse}}", errorResponse);
+                _logger.LogWarning(badRequestException, "BadRequest response {@errorResponse}", errorResponse);
             }
-            else
+            else //deal with unhandled exceptions
             {
                 errorResponse = new ErrorResponse((int) HttpStatusCode.InternalServerError, "Upsss, something went wrong");
-                _logger.LogError(ex, "Error response {@errorResponse}}", errorResponse);
+                _logger.LogError(ex, "Error response {@errorResponse}", errorResponse);
             }
             
+
+            //send response
             context.Response.StatusCode = errorResponse.StatusCode;
             context.Response.ContentType = "application/json";
             return context.Response.WriteAsync(JsonSerializer.Serialize(errorResponse));

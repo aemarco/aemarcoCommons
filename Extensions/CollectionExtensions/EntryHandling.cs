@@ -2,27 +2,27 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace aemarcoCommons.Extensions.SortingExtensions
+namespace aemarcoCommons.Extensions.CollectionExtensions
 {
-    public static class ListExtensions
+    public static class EntryHandling
     {
         private static readonly Random Random = new Random();
-        public static List<T> Shuffle<T>(this List<T> list)
+        public static List<T> Shuffle<T>(this IEnumerable<T> list)
         {
-            list = list.OrderBy(x => Random.Next()).ToList();
-            return list;
+            var result = list.ToList();
+            result = result.OrderBy(x => Random.Next()).ToList();
+            return result;
         }
 
-        public static List<List<T>> Chunk<T>(this List<T> list, int chunkSize)
+        public static List<List<T>> Chunk<T>(this IEnumerable<T> list, int chunkSize)
         {
+            if (chunkSize <= 0)
+                throw new ArgumentException("chunkSize must be greater than 0.");
+          
+
             var copy = list.ToList();
 
-            if (chunkSize <= 0)
-            {
-                throw new ArgumentException("chunkSize must be greater than 0.");
-            }
-
-            List<List<T>> result = new List<List<T>>();
+            var result = new List<List<T>>();
             while (copy.Count > 0)
             {
                 var chunk = copy.Take(chunkSize).ToList();
