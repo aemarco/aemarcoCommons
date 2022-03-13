@@ -29,6 +29,12 @@ namespace aemarcoCommons.Extensions.AttributeExtensions
             return obj.GetType().GetAttribute<T>(memberName);
         }
 
+        public static bool HasAttribute<T>(this Type type, string memberName = null)
+            where T : Attribute
+        {
+            return type.GetAttribute<T>(memberName) != null;
+        }
+
         public static bool HasAttribute<T>(this object obj, string memberName = null)
             where T : Attribute
         {
@@ -44,12 +50,18 @@ namespace aemarcoCommons.Extensions.AttributeExtensions
             //get attribute on type
             if (memberName == null)
             {
-                return (IEnumerable<T>)type.GetCustomAttributes(typeof(T));
+                return type
+                    .GetCustomAttributes(typeof(T))
+                    .OfType<T>();
             }
             //get attribute on member
             else
             {
-                return (IEnumerable<T>) type.GetMember(memberName).FirstOrDefault()?.GetCustomAttributes(typeof(T)) ?? new List<T>();
+                return type
+                    .GetMember(memberName)
+                    .FirstOrDefault()?
+                    .GetCustomAttributes(typeof(T))
+                    .OfType<T>() ?? new List<T>(); // ?? because we want a collection also if there is no member found
             }
         }
 

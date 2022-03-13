@@ -31,6 +31,34 @@ namespace aemarcoCommons.Extensions.CollectionExtensions
             }
             return result;
         }
+
+        public static IEnumerable<(int Min, int Max)> Consolidate(this IEnumerable<(int Min, int Max)> ranges)
+        {
+            var result = new List<(int Min, int Max)>();
+            foreach (var range in ranges.OrderBy(x => x.Min).ToList())
+            {
+                if (result.NotNullOrEmpty())
+                {
+                    var last = result.Last();
+                    if (last.Max >= range.Min - 1)
+                    {
+                        result.Remove(last);
+                        result.Add((last.Min, Math.Max(last.Max, range.Max)));
+                        continue;
+                    }
+                }
+                result.Add(range);
+            }
+            return result;
+        }
+
+
+
+
+
+
+
+
     }
 
 

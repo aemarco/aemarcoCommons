@@ -79,8 +79,7 @@ namespace aemarcoCommons.Toolbox.Oidc
             return await base.SendAsync(request, cancellationToken)
                 .ConfigureAwait(false);
         }
-
-
+        
         protected override void Dispose(bool disposing)
         {
             if (disposing && !_disposed)
