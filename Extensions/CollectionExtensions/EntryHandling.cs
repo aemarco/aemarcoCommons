@@ -32,7 +32,7 @@ namespace aemarcoCommons.Extensions.CollectionExtensions
             return result;
         }
 
-        public static IEnumerable<(int Min, int Max)> Consolidate(this IEnumerable<(int Min, int Max)> ranges)
+        public static IEnumerable<(int Min, int Max)> ConsolidateRanges(this IEnumerable<(int Min, int Max)> ranges)
         {
             var result = new List<(int Min, int Max)>();
             foreach (var range in ranges.OrderBy(x => x.Min).ToList())
