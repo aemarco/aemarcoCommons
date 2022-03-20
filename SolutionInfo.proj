@@ -2,7 +2,7 @@
 
   <!-- assembly and nuget version we spit out -->
   <PropertyGroup>
-    <AssemblyVersion>1.0.59.0</AssemblyVersion>
+    <AssemblyVersion>1.0.60.0</AssemblyVersion>
   </PropertyGroup>
 
   <!-- ceremony-->

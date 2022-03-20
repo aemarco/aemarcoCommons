@@ -18,13 +18,13 @@ namespace aemarcoCommons.WebTools.Middleware
             app.UseMiddleware<ExceptionMiddleware<Exception>>();
             app.UseMiddleware<ExceptionMiddleware<BadRequestException>>();
         }
-
-       
+        public static void UseDeveloperExceptionMiddleware(this IApplicationBuilder app)
+        {
+            app.UseDeveloperExceptionPage();
+            app.UseMiddleware<ExceptionMiddleware<BadRequestException>>();
+        }
     }
-
-
-
-
+    
     public class ExceptionMiddleware<T> where T : Exception
     {
         private readonly RequestDelegate _next;
