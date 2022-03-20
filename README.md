@@ -20,6 +20,7 @@ Some Extensions, some Toolbox, some Console-, Wpf- and Web-Tools
 <p>Depends on aemarcoToolbox. TBD</p>
 
 <h1>aemarcoWpfTools</h1>
+<a href=tree/master/WebTools/Authorization> Authorization </a><br/>
 <p>Depends on aemarcoToolbox. TBD</p>
 
 <h1>aemarcoWebTools</h1>
