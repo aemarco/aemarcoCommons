@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Builder;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +10,19 @@ using Microsoft.Extensions.Logging;
 
 namespace aemarcoCommons.WebTools.Middleware
 {
+
+
+
+    public static class BearerToHeaderMiddlewareExtensions
+    {
+        
+        public static void UseBearerToHeaderMiddleware(this IApplicationBuilder app)
+        {
+            app.UseMiddleware<BearerToHeaderMiddleware>();
+        } 
+
+    }
+
     /// <summary>
     /// This Middleware takes access tokens from query parameter, removes it there and puts in as authorization header
     /// https://tools.ietf.org/html/rfc6750#section-2.3
@@ -40,6 +54,9 @@ namespace aemarcoCommons.WebTools.Middleware
                 _logger.LogDebug("Access token moved to Authorization header");
             }
             await _next(context);
+
+
+
         }
     }
 }

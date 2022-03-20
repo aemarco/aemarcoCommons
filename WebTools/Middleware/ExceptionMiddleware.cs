@@ -4,12 +4,27 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using aemarcoCommons.WebTools.Exceptions;
 using aemarcoCommons.WebTools.Models;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 // ReSharper disable ClassNeverInstantiated.Global
 
 namespace aemarcoCommons.WebTools.Middleware
 {
+    public static class ExceptionMiddlewareExtensions
+    {
+        public static void UseExceptionMiddleware(this IApplicationBuilder app)
+        {
+            app.UseMiddleware<ExceptionMiddleware<Exception>>();
+            app.UseMiddleware<ExceptionMiddleware<BadRequestException>>();
+        }
+
+       
+    }
+
+
+
+
     public class ExceptionMiddleware<T> where T : Exception
     {
         private readonly RequestDelegate _next;
