@@ -14,7 +14,7 @@ namespace aemarcoCommons.Extensions.CollectionExtensions
             return result;
         }
 
-        public static List<List<T>> Chunk<T>(this IEnumerable<T> list, int chunkSize)
+        public static List<List<T>> ChunkList<T>(this IEnumerable<T> list, int chunkSize)
         {
             if (chunkSize <= 0)
                 throw new ArgumentException("chunkSize must be greater than 0.");
