@@ -66,11 +66,13 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
                 .As<IConfigurationRoot>()
                 .SingleInstance();
 
-            builder.RegisterBuildCallback(scope =>
-            {
-                SettingsBase.ConfigurationRoot = scope.Resolve<IConfigurationRoot>();
-                SettingsBase.ConfigurationOptions = scope.Resolve<ConfigurationOptions>();
-            });
+            //builder.RegisterBuildCallback(scope =>
+            //{
+            //    SettingsBase.ConfigurationRoot = scope.Resolve<IConfigurationRoot>();
+            //    SettingsBase.ConfigurationOptions = scope.Resolve<ConfigurationOptions>();
+            //});
+            SettingsBase.ConfigurationRoot = rootConfig;
+            SettingsBase.ConfigurationOptions = toolConfig;
 
             return rootConfig;
         }
