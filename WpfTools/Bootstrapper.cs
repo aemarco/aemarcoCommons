@@ -6,8 +6,11 @@ using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Polly;
+using Polly.Extensions.Http;
 using Serilog.Extensions.Logging;
 using System;
+using System.Net.Http;
 using System.Windows;
 
 namespace aemarcoCommons.WpfTools
@@ -76,15 +79,20 @@ namespace aemarcoCommons.WpfTools
                 .AsImplementedInterfaces()
                 .InstancePerDependency();
 
-
-
-
             builder.RegisterGeneric(typeof(OpenWindowCommand<>));
             builder.RegisterGeneric(typeof(OpenDialogCommand<>));
-            sc.AddHttpClient();
-            sc.AddHttpClient(nameof(WallpaperSetter));
 
 
+
+            var waitAndRetry = HttpPolicyExtensions
+                .HandleTransientHttpError()
+                .WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(1));
+            var timeoutPolicy = Policy.TimeoutAsync<HttpResponseMessage>(TimeSpan.FromSeconds(10));
+
+
+            sc.AddHttpClient(nameof(WallpaperSetter))
+                .AddPolicyHandler(waitAndRetry)
+                .AddPolicyHandler(timeoutPolicy);
 
             builder.Populate(sc);
             builder.RegisterBuildCallback(rootScope => RootScope = rootScope);

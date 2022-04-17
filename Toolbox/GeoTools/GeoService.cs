@@ -13,29 +13,35 @@ namespace aemarcoCommons.Toolbox.GeoTools
         #region ctor
 
         private readonly IGeoServiceSettings _geoServiceSettings;
-        private readonly IHttpClientFactory _httpClientFactory;
         private readonly HttpClient _geoClient;
-        private HttpClient GeoClient => _httpClientFactory?.CreateClient(nameof(GeoService)) ?? _geoClient;
+
+
+        public GeoService()
+            : this(new GeoServiceSettings(), new HttpClient(new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (r, c, chain, errors) => true
+            }))
+        { }
+
+        public GeoService(IGeoServiceSettings geoServiceSettings)
+            : this(geoServiceSettings, new HttpClient())
+        { }
 
         public GeoService(IHttpClientFactory httpClientFactory)
             : this(new GeoServiceSettings(), httpClientFactory)
         { }
 
         public GeoService(IGeoServiceSettings geoServiceSettings, IHttpClientFactory httpClientFactory)
-        {
-            _geoServiceSettings = geoServiceSettings;
-            _httpClientFactory = httpClientFactory;
-        }
-
-
-        public GeoService()
-            : this(new GeoServiceSettings())
+            : this(geoServiceSettings, httpClientFactory.CreateClient(nameof(GeoService)))
         { }
 
-        public GeoService(IGeoServiceSettings geoServiceSettings)
+        private GeoService(IGeoServiceSettings geoServiceSettings, HttpClient client)
         {
             _geoServiceSettings = geoServiceSettings;
-            _geoClient = new HttpClient();
+            _geoClient = client;
+
+            if (_geoServiceSettings.NumberOfCachedSunriseSunsetInfos < 0)
+                throw new ArgumentException("NumberOfCachedSunriseSunsetInfos must be >= 0", nameof(geoServiceSettings));
         }
 
         #endregion
@@ -55,7 +61,7 @@ namespace aemarcoCommons.Toolbox.GeoTools
                     return _lastIpInfo;
                 }
 
-                using (var response = await GeoClient.GetAsync("http://checkip.dyndns.org"))
+                using (var response = await _geoClient.GetAsync("http://checkip.dyndns.org"))
                 {
                     response.EnsureSuccessStatusCode();
 
@@ -94,16 +100,23 @@ namespace aemarcoCommons.Toolbox.GeoTools
             bool throwExceptions = false,
             bool byPassCache = false)
         {
+            //reduce precision to get caching take more effect
+            latitude = Convert.ToSingle(Math.Round(latitude, 3));
+            longitude = Convert.ToSingle(Math.Round(longitude, 3));
+            //default to today
             if (date == null) date = DateTimeOffset.Now; //2020-10-03
+
 
             var query = $"lat={latitude}&lng={longitude}&date={date.Value.Date:yyyy-MM-dd}&formatted=0";
 
             //return cached result if already present
-            if (!byPassCache && _sunriseSunsetResponses.TryGetValue(query, out var cached)) return cached;
+            if (!byPassCache && _sunriseSunsetResponses.TryGetValue(query, out SunriseSunsetInfo cached))
+                return cached;
 
             try
             {
-                using (var response = await GeoClient.GetAsync($"https://api.sunrise-sunset.org/json?{query}"))
+                using (HttpResponseMessage response = await _geoClient
+                           .GetAsync($"https://api.sunrise-sunset.org/json?{query}"))
                 {
                     response.EnsureSuccessStatusCode();
 
@@ -111,11 +124,12 @@ namespace aemarcoCommons.Toolbox.GeoTools
                     var info = await response.Content.ReadAsAsync<SunriseSunsetResponse>();
                     var result = info.ToInfo(throwExceptions);
 
-                    //remember 10 result, so we don´t ask to often
+                    //remember configured number of result, so we don´t ask to often
                     _sunriseSunsetResponses.TryAdd(query, result);
-                    while (_sunriseSunsetResponses.Count > _geoServiceSettings.NumberOfCachedSunriseSunsetInfos &&
-                           _sunriseSunsetResponses.TryRemove(_sunriseSunsetResponses.Keys.First(), out _)) { }
-
+                    while (_sunriseSunsetResponses.Count > _geoServiceSettings.NumberOfCachedSunriseSunsetInfos)
+                    {
+                        _sunriseSunsetResponses.TryRemove(_sunriseSunsetResponses.Keys.First(), out _);
+                    }
                     return result;
                 }
             }
