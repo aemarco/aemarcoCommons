@@ -8,14 +8,15 @@ namespace aemarcoCommons.Extensions.TimeExtensions
     {
         public static async Task WaitTill(this DateTimeOffset target, CancellationToken token)
         {
-            token.ThrowIfCancellationRequested();
             if (target.IsFuture())
             {
                 var toWait = target - DateTimeOffset.Now;
-                try { await Task.Delay(toWait, token); }
-                catch (TaskCanceledException) { }
+                if (toWait.TotalMilliseconds > 0)
+                {
+                    await Task.Delay(toWait, token)
+                        .ConfigureAwait(false);
+                }
             }
-            token.ThrowIfCancellationRequested();
         }
 
 
