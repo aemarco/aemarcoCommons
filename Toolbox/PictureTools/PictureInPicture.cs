@@ -23,10 +23,12 @@ namespace aemarcoCommons.Toolbox.PictureTools
         public int Width => TargetArea.Width;
         public int Height => TargetArea.Height;
 
+        public DateTimeOffset Timestamp { get; private set; }
+        public Image CurrentOriginal { get; private set; }
+
         #endregion
 
         #region Setting the inner picture
-
 
         internal void SetWallpaper(Image wall, WallpaperMode mode, int percentTopBottomCutAllowed, int percentLeftRightCutAllowed)
         {
@@ -39,34 +41,23 @@ namespace aemarcoCommons.Toolbox.PictureTools
                 return (imageRatio <= maxRatio && imageRatio >= minRatio);
             }
 
-            Timestamp = DateTimeOffset.Now;
-            CurrentOriginal = wall ?? throw new NullReferenceException("Wallpaper can´t be null");
-
             switch (mode)
             {
                 case WallpaperMode.AllowFill:
                     {
                         if (CanBeSnapped(wall.Width, wall.Height))
-                        {
-                            SetSnappedWallpaper(wall);
-                        }
+                            SetSnapped(wall);
                         else
-                        {
-
                             SetPicture(wall);
-                        }
+
                         break;
                     }
                 case WallpaperMode.AllowFillForceCut:
                     {
                         if (CanBeSnapped(wall.Width, wall.Height))
-                        {
-                            SetSnappedWallpaper(wall);
-                        }
+                            SetSnapped(wall);
                         else
-                        {
                             SetCutWallpaper(wall, percentTopBottomCutAllowed, percentLeftRightCutAllowed);
-                        }
                         break;
                     }
                 case WallpaperMode.Fit:
@@ -76,16 +67,13 @@ namespace aemarcoCommons.Toolbox.PictureTools
                     }
                 case WallpaperMode.Fill:
                     {
-                        SetSnappedWallpaper(wall);
+                        SetSnapped(wall);
                         break;
                     }
                 default:
                     throw new NotSupportedException("WallpaperMode not supported");
             }
         }
-
-        public DateTimeOffset Timestamp { get; private set; }
-        public Image CurrentOriginal { get; private set; }
 
         private Image _currentPicture;
 
@@ -134,13 +122,17 @@ namespace aemarcoCommons.Toolbox.PictureTools
             var targetImg = new Bitmap(TargetArea.Width, TargetArea.Height);
             Graphics.FromImage(targetImg).DrawImage(image, new Rectangle(x, y, width, height));
             _currentPicture = targetImg;
+
+
+            Timestamp = DateTimeOffset.Now;
+            CurrentOriginal = image;
         }
 
         /// <summary>
         /// Sets the Picture and fills the screen by cutting the Picture
         /// </summary>
         /// <param name="pictureToBeCut"></param>
-        private void SetSnappedWallpaper(Image pictureToBeCut)
+        private void SetSnapped(Image pictureToBeCut)
         {
             var targetRatio = 1.0 * TargetArea.Width / TargetArea.Height;
             var imageRatio = 1.0 * pictureToBeCut.Width / pictureToBeCut.Height;
@@ -169,8 +161,10 @@ namespace aemarcoCommons.Toolbox.PictureTools
             }
 
             SetPicture(((Bitmap)pictureToBeCut).Clone(rect, pictureToBeCut.PixelFormat));
-        }
 
+            Timestamp = DateTimeOffset.Now;
+            CurrentOriginal = pictureToBeCut;
+        }
 
         /// <summary>
         /// Cuts the Picture by the allowed amount and sets it as big as possible with black bars.
@@ -207,6 +201,9 @@ namespace aemarcoCommons.Toolbox.PictureTools
             }
 
             SetPicture(((Bitmap)pictureToBeCut).Clone(rect, pictureToBeCut.PixelFormat));
+
+            Timestamp = DateTimeOffset.Now;
+            CurrentOriginal = pictureToBeCut;
         }
 
         #endregion

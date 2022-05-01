@@ -15,13 +15,37 @@ namespace aemarcoCommons.Toolbox.PictureTools
             int targetWidth,
             int targetHeight,
             WallpaperMode mode = WallpaperMode.AllowFillForceCut,
+            int? percentTopBottomCutAllowed = null,
+            int? percentLeftRightCutAllowed = null,
             ImageFormat format = null,
             Color? background = null)
         {
+            var resultImage = ResizePicture(
+                Image.FromStream(stream),
+                targetWidth, targetHeight,
+                mode, percentTopBottomCutAllowed, percentLeftRightCutAllowed,
+                background);
+
+            var ms = new MemoryStream();
+            resultImage.Save(ms, format ?? ImageFormat.Jpeg);
+            return ms;
+        }
+
+        public static Image ResizePicture(
+            Image sourceImage,
+            int targetWidth,
+            int targetHeight,
+            WallpaperMode mode = WallpaperMode.AllowFillForceCut,
+            int? percentTopBottomCutAllowed = null,
+            int? percentLeftRightCutAllowed = null,
+            Color? background = null)
+        {
             var pip = new PictureInPicture(new Rectangle(0, 0, targetWidth, targetHeight));
-
-
-            pip.SetWallpaper(Image.FromStream(stream), mode, 11, 25);
+            pip.SetWallpaper(
+                sourceImage,
+                mode,
+                percentTopBottomCutAllowed ?? 11,
+                percentLeftRightCutAllowed ?? 25);
 
             var image = new Bitmap(targetWidth, targetHeight);
             var graphic = Graphics.FromImage(image);
@@ -34,10 +58,17 @@ namespace aemarcoCommons.Toolbox.PictureTools
             graphic.Clear(background ?? Color.Black);
             pip.DrawToGraphics(graphic);
 
-            var ms = new MemoryStream();
-            image.Save(ms, format ?? ImageFormat.Jpeg);
-            return ms;
+            return image;
         }
+
+
+
+
+
+
+
+
+
 
     }
 }
