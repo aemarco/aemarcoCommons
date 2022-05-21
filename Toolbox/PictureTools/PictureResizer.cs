@@ -1,6 +1,5 @@
 ﻿using aemarcoCommons.Toolbox.MonitorTools;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 
@@ -8,7 +7,6 @@ namespace aemarcoCommons.Toolbox.PictureTools
 {
     public static class PictureResize
     {
-
 
         public static MemoryStream ResizePicture(
             Stream stream,
@@ -41,34 +39,17 @@ namespace aemarcoCommons.Toolbox.PictureTools
             Color? background = null)
         {
             var pip = new PictureInPicture(new Rectangle(0, 0, targetWidth, targetHeight));
+
             pip.SetWallpaper(
                 sourceImage,
                 mode,
                 percentTopBottomCutAllowed ?? 11,
-                percentLeftRightCutAllowed ?? 25);
+                percentLeftRightCutAllowed ?? 25,
+                background);
 
-            var image = new Bitmap(targetWidth, targetHeight);
-            var graphic = Graphics.FromImage(image);
-
-            graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
-            graphic.SmoothingMode = SmoothingMode.HighQuality;
-            graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            graphic.CompositingQuality = CompositingQuality.HighQuality;
-
-            graphic.Clear(background ?? Color.Black);
-            pip.DrawToGraphics(graphic);
-
-            return image;
+            var result = pip.CreateOuterImage();
+            return result;
         }
-
-
-
-
-
-
-
-
-
 
     }
 }

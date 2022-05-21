@@ -16,12 +16,13 @@ namespace aemarcoCommons.WpfTools.MonitorTools
         event EventHandler SplitSettingsChanged;
         public int HorizontalSplit { get; set; }
         public int VerticalSplit { get; set; }
+        ScreenUsage ScreenUsage { get; set; }
 
     }
 
     public class WallpaperSetterSettings : ISingleton, IWallpaperSetterSettings
     {
-       
+
 
         /// <summary>
         /// path to store the Wallpaper, defaults to "CurrentCombinedWallpaper.jpg"
@@ -38,7 +39,7 @@ namespace aemarcoCommons.WpfTools.MonitorTools
         /// </summary>
         /// 
         public string LockScreenFilePath { get; set; } = Path.Combine(AppDomain.CurrentDomain.BaseDirectory!, "CurrentLockScreen.jpg");
-        
+
 
         public event EventHandler SplitSettingsChanged;
         private int _horizontalSplit = 1;
@@ -62,7 +63,7 @@ namespace aemarcoCommons.WpfTools.MonitorTools
         /// <summary>
         /// Number of Slices vertically per Monitor
         /// </summary>
-        public int VerticalSplit 
+        public int VerticalSplit
         {
             get => _verticalSplit;
             set
@@ -74,7 +75,7 @@ namespace aemarcoCommons.WpfTools.MonitorTools
                 SplitSettingsChanged?.Invoke(this, EventArgs.Empty);
             }
         }
-        
+
 
 
         /// <summary>
@@ -95,5 +96,10 @@ namespace aemarcoCommons.WpfTools.MonitorTools
         /// Defines how many percent that pictures can be cut horizontally, defaults to 20
         /// </summary>
         public int PercentLeftRightCutAllowed { get; set; } = 20;
+
+        /// <summary>
+        /// Defines if the entire area is used, or only it´s working area
+        /// </summary>
+        public ScreenUsage ScreenUsage { get; set; } = ScreenUsage.All;
     }
 }

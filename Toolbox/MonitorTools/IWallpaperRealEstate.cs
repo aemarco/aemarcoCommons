@@ -1,17 +1,15 @@
-﻿using System;
+﻿using aemarcoCommons.Toolbox.PictureTools;
 using System.Drawing;
 
 namespace aemarcoCommons.Toolbox.MonitorTools
 {
-    public interface IWallpaperRealEstate
+    public interface IWallpaperRealEstate : IPictureInPicture
     {
         string DeviceName { get; }
-        int Width { get; }
-        int Height { get; }
-        void SetWallpaper(Image image);
-        void DrawToGraphics(Graphics g);
+        RealEstateType Type { get; }
 
-        DateTimeOffset Timestamp { get; }
-        Image CurrentOriginal { get; }
+        void SetWallpaper(Image image, Color? background = null);
     }
+
+
 }

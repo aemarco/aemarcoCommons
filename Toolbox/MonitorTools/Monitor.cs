@@ -13,7 +13,12 @@ namespace aemarcoCommons.Toolbox.MonitorTools
         #region ctor
 
         private readonly IWallpaperRealEstateSettings _monitorSettings;
-        public Monitor(Rectangle rect, string deviceName, string sourceFile, IWallpaperRealEstateSettings monitorSettings)
+        public Monitor(
+            Rectangle rect,
+            string deviceName,
+            string sourceFile,
+            IWallpaperRealEstateSettings monitorSettings,
+            RealEstateType realEstateType)
             : base(rect)
         {
             if (string.IsNullOrWhiteSpace(deviceName))
@@ -21,6 +26,7 @@ namespace aemarcoCommons.Toolbox.MonitorTools
 
 
             DeviceName = deviceName;
+            Type = realEstateType;
             _monitorSettings = monitorSettings;
 
             TrySetFromPreviousImage(sourceFile);
@@ -48,7 +54,7 @@ namespace aemarcoCommons.Toolbox.MonitorTools
                 {
                     File.Delete(sourceFile);
 
-                    if (Bootstrapper.RootScope != null && 
+                    if (Bootstrapper.RootScope != null &&
                         Bootstrapper.RootScope.TryResolve(out ILogger<Monitor> logger))
                     {
                         logger.LogError(ex, "Could not reinitialize picture for monitor with Target area {targetArea}", TargetArea);
@@ -59,18 +65,19 @@ namespace aemarcoCommons.Toolbox.MonitorTools
             SetPicture(new Bitmap(TargetArea.Width, TargetArea.Height));
         }
 
-
-
         #endregion
 
         public string DeviceName { get; }
 
-        public void SetWallpaper(Image wall) =>
+        public RealEstateType Type { get; }
+
+        public void SetWallpaper(Image wall, Color? background = null) =>
             SetWallpaper(
                 wall,
                 _monitorSettings.WallpaperMode,
                 _monitorSettings.PercentTopBottomCutAllowed,
-                _monitorSettings.PercentLeftRightCutAllowed);
+                _monitorSettings.PercentLeftRightCutAllowed,
+                background);
 
     }
 }

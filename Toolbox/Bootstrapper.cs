@@ -24,6 +24,12 @@ namespace aemarcoCommons.Toolbox
             builder.RegisterGeneric(typeof(JsonTypeToFileStore<>))
                 .AsImplementedInterfaces()
                 .SingleInstance();
+            builder.RegisterType<EmbeddedResourceQuery>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+
+
 
             builder.RegisterType<GeoService>();
             //in case AppConfiguration is not used from toolbox

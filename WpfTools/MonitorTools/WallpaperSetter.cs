@@ -1,17 +1,19 @@
 ﻿using aemarcoCommons.Extensions.AttributeExtensions;
 using aemarcoCommons.Toolbox.Interop;
 using aemarcoCommons.Toolbox.MonitorTools;
+using aemarcoCommons.Toolbox.PictureTools;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.Versioning;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace aemarcoCommons.WpfTools.MonitorTools
 {
@@ -19,11 +21,9 @@ namespace aemarcoCommons.WpfTools.MonitorTools
     {
         #region ctor
 
-        public const string VirtualScreenName = "Virtual";
-        public const string LockScreenName = nameof(LockScreen);
         private readonly IWallpaperSetterSettings _wallpaperSetterSettings;
         private readonly IHttpClientFactory _httpClientFactory;
-        private List<IWallpaperRealEstate> _monitors;
+        private List<IWallpaperRealEstate> _wallpaperTargets;
 
 
         /// <summary>
@@ -38,41 +38,48 @@ namespace aemarcoCommons.WpfTools.MonitorTools
         {
             _wallpaperSetterSettings = wallpaperSetterSettings;
             _httpClientFactory = httpClientFactory;
-            _monitors = GetMonitors().ToList();
+            _wallpaperTargets = GetRealEstates().ToList();
 
             SystemEvents.DisplaySettingsChanged += SystemEvents_DisplaySettingsChanged;
             _wallpaperSetterSettings.SplitSettingsChanged += Settings_SplitSettingsChanged;
         }
 
-       
-
         private void SystemEvents_DisplaySettingsChanged(object sender, EventArgs e)
         {
-            var oldMons = _monitors;
-            _monitors = GetMonitors().ToList();
-            foreach (var re in _monitors
-                .Where(x => oldMons.Any(om => om.DeviceName == x.DeviceName && om.CurrentOriginal is not null)))
+            var oldMons = _wallpaperTargets;
+            _wallpaperTargets = GetRealEstates()
+                .ToList();
+
+            foreach (var re in _wallpaperTargets
+                .Where(x =>
+                    oldMons.Any(om =>
+                        om.DeviceName == x.DeviceName &&
+                        om.CurrentOriginal is not null)))
             {
                 var oldMon = oldMons.First(x => x.DeviceName == re.DeviceName);
                 re.SetWallpaper(oldMon.CurrentOriginal);
             }
 
+
             switch (_lastMode)
             {
-                case "Combined":
-                    SetCombinedBackgroundImage();
+                case RealEstateType.Monitor:
+                    SetBackgroundImage(_wallpaperTargets
+                        .Where(x => x.Type == RealEstateType.Monitor));
                     break;
-                case "Virtual":
-                    SetVirtualBackgroundImage();
+                case RealEstateType.Virtual:
+                    SetBackgroundImage(_wallpaperTargets
+                        .Where(x => x.Type == RealEstateType.Virtual));
                     break;
             }
         }
         private void Settings_SplitSettingsChanged(object sender, EventArgs e)
         {
-            _monitors = GetMonitors().ToList();
+            _wallpaperTargets = GetRealEstates().ToList();
         }
 
-        private IEnumerable<IWallpaperRealEstate> GetMonitors()
+
+        private IEnumerable<IWallpaperRealEstate> GetRealEstates()
         {
             foreach (var scr in Screen.AllScreens)
             {
@@ -83,7 +90,8 @@ namespace aemarcoCommons.WpfTools.MonitorTools
             }
 
             yield return CreateVirtualMonitor();
-            yield return CreateLockScreen();
+            if (OperatingSystem.IsWindowsVersionAtLeast(10, 0, 10240))
+                yield return CreateLockScreen();
         }
         private IEnumerable<IWallpaperRealEstate> CreateMonitor(Screen screen)
         {
@@ -91,30 +99,47 @@ namespace aemarcoCommons.WpfTools.MonitorTools
             var verDiv = _wallpaperSetterSettings.VerticalSplit;
 
             var count = 0;
+            var bounds = _wallpaperSetterSettings.ScreenUsage switch
+            {
+                ScreenUsage.WorkingArea => screen.WorkingArea,
+                _ => screen.Bounds
+            };
+
+            var minX = Screen.AllScreens.Min(x => x.Bounds.X);
+            var minY = Screen.AllScreens.Min(x => x.Bounds.Y);
+
+
+            var width = bounds.Width / horDiv;
+            var height = bounds.Height / verDiv;
             for (var j = 0; j < verDiv; j++)
             {
                 for (var i = 0; i < horDiv; i++)
                 {
-                    count++;
-                    var width = screen.Bounds.Width / horDiv;
-                    var height = screen.Bounds.Height / verDiv;
 
-                    var targetRectangle = new Rectangle(
-                        -Screen.AllScreens.Min(x => x.Bounds.X) + screen.Bounds.Left + (i * width),
-                        -Screen.AllScreens.Min(x => x.Bounds.Y) + screen.Bounds.Top + (j * height),
-                        width,
-                        height);
+                    var x = _wallpaperSetterSettings.ScreenUsage switch
+                    {
+                        ScreenUsage.WorkingArea => -minX + screen.WorkingArea.Left + (i * width),
+                        _ => -minX + screen.Bounds.Left + (i * width)
+
+                    };
+                    var y = _wallpaperSetterSettings.ScreenUsage switch
+                    {
+                        ScreenUsage.WorkingArea => -minY + screen.WorkingArea.Top + (j * height),
+                        _ => -minY + screen.Bounds.Top + (j * height)
+
+                    };
 
                     var name = screen.DeviceName;
                     if (horDiv > 1 || verDiv > 1)
                     {
-                        name += $"_{count}";
+                        name += $"_{++count}";
                     }
                     yield return new Monitor(
-                        targetRectangle, 
-                        name, 
-                        _wallpaperSetterSettings.CombinedWallpaperFilePath, 
-                        _wallpaperSetterSettings);
+                        new Rectangle(x, y, width, height),
+                        name,
+                        _wallpaperSetterSettings.CombinedWallpaperFilePath,
+                        _wallpaperSetterSettings,
+                        RealEstateType.Monitor);
                 }
             }
 
@@ -132,7 +157,12 @@ namespace aemarcoCommons.WpfTools.MonitorTools
                 0,
                 SystemInformation.VirtualScreen.Width,
                 SystemInformation.VirtualScreen.Height);
-            var virtualMon = new Monitor(allScreenRect, VirtualScreenName, _wallpaperSetterSettings.VirtualWallpaperFilePath, _wallpaperSetterSettings);
+            var virtualMon = new Monitor(
+                allScreenRect,
+                "Virtual",
+                _wallpaperSetterSettings.VirtualWallpaperFilePath,
+                _wallpaperSetterSettings,
+                RealEstateType.Virtual);
             return virtualMon;
         }
         private IWallpaperRealEstate CreateLockScreen()
@@ -143,105 +173,16 @@ namespace aemarcoCommons.WpfTools.MonitorTools
                 Screen.PrimaryScreen.Bounds.Width,
                 Screen.PrimaryScreen.Bounds.Height);
 
-            return new LockScreen(targetRectangle, LockScreenName, _wallpaperSetterSettings);
+            return new LockScreen(targetRectangle, _wallpaperSetterSettings);
         }
 
-
-
-        public IEnumerable<IWallpaperRealEstate> WallpaperTargets => _monitors.ToList();
-        public IWallpaperSetterSettings Settings => _wallpaperSetterSettings;
-
-
-        #endregion
-
-        #region private
-
-        private string _lastMode = "Combined";
-        private void SetCombinedBackgroundImage()
-        {
-
-            //get the right true screen objects, and draw a image for it
-            var mons = _monitors.Where(x =>
-                x.DeviceName != VirtualScreenName &&
-                x.DeviceName != LockScreenName);
-            using Image virtualScreenBitmap = new Bitmap(SystemInformation.VirtualScreen.Width, SystemInformation.VirtualScreen.Height);
-            using var virtualScreenGraphic = Graphics.FromImage(virtualScreenBitmap);
-            foreach (var mon in mons)
-            {
-                mon.DrawToGraphics(virtualScreenGraphic);
-            }
-
-
-            //save the image to hd and set it
-            virtualScreenBitmap.Save(_wallpaperSetterSettings.CombinedWallpaperFilePath, ImageFormat.Jpeg);
-            WallpaperHelper.SetWallpaper(_wallpaperSetterSettings.CombinedWallpaperFilePath, WindowsWallpaperStyle.Tile);
-
-            //remember last mode for migration
-            _lastMode = "Combined";
-        }
-        private void SetVirtualBackgroundImage()
-        {
-            //get the right virtual screen object, and draw a image for it
-            var mon = _monitors.First(x => x.DeviceName == VirtualScreenName);
-            using Image virtualScreenBitmap = new Bitmap(mon.Width, mon.Height);
-            using var virtualScreenGraphic = Graphics.FromImage(virtualScreenBitmap);
-            mon.DrawToGraphics(virtualScreenGraphic);
-
-            //save the image to hd and set it
-            virtualScreenBitmap.Save(_wallpaperSetterSettings.VirtualWallpaperFilePath, ImageFormat.Jpeg);
-            WallpaperHelper.SetWallpaper(_wallpaperSetterSettings.VirtualWallpaperFilePath, WindowsWallpaperStyle.Tile);
-
-            //remember last mode for migration
-            _lastMode = "Virtual";
-        }
-
-
-        [SupportedOSPlatform("windows10.0.10240")]
-        private async Task SetLockScreenBackgroundImage()
-        {
-            //get the right lock screen object, and draw a image for it
-            var mon = _monitors.First(x => x.DeviceName == LockScreenName);
-            using Image virtualScreenBitmap = new Bitmap(mon.Width, mon.Height);
-            using var virtualScreenGraphic = Graphics.FromImage(virtualScreenBitmap);
-            mon.DrawToGraphics(virtualScreenGraphic);
-
-            //save the image to hd
-            virtualScreenBitmap.Save(_wallpaperSetterSettings.LockScreenFilePath, ImageFormat.Jpeg);
-
-            //use win api to set the lock screen
-            await using var stream = File.OpenRead(_wallpaperSetterSettings.LockScreenFilePath);
-            await Windows.System.UserProfile.LockScreen.SetImageStreamAsync(stream.AsRandomAccessStream());
-
-           ////this shittyyyyy
-           // var f = await Windows.Storage.StorageFile.GetFileFromPathAsync(_wallpaperSetterSettings.LockScreenFilePath);
-           // await Windows.System.UserProfile.UserProfilePersonalizationSettings.Current.TrySetWallpaperImageAsync(f);
-        }
-
-        protected async Task<Image> GetImage(string fileOrUrl)
-        {
-            if (fileOrUrl.StartsWith("http"))
-            {
-                var resp = await _httpClientFactory.CreateClient(nameof(WallpaperSetter))
-                    .GetAsync(fileOrUrl, HttpCompletionOption.ResponseHeadersRead);
-                resp.EnsureSuccessStatusCode();
-
-                await using var stream = await resp.Content.ReadAsStreamAsync();
-                return Image.FromStream(stream);
-
-            }
-            else
-            {
-                using var bmpTemp = new Bitmap(fileOrUrl);
-                return new Bitmap(bmpTemp);
-            }
-        }
+        public IEnumerable<IWallpaperRealEstate> WallpaperTargets => _wallpaperTargets.ToList();
 
         #endregion
 
         #region Setting Wall
 
         //one for each screen --> direct to Windows API
-
         /// <summary>
         /// Sets given Wallpaper foreach Screen
         /// </summary>
@@ -314,9 +255,6 @@ namespace aemarcoCommons.WpfTools.MonitorTools
         /// </summary>
         /// <param name="screens">Screen Device names</param>
         /// <param name="images">Image to set on those screens</param>
-
-        // ReSharper disable once MemberCanBePrivate.Global
-        // ReSharper disable once MemberCanBeProtected.Global
         public async Task SetWallsForScreens(List<string> screens, List<Image> images)
         {
             if (screens == null) throw new ArgumentNullException(nameof(screens));
@@ -326,22 +264,83 @@ namespace aemarcoCommons.WpfTools.MonitorTools
             if (screens.Count == 0) throw new ArgumentException("no screens to set", nameof(screens));
             if (screens.Count != images.Count) throw new ArgumentException("screen count does not match images count", nameof(images));
 
+
+
             for (var i = 0; i < screens.Count; i++)
             {
-                var mon = _monitors.First(x => x.DeviceName == screens[i]);
-                mon.SetWallpaper(images[i]);
+                _wallpaperTargets
+                    .First(x => x.DeviceName == screens[i])
+                    .SetWallpaper(images[i]);
             }
 
-            if (screens.Any(x => x == VirtualScreenName))
-                SetVirtualBackgroundImage();
-            else
-                SetCombinedBackgroundImage();
+            SetBackgroundImage(
+                screens.Any(x => _wallpaperTargets.First(wt => wt.Type == RealEstateType.Virtual).DeviceName == x)
+                    ? WallpaperTargets.Where(x => x.Type == RealEstateType.Virtual)
+                    : WallpaperTargets.Where(x => x.Type == RealEstateType.Monitor));
 
-            if (screens.Any(x => x == LockScreenName) && OperatingSystem.IsWindowsVersionAtLeast(10, 0, 10240))
+            if (screens.Any(x => _wallpaperTargets.First(wt => wt.Type == RealEstateType.LockScreen).DeviceName == x)
+                && OperatingSystem.IsWindowsVersionAtLeast(10, 0, 10240))
             {
-                await SetLockScreenBackgroundImage()
+                await SetLockScreenImage()
                     .ConfigureAwait(false);
             }
+        }
+
+        #endregion
+
+        #region private
+
+        protected async Task<Image> GetImage(string fileOrUrl)
+        {
+            if (fileOrUrl.StartsWith("http"))
+            {
+                var resp = await _httpClientFactory.CreateClient(nameof(WallpaperSetter))
+                    .GetAsync(fileOrUrl, HttpCompletionOption.ResponseHeadersRead);
+                resp.EnsureSuccessStatusCode();
+
+                await using var stream = await resp.Content.ReadAsStreamAsync();
+                return Image.FromStream(stream);
+
+            }
+            else
+            {
+                using var bmpTemp = new Bitmap(fileOrUrl);
+                return new Bitmap(bmpTemp);
+            }
+        }
+
+
+        private RealEstateType _lastMode = RealEstateType.Monitor;
+        private void SetBackgroundImage(IEnumerable<IWallpaperRealEstate> targets)
+        {
+            IWallpaperRealEstate[] sources = targets.ToArray();
+            _lastMode = sources.Any(x => x.Type == RealEstateType.Virtual)
+                ? RealEstateType.Virtual
+                : RealEstateType.Monitor;
+
+            var filePath = _lastMode switch
+            {
+                RealEstateType.Monitor => _wallpaperSetterSettings.CombinedWallpaperFilePath,
+                RealEstateType.Virtual => _wallpaperSetterSettings.VirtualWallpaperFilePath,
+                _ => throw new InvalidOperationException($"Mode {_lastMode} not supported.")
+            };
+
+            sources.CreateImageFile(filePath);
+            WallpaperHelper.SetWallpaper(filePath, WindowsWallpaperStyle.Tile);
+        }
+
+
+        [SupportedOSPlatform("windows10.0.10240")]
+        private async Task SetLockScreenImage()
+        {
+            //get the right lock screen object, and draw a image for it
+            _wallpaperTargets
+                 .First(x => x.Type == RealEstateType.LockScreen)
+                 .CreateImageFile(_wallpaperSetterSettings.LockScreenFilePath);
+
+            //use win api to set the lock screen
+            await using FileStream stream = File.OpenRead(_wallpaperSetterSettings.LockScreenFilePath);
+            await Windows.System.UserProfile.LockScreen.SetImageStreamAsync(stream.AsRandomAccessStream());
         }
 
         #endregion
@@ -371,5 +370,6 @@ namespace aemarcoCommons.WpfTools.MonitorTools
         }
 
         #endregion
+
     }
 }

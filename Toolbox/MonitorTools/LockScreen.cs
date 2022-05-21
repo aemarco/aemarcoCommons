@@ -1,5 +1,5 @@
-﻿using System.Drawing;
-using aemarcoCommons.Toolbox.PictureTools;
+﻿using aemarcoCommons.Toolbox.PictureTools;
+using System.Drawing;
 
 namespace aemarcoCommons.Toolbox.MonitorTools
 {
@@ -7,19 +7,24 @@ namespace aemarcoCommons.Toolbox.MonitorTools
     {
         private readonly IWallpaperRealEstateSettings _lockScreenSettings;
 
-        public LockScreen(Rectangle rect, string deviceName, IWallpaperRealEstateSettings lockScreenSettings)
-            :base(rect)
+        public LockScreen(
+            Rectangle rect,
+            IWallpaperRealEstateSettings lockScreenSettings)
+            : base(rect)
         {
             _lockScreenSettings = lockScreenSettings;
-            DeviceName = deviceName;
+
         }
 
-        public string DeviceName { get; }
-        public void SetWallpaper(Image wall) =>
+        public string DeviceName => nameof(LockScreen);
+        public RealEstateType Type => RealEstateType.LockScreen;
+
+        public void SetWallpaper(Image wall, Color? background = null) =>
             SetWallpaper(
-                wall, 
-                _lockScreenSettings.WallpaperMode, 
-                _lockScreenSettings.PercentTopBottomCutAllowed, 
-                _lockScreenSettings.PercentLeftRightCutAllowed);
+                wall,
+                _lockScreenSettings.WallpaperMode,
+                _lockScreenSettings.PercentTopBottomCutAllowed,
+                _lockScreenSettings.PercentLeftRightCutAllowed,
+                background);
     }
 }

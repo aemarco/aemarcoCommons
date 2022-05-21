@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
 
 namespace aemarcoCommons.Extensions.SortingExtensions
 {
     public static class EntityFrameworkExtensions
     {
-        public static IOrderedQueryable<T>  OrderBy<T>(this IQueryable<T> query, string propertyName)
+        public static IOrderedQueryable<T> OrderBy<T>(this IQueryable<T> query, string propertyName)
         {
             var entityType = typeof(T);
 

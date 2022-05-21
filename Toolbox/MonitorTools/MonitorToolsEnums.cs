@@ -27,4 +27,19 @@ namespace aemarcoCommons.Toolbox.MonitorTools
         [WallpaperModeWindowsMapping(WindowsWallpaperStyle.Fill)]
         Fill
     }
+
+
+    public enum RealEstateType
+    {
+        Monitor,
+        Virtual,
+        LockScreen
+    }
+
+    public enum ScreenUsage
+    {
+        All,
+        WorkingArea
+    }
+
 }
