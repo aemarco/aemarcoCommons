@@ -1,4 +1,5 @@
 ﻿using aemarcoCommons.WpfTools.BaseModels;
+using System;
 using System.Windows;
 
 namespace aemarcoCommons.WpfTools.Helpers
@@ -28,6 +29,18 @@ namespace aemarcoCommons.WpfTools.Helpers
                 if (!(window.DataContext is IBaseViewModel vm)) return;
                 vm.CloseCommand.CommandAction = _ => window.Close();
             };
+            window.Closing += (s, ee) =>
+            {
+                if (!(window.DataContext is IBaseViewModel vm)) return;
+
+                // ReSharper disable once SuspiciousTypeConversion.Global
+                if (vm is ITransient and IDisposable dis)
+                {
+                    dis.Dispose();
+                }
+            };
+
+
         }
     }
 }

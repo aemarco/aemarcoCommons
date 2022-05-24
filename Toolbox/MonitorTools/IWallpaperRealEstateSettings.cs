@@ -3,8 +3,8 @@
     public interface IWallpaperRealEstateSettings
     {
         WallpaperMode WallpaperMode { get; }
-        int PercentTopBottomCutAllowed { get; }
-        int PercentLeftRightCutAllowed { get; }
+        int PercentTopBottomCutAllowed { get; set; }
+        int PercentLeftRightCutAllowed { get; set; }
     }
 
 }

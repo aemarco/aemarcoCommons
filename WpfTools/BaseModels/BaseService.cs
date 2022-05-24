@@ -22,9 +22,10 @@ namespace aemarcoCommons.WpfTools.BaseModels
             //NotifyTriggersEventAttribute
             foreach (var eventAttribute in this.GetAttributes<NotifyTriggersEventAttribute>(propertyName))
             {
-                if (!(GetType()
-                    .GetField(eventAttribute.EventName, BindingFlags.Instance | BindingFlags.NonPublic)
-                    ?.GetValue(this) is MulticastDelegate multiDelegate)) continue;
+                if (GetType()
+                        .GetField(eventAttribute.EventName, BindingFlags.Instance | BindingFlags.NonPublic)
+                        ?.GetValue(this)
+                    is not MulticastDelegate multiDelegate) continue;
 
                 foreach (var eventHandler in multiDelegate.GetInvocationList())
                 {

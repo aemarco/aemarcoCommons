@@ -176,7 +176,7 @@ namespace aemarcoCommons.WpfTools.MonitorTools
             return new LockScreen(targetRectangle, _wallpaperSetterSettings);
         }
 
-        public IEnumerable<IWallpaperRealEstate> WallpaperTargets => _wallpaperTargets.ToList();
+        public IEnumerable<IWallpaperRealEstate> WallpaperTargets => _wallpaperTargets;
 
         #endregion
 
