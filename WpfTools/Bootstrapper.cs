@@ -3,7 +3,6 @@ using aemarcoCommons.WpfTools.Commands;
 using aemarcoCommons.WpfTools.MonitorTools;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Polly;
@@ -33,14 +32,6 @@ namespace aemarcoCommons.WpfTools
 
         internal static ILifetimeScope RootScope { get; private set; }
 
-
-        public static IConfigurationBuilder ConfigAppsettings(this IConfigurationBuilder builder)
-        {
-            var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
-            return builder
-                .AddJsonFile("appsettings.json", false, true)
-                .AddJsonFile($"appsettings.{environmentName}.json", true, true);
-        }
 
         /// <summary>
         /// Call this, to register

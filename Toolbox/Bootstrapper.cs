@@ -2,6 +2,7 @@
 using aemarcoCommons.Toolbox.SerializationTools;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using Polly.Extensions.Http;
@@ -12,6 +13,16 @@ namespace aemarcoCommons.Toolbox
 {
     public static class Bootstrapper
     {
+
+        public static IConfigurationBuilder ConfigAppsettings(this IConfigurationBuilder builder)
+        {
+            var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
+            return builder
+                .AddJsonFile("appsettings.json", false, true)
+                .AddJsonFile($"appsettings.{environmentName}.json", true, true);
+        }
+
+
         internal static ILifetimeScope RootScope { get; private set; }
         public static ContainerBuilder SetupToolbox(this ContainerBuilder builder)
         {
