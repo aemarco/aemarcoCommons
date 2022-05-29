@@ -1,8 +1,9 @@
 ﻿using aemarcoCommons.Extensions.CryptoExtensions;
+using aemarcoCommons.Extensions.FileExtensions;
 using FluentAssertions;
 using NUnit.Framework;
 using System.IO;
-using aemarcoCommons.Extensions.FileExtensions;
+using System.Text;
 
 namespace ExtensionsTests.CryptoExtensionsTests
 {
@@ -19,11 +20,45 @@ namespace ExtensionsTests.CryptoExtensionsTests
             result.Should().Be(text);
         }
 
+
+
+        [TestCase("test")]
+        [TestCase("77B80F6DE365762B070048D1F59ABB39")]
+        [TestCase(@"C:\Users\someUser\someDir\someOtherDirrrrrr\someTestDir\bin\Debug\net6.0\dataFolder\someFile-000-111.file")]
+        public void EncryptDecrypt_Deterministic_ShouldWork(string text)
+        {
+            var encrypted = text.EncryptToBase64("password", base64Salt: "Eo2qLjBs+hexKpCmJDCWIA==", base64Iv: "vYryJXbg0t3seI6+GdVCUA==");
+            var result = encrypted.DecryptFromBase64("password");
+
+            result.Should().Be(text);
+        }
+
+
+        [TestCase("test")]
+        [TestCase("77B80F6DE365762B070048D1F59ABB39")]
+        [TestCase(@"C:\Users\someUser\someDir\someOtherDirrrrrr\someTestDir\bin\Debug\net6.0\dataFolder\someFile-000-111.file")]
+        public void EncryptDecryptBytes_Deterministic_ShouldWork(string text)
+        {
+            var bytes = Encoding.UTF8.GetBytes(text);
+
+            var encrypted = bytes.Encrypt("password", base64Salt: "Eo2qLjBs+hexKpCmJDCWIA==", base64Iv: "vYryJXbg0t3seI6+GdVCUA==");
+
+
+            var result = encrypted.Decrypt("password");
+
+
+            result.Should().Equal(bytes);
+        }
+
+
+
+
+
         [Test]
         public void EncryptDecryptFile_ShouldWork()
         {
             var bytes = Symetric.GetRandomBytes(1024 * 1024 * 8);
-            
+
             var fileInfo = new FileInfo("testfile.fi");
             File.WriteAllBytes(fileInfo.FullName, bytes);
 
@@ -59,6 +94,14 @@ namespace ExtensionsTests.CryptoExtensionsTests
             decrypted.Delete();
             result.Should().BeTrue();
         }
+
+
+
+
+
+
+
+
 
     }
 }
