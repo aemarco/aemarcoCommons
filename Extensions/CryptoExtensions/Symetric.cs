@@ -6,71 +6,12 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
 {
     public static class Symetric
     {
-
-        public static byte[] Encrypt(
-            this byte[] clearText,
-            string password,
-            KeySize keySize = KeySize.Normal_128,
-            string base64Salt = null,
-            string base64Iv = null)
+        public static string EncryptToBase64(this string clearText, string password, KeySize keySize = KeySize.Normal_128)
         {
             using (var memory = new MemoryStream())
             {
                 Encrypt(
-                    password,
-                    memory,
-                    cryptoStream =>
-                    {
-                        cryptoStream.Write(clearText, 0, clearText.Length);
-                    },
-                    keySize,
-                    base64Salt,
-                    base64Iv);
-                return memory.ToArray();
-            }
-        }
-
-        public static byte[] Decrypt(
-            this byte[] cryptedBytes,
-            string password)
-        {
-            byte[] result = null;
-            using (var memory = new MemoryStream(cryptedBytes))
-            {
-                Decrypt(
-                    password,
-                    memory,
-                    cryptoStream =>
-                    {
-                        using (var decrypted = new MemoryStream())
-                        {
-                            cryptoStream.CopyTo(decrypted);
-                            result = decrypted.ToArray();
-                        }
-                    });
-
-
-            }
-            return result;
-        }
-
-
-
-
-
-
-
-        public static string EncryptToBase64(
-            this string clearText,
-            string password,
-            KeySize keySize = KeySize.Normal_128,
-            string base64Salt = null,
-            string base64Iv = null)
-        {
-            using (var memory = new MemoryStream())
-            {
-                Encrypt(
-                    password,
+                    password, 
                     memory,
                     cryptoStream =>
                     {
@@ -79,23 +20,19 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
                             swEncrypt.Write(clearText);
                         }
                     },
-                    keySize,
-                    base64Salt,
-                    base64Iv);
+                    keySize);
                 var result = Convert.ToBase64String(memory.ToArray());
                 return result;
             }
         }
-        public static string DecryptFromBase64(
-            this string cryptedBase64,
-            string password)
+        public static string DecryptFromBase64(this string cryptedBase64, string password)
         {
             var bytesToDecrpyt = Convert.FromBase64String(cryptedBase64);
             using (var memory = new MemoryStream(bytesToDecrpyt))
             {
                 string result = null;
                 Decrypt(
-                    password,
+                    password, 
                     memory,
                     cryptoStream =>
                     {
@@ -108,20 +45,14 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
             }
         }
 
-        public static FileInfo EncryptFile(
-            this FileInfo fileInfo,
-            string password,
-            bool deleteOriginal = false,
-            KeySize keySize = KeySize.Normal_128,
-            string base64Salt = null,
-            string base64Iv = null)
+        public static FileInfo EncryptFile(this FileInfo fileInfo, string password, bool deleteOriginal = false, KeySize keySize = KeySize.Normal_128)
         {
             var crypted = new FileInfo($"{fileInfo.FullName}.crypted");
             using (var destinationStream = File.OpenWrite(crypted.FullName))
             {
                 Encrypt(
                     password,
-                    destinationStream,
+                    destinationStream, 
                     cryptoStream =>
                     {
                         using (var readStream = fileInfo.OpenRead())
@@ -129,33 +60,23 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
                             readStream.CopyTo(cryptoStream);
                         }
                     },
-                    keySize,
-                    base64Salt,
-                    base64Iv);
+                    keySize);
             }
             if (deleteOriginal)
             {
                 fileInfo.Delete();
             }
             return crypted;
-
+                     
         }
-        public static void EncryptFileInPlace(
-            this FileInfo fileInfo,
-            string password,
-            KeySize keySize = KeySize.Normal_128,
-            string base64Salt = null,
-            string base64Iv = null)
+        public static void EncryptFileInPlace(this FileInfo fileInfo, string password, KeySize keySize = KeySize.Normal_128)
         {
-            var crypted = fileInfo.EncryptFile(password, true, keySize, base64Salt, base64Iv);
+            var crypted = fileInfo.EncryptFile(password, true, keySize);
             File.Move(crypted.FullName, fileInfo.FullName);
         }
 
 
-        public static FileInfo DecryptFile(
-            this FileInfo fileInfo,
-            string password,
-            bool deleteCrypted = false)
+        public static FileInfo DecryptFile(this FileInfo fileInfo, string password, bool deleteCrypted = false)
         {
             var decrypted = new FileInfo($"{fileInfo.FullName}.decrypted");
             if (decrypted.FullName.EndsWith(".crypted.decrypted"))
@@ -165,7 +86,7 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
             using (var sourceStream = fileInfo.OpenRead())
             {
                 Decrypt(
-                    password,
+                    password, 
                     sourceStream,
                     cryptoStream =>
                     {
@@ -181,9 +102,7 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
             }
             return decrypted;
         }
-        public static void DecryptFileInPlace(
-            this FileInfo fileInfo,
-            string password)
+        public static void DecryptFileInPlace(this FileInfo fileInfo, string password)
         {
             var decrypted = fileInfo.DecryptFile(password, true);
             File.Move(decrypted.FullName, fileInfo.FullName);
@@ -194,66 +113,21 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
 
         //this internal logic encrypts stuff symetrical with aes with given pw and keysize
         //the resulting bytes are build up as following: salt + iv + key size + data
-
+        
         private const int DerivationPasswordIterations = 10000;
 
-        //private static void Encrypt(string passPhrase, Stream destinationStream, Action<CryptoStream> writeAction, KeySize keySize)
-        //{
-        //    using (var aesAlg = Aes.Create())
-        //    {
-        //        var salt = GetRandomBytes(aesAlg.BlockSize);
-        //        destinationStream.Write(salt, 0, salt.Length);
-
-        //        using (var pwd = new Rfc2898DeriveBytes(passPhrase, salt, DerivationPasswordIterations))
-        //        {
-        //            aesAlg.Padding = PaddingMode.PKCS7;
-
-        //            aesAlg.IV = GetRandomBytes(aesAlg.BlockSize);
-        //            destinationStream.Write(aesAlg.IV, 0, aesAlg.IV.Length);
-
-        //            var ks = 64 * (byte)keySize;
-        //            destinationStream.WriteByte((byte)keySize);
-        //            aesAlg.KeySize = ks;
-        //            aesAlg.Key = pwd.GetBytes(ks / 8);
-
-
-        //            var saltS = Convert.ToBase64String(salt);
-        //            var ivS = Convert.ToBase64String(aesAlg.IV);
-
-
-        //            using (var cryptoStream = new CryptoStream(
-        //                    destinationStream,
-        //                    aesAlg.CreateEncryptor(),
-        //                    CryptoStreamMode.Write))
-        //            {
-        //                writeAction(cryptoStream);
-        //            }
-        //        }
-        //    }
-        //}
-
-        private static void Encrypt(
-            string passPhrase,
-            Stream destinationStream,
-            Action<CryptoStream> writeAction,
-            KeySize keySize,
-            string base64Salt = null,
-            string base64Iv = null)
+        private static void Encrypt(string passPhrase, Stream destinationStream, Action<CryptoStream> writeAction, KeySize keySize)
         {
             using (var aesAlg = Aes.Create())
             {
-                var salt = base64Salt == null
-                    ? GetRandomBytes(aesAlg.BlockSize)
-                    : Convert.FromBase64String(base64Salt);
+                var salt = GetRandomBytes(aesAlg.BlockSize);
                 destinationStream.Write(salt, 0, salt.Length);
 
                 using (var pwd = new Rfc2898DeriveBytes(passPhrase, salt, DerivationPasswordIterations))
-                {
+                { 
                     aesAlg.Padding = PaddingMode.PKCS7;
 
-                    aesAlg.IV = base64Iv == null
-                        ? GetRandomBytes(aesAlg.BlockSize)
-                        : Convert.FromBase64String(base64Iv);
+                    aesAlg.IV = GetRandomBytes(aesAlg.BlockSize);
                     destinationStream.Write(aesAlg.IV, 0, aesAlg.IV.Length);
 
                     var ks = 64 * (byte)keySize;
@@ -262,16 +136,15 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
                     aesAlg.Key = pwd.GetBytes(ks / 8);
 
                     using (var cryptoStream = new CryptoStream(
-                               destinationStream,
-                               aesAlg.CreateEncryptor(),
-                               CryptoStreamMode.Write))
+                            destinationStream, 
+                            aesAlg.CreateEncryptor(), 
+                            CryptoStreamMode.Write))
                     {
                         writeAction(cryptoStream);
                     }
                 }
             }
         }
-
 
         private static void Decrypt(string passPhrase, Stream sourceStream, Action<CryptoStream> readAction)
         {
@@ -291,7 +164,7 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
                     var key = pwd.GetBytes(aesAlg.KeySize / 8);
 
                     using (var cryptoStream = new CryptoStream(
-                            sourceStream,
+                            sourceStream,  
                             aesAlg.CreateDecryptor(key, iv),
                             CryptoStreamMode.Read))
                     {
