@@ -81,10 +81,6 @@ namespace aemarcoCommons.WpfTools.MonitorTools
 
         private IEnumerable<IWallpaperRealEstate> GetRealEstates()
         {
-            //virtual
-            yield return CreateVirtualMonitor();
-
-            //monitors
             foreach (var scr in Screen.AllScreens)
             {
                 foreach (var split in CreateMonitor(scr))
@@ -93,24 +89,9 @@ namespace aemarcoCommons.WpfTools.MonitorTools
                 }
             }
 
-            //lock screen
+            yield return CreateVirtualMonitor();
             if (OperatingSystem.IsWindowsVersionAtLeast(10, 0, 10240))
                 yield return CreateLockScreen();
-        }
-        private IWallpaperRealEstate CreateVirtualMonitor()
-        {
-            var allScreenRect = new Rectangle(
-                0,
-                0,
-                SystemInformation.VirtualScreen.Width,
-                SystemInformation.VirtualScreen.Height);
-            var virtualMon = new Monitor(
-                allScreenRect,
-                "Virtual",
-                _wallpaperSetterSettings.VirtualWallpaperFilePath,
-                _wallpaperSetterSettings,
-                RealEstateType.Virtual);
-            return virtualMon;
         }
         private IEnumerable<IWallpaperRealEstate> CreateMonitor(Screen screen)
         {
@@ -168,6 +149,21 @@ namespace aemarcoCommons.WpfTools.MonitorTools
             //    screen.Bounds.Width,
             //    screen.Bounds.Height);
             //yield return new Monitor(targetRectangle, screen.DeviceName, _wallpaperSetterSettings.CombinedWallpaperFilePath, _wallpaperSetterSettings);
+        }
+        private IWallpaperRealEstate CreateVirtualMonitor()
+        {
+            var allScreenRect = new Rectangle(
+                0,
+                0,
+                SystemInformation.VirtualScreen.Width,
+                SystemInformation.VirtualScreen.Height);
+            var virtualMon = new Monitor(
+                allScreenRect,
+                "Virtual",
+                _wallpaperSetterSettings.VirtualWallpaperFilePath,
+                _wallpaperSetterSettings,
+                RealEstateType.Virtual);
+            return virtualMon;
         }
         private IWallpaperRealEstate CreateLockScreen()
         {
