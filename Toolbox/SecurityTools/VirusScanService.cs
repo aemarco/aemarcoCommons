@@ -7,9 +7,10 @@ using System.IO;
 
 namespace aemarcoCommons.Toolbox.SecurityTools
 {
-    public static class VirusScanService
+    public class VirusScanService
     {
-        public static VirusScanResult ScanFile(
+
+        public VirusScanResult ScanFile(
             string filePath,
             string mpCmdRunExeLocation = @"C:\Program Files\Windows Defender\MpCmdRun.exe",
             int timeoutInMs = 30000)

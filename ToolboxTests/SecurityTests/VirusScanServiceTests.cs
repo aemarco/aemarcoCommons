@@ -15,7 +15,7 @@ namespace ToolboxTests.SecurityTests
             File.WriteAllBytes("eicar", eicar);
 
 
-            var result = VirusScanService.ScanFile("eicar");
+            var result = new VirusScanService().ScanFile("eicar");
 
             result.Success.Should().BeTrue();
             result.IsThread.Should().BeTrue();
@@ -28,7 +28,7 @@ namespace ToolboxTests.SecurityTests
             File.WriteAllBytes("save", save);
 
 
-            var result = VirusScanService.ScanFile("save");
+            var result = new VirusScanService().ScanFile("save");
 
             result.Success.Should().BeTrue();
             result.IsThread.Should().BeFalse();
@@ -37,7 +37,7 @@ namespace ToolboxTests.SecurityTests
         [Test]
         public void ScanFile_ThrowsFileNotFound_ForCandidate()
         {
-            var result = VirusScanService.ScanFile("save");
+            var result = new VirusScanService().ScanFile("save");
 
             result.Success.Should().BeFalse();
             result.IsThread.Should().BeNull();
@@ -50,7 +50,7 @@ namespace ToolboxTests.SecurityTests
             var save = Encoding.ASCII.GetBytes(@"123");
             File.WriteAllBytes("save", save);
 
-            var result = VirusScanService.ScanFile("save", "123.exe");
+            var result = new VirusScanService().ScanFile("save", "123.exe");
 
             result.Success.Should().BeFalse();
             result.IsThread.Should().BeNull();

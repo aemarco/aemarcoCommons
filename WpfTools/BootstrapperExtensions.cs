@@ -27,7 +27,7 @@ namespace aemarcoCommons.WpfTools
 
 
 
-    public static class Bootstrapper
+    public static class BootstrapperExtensions
     {
 
         internal static ILifetimeScope RootScope { get; private set; }
@@ -91,18 +91,10 @@ namespace aemarcoCommons.WpfTools
             return builder;
         }
 
-        public static ContainerBuilder SetupSerilogAsILogger(this ContainerBuilder builder, out ILoggerFactory factory)
+        public static ContainerBuilder SetupSerilogAsILogger(this ContainerBuilder builder)
         {
-            factory = new LoggerFactory(new ILoggerProvider[] { new SerilogLoggerProvider() });
-
-            //logging
-            builder.RegisterInstance(factory)
-                .As<ILoggerFactory>()
-                .SingleInstance();
-            builder.RegisterGeneric(typeof(Logger<>))
-                .As(typeof(ILogger<>))
-                .SingleInstance();
-
+            var factory = new LoggerFactory(new ILoggerProvider[] { new SerilogLoggerProvider() });
+            builder.SetupLoggerFactory(factory);
             return builder;
         }
 

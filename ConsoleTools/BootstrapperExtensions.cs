@@ -1,5 +1,7 @@
 ﻿using aemarcoCommons.Toolbox;
 using Autofac;
+using Microsoft.Extensions.Logging;
+using Serilog.Extensions.Logging;
 using Spectre.Console.Cli;
 using System;
 
@@ -20,11 +22,24 @@ namespace aemarcoCommons.ConsoleTools
             return builder;
         }
 
+        public static ContainerBuilder SetupSerilogAsILogger(this ContainerBuilder builder)
+        {
+            var factory = new LoggerFactory(new ILoggerProvider[] { new SerilogLoggerProvider() });
+            builder.SetupLoggerFactory(factory);
+            return builder;
+        }
+
+
+
         public static ITypeRegistrar ToAutoFacTypeRegistrar(this ContainerBuilder builder)
         {
             builder.SetupConsoleTools();
             return new AutofacTypeRegistrar(builder);
         }
+
+
+
+
     }
 
 

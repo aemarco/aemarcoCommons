@@ -1,4 +1,5 @@
-﻿<!--EXTERNAL_PROPERTIES: AssemblyVersion-->
+﻿
+<!--EXTERNAL_PROPERTIES: AssemblyVersion-->
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\SolutionInfo.proj" />
 

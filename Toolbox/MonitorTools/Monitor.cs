@@ -54,8 +54,8 @@ namespace aemarcoCommons.Toolbox.MonitorTools
                 {
                     File.Delete(sourceFile);
 
-                    if (Bootstrapper.RootScope != null &&
-                        Bootstrapper.RootScope.TryResolve(out ILogger<Monitor> logger))
+                    if (BootstrapperExtensions.RootScope != null &&
+                        BootstrapperExtensions.RootScope.TryResolve(out ILogger<Monitor> logger))
                     {
                         logger.LogError(ex, "Could not reinitialize picture for monitor with Target area {targetArea}", TargetArea);
                     }

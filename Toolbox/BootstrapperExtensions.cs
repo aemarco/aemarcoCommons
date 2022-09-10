@@ -1,9 +1,11 @@
 ﻿using aemarcoCommons.Toolbox.GeoTools;
+using aemarcoCommons.Toolbox.SecurityTools;
 using aemarcoCommons.Toolbox.SerializationTools;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Extensions.Http;
 using System;
@@ -11,7 +13,7 @@ using System.Net.Http;
 
 namespace aemarcoCommons.Toolbox
 {
-    public static class Bootstrapper
+    public static class BootstrapperExtensions
     {
 
         public static IConfigurationBuilder ConfigAppsettings(this IConfigurationBuilder builder)
@@ -32,6 +34,10 @@ namespace aemarcoCommons.Toolbox
             builder.RegisterType<Random>().SingleInstance();
 
             //* Toolbox stuff
+
+            builder.RegisterType<VirusScanService>();
+
+
             builder.RegisterGeneric(typeof(JsonTypeToFileStore<>))
                 .AsImplementedInterfaces()
                 .SingleInstance();
@@ -70,6 +76,18 @@ namespace aemarcoCommons.Toolbox
             return builder;
         }
 
+        public static ContainerBuilder SetupLoggerFactory(
+            this ContainerBuilder builder,
+            ILoggerFactory factory)
+        {
+            builder.RegisterInstance(factory)
+                .As<ILoggerFactory>()
+                .SingleInstance();
+            builder.RegisterGeneric(typeof(Logger<>))
+                .As(typeof(ILogger<>))
+                .SingleInstance();
+            return builder;
+        }
 
     }
 }

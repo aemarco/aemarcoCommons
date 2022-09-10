@@ -5,9 +5,9 @@ namespace aemarcoCommons.Toolbox.CustomDatastructures
     public class DropOutStack<T>
     {
         private readonly T[] _items;
-        private int _top = 0;
+        private int _top;
         public DropOutStack(int capacity)
-        { 
+        {
             _items = new T[capacity];
         }
 
