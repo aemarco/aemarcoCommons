@@ -12,7 +12,7 @@ namespace aemarcoCommons.Extensions.TextExtensions
         /// <param name="text">text to parse</param>
         /// <param name="value">out the parsed value</param>
         /// <returns>true if success</returns>
-        internal static bool TryParse<T>(this string text, out T? value)
+        public static bool TryParse<T>(this string text, out T? value)
             where T : struct
         {
             var converter = TypeDescriptor.GetConverter(typeof(T));
