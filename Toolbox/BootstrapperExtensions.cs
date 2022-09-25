@@ -1,12 +1,14 @@
 ﻿using aemarcoCommons.Toolbox.GeoTools;
+using aemarcoCommons.Toolbox.NetworkTools;
+using aemarcoCommons.Toolbox.Oidc;
 using aemarcoCommons.Toolbox.SecurityTools;
 using aemarcoCommons.Toolbox.SerializationTools;
 using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Polly;
+using Polly.Contrib.WaitAndRetry;
 using Polly.Extensions.Http;
 using System;
 using System.Net.Http;
@@ -24,58 +26,6 @@ namespace aemarcoCommons.Toolbox
                 .AddJsonFile($"appsettings.{environmentName}.json", true, true);
         }
 
-
-        internal static ILifetimeScope RootScope { get; private set; }
-        public static ContainerBuilder SetupToolbox(this ContainerBuilder builder)
-        {
-            var sc = new ServiceCollection();
-
-
-            builder.RegisterType<Random>().SingleInstance();
-
-            //* Toolbox stuff
-
-            builder.RegisterType<VirusScanService>();
-
-
-            builder.RegisterGeneric(typeof(JsonTypeToFileStore<>))
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            builder.RegisterType<EmbeddedResourceQuery>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
-
-
-
-            builder.RegisterType<GeoService>();
-            //in case AppConfiguration is not used from toolbox
-            //somebody may override this still
-            builder.RegisterType<GeoServiceSettings>()
-                .AsImplementedInterfaces()
-                .IfNotRegistered(typeof(IGeoServiceSettings));
-
-            var waitAndRetry = HttpPolicyExtensions
-                .HandleTransientHttpError()
-                .WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(1));
-            var timeoutPolicy = Policy.TimeoutAsync<HttpResponseMessage>(TimeSpan.FromSeconds(10));
-            sc.AddHttpClient(nameof(GeoService))
-                .AddPolicyHandler(waitAndRetry)
-                .AddPolicyHandler(timeoutPolicy)
-                .ConfigurePrimaryHttpMessageHandler(() =>
-                {
-                    return new HttpClientHandler
-                    {
-                        ServerCertificateCustomValidationCallback =
-                            (r, c, ch, e) => true
-                    };
-                });
-
-            builder.Populate(sc);
-            builder.RegisterBuildCallback(scope => RootScope = scope);
-            return builder;
-        }
-
         public static ContainerBuilder SetupLoggerFactory(
             this ContainerBuilder builder,
             ILoggerFactory factory)
@@ -88,6 +38,69 @@ namespace aemarcoCommons.Toolbox
                 .SingleInstance();
             return builder;
         }
+
+
+        public static IServiceCollection SetupToolbox(this IServiceCollection sc) =>
+            sc
+                .SetupServices()
+                .SetupPollyPolicies()
+                .SetupHttpClientStuff();
+
+        private static IServiceCollection SetupServices(this IServiceCollection sc)
+        {
+            sc.AddSingleton<Random>();
+            sc.AddSingleton(typeof(ITypeToFileStore<>), typeof(JsonTypeToFileStore<>));
+            sc.AddTransient<IEmbeddedResourceQuery, EmbeddedResourceQuery>();
+
+            sc.AddTransient<VirusScanService>();
+            sc.AddTransient<IGeoServiceSettings, GeoServiceSettings>();
+            sc.AddTransient<GeoService>();
+
+            return sc;
+        }
+
+        private static IServiceCollection SetupPollyPolicies(this IServiceCollection sc)
+        {
+            var policyRegistry = sc.AddPolicyRegistry();
+
+            policyRegistry.Add(
+                "HttpRetry",
+                HttpPolicyExtensions.HandleTransientHttpError()
+                    .WaitAndRetryAsync(Backoff.DecorrelatedJitterBackoffV2(TimeSpan.FromSeconds(1), 5)));
+
+            policyRegistry.Add(
+                "HttpCircuitBreaker",
+                HttpPolicyExtensions
+                    .HandleTransientHttpError()
+                    .CircuitBreakerAsync(
+                        handledEventsAllowedBeforeBreaking: 10,
+                        durationOfBreak: TimeSpan.FromMinutes(5)));
+
+            return sc;
+        }
+
+        private static IServiceCollection SetupHttpClientStuff(this IServiceCollection sc)
+        {
+            sc.AddSingleton<RateLimitingPerHostHandler>();
+            sc.AddScoped<OidcTokenRenewalHandler>();
+            sc.AddSingleton<OidcTokenRenewalHandlerHelper>();
+
+            var timeoutPolicy = Policy.TimeoutAsync<HttpResponseMessage>(TimeSpan.FromSeconds(10));
+            sc.AddHttpClient(nameof(GeoService))
+                .AddPolicyHandlerFromRegistry("HttpRetry")
+                .AddPolicyHandler(timeoutPolicy)
+                .ConfigurePrimaryHttpMessageHandler(() =>
+                {
+                    return new HttpClientHandler
+                    {
+                        ServerCertificateCustomValidationCallback =
+                            (r, c, ch, e) => true
+                    };
+                });
+
+            return sc;
+        }
+
 
     }
 }

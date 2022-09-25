@@ -43,13 +43,12 @@ namespace aemarcoCommons.WpfTools
         /// <returns>builder with registrations</returns>
         public static ContainerBuilder SetupWpfTools(this ContainerBuilder builder)
         {
-            builder.SetupToolbox();
-            var sc = new ServiceCollection();
+            var sc = new ServiceCollection()
+                .SetupToolbox();
 
 
             //* some common stuff
             builder.RegisterInstance(Application.Current.Dispatcher);
-            builder.RegisterType<Random>().SingleInstance();
 
             //* WpfTools stuff
             //--> windows getting registered

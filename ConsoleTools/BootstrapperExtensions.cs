@@ -1,5 +1,7 @@
 ﻿using aemarcoCommons.Toolbox;
 using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog.Extensions.Logging;
 using Spectre.Console.Cli;
@@ -13,10 +15,14 @@ namespace aemarcoCommons.ConsoleTools
         private static ILifetimeScope _rootScope;
         public static ContainerBuilder SetupConsoleTools(this ContainerBuilder builder)
         {
-            builder.SetupToolbox();
-
+            var sc = new ServiceCollection()
+                .SetupToolbox();
             //register console stuff here
 
+
+
+
+            builder.Populate(sc);
 
             builder.RegisterBuildCallback(scope => _rootScope = scope);
             return builder;

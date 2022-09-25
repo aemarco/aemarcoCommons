@@ -1,6 +1,5 @@
-﻿using aemarcoCommons.Toolbox.PictureTools;
-using Autofac;
-using Microsoft.Extensions.Logging;
+﻿using aemarcoCommons.Extensions.FileExtensions;
+using aemarcoCommons.Toolbox.PictureTools;
 using System;
 using System.Drawing;
 using System.IO;
@@ -50,15 +49,9 @@ namespace aemarcoCommons.Toolbox.MonitorTools
                         //if the previous file is not compatible in size, then we default without exception
                     }
                 }
-                catch (Exception ex)
+                catch
                 {
-                    File.Delete(sourceFile);
-
-                    if (BootstrapperExtensions.RootScope != null &&
-                        BootstrapperExtensions.RootScope.TryResolve(out ILogger<Monitor> logger))
-                    {
-                        logger.LogError(ex, "Could not reinitialize picture for monitor with Target area {targetArea}", TargetArea);
-                    }
+                    new FileInfo(sourceFile).TryDelete();
                 }
             }
             //defaults to a black image
