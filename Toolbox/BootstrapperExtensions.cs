@@ -82,21 +82,15 @@ namespace aemarcoCommons.Toolbox
         private static IServiceCollection SetupHttpClientStuff(this IServiceCollection sc)
         {
             sc.AddSingleton<RateLimitingPerHostHandler>();
-            sc.AddScoped<OidcTokenRenewalHandler>();
+            sc.AddTransient<OidcTokenRenewalHandler>();
+            sc.AddTransient<IgnoreServerCertificateHandler>();
             sc.AddSingleton<OidcTokenRenewalHandlerHelper>();
 
             var timeoutPolicy = Policy.TimeoutAsync<HttpResponseMessage>(TimeSpan.FromSeconds(10));
             sc.AddHttpClient(nameof(GeoService))
                 .AddPolicyHandlerFromRegistry("HttpRetry")
                 .AddPolicyHandler(timeoutPolicy)
-                .ConfigurePrimaryHttpMessageHandler(() =>
-                {
-                    return new HttpClientHandler
-                    {
-                        ServerCertificateCustomValidationCallback =
-                            (r, c, ch, e) => true
-                    };
-                });
+                .ConfigurePrimaryHttpMessageHandler<IgnoreServerCertificateHandler>();
 
             return sc;
         }

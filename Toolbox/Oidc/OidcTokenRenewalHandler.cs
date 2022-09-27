@@ -37,11 +37,6 @@ namespace aemarcoCommons.Toolbox.Oidc
             _oidcClient = oidcClient ?? throw new ArgumentNullException(nameof(oidcClient));
             _sessionStore = sessionStore ?? throw new ArgumentNullException(nameof(sessionStore));
 
-            InnerHandler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback =
-                    (r, c, ch, e) => true
-            };
         }
 
 

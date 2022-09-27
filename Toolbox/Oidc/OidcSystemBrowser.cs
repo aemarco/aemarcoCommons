@@ -1,12 +1,11 @@
 ﻿using aemarcoCommons.Extensions.NetworkExtensions;
 using IdentityModel.OidcClient.Browser;
-using System;
-using System.IO;
-using System.Net;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
+using System;
+using System.IO;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -78,7 +77,7 @@ namespace aemarcoCommons.Toolbox.Oidc
         public LoopbackHttpListener(string url)
         {
             _source = new TaskCompletionSource<string>();
-            
+
             _host = new WebHostBuilder()
                 .UseKestrel()
                 .UseUrls(url)
@@ -139,7 +138,7 @@ namespace aemarcoCommons.Toolbox.Oidc
                 ctx.Response.StatusCode = 200;
                 ctx.Response.ContentType = "text/html";
                 ctx.Response.Headers.Add("Date", DateTimeOffset.UtcNow.ToString());
-                
+
                 await ctx.Response.WriteAsync(content);
                 await ctx.Response.Body.FlushAsync();
 
