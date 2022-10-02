@@ -43,7 +43,7 @@ namespace aemarcoCommons.Toolbox.MonitorTools
                         if (old.Width >= (TargetArea.X + TargetArea.Width) &&
                             old.Height >= (TargetArea.Y + TargetArea.Height))
                         {
-                            SetPicture(new Bitmap(old.Clone(TargetArea, old.PixelFormat)));
+                            Current = new Bitmap(old.Clone(TargetArea, old.PixelFormat));
                             return;
                         }
                         //if the previous file is not compatible in size, then we default without exception
@@ -55,7 +55,7 @@ namespace aemarcoCommons.Toolbox.MonitorTools
                 }
             }
             //defaults to a black image
-            SetPicture(new Bitmap(TargetArea.Width, TargetArea.Height));
+            Current = new Bitmap(TargetArea.Width, TargetArea.Height);
         }
 
         #endregion

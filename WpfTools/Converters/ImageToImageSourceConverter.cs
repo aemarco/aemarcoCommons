@@ -16,17 +16,19 @@ namespace aemarcoCommons.WpfTools.Converters
             object parameter, CultureInfo culture)
         {
             // empty images are empty...
-            if (value == null) { return null; }
+            if (value == null)
+                return null;
+
 
             var image = (System.Drawing.Image)value;
-            // Winforms Image we want to get the WPF Image from...
+
             var bitmap = new System.Windows.Media.Imaging.BitmapImage();
             bitmap.BeginInit();
             MemoryStream memoryStream = new MemoryStream();
-            // Save to a memory stream...
+
             image.Save(memoryStream, ImageFormat.Bmp);
-            // Rewind the stream...
-            memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
+
+            memoryStream.Seek(0, SeekOrigin.Begin);
             bitmap.StreamSource = memoryStream;
             bitmap.EndInit();
             return bitmap;

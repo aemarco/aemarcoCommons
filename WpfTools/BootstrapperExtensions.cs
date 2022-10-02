@@ -80,7 +80,10 @@ namespace aemarcoCommons.WpfTools
             var timeoutPolicy = Policy.TimeoutAsync<HttpResponseMessage>(TimeSpan.FromSeconds(10));
 
 
-            sc.AddHttpClient(nameof(WallpaperSetter))
+            sc.AddHttpClient(nameof(WallpaperSetter), c =>
+                {
+                    c.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.88 Safari/537.36");
+                })
                 .AddPolicyHandler(waitAndRetry)
                 .AddPolicyHandler(timeoutPolicy);
 

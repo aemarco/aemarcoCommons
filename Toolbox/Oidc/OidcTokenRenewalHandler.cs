@@ -16,6 +16,7 @@ namespace aemarcoCommons.Toolbox.Oidc
     {
         string AccessToken { get; set; }
         string RefreshToken { get; set; }
+        string IdToken { get; set; }
     }
 
     /// <summary>
@@ -113,11 +114,15 @@ namespace aemarcoCommons.Toolbox.Oidc
                 if (response.IsError)
                     throw new Exception("Could not refresh token");
 
-                _sessionStore.AccessToken = response.AccessToken;
+                if (!string.IsNullOrWhiteSpace(response.IdentityToken))
+                {
+                    _sessionStore.IdToken = response.IdentityToken;
+                }
                 if (!string.IsNullOrWhiteSpace(response.RefreshToken))
                 {
                     _sessionStore.RefreshToken = response.RefreshToken;
                 }
+                _sessionStore.AccessToken = response.AccessToken;
 
             }, cancellationToken)
                 .ConfigureAwait(false);

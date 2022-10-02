@@ -5,8 +5,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
-using System.Net;
-using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,24 +15,29 @@ namespace aemarcoCommons.Toolbox.Oidc
     {
 
         private readonly int _port;
-        public OidcSystemBrowser(int? port = null)
+        private readonly string _postLoginUrl;
+
+        public OidcSystemBrowser(int port, string postLoginUrl = null)
         {
-            _port = port ?? GetRandomUnusedPort();
+            _port = port;
+            _postLoginUrl = postLoginUrl;
         }
-        private static int GetRandomUnusedPort()
-        {
-            var listener = new TcpListener(IPAddress.Loopback, 0);
-            listener.Start();
-            var port = ((IPEndPoint)listener.LocalEndpoint).Port;
-            listener.Stop();
-            return port;
-        }
+        //public static int GetRandomUnusedPort()
+        //{
+        //    var listener = new TcpListener(IPAddress.Loopback, 0);
+        //    listener.Start();
+        //    var port = ((IPEndPoint)listener.LocalEndpoint).Port;
+        //    listener.Stop();
+        //    return port;
+        //}
+
+
 
         public string RedirectUri => $"http://127.0.0.1:{_port}/";
 
         public async Task<BrowserResult> InvokeAsync(BrowserOptions options, CancellationToken cancellationToken = new CancellationToken())
         {
-            using (var listener = new LoopbackHttpListener(options.EndUrl))
+            using (var listener = new LoopbackHttpListener(options.EndUrl, _postLoginUrl))
             {
                 new Uri(options.StartUrl).OpenInBrowser();
                 try
@@ -70,12 +73,12 @@ namespace aemarcoCommons.Toolbox.Oidc
 
     internal class LoopbackHttpListener : IDisposable
     {
-        private const string AutoClose = @"<!DOCTYPE html><html><body>{{{message}}}<script>window.addEventListener('load',function(){close();});</script></body></html>";
         private readonly IWebHost _host;
         private readonly TaskCompletionSource<string> _source;
-
-        public LoopbackHttpListener(string url)
+        private readonly string _postLoginUrl;
+        public LoopbackHttpListener(string url, string postLoginUrl)
         {
+            _postLoginUrl = postLoginUrl;
             _source = new TaskCompletionSource<string>();
 
             _host = new WebHostBuilder()
@@ -96,7 +99,13 @@ namespace aemarcoCommons.Toolbox.Oidc
                         var message = string.IsNullOrWhiteSpace(ctx.Request.QueryString.Value)
                             ? "Logout success"
                             : "Login success";
-                        await SetResult(ctx.Request.QueryString.Value, ctx, message);
+                        var template = string.IsNullOrWhiteSpace(ctx.Request.QueryString.Value)
+                            ? AutoClose
+                            : _postLoginUrl == null
+                                ? AutoClose
+                                : Redirect;
+
+                        await SetResult(ctx.Request.QueryString.Value, ctx, template, message);
                         break;
                     case "POST" when !ctx.Request.ContentType.Equals("application/x-www-form-urlencoded",
                         StringComparison.OrdinalIgnoreCase):
@@ -107,7 +116,7 @@ namespace aemarcoCommons.Toolbox.Oidc
                             using (var sr = new StreamReader(ctx.Request.Body, Encoding.UTF8))
                             {
                                 var body = await sr.ReadToEndAsync();
-                                await SetResult(body, ctx, "Success");
+                                await SetResult(body, ctx, AutoClose, "Success");
                                 break;
                             }
                         }
@@ -121,20 +130,21 @@ namespace aemarcoCommons.Toolbox.Oidc
 
 
 
-        public void Dispose()
-        {
-            Task.Run(async () =>
-            {
-                await Task.Delay(500);
-                _host.Dispose();
-            });
-        }
+        private const string AutoClose = @"<!DOCTYPE html><html><body>{{{message}}}<script>window.addEventListener('load',function(){close();});</script></body></html>";
+        private const string Redirect = @"<!DOCTYPE html><html><body>{{{message}}}<script>window.addEventListener('load',function(){window.location.assign('{{{postLogoutUrl}}}');});</script></body></html>";
 
-        private async Task SetResult(string value, HttpContext ctx, string message)
+        private async Task SetResult(
+            string value,
+            HttpContext ctx,
+            string template,
+            string message)
         {
             try
             {
-                var content = AutoClose.Replace("{{{message}}}", $"<h1>{message}</h1>");
+                var content = template
+                    .Replace("{{{message}}}", $"<h1>{message}</h1>")
+                    .Replace("{{{postLogoutUrl}}}", _postLoginUrl);
+
                 ctx.Response.StatusCode = 200;
                 ctx.Response.ContentType = "text/html";
                 ctx.Response.Headers.Add("Date", DateTimeOffset.UtcNow.ToString());
@@ -169,5 +179,13 @@ namespace aemarcoCommons.Toolbox.Oidc
             await _host.StopAsync();
         }
 
+        public void Dispose()
+        {
+            Task.Run(async () =>
+            {
+                await Task.Delay(500);
+                _host.Dispose();
+            });
+        }
     }
 }

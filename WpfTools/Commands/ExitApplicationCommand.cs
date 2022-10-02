@@ -1,21 +1,23 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 #nullable enable
 
 namespace aemarcoCommons.WpfTools.Commands
 {
-    public class ExitApplicationCommand : BaseCommand
+    public class ExitApplicationCommand : AsyncBaseCommand
     {
-        private readonly Action? _beforeClose;
+        private readonly Func<Task>? _beforeClose;
 
-        public ExitApplicationCommand(Action? beforeClose = null)
+        public ExitApplicationCommand(Func<Task>? beforeClose = null)
         {
             _beforeClose = beforeClose;
         }
 
-        public override void Execute(object? parameter)
+        public override async Task ExecuteAsync(object? parameter)
         {
-            _beforeClose?.Invoke();
+            if (_beforeClose is not null)
+                await _beforeClose();
             Application.Current.Shutdown();
         }
     }

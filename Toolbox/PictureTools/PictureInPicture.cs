@@ -21,8 +21,24 @@ namespace aemarcoCommons.Toolbox.PictureTools
         }
 
         public Rectangle TargetArea { get; }
+
+        private Image _current;
+        public Image Current
+        {
+            get => _current;
+            protected set
+            {
+                if (_current == value)
+                    return;
+
+                _current = value;
+                Timestamp = DateTimeOffset.Now;
+                ChangedSinceDrawn = true;
+            }
+        }
         public DateTimeOffset Timestamp { get; private set; }
-        public Image CurrentOriginal { get; private set; }
+
+        public bool ChangedSinceDrawn { get; private set; }
 
         #endregion
 
@@ -35,63 +51,87 @@ namespace aemarcoCommons.Toolbox.PictureTools
             int percentLeftRightCutAllowed,
             Color? background = null)
         {
-            bool CanBeSnapped(int width, int height)
+
+            _wallpaperMode = mode;
+            _percentTopBottomCutAllowed = percentTopBottomCutAllowed;
+            _percentLeftRightCutAllowed = percentLeftRightCutAllowed;
+            _background = background;
+
+            Current = wall;
+        }
+
+        #endregion
+
+        #region Drawing to the outer picture
+
+        public void DrawToImage(Image image)
+        {
+            using (var currentContent = GetCurrentContent())
             {
-                var minRatio = TargetArea.Size.ToMinRatio(percentTopBottomCutAllowed);
-                var maxRatio = TargetArea.Size.ToMaxRatio(percentLeftRightCutAllowed);
-                var imageRatio = 1.0 * width / height;
-
-                return (imageRatio <= maxRatio && imageRatio >= minRatio);
+                using (Graphics g = Graphics.FromImage(image))
+                {
+                    g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    g.SmoothingMode = SmoothingMode.HighQuality;
+                    g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                    g.CompositingQuality = CompositingQuality.HighQuality;
+                    g.DrawImage(currentContent, TargetArea);
+                }
             }
+            ChangedSinceDrawn = false;
+        }
 
-            switch (mode)
+
+        private WallpaperMode _wallpaperMode;
+        private int _percentTopBottomCutAllowed;
+        private int _percentLeftRightCutAllowed;
+        private Color? _background;
+        private Image GetCurrentContent()
+        {
+            var minRatio = TargetArea.Size.ToMinRatio(_percentTopBottomCutAllowed);
+            var maxRatio = TargetArea.Size.ToMaxRatio(_percentLeftRightCutAllowed);
+            var imageRatio = 1.0 * Current.Width / Current.Height;
+            var canBeSnapped = imageRatio <= maxRatio && imageRatio >= minRatio;
+
+            switch (_wallpaperMode)
             {
                 case WallpaperMode.AllowFill:
                     {
-                        if (CanBeSnapped(wall.Width, wall.Height))
-                            SetSnapped(wall, background);
-                        else
-                            SetPicture(wall, background);
-
-                        break;
+                        return canBeSnapped
+                            ? GetSnapped()
+                            : GetPicture(Current);
                     }
                 case WallpaperMode.AllowFillForceCut:
                     {
-                        if (CanBeSnapped(wall.Width, wall.Height))
-                            SetSnapped(wall, background);
-                        else
-                            SetCutWallpaper(wall, percentTopBottomCutAllowed, percentLeftRightCutAllowed, background);
-                        break;
+                        return canBeSnapped
+                            ? GetSnapped()
+                            : GetCutWallpaper();
                     }
                 case WallpaperMode.Fit:
                     {
-                        SetPicture(wall, background);
-                        break;
+                        return GetPicture(Current);
                     }
                 case WallpaperMode.Fill:
                     {
-                        SetSnapped(wall, background);
-                        break;
+                        return GetSnapped();
                     }
                 default:
                     throw new NotSupportedException("WallpaperMode not supported");
             }
         }
 
-        private Image _currentPicture;
 
+        //Uniform
         /// <summary>
         /// Sets the Picture as big as possible with Black bars to keep aspect ratio
         /// </summary>
         /// <param name="image">readyToUsePicture</param>
         /// <param name="background">color of the background</param>
-        protected void SetPicture(Image image, Color? background = null)
+        private Image GetPicture(Image image)
         {
             //shortcut if the picture already fits
             if (image.Width == TargetArea.Width && image.Height == TargetArea.Height)
             {
-                _currentPicture = new Bitmap(image);
-                return;
+                return new Bitmap(image);
             }
 
             var heightRatio = TargetArea.Height / (double)image.Height;
@@ -103,8 +143,7 @@ namespace aemarcoCommons.Toolbox.PictureTools
             {
                 var img = new Bitmap(TargetArea.Width, TargetArea.Height);
                 Graphics.FromImage(img).DrawImage(image, 0, 0, TargetArea.Width, TargetArea.Height);
-                _currentPicture = img;
-                return;
+                return img;
             }
 
             //black bars needed :(
@@ -126,55 +165,49 @@ namespace aemarcoCommons.Toolbox.PictureTools
             var targetImg = new Bitmap(TargetArea.Width, TargetArea.Height);
             var g = Graphics.FromImage(targetImg);
 
-            g.Clear(background ?? Color.Black);
+            g.Clear(_background ?? Color.Black);
             g.DrawImage(image, new Rectangle(x, y, width, height));
-            _currentPicture = targetImg;
 
-
-            Timestamp = DateTimeOffset.Now;
-            CurrentOriginal = image;
+            return targetImg;
         }
 
+        //UniformToFill
         /// <summary>
         /// Sets the Picture and fills the screen by cutting the Picture
         /// </summary>
         /// <param name="pictureToBeCut"></param>
         /// <param name="background">color of the background</param>
-        private void SetSnapped(Image pictureToBeCut, Color? background = null)
+        private Image GetSnapped()
         {
             var targetRatio = 1.0 * TargetArea.Width / TargetArea.Height;
-            var imageRatio = 1.0 * pictureToBeCut.Width / pictureToBeCut.Height;
+            var imageRatio = 1.0 * Current.Width / Current.Height;
+
 
             //shortcut, if ratio matches
-
             if (imageRatio.IsNearlyEqual(targetRatio))
             {
-                SetPicture(pictureToBeCut, background);
+                return GetPicture(Current);
+            }
+
+            Rectangle rect;
+            if (targetRatio < imageRatio)
+            {   // ratio to big
+                var targetWidth = (int)(targetRatio * Current.Height);
+                rect = new Rectangle(0, 0, targetWidth, Current.Height);
+                rect.X = (Current.Width - rect.Width) / 2;
             }
             else
             {
-                Rectangle rect;
-                if (targetRatio < imageRatio)
-                {   // ratio to big
-                    var targetWidth = (int)(targetRatio * pictureToBeCut.Height);
-                    rect = new Rectangle(0, 0, targetWidth, pictureToBeCut.Height);
-                    rect.X = (pictureToBeCut.Width - rect.Width) / 2;
-                }
-                else
-                {
-                    // ratio to small
-                    var targetHeight = (int)(pictureToBeCut.Width / targetRatio);
-                    rect = new Rectangle(0, 0, pictureToBeCut.Width, targetHeight);
-                    rect.Y = (pictureToBeCut.Height - rect.Height) / 2;
-                }
-
-                SetPicture(((Bitmap)pictureToBeCut).Clone(rect, pictureToBeCut.PixelFormat), background);
+                // ratio to small
+                var targetHeight = (int)(Current.Width / targetRatio);
+                rect = new Rectangle(0, 0, Current.Width, targetHeight);
+                rect.Y = (Current.Height - rect.Height) / 2;
             }
 
-            Timestamp = DateTimeOffset.Now;
-            CurrentOriginal = pictureToBeCut;
+            return GetPicture(((Bitmap)Current).Clone(rect, Current.PixelFormat));
         }
 
+        //LimitedUniformToFill
         /// <summary>
         /// Cuts the Picture by the allowed amount and sets it as big as possible with black bars.
         /// Should be called only if it can´t be "Snapped"
@@ -183,58 +216,33 @@ namespace aemarcoCommons.Toolbox.PictureTools
         /// <param name="percentLeftRightCutAllowed"></param>
         /// <param name="percentTopBottomCutAllowed"></param>
         /// <param name="background">color of the background</param>
-        private void SetCutWallpaper(
-            Image pictureToBeCut,
-            int percentTopBottomCutAllowed,
-            int percentLeftRightCutAllowed,
-            Color? background = null)
+        private Image GetCutWallpaper()
         {
 
             var targetRatio = 1.0 * TargetArea.Width / TargetArea.Height;
-            var imageRatio = 1.0 * pictureToBeCut.Width / pictureToBeCut.Height;
+            var imageRatio = 1.0 * Current.Width / Current.Height;
 
             //shortcut, if ratio matches
             if (imageRatio.IsNearlyEqual(targetRatio))
             {
-                SetPicture(pictureToBeCut, background);
+                return GetPicture(Current);
+            }
+
+            Rectangle rect;
+            if (targetRatio < 1.0 * Current.Width / Current.Height)
+            {   // ratio to big
+                var pixelsToCut = 1.0 * Current.Width / 100 * _percentLeftRightCutAllowed;
+                rect = new Rectangle(0, 0, Current.Width - (int)pixelsToCut, Current.Height);
+                rect.X = (Current.Width - rect.Width) / 2;
             }
             else
-            {
-                Rectangle rect;
-                if (targetRatio < 1.0 * pictureToBeCut.Width / pictureToBeCut.Height)
-                {   // ratio to big
-                    var pixelsToCut = 1.0 * pictureToBeCut.Width / 100 * percentLeftRightCutAllowed;
-                    rect = new Rectangle(0, 0, pictureToBeCut.Width - (int)pixelsToCut, pictureToBeCut.Height);
-                    rect.X = (pictureToBeCut.Width - rect.Width) / 2;
-                }
-                else
-                {   // ratio to small
-                    var pixelsToCut = 1.0 * pictureToBeCut.Height / 100 * percentTopBottomCutAllowed;
-                    rect = new Rectangle(0, 0, pictureToBeCut.Width, pictureToBeCut.Height - (int)pixelsToCut);
-                    rect.Y = (pictureToBeCut.Height - rect.Height) / 2;
-                }
-
-                SetPicture(((Bitmap)pictureToBeCut).Clone(rect, pictureToBeCut.PixelFormat), background);
+            {   // ratio to small
+                var pixelsToCut = 1.0 * Current.Height / 100 * _percentTopBottomCutAllowed;
+                rect = new Rectangle(0, 0, Current.Width, Current.Height - (int)pixelsToCut);
+                rect.Y = (Current.Height - rect.Height) / 2;
             }
 
-            Timestamp = DateTimeOffset.Now;
-            CurrentOriginal = pictureToBeCut;
-        }
-
-        #endregion
-
-        #region Drawing to the outer picture
-
-        public void DrawToImage(Image image)
-        {
-            using (Graphics g = Graphics.FromImage(image))
-            {
-                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                g.SmoothingMode = SmoothingMode.HighQuality;
-                g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                g.CompositingQuality = CompositingQuality.HighQuality;
-                g.DrawImage(_currentPicture, TargetArea);
-            }
+            return GetPicture(((Bitmap)Current).Clone(rect, Current.PixelFormat));
         }
 
         #endregion

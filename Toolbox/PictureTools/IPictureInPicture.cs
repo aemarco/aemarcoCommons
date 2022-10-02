@@ -6,8 +6,11 @@ namespace aemarcoCommons.Toolbox.PictureTools
     public interface IPictureInPicture
     {
         Rectangle TargetArea { get; }
+
+        Image Current { get; }
         DateTimeOffset Timestamp { get; }
-        Image CurrentOriginal { get; }
+        bool ChangedSinceDrawn { get; }
+
         void DrawToImage(Image image);
     }
 }
