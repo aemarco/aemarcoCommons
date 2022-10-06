@@ -12,7 +12,8 @@ namespace aemarcoCommons.WpfTools.BaseModels
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            if (propertyName == null || PropertyChanged == null) return;
+            if (PropertyChanged == null)
+                return;
 
             foreach (var d in PropertyChanged.GetInvocationList())
             {
