@@ -5,11 +5,12 @@ namespace aemarcoCommons.WpfTools.BaseModels
 {
     public class BaseNotifier : IBaseNotifier
     {
-       
+
         #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void NotifyPropertyChanged([CallerMemberName]string propertyName = null)
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             if (propertyName == null || PropertyChanged == null) return;
 
@@ -25,6 +26,10 @@ namespace aemarcoCommons.WpfTools.BaseModels
                 }
             }
         }
+
+
+        protected virtual void NotifyPropertyChanged(
+            [CallerMemberName] string propertyName = null) => OnPropertyChanged(propertyName);
 
         #endregion
 
