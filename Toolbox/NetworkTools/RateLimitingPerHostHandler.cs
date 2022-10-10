@@ -17,43 +17,7 @@ namespace aemarcoCommons.Toolbox.NetworkTools
         }
 
 
-
-        //private readonly ConcurrentDictionary<string, int> _rateLimits = new ConcurrentDictionary<string, int>();
-        //protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-        //{
-        //    var host = request.RequestUri.Host;
-        //    var delay = 0;
-        //    if (_rateLimits.ContainsKey(host) &&
-        //        _rateLimits.TryGetValue(host, out delay))
-        //    {
-        //        await Task.Delay(delay, cancellationToken)
-        //            .ConfigureAwait(false);
-        //    }
-
-
-        //    HttpResponseMessage response = await base.SendAsync(request, cancellationToken)
-        //        .ConfigureAwait(false);
-
-        //    //we skip all but 429
-        //    if ((int)response.StatusCode != 429)
-        //        return response;
-
-        //    _rateLimits.AddOrUpdate(
-        //        host,
-        //        100,
-        //        (key, val) => Math.Min(delay + 100, 1000));
-        //    if (_rateLimits.TryGetValue(host, out delay))
-        //    {
-        //        _logger.LogWarning("Rate limiting {host} with new delay {delay}", host, delay);
-        //    }
-
-        //    return await SendAsync(request, cancellationToken)
-        //        .ConfigureAwait(false);
-        //}
-
-
-
-        private readonly ConcurrentDictionary<string, RateLimitingInfo> _rateLimits = new ConcurrentDictionary<string, RateLimitingInfo>();
+        private static readonly ConcurrentDictionary<string, RateLimitingInfo> _rateLimits = new ConcurrentDictionary<string, RateLimitingInfo>();
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             var host = request.RequestUri.Host;

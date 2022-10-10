@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Net;
@@ -39,7 +38,7 @@ namespace aemarcoCommons.WebTools.Authorization
         private readonly ILogger<LanIpAddressHandler> _logger;
 
         public LanIpAddressHandler(
-            IHttpClientFactory httpClientFactory, 
+            IHttpClientFactory httpClientFactory,
             IHttpContextAccessor httpContextAccessor,
             ILogger<LanIpAddressHandler> logger)
         {
@@ -53,7 +52,7 @@ namespace aemarcoCommons.WebTools.Authorization
         {
             var wanAddress = await GetWanIp()
                 .ConfigureAwait(false);
-            HttpContext? httpContext =_httpContextAccessor.HttpContext;
+            HttpContext? httpContext = _httpContextAccessor.HttpContext;
             if (string.IsNullOrWhiteSpace(wanAddress) || // if unknown, assume not local
                 httpContext is null) //must have a http context
             {
@@ -61,18 +60,18 @@ namespace aemarcoCommons.WebTools.Authorization
                 context.Fail();
                 return;
             }
-           
+
 
             var remoteAddress = httpContext.Connection.RemoteIpAddress?.ToString();
             var localAddress = httpContext.Connection.LocalIpAddress?.ToString();
-            if (string.IsNullOrWhiteSpace(remoteAddress) || 
+            if (string.IsNullOrWhiteSpace(remoteAddress) ||
                 string.IsNullOrWhiteSpace(localAddress))
             {
                 _logger.LogWarning(string.IsNullOrWhiteSpace(remoteAddress) ? "Could not get remoteAddress" : "Could not get localAddress");
                 context.Fail();
                 return;
             }
-            
+
             var whitelist = new[]
             {
                 "127.0.0.1", // check if localhost
@@ -86,13 +85,13 @@ namespace aemarcoCommons.WebTools.Authorization
                 context.Fail();
                 return;
             }
-            
+
             _logger.LogDebug("Access granted to {remoteAddress}", remoteAddress);
             context.Succeed(requirement);
         }
 
 
-
+        //TODO better way to get a wan ip ?
         private string? _wanIp;
         private async Task<string> GetWanIp()
         {
@@ -117,5 +116,5 @@ namespace aemarcoCommons.WebTools.Authorization
         }
 
     }
-    
+
 }
