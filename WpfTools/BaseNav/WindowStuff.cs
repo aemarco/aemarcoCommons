@@ -33,9 +33,9 @@ namespace aemarcoCommons.WpfTools.BaseNav
             View = ViewViewModel.View;
 
 
-            NotifyPropertyChanged(nameof(ViewViewModel));
-            NotifyPropertyChanged(nameof(View));
-            NotifyPropertyChanged(nameof(Title));
+            OnPropertyChanged(nameof(ViewViewModel));
+            OnPropertyChanged(nameof(View));
+            OnPropertyChanged(nameof(Title));
 
         }
 

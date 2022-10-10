@@ -7,10 +7,9 @@ namespace aemarcoCommons.WpfTools.BaseModels
 {
     public class BaseService : BaseNotifier, IBaseService
     {
-        protected override void NotifyPropertyChanged([CallerMemberName] string propertyName = null)
+        protected override void OnPropertyChanged(string propertyName = null)
         {
-            base.NotifyPropertyChanged(propertyName);
-
+            base.OnPropertyChanged(propertyName);
 
             //NotifyCallsMethodAttribute
             foreach (var methodAttribute in this.GetAttributes<NotifyCallsMethodAttribute>(propertyName))
@@ -34,8 +33,10 @@ namespace aemarcoCommons.WpfTools.BaseModels
                         new object[] { this, EventArgs.Empty });
                 }
             }
-
         }
+
+        protected override void NotifyPropertyChanged(
+            [CallerMemberName] string propertyName = null) => OnPropertyChanged(propertyName);
 
     }
 }
