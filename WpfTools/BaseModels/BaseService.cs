@@ -3,40 +3,39 @@ using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-namespace aemarcoCommons.WpfTools.BaseModels
+namespace aemarcoCommons.WpfTools.BaseModels;
+
+public class BaseService : BaseNotifier, IBaseService
 {
-    public class BaseService : BaseNotifier, IBaseService
+    protected override void OnPropertyChanged(string propertyName = null)
     {
-        protected override void OnPropertyChanged(string propertyName = null)
+        base.OnPropertyChanged(propertyName);
+
+        //NotifyCallsMethodAttribute
+        foreach (var methodAttribute in this.GetAttributes<NotifyCallsMethodAttribute>(propertyName))
         {
-            base.OnPropertyChanged(propertyName);
-
-            //NotifyCallsMethodAttribute
-            foreach (var methodAttribute in this.GetAttributes<NotifyCallsMethodAttribute>(propertyName))
-            {
-                GetType().GetMethod(methodAttribute.MethodName, BindingFlags.Instance | BindingFlags.NonPublic)
-                    ?.Invoke(this, methodAttribute.Parameters);
-            }
-
-            //NotifyTriggersEventAttribute
-            foreach (var eventAttribute in this.GetAttributes<NotifyTriggersEventAttribute>(propertyName))
-            {
-                if (GetType()
-                        .GetField(eventAttribute.EventName, BindingFlags.Instance | BindingFlags.NonPublic)
-                        ?.GetValue(this)
-                    is not MulticastDelegate multiDelegate) continue;
-
-                foreach (var eventHandler in multiDelegate.GetInvocationList())
-                {
-                    eventHandler.Method.Invoke(
-                        eventHandler.Target,
-                        new object[] { this, EventArgs.Empty });
-                }
-            }
+            GetType().GetMethod(methodAttribute.MethodName, BindingFlags.Instance | BindingFlags.NonPublic)
+                ?.Invoke(this, methodAttribute.Parameters);
         }
 
-        protected override void NotifyPropertyChanged(
-            [CallerMemberName] string propertyName = null) => OnPropertyChanged(propertyName);
+        //NotifyTriggersEventAttribute
+        foreach (var eventAttribute in this.GetAttributes<NotifyTriggersEventAttribute>(propertyName))
+        {
+            if (GetType()
+                    .GetField(eventAttribute.EventName, BindingFlags.Instance | BindingFlags.NonPublic)
+                    ?.GetValue(this)
+                is not MulticastDelegate multiDelegate) continue;
 
+            foreach (var eventHandler in multiDelegate.GetInvocationList())
+            {
+                eventHandler.Method.Invoke(
+                    eventHandler.Target,
+                    new object[] { this, EventArgs.Empty });
+            }
+        }
     }
+
+    protected override void NotifyPropertyChanged(
+        [CallerMemberName] string propertyName = null) => OnPropertyChanged(propertyName);
+
 }

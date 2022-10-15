@@ -5,73 +5,72 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace aemarcoCommons.WpfTools.Oidc
+namespace aemarcoCommons.WpfTools.Oidc;
+
+public class OidcBrowser : IBrowser
 {
-    public class OidcBrowser : IBrowser
+    private BrowserOptions _options;
+
+
+    public async Task<BrowserResult> InvokeAsync(BrowserOptions options, CancellationToken cancellationToken = default)
     {
-        private BrowserOptions _options;
+        _options = options;
 
-
-        public async Task<BrowserResult> InvokeAsync(BrowserOptions options, CancellationToken cancellationToken = default)
+        var window = new Window()
         {
-            _options = options;
+            WindowStartupLocation = WindowStartupLocation.CenterScreen,
+            Width = 800,
+            Height = 700,
+            Title = "Login"
+        };
 
-            var window = new Window()
+        // Note: Unfortunately, WebBrowser is very limited and does not give sufficient information for 
+        //   robust error handling. The alternative is to use a system browser or third party embedded
+        //   library (which tend to balloon the size of your application and are complicated).
+        var webBrowser = new WebBrowser();
+
+        var signal = new SemaphoreSlim(0, 1);
+
+        var result = new BrowserResult()
+        {
+            ResultType = BrowserResultType.UserCancel
+        };
+
+        webBrowser.Navigating += (_, e) =>
+        {
+            if (BrowserIsNavigatingToRedirectUri(e.Uri))
             {
-                WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                Width = 800,
-                Height = 700,
-                Title = "Login"
-            };
+                e.Cancel = true;
 
-            // Note: Unfortunately, WebBrowser is very limited and does not give sufficient information for 
-            //   robust error handling. The alternative is to use a system browser or third party embedded
-            //   library (which tend to balloon the size of your application and are complicated).
-            var webBrowser = new WebBrowser();
-
-            var signal = new SemaphoreSlim(0, 1);
-
-            var result = new BrowserResult()
-            {
-                ResultType = BrowserResultType.UserCancel
-            };
-
-            webBrowser.Navigating += (_, e) =>
-            {
-                if (BrowserIsNavigatingToRedirectUri(e.Uri))
+                result = new BrowserResult()
                 {
-                    e.Cancel = true;
+                    ResultType = BrowserResultType.Success,
+                    Response = e.Uri.AbsoluteUri
+                };
 
-                    result = new BrowserResult()
-                    {
-                        ResultType = BrowserResultType.Success,
-                        Response = e.Uri.AbsoluteUri
-                    };
-
-                    signal.Release();
-
-                    window.Close();
-                }
-            };
-
-            window.Closing += (s, e) =>
-            {
                 signal.Release();
-            };
 
-            window.Content = webBrowser;
-            window.Show();
-            webBrowser.Source = new Uri(_options.StartUrl);
+                window.Close();
+            }
+        };
 
-            await signal.WaitAsync(cancellationToken);
-
-            return result;
-        }
-
-        private bool BrowserIsNavigatingToRedirectUri(Uri uri)
+        window.Closing += (s, e) =>
         {
-            return uri.AbsoluteUri.StartsWith(_options.EndUrl);
-        }
+            signal.Release();
+        };
 
+        window.Content = webBrowser;
+        window.Show();
+        webBrowser.Source = new Uri(_options.StartUrl);
+
+        await signal.WaitAsync(cancellationToken);
+
+        return result;
     }
+
+    private bool BrowserIsNavigatingToRedirectUri(Uri uri)
+    {
+        return uri.AbsoluteUri.StartsWith(_options.EndUrl);
+    }
+
 }

@@ -1,10 +1,9 @@
-﻿namespace WpfToolsManualTests.ViewModel
+﻿namespace WpfToolsManualTests.ViewModel;
+
+public class MainWindowViewModel
 {
-    public class MainWindowViewModel
-    {
 
 
 
 
-    }
 }

@@ -1,17 +1,16 @@
 ﻿using aemarcoCommons.WpfTools.BaseModels;
 using Autofac;
 
-namespace aemarcoCommons.WpfTools.Commands
+namespace aemarcoCommons.WpfTools.Commands;
+
+public class OpenWindowCommand<T> : DelegateCommand where T : IWindow
 {
-    public class OpenWindowCommand<T> : DelegateCommand where T : IWindow
+    public OpenWindowCommand()
     {
-        public OpenWindowCommand()
+        CommandAction = _ =>
         {
-            CommandAction = _ =>
-            {
-                var wind = BootstrapperExtensions.RootScope.Resolve<T>();
-                wind.Show();
-            };
-        }
+            var wind = BootstrapperExtensions.RootScope.Resolve<T>();
+            wind.Show();
+        };
     }
 }

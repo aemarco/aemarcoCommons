@@ -1,21 +1,20 @@
 ﻿using System.Windows;
 
-namespace WpfToolsManualTests.View
+namespace WpfToolsManualTests.View;
+
+/// <summary>
+/// Interaktionslogik für MainWindow.xaml
+/// </summary>
+public partial class MainWindow : Window
 {
-    /// <summary>
-    /// Interaktionslogik für MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    public MainWindow()
     {
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+    }
 
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
-        {
+    private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+    {
 
-            MessageBox.Show("Yes");
-        }
+        MessageBox.Show("Yes");
     }
 }

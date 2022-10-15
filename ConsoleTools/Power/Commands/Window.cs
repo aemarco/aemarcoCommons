@@ -2,21 +2,20 @@
 using System.Runtime.Versioning;
 
 // ReSharper disable once CheckNamespace
-namespace aemarcoCommons.ConsoleTools
+namespace aemarcoCommons.ConsoleTools;
+
+public static partial class PowerConsole
 {
-    public static partial class PowerConsole
+
+    [SupportedOSPlatform("windows")]
+    public static void ShowWindow()
     {
+        WindowVisibility.Show();
+    }
 
-        [SupportedOSPlatform("windows")]
-        public static void ShowWindow()
-        {
-            WindowVisibility.Show();
-        }
-
-        [SupportedOSPlatform("windows")]
-        public static void HideWindow()
-        {
-            WindowVisibility.Hide();
-        }
+    [SupportedOSPlatform("windows")]
+    public static void HideWindow()
+    {
+        WindowVisibility.Hide();
     }
 }

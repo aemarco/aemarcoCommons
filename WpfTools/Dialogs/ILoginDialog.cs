@@ -1,7 +1,6 @@
-﻿namespace aemarcoCommons.WpfTools.Dialogs
+﻿namespace aemarcoCommons.WpfTools.Dialogs;
+
+public interface ILoginDialog
 {
-    public interface ILoginDialog
-    {
-        bool? ShowDialog();
-    }
+    bool? ShowDialog();
 }

@@ -1,10 +1,9 @@
 ﻿using System.Threading.Tasks;
 using System.Windows.Input;
 #nullable enable
-namespace aemarcoCommons.WpfTools.Commands
+namespace aemarcoCommons.WpfTools.Commands;
+
+public interface IAsyncCommand : ICommand
 {
-    public interface IAsyncCommand : ICommand
-    {
-        Task ExecuteAsync(object? parameter);
-    }
+    Task ExecuteAsync(object? parameter);
 }

@@ -2,25 +2,21 @@
 using System.ComponentModel;
 using aemarcoCommons.WpfTools.Commands;
 
-namespace aemarcoCommons.WpfTools.BaseModels
+namespace aemarcoCommons.WpfTools.BaseModels;
+
+public interface IBaseNotifier : INotifyPropertyChanged { }
+
+public interface IBaseViewModel : IBaseNotifier
 {
-    public interface IBaseNotifier : INotifyPropertyChanged { }
+    DelegateCommand CloseCommand { get; }
+}
+public interface IBaseService : IBaseNotifier { }
 
-    public interface IBaseViewModel : IBaseNotifier
-    {
-        DelegateCommand CloseCommand { get; }
-    }
-    public interface IBaseService : IBaseNotifier { }
+public interface IWindow
+{
+    void Show();
+    bool? ShowDialog();
 
-    public interface IWindow
-    {
-        void Show();
-        bool? ShowDialog();
-
-        [Obsolete]
-        void Close();
-    }
-
-
-
+    [Obsolete]
+    void Close();
 }

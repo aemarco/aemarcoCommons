@@ -4,40 +4,39 @@ using System.Globalization;
 using System.IO;
 using System.Windows.Data;
 
-namespace aemarcoCommons.WpfTools.Converters
+namespace aemarcoCommons.WpfTools.Converters;
+
+/// <summary>
+/// One-way converter from System.Drawing.Image to System.Windows.Media.ImageSource
+/// </summary>
+[ValueConversion(typeof(System.Drawing.Image), typeof(System.Windows.Media.ImageSource))]
+public class ImageToImageSourceConverter : IValueConverter
 {
-    /// <summary>
-    /// One-way converter from System.Drawing.Image to System.Windows.Media.ImageSource
-    /// </summary>
-    [ValueConversion(typeof(System.Drawing.Image), typeof(System.Windows.Media.ImageSource))]
-    public class ImageToImageSourceConverter : IValueConverter
+    public object Convert(object value, Type targetType,
+        object parameter, CultureInfo culture)
     {
-        public object Convert(object value, Type targetType,
-            object parameter, CultureInfo culture)
-        {
-            // empty images are empty...
-            if (value == null)
-                return null;
+        // empty images are empty...
+        if (value == null)
+            return null;
 
 
-            var image = (System.Drawing.Image)value;
+        var image = (System.Drawing.Image)value;
 
-            var bitmap = new System.Windows.Media.Imaging.BitmapImage();
-            bitmap.BeginInit();
-            MemoryStream memoryStream = new MemoryStream();
+        var bitmap = new System.Windows.Media.Imaging.BitmapImage();
+        bitmap.BeginInit();
+        MemoryStream memoryStream = new MemoryStream();
 
-            image.Save(memoryStream, ImageFormat.Bmp);
+        image.Save(memoryStream, ImageFormat.Bmp);
 
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            bitmap.StreamSource = memoryStream;
-            bitmap.EndInit();
-            return bitmap;
-        }
+        memoryStream.Seek(0, SeekOrigin.Begin);
+        bitmap.StreamSource = memoryStream;
+        bitmap.EndInit();
+        return bitmap;
+    }
 
-        public object ConvertBack(object value, Type targetType,
-            object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
+    public object ConvertBack(object value, Type targetType,
+        object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
     }
 }
