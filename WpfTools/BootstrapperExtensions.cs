@@ -9,8 +9,11 @@ using Polly;
 using Polly.Extensions.Http;
 using Serilog.Extensions.Logging;
 using System;
+using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Windows;
+using Policy = Polly.Policy;
 
 namespace aemarcoCommons.WpfTools
 {
@@ -32,7 +35,6 @@ namespace aemarcoCommons.WpfTools
 
         internal static ILifetimeScope RootScope { get; private set; }
 
-
         /// <summary>
         /// Call this, to register
         /// * some common stuff
@@ -40,9 +42,17 @@ namespace aemarcoCommons.WpfTools
         /// * WpfTools stuff
         /// </summary>
         /// <param name="builder">builder to register to</param>
+        /// <param name="externals">externally owned objects</param>
         /// <returns>builder with registrations</returns>
-        public static ContainerBuilder SetupWpfTools(this ContainerBuilder builder)
+        public static ContainerBuilder SetupWpfTools(this ContainerBuilder builder, params object[] externals)
         {
+            foreach (var external in externals)
+            {
+                builder.RegisterInstance(external)
+                    .AsSelf()
+                    .ExternallyOwned();
+            }
+
             var sc = new ServiceCollection()
                 .SetupToolbox();
 
@@ -52,7 +62,15 @@ namespace aemarcoCommons.WpfTools
 
             //* WpfTools stuff
             //--> windows getting registered
+
+            var shortestNameSpace = Assembly.GetEntryAssembly()!
+                .GetTypes()
+                .Select(x => x.Namespace)
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .OrderBy(x => x!.Length)
+                .First(); //now only registers consumers windows
             builder.RegisterAssemblyTypes(AppDomain.CurrentDomain.GetAssemblies())
+                .Where(x => x.Namespace?.StartsWith(shortestNameSpace) ?? false)
                 .Where(t => t.IsSubclassOf(typeof(Window)))
                 .AsSelf()
                 .AsImplementedInterfaces()

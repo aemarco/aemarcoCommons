@@ -13,11 +13,12 @@ namespace aemarcoCommons.WpfTools.Commands
             return CanExecuteFunc == null || CanExecuteFunc(parameter);
         }
 
+
         public Func<object?, Task>? CommandAction { get; set; }
         public override Task ExecuteAsync(object? parameter)
         {
-            return CommandAction is null 
-                ? Task.CompletedTask 
+            return CommandAction is null
+                ? Task.CompletedTask
                 : CommandAction(parameter);
         }
     }

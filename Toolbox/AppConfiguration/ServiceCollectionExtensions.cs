@@ -54,10 +54,13 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
                 }
             }
 
+            //register command line
+            if (toolConfig.ConfigureSource != null)
+                configBuilder.AddCommandLine(toolConfig.ConfigureSource);
+
+
             //register IConfiguration stuff
             var rootConfig = configBuilder.Build();
-
-
             //builder.RegisterInstance(rootConfig)
             //    .As<IConfiguration>()
             //    .As<IConfigurationRoot>()

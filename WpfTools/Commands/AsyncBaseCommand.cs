@@ -21,7 +21,8 @@ namespace aemarcoCommons.WpfTools.Commands
         {
             return true;
         }
-        
+
+
         public async void Execute(object? parameter)
         {
             await ExecuteAsync(parameter);

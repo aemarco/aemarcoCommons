@@ -1,6 +1,7 @@
-﻿using System;
+﻿using aemarcoCommons.Toolbox.AppConfiguration.Transformations;
+using Microsoft.Extensions.Configuration.CommandLine;
+using System;
 using System.Collections.Generic;
-using aemarcoCommons.Toolbox.AppConfiguration.Transformations;
 
 namespace aemarcoCommons.Toolbox.AppConfiguration
 {
@@ -19,6 +20,19 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
                 return $"savedSettings.{fileMiddleName}.json";
             };
         }
+
+
+        /// <summary>
+        /// Use AddCommandLine from IConfigurationBuilder
+        /// </summary>
+        /// <param name="configureSource"></param>
+        public void AddCommandLine(Action<CommandLineConfigurationSource> configureSource)
+        {
+            ConfigureSource = configureSource;
+        }
+        internal Action<CommandLineConfigurationSource> ConfigureSource { get; private set; }
+
+
 
         /// <summary>
         /// If Save() is being used on any Settings-Class, define a directory where stuff gets saved
