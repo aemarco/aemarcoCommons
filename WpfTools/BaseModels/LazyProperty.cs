@@ -72,7 +72,7 @@ public class LazyProperty<T> : INotifyPropertyChanged
                         ErrorOnLoading = true;
                         _isLoaded = true;
                         IsLoading = false;
-                        OnPropertyChanged(nameof(Value));
+                        OnPropertyChanged();
                     }
                     else
                     {

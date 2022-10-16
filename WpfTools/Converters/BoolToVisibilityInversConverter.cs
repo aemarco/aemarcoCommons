@@ -13,16 +13,14 @@ public class BoolToVisibilityInversConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if ((bool)value)
-            return Visibility.Collapsed;
-        else
-            return Visibility.Visible;
+        return value is true
+            ? Visibility.Collapsed
+            : Visibility.Visible;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        string strValue = value as string;
-        if (Enum.TryParse<Visibility>(strValue, out Visibility result))
+        if (value is string strValue && Enum.TryParse(strValue, out Visibility result))
         {
             return result;
         }
