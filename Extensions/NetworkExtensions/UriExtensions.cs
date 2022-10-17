@@ -9,7 +9,10 @@ namespace aemarcoCommons.Extensions.NetworkExtensions
     public static class UriExtensions
     {
 
-        public static bool Ping(this Uri uri)
+        [Obsolete("Use TcpPing instead.")]
+        public static bool Ping(this Uri uri) => uri.TcpPing();
+
+        public static bool TcpPing(this Uri uri)
         {
             TcpClient client = null;
             try
