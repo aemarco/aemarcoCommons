@@ -11,4 +11,22 @@
     <converters:ObjectToJsonConverter x:Key="ObjectToJsonConverter" />
     <converters:MultiplyConverter x:Key="MultiplyConverter" />
 
+
+    <Style TargetType="Button" x:Key="HyperlinkButton">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <TextBlock Foreground="DodgerBlue"
+                               TextDecorations="Underline" 
+                               Cursor="Hand"
+                               Text="{TemplateBinding Content}"
+                               HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                               VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                               FontSize="{TemplateBinding FontSize}"
+                               Margin="{TemplateBinding Margin}"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>
