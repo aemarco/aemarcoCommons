@@ -3,7 +3,7 @@
   <!-- assembly and nuget version we spit out -->
   <PropertyGroup>
 
-    <AssemblyVersion>1.0.85.0</AssemblyVersion>
+    <AssemblyVersion>1.0.86.0</AssemblyVersion>
 
   </PropertyGroup>
 
