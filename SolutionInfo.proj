@@ -3,7 +3,11 @@
   <!-- assembly and nuget version we spit out -->
   <PropertyGroup>
 
+<<<<<<< HEAD
     <AssemblyVersion>1.0.85.0</AssemblyVersion>
+=======
+    <AssemblyVersion>1.0.86.0</AssemblyVersion>
+>>>>>>> 7b1b15838c562ef36905159d60e140b259abde1c
 
   </PropertyGroup>
 
