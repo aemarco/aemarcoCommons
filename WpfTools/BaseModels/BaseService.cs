@@ -7,7 +7,7 @@ namespace aemarcoCommons.WpfTools.BaseModels;
 
 public class BaseService : BaseNotifier, IBaseService
 {
-    protected override void OnPropertyChanged(string propertyName = null)
+    protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
     {
         base.OnPropertyChanged(propertyName);
 

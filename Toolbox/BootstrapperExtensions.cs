@@ -54,7 +54,7 @@ namespace aemarcoCommons.Toolbox
 
             sc.AddTransient<VirusScanService>();
             sc.AddTransient<IGeoServiceSettings, GeoServiceSettings>();
-            sc.AddTransient<GeoService>();
+            sc.AddSingleton<GeoService>();
 
             return sc;
         }
