@@ -8,7 +8,7 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
     public static class ServiceCollectionExtensions
     {
 
-        public static IConfigurationRoot AddConfigurationUtils(this ServiceCollection serviceCollection,
+        public static IConfigurationRoot AddConfigurationUtils(this IServiceCollection serviceCollection,
             IConfigurationBuilder configBuilder,
             Action<ConfigurationOptions> options = null)
         {
