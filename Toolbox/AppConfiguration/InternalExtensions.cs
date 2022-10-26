@@ -1,10 +1,14 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using aemarcoCommons.Extensions.AttributeExtensions;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace aemarcoCommons.Toolbox.AppConfiguration
 {
+
     internal static class InternalExtensions
     {
 
@@ -92,6 +96,28 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
         }
 
 
+        internal static void HandleAutoSaveOnPropertyChanged(this SettingsBase settingsBase)
+        {
+            var type = settingsBase.GetType();
 
+            if (!type.HasAttribute<AutoSaveOnPropertyChangedAttribute>())
+                return;
+
+
+            EventInfo eventInfo = type.GetEvent("PropertyChanged");
+            if (eventInfo == null)
+                throw new Exception($"{nameof(AutoSaveOnPropertyChangedAttribute)} require a PropertyChanged event to be declared");
+
+            MethodInfo methodInfo = typeof(SettingsBase)
+                .GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)
+                .First(x => x.Name == "AutoSaveOnPropertyChanged");
+
+            eventInfo.AddEventHandler(
+                settingsBase,
+                Delegate.CreateDelegate(
+                    eventInfo.EventHandlerType,
+                    settingsBase,
+                    methodInfo));
+        }
     }
 }

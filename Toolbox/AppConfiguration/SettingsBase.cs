@@ -1,9 +1,11 @@
-﻿using aemarcoCommons.Toolbox.AppConfiguration.Transformations;
+﻿using aemarcoCommons.Extensions.AttributeExtensions;
+using aemarcoCommons.Toolbox.AppConfiguration.Transformations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -26,6 +28,22 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
     }
 
     /// <summary>
+    /// Use this to automatically save on PropertyChanged event
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Class)]
+    public class AutoSaveOnPropertyChangedAttribute : Attribute
+    {
+        public AutoSaveOnPropertyChangedAttribute(params string[] ignoredProperties)
+        {
+            IgnoredProperties = ignoredProperties;
+        }
+        public string[] IgnoredProperties { get; }
+    }
+
+
+
+
+    /// <summary>
     /// Inherit this class in your setting classes
     /// </summary>
     public abstract class SettingsBase
@@ -40,11 +58,13 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
             Init();
             if (ConfigurationOptions.WatchSavedFiles)
                 ChangeToken.OnChange(ConfigurationRoot.GetReloadToken, Init);
+
+            this.HandleAutoSaveOnPropertyChanged();
         }
 
         private void Init()
         {
-            
+
             //problems:
             //a: if multiple providers provide values for a collection, the values get added
             //doubleMerge: when having Config inside Config, Bind will be executed twice
@@ -73,7 +93,7 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
                 var subSetting = Activator.CreateInstance(propertyInfo.PropertyType);
                 subSettings.Add(propertyInfo, subSetting);
             }
-            
+
             #endregion
 
 
@@ -99,11 +119,22 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
             }
 
             #endregion
-
         }
-        
 
-       
+
+
+        // ReSharper disable once UnusedMember.Local
+        // ReSharper disable once UnusedParameter.Local
+        private void AutoSaveOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            var attr = this.GetAttribute<AutoSaveOnPropertyChangedAttribute>();
+            if (attr.IgnoredProperties.Contains(e.PropertyName))
+                return;
+
+            Save();
+        }
+
+
         /// <summary>
         /// Save this Configuration. 
         /// SettingsSaveDirectory should be defined when using this.
@@ -114,11 +145,13 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
         {
             var type = GetType();
             var filePath = type.GetSavePathForSetting(ConfigurationOptions);
+
             Save(filePath);
+
             return filePath;
         }
 
-        
+
         /// <summary>
         /// Export this configuration based on root level to a given file path
         /// given folder must already exist
