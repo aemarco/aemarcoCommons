@@ -1,16 +1,30 @@
 ﻿using aemarcoCommons.WpfTools.BaseModels;
 using Autofac;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace aemarcoCommons.WpfTools.Commands;
 
 public class OpenDialogCommand<T> : DelegateCommand where T : IWindow
 {
-    public OpenDialogCommand()
+    public OpenDialogCommand(ILifetimeScope lifetimeScope)
     {
+
         CommandAction = _ =>
         {
-            var wind = BootstrapperExtensions.RootScope.Resolve<T>();
-            wind.ShowDialog();
+            var window = lifetimeScope.Resolve<T>();
+            window.ShowDialog();
+        };
+    }
+
+    public OpenDialogCommand(IServiceProvider serviceProvider)
+    {
+
+
+        CommandAction = _ =>
+        {
+            var window = serviceProvider.GetRequiredService<T>();
+            window.ShowDialog();
         };
     }
 }

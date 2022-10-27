@@ -55,9 +55,10 @@ public abstract class BaseNavWindowViewModel : BaseViewModel //inherit this in w
     /// <param name="p">Parameters To Pass to the Constructor</param>
     /// <typeparam name="T">Interface of view model to resolve</typeparam>
     /// <returns>requested view model</returns>
-    protected virtual T Resolve<T>(params Parameter[] p) where T : INavViewModel => BootstrapperExtensions.RootScope != null
-        ? BootstrapperExtensions.RootScope.Resolve<T>(p)
-        : throw new NotImplementedException("Override Resolve to resolve INavViewModel´s");
+    protected virtual T Resolve<T>(params Parameter[] p) where T : INavViewModel =>
+        BootstrapperExtensions.RootScope != null
+            ? BootstrapperExtensions.RootScope.Resolve<T>(p)
+            : throw new NotImplementedException("Override Resolve to resolve INavViewModel´s");
 
 
     public override DelegateCommand CloseCommand =>

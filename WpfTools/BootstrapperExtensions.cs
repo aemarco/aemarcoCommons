@@ -86,8 +86,10 @@ public static class BootstrapperExtensions
             .AsImplementedInterfaces()
             .InstancePerDependency();
 
-        builder.RegisterGeneric(typeof(OpenWindowCommand<>));
-        builder.RegisterGeneric(typeof(OpenDialogCommand<>));
+        builder.RegisterGeneric(typeof(OpenWindowCommand<>))
+            .FindConstructorsWith(t => new[] { t.GetConstructor(new[] { typeof(ILifetimeScope) }) });
+        builder.RegisterGeneric(typeof(OpenDialogCommand<>))
+            .FindConstructorsWith(t => new[] { t.GetConstructor(new[] { typeof(ILifetimeScope) }) });
 
 
 
@@ -109,6 +111,77 @@ public static class BootstrapperExtensions
 
         return builder;
     }
+
+    public static IServiceCollection SetupWpfTools(this IServiceCollection sc, params object[] externals)
+    {
+
+        foreach (var external in externals)
+        {
+            sc.AddSingleton(external);
+        }
+
+        sc.SetupToolbox();
+
+        //* some common stuff
+        sc.AddSingleton(Application.Current.Dispatcher);
+
+        //* WpfTools stuff
+        //--> windows getting registered
+        var shortestNameSpace = Assembly.GetEntryAssembly()!
+            .GetTypes()
+            .Select(x => x.Namespace)
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .OrderBy(x => x!.Length)
+            .First(); //now only registers consumers windows
+
+        AppDomain.CurrentDomain
+            .GetAssemblies()
+            .SelectMany(x => x.GetTypes())
+            .Where(x => x.Namespace?.StartsWith(shortestNameSpace) ?? false)
+            .ToList()
+            .ForEach(t =>
+            {
+                if (t.IsSubclassOf(typeof(Window)))
+                {
+                    sc.AddTransient(t);
+                    foreach (var i in t.GetInterfaces())
+                        sc.AddTransient(i, t);
+                }
+                else if (typeof(ISingleton).IsAssignableFrom(t))
+                {
+                    sc.AddSingleton(t);
+                    foreach (var i in t.GetInterfaces())
+                        sc.AddSingleton(i, sp => sp.GetService(t));
+                }
+                else if (typeof(ITransient).IsAssignableFrom(t))
+                {
+                    sc.AddTransient(t);
+                    foreach (var i in t.GetInterfaces())
+                        sc.AddTransient(i, t);
+                }
+            });
+
+
+        sc.AddTransient(typeof(OpenWindowCommand<>));
+        sc.AddTransient(typeof(OpenDialogCommand<>));
+
+
+        var waitAndRetry = HttpPolicyExtensions
+            .HandleTransientHttpError()
+            .WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(1));
+        var timeoutPolicy = Policy.TimeoutAsync<HttpResponseMessage>(TimeSpan.FromSeconds(10));
+
+
+        sc.AddHttpClient(nameof(WallpaperSetter), c =>
+            {
+                c.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.88 Safari/537.36");
+            })
+            .AddPolicyHandler(waitAndRetry)
+            .AddPolicyHandler(timeoutPolicy);
+
+        return sc;
+    }
+
 
     public static ContainerBuilder SetupSerilogAsILogger(this ContainerBuilder builder)
     {
