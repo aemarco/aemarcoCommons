@@ -67,7 +67,7 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
             //    .SingleInstance();
             serviceCollection
                 .AddSingleton(rootConfig)
-                .AddSingleton(x => x.GetRequiredService<IConfiguration>());
+                .AddSingleton<IConfiguration>(x => x.GetRequiredService<IConfigurationRoot>());
 
 
 
