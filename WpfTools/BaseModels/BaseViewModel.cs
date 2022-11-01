@@ -1,23 +1,30 @@
 ﻿using aemarcoCommons.Extensions.NetworkExtensions;
 using aemarcoCommons.WpfTools.Commands;
+using CommunityToolkit.Mvvm.Input;
 using System;
-using System.Windows.Input;
+using System.Windows;
 
 namespace aemarcoCommons.WpfTools.BaseModels;
 
-public class BaseViewModel : BaseNotifier, IBaseViewModel
+// ReSharper disable once PartialTypeWithSinglePart
+public partial class BaseViewModel : BaseNotifier, IBaseViewModel
 {
-    public virtual DelegateCommand CloseCommand { get; } = new DelegateCommand();
+    [RelayCommand]
+    // ReSharper disable once UnusedMember.Local
+    protected virtual void NavigateToUrl(string url)
+    {
+        if (string.IsNullOrWhiteSpace(url))
+            throw new Exception("Must provide a url");
+        new Uri(url).OpenInBrowser();
+    }
 
-    public virtual ICommand NavigateToUrlCommand =>
-        new DelegateCommand
-        {
-            CommandAction = x =>
-            {
-                if (x is not string url)
-                    return;
-                new Uri(url).OpenInBrowser();
-            }
-        };
+
+
+    public virtual DelegateCommand CloseCommand { get; } = new();
+
+
+    [RelayCommand]
+    protected virtual void ExitApplication()
+        => Application.Current.Shutdown();
 
 }

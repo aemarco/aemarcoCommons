@@ -1,24 +1,39 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 #nullable enable
 
 namespace aemarcoCommons.WpfTools.Commands;
 
-public class AsyncDelegateCommand : AsyncBaseCommand
+public class AsyncDelegateCommand : ICommand
 {
-    public Func<object?, bool>? CanExecuteFunc { get; set; }
-    public override bool CanExecute(object? parameter)
+
+    public event EventHandler? CanExecuteChanged
     {
-        return CanExecuteFunc == null || CanExecuteFunc(parameter);
+        add => CommandManager.RequerySuggested += value;
+        remove => CommandManager.RequerySuggested -= value;
+    }
+    protected virtual void OnCanExecuteChanged()
+    {
+        CommandManager.InvalidateRequerySuggested();
     }
 
 
-    public Func<object?, Task>? CommandAction { get; set; }
-    public override Task ExecuteAsync(object? parameter)
+
+    public Func<object?, bool>? CanExecuteFunc { get; init; }
+    public bool CanExecute(object? parameter)
     {
-        return CommandAction is null
-            ? Task.CompletedTask
-            : CommandAction(parameter);
+        return CanExecuteFunc is null || CanExecuteFunc(parameter);
     }
+
+
+    public Func<object?, Task>? CommandAction { get; init; }
+    public async void Execute(object? parameter)
+    {
+        if (CommandAction is not null)
+            await CommandAction(parameter);
+    }
+
+
 }

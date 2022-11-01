@@ -21,25 +21,27 @@ public class WindowCloser
     private static void OnEnableWindowClosingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         //ensure is a window
-        if (!(d is Window window)) return;
+        if (d is not Window window)
+            return;
 
-        window.Loaded += (s, ee) =>
+        window.Loaded += (_, _) =>
         {
             //ensure data context implements IBaseViewModel
-            if (!(window.DataContext is IBaseViewModel vm)) return;
+            if (window.DataContext is not IBaseViewModel vm)
+                return;
+
             vm.CloseCommand.CommandAction = _ => window.Close();
         };
-        window.Closing += (s, ee) =>
+        window.Closing += (_, _) =>
         {
-            if (!(window.DataContext is IBaseViewModel vm)) return;
+            if (window.DataContext is not IBaseViewModel vm)
+                return;
 
             // ReSharper disable once SuspiciousTypeConversion.Global
-            if (vm is ITransient and IDisposable dis)
+            if (vm is IDisposable dis)
             {
                 dis.Dispose();
             }
         };
-
-
     }
 }

@@ -90,7 +90,8 @@ public static class BootstrapperExtensions
             .FindConstructorsWith(t => new[] { t.GetConstructor(new[] { typeof(ILifetimeScope) }) });
         builder.RegisterGeneric(typeof(OpenDialogCommand<>))
             .FindConstructorsWith(t => new[] { t.GetConstructor(new[] { typeof(ILifetimeScope) }) });
-
+        builder.RegisterGeneric(typeof(ShowWindowCommand<>))
+            .FindConstructorsWith(t => new[] { t.GetConstructor(new[] { typeof(ILifetimeScope) }) });
 
 
         var waitAndRetry = HttpPolicyExtensions
@@ -164,6 +165,7 @@ public static class BootstrapperExtensions
 
         sc.AddTransient(typeof(OpenWindowCommand<>));
         sc.AddTransient(typeof(OpenDialogCommand<>));
+        sc.AddTransient(typeof(ShowWindowCommand<>));
 
 
         var waitAndRetry = HttpPolicyExtensions

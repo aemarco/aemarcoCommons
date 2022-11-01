@@ -11,16 +11,16 @@ public abstract class BaseCommand : ICommand
         add => CommandManager.RequerySuggested += value;
         remove => CommandManager.RequerySuggested -= value;
     }
-    protected virtual void OnCanExecuteChanged()
+    public virtual void OnCanExecuteChanged()
     {
         CommandManager.InvalidateRequerySuggested();
     }
-        
+
     public virtual bool CanExecute(object? parameter)
     {
         return true;
     }
-        
+
     public abstract void Execute(object? parameter);
 
 }
