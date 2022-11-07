@@ -52,7 +52,8 @@ public class BaseNotifier : ObservableObject
             if (GetType()
                     .GetField(eventAttribute.EventName, BindingFlags.Instance | BindingFlags.NonPublic)
                     ?.GetValue(this)
-                is not MulticastDelegate multiDelegate) continue;
+                is not MulticastDelegate multiDelegate)
+                continue;
 
             foreach (var eventHandler in multiDelegate.GetInvocationList())
             {
