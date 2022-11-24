@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Humanizer;
+using Humanizer.Localisation;
+using System;
 using System.Globalization;
 using System.Windows.Data;
-using Humanizer;
-using Humanizer.Localisation;
 
 
 namespace aemarcoCommons.WpfTools.Converters;
@@ -16,11 +16,16 @@ public class TimespanToStringConverter : IValueConverter
 
 
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    { 
+    {
         var val = (TimeSpan?)value;
-        return !val.HasValue 
-            ? "Unknown" 
-            : val.Value.Humanize(2, collectionSeparator: " ", minUnit: TimeUnit.Second);
+
+        if (!val.HasValue)
+            return "Unknown";
+
+        var human = val.Value.Humanize(2, collectionSeparator: " ", minUnit: TimeUnit.Second);
+        return val.Value.TotalMilliseconds < 0
+            ? $"- {human}"
+            : human;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
