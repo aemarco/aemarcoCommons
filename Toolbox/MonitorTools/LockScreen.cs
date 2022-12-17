@@ -1,4 +1,5 @@
 ﻿using aemarcoCommons.Extensions.FileExtensions;
+using aemarcoCommons.Extensions.TextExtensions;
 using aemarcoCommons.Toolbox.PictureTools;
 using System.Drawing;
 using System.IO;
@@ -53,6 +54,7 @@ namespace aemarcoCommons.Toolbox.MonitorTools
 
         public string DeviceName { get; }
         public RealEstateType Type => RealEstateType.LockScreen;
+        public string FriendlyName => $"Lock Screen {string.Join("-", DeviceName.GetNumbersFromText())}";
 
         public void SetWallpaper(Image wall, Color? background = null) =>
             SetWallpaper(

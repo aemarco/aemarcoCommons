@@ -9,7 +9,7 @@ namespace aemarcoCommons.WpfTools.BaseModels;
 // ReSharper disable once PartialTypeWithSinglePart
 public partial class BaseViewModel : BaseNotifier, IBaseViewModel
 {
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanNavigateToUrl))]
     // ReSharper disable once UnusedMember.Local
     protected virtual void NavigateToUrl(string url)
     {
@@ -17,6 +17,13 @@ public partial class BaseViewModel : BaseNotifier, IBaseViewModel
             throw new Exception("Must provide a url");
         new Uri(url).OpenInBrowser();
     }
+
+    protected virtual bool CanNavigateToUrl(string url)
+    {
+        return !string.IsNullOrWhiteSpace(url) &&
+               Uri.TryCreate(url, UriKind.Absolute, out _);
+    }
+
 
 
 

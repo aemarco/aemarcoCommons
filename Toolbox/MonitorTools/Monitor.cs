@@ -1,4 +1,5 @@
 ﻿using aemarcoCommons.Extensions.FileExtensions;
+using aemarcoCommons.Extensions.TextExtensions;
 using aemarcoCommons.Toolbox.PictureTools;
 using System;
 using System.Drawing;
@@ -61,8 +62,21 @@ namespace aemarcoCommons.Toolbox.MonitorTools
         #endregion
 
         public string DeviceName { get; }
-
         public RealEstateType Type { get; }
+        public string FriendlyName
+        {
+            get
+            {
+                switch (Type)
+                {
+                    case RealEstateType.Virtual:
+                        return $"All Monitors {string.Join("-", DeviceName.GetNumbersFromText())}";
+                    default:
+                        return $"Monitor {string.Join("-", DeviceName.GetNumbersFromText())}";
+                }
+            }
+        }
+
 
         public void SetWallpaper(Image wall, Color? background = null) =>
             SetWallpaper(

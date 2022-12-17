@@ -9,17 +9,17 @@ namespace aemarcoCommons.Toolbox.Pipes
 {
     public class MessageBasedPipeServer
     {
-
-        private string _pipeName;
-        private Action<string> _eventAction;
-        public MessageBasedPipeServer Start(string pipeName, Action<string> eventAction)
+        private readonly string _pipeName;
+        private readonly Action<string> _eventAction;
+        public MessageBasedPipeServer(string pipeName, Action<string> eventAction)
         {
             _pipeName = pipeName;
             _eventAction = eventAction;
 
             new Thread(CreateNamedPipeServer) { IsBackground = true }.Start();
-            return this;
         }
+
+
 
         private void CreateNamedPipeServer()
         {
@@ -42,10 +42,10 @@ namespace aemarcoCommons.Toolbox.Pipes
 
         public void HandleAsMessage(string message)
         {
-            if (string.IsNullOrWhiteSpace(message)) return;
+            if (string.IsNullOrWhiteSpace(message))
+                return;
             Task.Run(() => _eventAction(message)).SafeFireAndForget();
         }
-
     }
 
     public static class MessageBasedPipeClient
