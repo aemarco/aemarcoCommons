@@ -48,8 +48,10 @@
   <PropertyGroup>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>aemarcoWpfTools</PackageId>
-    <PackageVersion>$(AssemblyVersion)</PackageVersion>
-    <Authors>aemarco</Authors>
+	  <!-- ReSharper disable UnknownProperty -->
+	  <PackageVersion>$(AssemblyVersion)</PackageVersion>
+	  <!-- ReSharper restore UnknownProperty -->
+	  <Authors>aemarco</Authors>
     <Company>aemarco</Company>
     <Product>aemarcoWpfTools</Product>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>

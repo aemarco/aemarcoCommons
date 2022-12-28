@@ -32,8 +32,10 @@
   <PropertyGroup>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>aemarcoWebTools</PackageId>
-    <PackageVersion>$(AssemblyVersion)</PackageVersion>
-    <Authors>aemarco</Authors>
+	  <!-- ReSharper disable UnknownProperty -->
+	  <PackageVersion>$(AssemblyVersion)</PackageVersion>
+	  <!-- ReSharper restore UnknownProperty -->
+	  <Authors>aemarco</Authors>
     <Company>aemarco</Company>
     <Product>aemarcoWebTools</Product>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>

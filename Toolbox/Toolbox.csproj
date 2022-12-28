@@ -31,7 +31,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="6.0.2" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.2.0" />
 
     <PackageReference Include="IdentityModel.OidcClient" Version="5.2.0" />
@@ -53,8 +53,10 @@
   <PropertyGroup>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>aemarcoToolbox</PackageId>
-    <PackageVersion>$(AssemblyVersion)</PackageVersion>
-    <Authors>aemarco</Authors>
+	  <!-- ReSharper disable UnknownProperty -->
+	  <PackageVersion>$(AssemblyVersion)</PackageVersion>
+	  <!-- ReSharper restore UnknownProperty -->
+	  <Authors>aemarco</Authors>
     <Company>aemarco</Company>
     <Product>aemarcoToolbox</Product>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>

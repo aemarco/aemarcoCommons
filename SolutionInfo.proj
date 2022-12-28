@@ -3,18 +3,20 @@
   <!-- assembly and nuget version we spit out -->
   <PropertyGroup>
 
-	  <AssemblyVersion>1.0.97.0</AssemblyVersion>
+	  <AssemblyVersion>1.0.98.0</AssemblyVersion>
 
   </PropertyGroup>
+
 
   <!-- ceremony-->
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <DebugType>embedded</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
+
   <ItemGroup>
-	<!-- would be like example 'aemarcoCommons.ExtensionsTests'-->
-	<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+  <!-- would be like example 'aemarcoCommons.ExtensionsTests'-->
+  <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
 		<_Parameter1>$(AssemblyName)Tests</_Parameter1>
 	</AssemblyAttribute>
   </ItemGroup>

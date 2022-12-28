@@ -26,8 +26,10 @@
   <PropertyGroup>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>aemarcoConsoleTools</PackageId>
-    <PackageVersion>$(AssemblyVersion)</PackageVersion>
-    <Authors>aemarco</Authors>
+	  <!-- ReSharper disable UnknownProperty -->
+	  <PackageVersion>$(AssemblyVersion)</PackageVersion>
+	  <!-- ReSharper restore UnknownProperty -->
+	  <Authors>aemarco</Authors>
     <Company>aemarco</Company>
     <Product>aemarcoConsoleTools</Product>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>

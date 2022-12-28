@@ -26,9 +26,7 @@ namespace aemarcoCommons.Toolbox
                 .AddJsonFile($"appsettings.{environmentName}.json", true, true);
         }
 
-        public static ContainerBuilder SetupLoggerFactory(
-            this ContainerBuilder builder,
-            ILoggerFactory factory)
+        public static ContainerBuilder SetupLoggerFactory(this ContainerBuilder builder, ILoggerFactory factory)
         {
             builder.RegisterInstance(factory)
                 .As<ILoggerFactory>()
@@ -40,11 +38,14 @@ namespace aemarcoCommons.Toolbox
         }
 
 
+
+
         public static IServiceCollection SetupToolbox(this IServiceCollection sc) =>
             sc
                 .SetupServices()
                 .SetupPollyPolicies()
                 .SetupHttpClientStuff();
+
 
         private static IServiceCollection SetupServices(this IServiceCollection sc)
         {
@@ -52,7 +53,9 @@ namespace aemarcoCommons.Toolbox
             sc.AddSingleton(typeof(ITypeToFileStore<>), typeof(JsonTypeToFileStore<>));
             sc.AddTransient<IEmbeddedResourceQuery, EmbeddedResourceQuery>();
 
+            //SecurityTools
             sc.AddTransient<VirusScanService>();
+
             sc.AddTransient<IGeoServiceSettings, GeoServiceSettings>();
             sc.AddSingleton<GeoService>();
 

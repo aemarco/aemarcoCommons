@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-// ReSharper disable MemberCanBePrivate.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 
 namespace aemarcoCommons.Toolbox.SecurityTools
@@ -20,6 +18,7 @@ namespace aemarcoCommons.Toolbox.SecurityTools
                 return new VirusScanResult(new FileNotFoundException("Could not found Virus scanner exe", mpCmdRunExeLocation));
             if (!File.Exists(filePath))
                 return new VirusScanResult(new FileNotFoundException("Could not found file to scan", filePath));
+
 
             var fileInfo = new FileInfo(filePath);
             var process = new Process();

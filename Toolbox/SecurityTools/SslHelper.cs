@@ -2,8 +2,10 @@
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 
-namespace aemarcoCommons.Toolbox.SslTools
+namespace aemarcoCommons.Toolbox.SecurityTools
 {
+
+    //used in aemarcoSecrets
     public static class SslHelper
     {
 
