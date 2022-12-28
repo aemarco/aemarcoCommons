@@ -42,7 +42,8 @@ public class BearerToHeaderMiddleware
         if (context.Request.Query.TryGetValue("access_token", out var token))
         {
             var items = context.Request.Query
-                .SelectMany(x => x.Value, (col, value) => new KeyValuePair<string, string>(col.Key, value))
+                .SelectMany(x => x.Value,
+                    (col, value) => new KeyValuePair<string, string>(col.Key, value!))
                 .ToList();
             items.RemoveAll(x => x.Key.Equals("access_token", StringComparison.OrdinalIgnoreCase));
             context.Request.QueryString = new QueryBuilder(items).ToQueryString();
