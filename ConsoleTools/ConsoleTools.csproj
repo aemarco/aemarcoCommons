@@ -4,7 +4,7 @@
 
   <!-- project definition -->
   <PropertyGroup>
-    <TargetFrameworks>net7.0</TargetFrameworks>
+    <TargetFrameworks>net7.0-windows</TargetFrameworks>
 
     <RootNamespace>aemarcoCommons.ConsoleTools</RootNamespace>
     <AssemblyName>aemarcoCommons.ConsoleTools</AssemblyName>

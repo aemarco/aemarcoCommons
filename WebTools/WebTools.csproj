@@ -1,10 +1,10 @@
-<!--EXTERNAL_PROPERTIES: AssemblyVersion-->
+﻿<!--EXTERNAL_PROPERTIES: AssemblyVersion-->
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\SolutionInfo.proj" />
 
   <!-- project definition -->
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
 
     <RootNamespace>aemarcoCommons.WebTools</RootNamespace>

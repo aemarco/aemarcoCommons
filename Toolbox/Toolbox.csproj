@@ -4,7 +4,7 @@
 
   <!-- project definition -->
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net7.0-windows</TargetFrameworks>
    
     <RootNamespace>aemarcoCommons.Toolbox</RootNamespace>
     <AssemblyName>aemarcoCommons.Toolbox</AssemblyName>
@@ -16,8 +16,14 @@
   </ItemGroup>
 
   <!-- nuget references-->
+ 
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net7.0-windows' ">
+	  <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="7.0.0" />
+  </ItemGroup>
+
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="6.5.0" />
+
+	<PackageReference Include="Autofac" Version="6.5.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Humanizer.Core" Version="2.14.1" />
     <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="7.0.1" />
@@ -31,9 +37,9 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.2.0" />
 
+    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.2.0" />
+	<PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.0" />
     <PackageReference Include="IdentityModel.OidcClient" Version="5.2.0" />
 
     <PackageReference Include="Polly.Contrib.WaitAndRetry" Version="1.1.1" />
@@ -83,6 +89,9 @@
 	  <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
 		  <_Parameter1>ToolboxTests</_Parameter1>
 	  </AssemblyAttribute>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="_Obsolete\" />
   </ItemGroup>
 
 </Project>

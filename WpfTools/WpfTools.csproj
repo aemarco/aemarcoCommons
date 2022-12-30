@@ -5,7 +5,7 @@
 
   <!-- project definition -->
   <PropertyGroup>
-    <TargetFrameworks>net6.0-windows10.0.19041.0;net7.0-windows10.0.19041.0</TargetFrameworks>
+    <TargetFramework>net7.0-windows10.0.19041.0</TargetFramework>
     <SupportedOSPlatformVersion>10.0</SupportedOSPlatformVersion>
 
     <RootNamespace>aemarcoCommons.WpfTools</RootNamespace>
