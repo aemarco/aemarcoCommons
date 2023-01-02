@@ -4,7 +4,7 @@
 
   <!-- project definition -->
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
 
     <RootNamespace>aemarcoCommons.WebTools</RootNamespace>

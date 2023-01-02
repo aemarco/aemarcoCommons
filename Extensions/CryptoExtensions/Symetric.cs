@@ -11,7 +11,7 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
             using (var memory = new MemoryStream())
             {
                 Encrypt(
-                    password, 
+                    password,
                     memory,
                     cryptoStream =>
                     {
@@ -32,7 +32,7 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
             {
                 string result = null;
                 Decrypt(
-                    password, 
+                    password,
                     memory,
                     cryptoStream =>
                     {
@@ -52,7 +52,7 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
             {
                 Encrypt(
                     password,
-                    destinationStream, 
+                    destinationStream,
                     cryptoStream =>
                     {
                         using (var readStream = fileInfo.OpenRead())
@@ -67,7 +67,7 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
                 fileInfo.Delete();
             }
             return crypted;
-                     
+
         }
         public static void EncryptFileInPlace(this FileInfo fileInfo, string password, KeySize keySize = KeySize.Normal_128)
         {
@@ -86,7 +86,7 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
             using (var sourceStream = fileInfo.OpenRead())
             {
                 Decrypt(
-                    password, 
+                    password,
                     sourceStream,
                     cryptoStream =>
                     {
@@ -113,7 +113,7 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
 
         //this internal logic encrypts stuff symetrical with aes with given pw and keysize
         //the resulting bytes are build up as following: salt + iv + key size + data
-        
+
         private const int DerivationPasswordIterations = 10000;
 
         private static void Encrypt(string passPhrase, Stream destinationStream, Action<CryptoStream> writeAction, KeySize keySize)
@@ -124,7 +124,7 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
                 destinationStream.Write(salt, 0, salt.Length);
 
                 using (var pwd = new Rfc2898DeriveBytes(passPhrase, salt, DerivationPasswordIterations))
-                { 
+                {
                     aesAlg.Padding = PaddingMode.PKCS7;
 
                     aesAlg.IV = GetRandomBytes(aesAlg.BlockSize);
@@ -136,8 +136,8 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
                     aesAlg.Key = pwd.GetBytes(ks / 8);
 
                     using (var cryptoStream = new CryptoStream(
-                            destinationStream, 
-                            aesAlg.CreateEncryptor(), 
+                            destinationStream,
+                            aesAlg.CreateEncryptor(),
                             CryptoStreamMode.Write))
                     {
                         writeAction(cryptoStream);
@@ -151,6 +151,7 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
             using (var aesAlg = Aes.Create())
             {
                 var salt = new byte[aesAlg.BlockSize / 8];
+                // ReSharper disable once MustUseReturnValue
                 sourceStream.Read(salt, 0, salt.Length);
 
                 using (var pwd = new Rfc2898DeriveBytes(passPhrase, salt, DerivationPasswordIterations))
@@ -158,13 +159,14 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
                     aesAlg.Padding = PaddingMode.PKCS7;
 
                     var iv = new byte[aesAlg.BlockSize / 8];
+                    // ReSharper disable once MustUseReturnValue
                     sourceStream.Read(iv, 0, iv.Length);
 
                     aesAlg.KeySize = 64 * sourceStream.ReadByte();
                     var key = pwd.GetBytes(aesAlg.KeySize / 8);
 
                     using (var cryptoStream = new CryptoStream(
-                            sourceStream,  
+                            sourceStream,
                             aesAlg.CreateDecryptor(key, iv),
                             CryptoStreamMode.Read))
                     {

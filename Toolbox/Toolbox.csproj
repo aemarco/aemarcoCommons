@@ -9,6 +9,11 @@
     <RootNamespace>aemarcoCommons.Toolbox</RootNamespace>
     <AssemblyName>aemarcoCommons.Toolbox</AssemblyName>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="_Obsolete\**" />
+    <EmbeddedResource Remove="_Obsolete\**" />
+    <None Remove="_Obsolete\**" />
+  </ItemGroup>
    
   <!-- project references -->
   <ItemGroup>
@@ -89,9 +94,6 @@
 	  <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
 		  <_Parameter1>ToolboxTests</_Parameter1>
 	  </AssemblyAttribute>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="_Obsolete\" />
   </ItemGroup>
 
 </Project>

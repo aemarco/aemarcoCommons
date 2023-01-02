@@ -16,7 +16,7 @@ namespace aemarcoCommons.Extensions.StorageExtensions
         {
             var assemblyLocation = assembly.Location;
             var di = new FileInfo(assemblyLocation).Directory;
-            return di.FullName;
+            return di?.FullName;
         }
 
     }
