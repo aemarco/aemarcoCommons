@@ -1,11 +1,48 @@
-﻿using System;
+﻿using CliWrap;
+using System;
 using System.Diagnostics;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace aemarcoCommons.Toolbox.ShellTools
 {
     public static class PowerShellHelper
     {
+        public static async Task<CommandResult> RunCommand(
+            string command,
+            Action<string> output = null,
+            params string[] args)
+        {
+            var cmd = CreateCommand(command, args);
+
+            if (output != null)
+            {
+                cmd = cmd.WithStandardOutputPipe(PipeTarget.ToDelegate(output));
+            }
+
+            var result = await cmd.ExecuteAsync();
+            return result;
+        }
+
+        public static Command CreateCommand(string command, params string[] args)
+        {
+            var result = Cli.Wrap("powershell.exe")
+                .WithArguments(b =>
+                {
+                    b.Add("-NoProfile");
+                    b.Add("-ExecutionPolicy").Add("unrestricted");
+                    b.Add(command);
+                    foreach (var arg in args)
+                    {
+                        b.Add(arg);
+                    }
+                });
+
+            return result;
+        }
+
+
+
         public static PowerShellCommandResult Execute(string command, bool throwExceptions = true)
         {
 

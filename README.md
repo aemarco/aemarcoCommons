@@ -1,8 +1,6 @@
-# aemarcoCommons
+# aemarcoCommons [![Build Status](https://dev.azure.com/aemarco/aemarcoCommons/_apis/build/status/aemarco.aemarcoCommons?branchName=master)](https://dev.azure.com/aemarco/aemarcoCommons/_build/latest?definitionId=10&branchName=master)
 
 Some Extensions, some Toolbox, some Console-, Wpf- and Web-Tools
-[![Build Status](https://dev.azure.com/aemarco/aemarcoCommons/_apis/build/status/aemarco.aemarcoCommons?branchName=master)](https://dev.azure.com/aemarco/aemarcoCommons/_build/latest?definitionId=10&branchName=master)
-
 
 ## Packages
 
