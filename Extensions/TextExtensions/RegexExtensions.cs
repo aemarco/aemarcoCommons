@@ -58,7 +58,7 @@ namespace aemarcoCommons.Extensions.TextExtensions
                 return false;
             }
         }
-        
+
         public static IEnumerable<long> GetNumbersFromText(this string text)
         {
             var matches = Regex.Matches(text, @"\d+");

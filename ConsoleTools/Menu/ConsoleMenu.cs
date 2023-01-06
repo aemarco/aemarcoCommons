@@ -32,6 +32,20 @@ public class ConsoleMenu
         _itemIsSelected = false;
         _menuItems[_selectedItemIndex].Execute();
     }
+    public async Task RunConsoleMenuAsync()
+    {
+        if (!string.IsNullOrEmpty(_description))
+        {
+            Console.WriteLine($"{_description}: {Environment.NewLine}");
+        }
+
+        StartConsoleDrawInLoopUntilInputIsMade();
+
+
+        _itemIsSelected = false;
+        await _menuItems[_selectedItemIndex].ExecuteAsync();
+    }
+
 
     private void StartConsoleDrawInLoopUntilInputIsMade()
     {
@@ -114,7 +128,7 @@ public abstract class ConsoleMenuItem
     }
     public string Label { get; }
     public virtual void Execute() { }
-
+    public virtual Task ExecuteAsync() => Task.CompletedTask;
 }
 
 public class ConsoleMenuItem<T> : ConsoleMenuItem
@@ -123,14 +137,14 @@ public class ConsoleMenuItem<T> : ConsoleMenuItem
     private readonly Func<T, Task> _asyncCallBack;
     private readonly T _underlyingObject;
 
-    public ConsoleMenuItem(string label, Action<T> callback, T underlyingObject)
+    public ConsoleMenuItem(string label, Action<T> callback, T underlyingObject = default)
         : base(label)
     {
         _callBack = callback;
         _underlyingObject = underlyingObject;
     }
 
-    public ConsoleMenuItem(string label, Func<T, Task> callback, T underlyingObject)
+    public ConsoleMenuItem(string label, Func<T, Task> callback, T underlyingObject = default)
         : base(label)
     {
         _asyncCallBack = callback;
@@ -142,10 +156,14 @@ public class ConsoleMenuItem<T> : ConsoleMenuItem
         _callBack?.Invoke(_underlyingObject);
         _asyncCallBack?.Invoke(_underlyingObject).GetAwaiter().GetResult();
     }
+
+    public override async Task ExecuteAsync()
+    {
+        _callBack?.Invoke(_underlyingObject);
+        if (_asyncCallBack is not null)
+            await _asyncCallBack.Invoke(_underlyingObject);
+    }
 }
-
-
-
 
 public class ConsoleMenuSeparator : ConsoleMenuItem
 {
