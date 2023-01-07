@@ -14,11 +14,8 @@ namespace aemarcoCommons.Toolbox.ShellTools
             params string[] args)
         {
             var cmd = CreateCommand(command, args);
-
             if (output != null)
-            {
                 cmd = cmd.WithStandardOutputPipe(PipeTarget.ToDelegate(output));
-            }
 
             var result = await cmd.ExecuteAsync();
             return result;
