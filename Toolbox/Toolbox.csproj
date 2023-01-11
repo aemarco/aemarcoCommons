@@ -17,11 +17,7 @@
 
   <!-- nuget references-->
  
-  <!-- ReSharper disable UnknownProperty -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net7.0-windows' ">
-	  <!-- ReSharper restore UnknownProperty -->
-	  <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="7.0.0" />
-  </ItemGroup>
+
 
   <ItemGroup>
 

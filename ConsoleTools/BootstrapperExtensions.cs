@@ -11,19 +11,33 @@ namespace aemarcoCommons.ConsoleTools;
 
 public static class BootstrapperExtensions
 {
-    // ReSharper disable once NotAccessedField.Local
-    private static ILifetimeScope _rootScope;
+
     public static ContainerBuilder SetupConsoleTools(this ContainerBuilder builder)
     {
         var sc = new ServiceCollection()
             .SetupToolbox();
         //register console stuff here
 
+        //builder.RegisterInstance(new CancelKeyPressHandler());
+        //builder.Register(scope => (CancellationToken)scope.Resolve<CancelKeyPressHandler>())
+        //    .SingleInstance();
+
         builder.Populate(sc);
 
-        builder.RegisterBuildCallback(scope => _rootScope = scope);
         return builder;
     }
+
+
+
+    public static IServiceCollection SetupConsoleTools(this IServiceCollection services)
+    {
+        services.SetupToolbox();
+
+        return services;
+    }
+
+
+
 
     public static ContainerBuilder SetupSerilogAsILogger(this ContainerBuilder builder)
     {
@@ -34,12 +48,12 @@ public static class BootstrapperExtensions
 
 
 
-    public static ITypeRegistrar ToAutoFacTypeRegistrar(this ContainerBuilder builder)
-    {
-        builder.SetupConsoleTools();
-        return new AutofacTypeRegistrar(builder);
-    }
+    public static ITypeRegistrar ToTypeRegistrar(this ContainerBuilder builder) =>
+        new AutofacTypeRegistrar(builder);
 
+
+    //TODO create a ServiceCollection "ToTypeRegistrar"
+    // we can wrap all stuff in SearchAndDestroy in a populate... and use the serviceCollection then.
 }
 
 
@@ -90,6 +104,11 @@ public sealed class AutofacTypeResolver : ITypeResolver, IDisposable
         _scope?.Dispose();
     }
 }
+
+
+
+
+
 
 
 //public sealed class ServiceCollectionTypeRegistrar : ITypeRegistrar
