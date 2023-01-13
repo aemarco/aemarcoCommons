@@ -170,12 +170,11 @@ public class WallpaperSetter : ISingleton, IDisposable
     {
         var minX = Screen.AllScreens.Min(x => x.Bounds.X);
         var minY = Screen.AllScreens.Min(x => x.Bounds.Y);
-
-        return new Rectangle(
-            -minX + rect.X,
-            -minY + rect.Y,
-            rect.Width,
-            rect.Height);
+        return rect with
+        {
+            X = -minX + rect.X,
+            Y = -minY + rect.Y
+        };
     }
 
 

@@ -1,6 +1,7 @@
 ﻿using aemarcoCommons.Extensions.FileExtensions;
 using aemarcoCommons.Extensions.TextExtensions;
 using aemarcoCommons.Toolbox.PictureTools;
+using System;
 using System.Drawing;
 using System.IO;
 
@@ -36,6 +37,8 @@ namespace aemarcoCommons.Toolbox.MonitorTools
                             old.Height >= (TargetArea.Y + TargetArea.Height))
                         {
                             Current = new Bitmap(old.Clone(TargetArea, old.PixelFormat));
+                            Timestamp = new DateTimeOffset(new FileInfo(sourceFile).LastWriteTime);
+                            ChangedSinceDrawn = false;
                             return;
                         }
                         //if the previous file is not compatible in size, then we default without exception
@@ -48,6 +51,7 @@ namespace aemarcoCommons.Toolbox.MonitorTools
             }
             //defaults to a black image
             Current = new Bitmap(TargetArea.Width, TargetArea.Height);
+            Timestamp = DateTimeOffset.MinValue;
         }
 
 

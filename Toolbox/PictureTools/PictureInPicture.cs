@@ -36,9 +36,9 @@ namespace aemarcoCommons.Toolbox.PictureTools
                 ChangedSinceDrawn = true;
             }
         }
-        public DateTimeOffset Timestamp { get; private set; }
+        public DateTimeOffset Timestamp { get; protected set; }
 
-        public bool ChangedSinceDrawn { get; private set; }
+        public bool ChangedSinceDrawn { get; protected set; }
 
         #endregion
 
