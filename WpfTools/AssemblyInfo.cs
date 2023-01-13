@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Runtime.Versioning;
 using System.Windows;
 using System.Windows.Markup;
@@ -12,6 +13,8 @@ using System.Windows.Markup;
 // app, or any theme specific resource dictionaries)
 )]
 
+
+
 [assembly: SupportedOSPlatform("windows")]
 
 [assembly: XmlnsPrefix("http://schemas.aemarco/wpf", "aem")]
@@ -20,3 +23,8 @@ using System.Windows.Markup;
 [assembly: XmlnsDefinition("http://schemas.aemarco/xaml", "aemarcoCommons.WpfTools.Dialogs")]
 [assembly: XmlnsDefinition("http://schemas.aemarco/xaml", "aemarcoCommons.WpfTools.Helpers")]
 [assembly: XmlnsDefinition("http://schemas.aemarco/xaml", "aemarcoCommons.WpfTools.MarkupExtensions")]
+
+[assembly: InternalsVisibleTo("aemarcoCommons.WpfToolsTests")]
+[assembly: InternalsVisibleTo("aemarcoCommons.WpfTools.Tests")]
+[assembly: InternalsVisibleTo("WpfToolsTests")]
+[assembly: InternalsVisibleTo("WpfTools.Tests")]

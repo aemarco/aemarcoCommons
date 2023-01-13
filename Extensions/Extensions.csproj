@@ -45,11 +45,6 @@
     </None>
   </ItemGroup>
 
-  <!--test library-->
-  <ItemGroup>
-	<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-		<_Parameter1>ExtensionsTests</_Parameter1>
-	</AssemblyAttribute>
-  </ItemGroup>
+  
 
 </Project>

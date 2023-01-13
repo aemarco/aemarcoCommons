@@ -3,6 +3,7 @@ using aemarcoCommons.WpfTools.Commands;
 using aemarcoCommons.WpfTools.MonitorTools;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Polly;
@@ -52,7 +53,7 @@ public static class BootstrapperExtensions
                 .ExternallyOwned();
         }
 
-        var sc = new ServiceCollection()
+        var services = new ServiceCollection()
             .SetupToolbox();
 
 
@@ -94,20 +95,23 @@ public static class BootstrapperExtensions
             .FindConstructorsWith(t => new[] { t.GetConstructor(new[] { typeof(ILifetimeScope) }) });
 
 
+        services.AddSingleton<IMessenger>(_ => WeakReferenceMessenger.Default);
+
+
         var waitAndRetry = HttpPolicyExtensions
             .HandleTransientHttpError()
             .WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(1));
         var timeoutPolicy = Policy.TimeoutAsync<HttpResponseMessage>(TimeSpan.FromSeconds(10));
 
 
-        sc.AddHttpClient(nameof(WallpaperSetter), c =>
+        services.AddHttpClient(nameof(WallpaperSetter), c =>
             {
                 c.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.88 Safari/537.36");
             })
             .AddPolicyHandler(waitAndRetry)
             .AddPolicyHandler(timeoutPolicy);
 
-        builder.Populate(sc);
+        builder.Populate(services);
         builder.RegisterBuildCallback(rootScope => RootScope = rootScope);
 
         return builder;
@@ -167,6 +171,7 @@ public static class BootstrapperExtensions
         sc.AddTransient(typeof(OpenDialogCommand<>));
         sc.AddTransient(typeof(ShowWindowCommand<>));
 
+        sc.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
 
         var waitAndRetry = HttpPolicyExtensions
             .HandleTransientHttpError()
