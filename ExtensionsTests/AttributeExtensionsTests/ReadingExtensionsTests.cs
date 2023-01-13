@@ -164,7 +164,7 @@ public class ReadingExtensionsTests
     private sealed class TestClassB
     {
         [DummyB("xxx")]
-        public string Info { get; set; }
+        public string? Info { get; set; }
     }
 
 

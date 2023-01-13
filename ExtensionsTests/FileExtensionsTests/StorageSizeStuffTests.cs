@@ -1,4 +1,5 @@
 ﻿using aemarcoCommons.Extensions.FileExtensions;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace ExtensionsTests.FileExtensionsTests;
@@ -18,7 +19,7 @@ public class StorageSizeStuffTests
     public void ConvertFromTo_Converts_Correct(long val, string su, string tu, decimal expected)
     {
         var result = val.ConvertFromTo(su, tu);
-        Assert.AreEqual(expected, result);
+        result.Should().Be(expected);
     }
 
 }
