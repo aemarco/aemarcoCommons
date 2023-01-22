@@ -12,7 +12,7 @@ namespace aemarcoCommons.WpfTools.BaseModels;
 
 public class LazyProperty<T> : INotifyPropertyChanged
 {
-    private readonly CancellationTokenSource _cancelTokenSource = new CancellationTokenSource();
+    private readonly CancellationTokenSource _cancelTokenSource = new();
     private readonly Func<CancellationToken, Task<T>> _retrievalFunc;
     private readonly T _defaultValue;
 
@@ -89,7 +89,8 @@ public class LazyProperty<T> : INotifyPropertyChanged
                 // to retrieve the "old" value asynchronously
                 CancelLoading();
 
-            if (EqualityComparer<T>.Default.Equals(_value, value)) return;
+            if (EqualityComparer<T>.Default.Equals(_value, value))
+                return;
 
             _value = value;
             _isLoaded = true;
@@ -97,6 +98,8 @@ public class LazyProperty<T> : INotifyPropertyChanged
             ErrorOnLoading = false;
 
             OnPropertyChanged();
+
+
         }
     }
 

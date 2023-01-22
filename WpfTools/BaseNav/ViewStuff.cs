@@ -23,7 +23,8 @@ public interface INavViewModel : IBaseViewModel //inherit in specific interface 
 
 public abstract class BaseNavViewModel : BaseViewModel, INavViewModel
 {
-    protected BaseNavViewModel(INavView view)
+    protected BaseNavViewModel(
+        INavView view)
     {
         View = view;
         View.DataContext = this;

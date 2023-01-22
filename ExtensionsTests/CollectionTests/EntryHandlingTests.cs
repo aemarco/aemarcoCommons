@@ -1,6 +1,7 @@
 ﻿using aemarcoCommons.Extensions.CollectionExtensions;
 using FluentAssertions;
 using NUnit.Framework;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ExtensionsTests.CollectionTests;
@@ -71,4 +72,45 @@ public class EntryHandlingTests
 
         consolidated.Should().BeEmpty();
     }
+
+    [Test]
+    public void AddDistinct_Should_Add_Item_To_Collection_If_It_Does_Not_Exist()
+    {
+        // Arrange
+        var collection = new List<int>();
+
+        // Act
+        collection.AddDistinct(1);
+        collection.AddDistinct(2);
+        collection.AddDistinct(1);
+
+        // Assert
+        collection.Should().BeEquivalentTo(new[] { 1, 2 });
+    }
+
+    [Test]
+    public void AddRangeDistinct_Should_Add_Items_To_Collection_If_They_Do_Not_Exist()
+    {
+        // Arrange
+        var collection = new List<int>();
+
+        // Act
+        collection.AddRangeDistinct(new[] { 1, 2 });
+        collection.AddRangeDistinct(new[] { 3, 2 });
+        collection.AddRangeDistinct(new[] { 1, 2 });
+
+        // Assert
+        collection.Should().BeEquivalentTo(new[] { 1, 2, 3 });
+    }
+
+
+
+
+
+
+
+
+
+
+
 }

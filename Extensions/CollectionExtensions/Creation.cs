@@ -20,14 +20,14 @@ namespace aemarcoCommons.Extensions.CollectionExtensions
                 x => x.Key,
                 x => (ICollection<TV>)x.ToList());
 
+
+        public static IDictionary<TK, int> ToCountDictionary<TK, TV>(this IEnumerable<IGrouping<TK, TV>> @this) =>
+            @this.ToDictionary(
+                    x => x.Key,
+                    x => x.Count());
+
         public static IDictionary<TK, int> ToCountDictionary<TK>(this IEnumerable<TK> @this) =>
             @this.GroupBy(x => x)
-                .ToDictionary(
-                x => x.Key,
-                x => x.Count());
-
-
-
-
+                .ToCountDictionary();
     }
 }

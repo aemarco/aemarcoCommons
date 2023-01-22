@@ -94,14 +94,6 @@ namespace aemarcoCommons.Extensions.CollectionExtensions
             e.Dispose();
         }
 
-
-
-
-
-
-
-
-
         public static IEnumerable<(int Min, int Max)> ConsolidateRanges(this IEnumerable<(int Min, int Max)> ranges)
         {
             (int Min, int Max)? current = null;
@@ -148,14 +140,19 @@ namespace aemarcoCommons.Extensions.CollectionExtensions
         }
 
 
-
-
-
-
-
-
+        public static void AddDistinct<T>(this ICollection<T> collection, T item)
+        {
+            if (!collection.Contains(item))
+            {
+                collection.Add(item);
+            }
+        }
+        public static void AddRangeDistinct<T>(this ICollection<T> collection, IEnumerable<T> items)
+        {
+            foreach (var item in items)
+            {
+                collection.AddDistinct(item);
+            }
+        }
     }
-
-
-
 }

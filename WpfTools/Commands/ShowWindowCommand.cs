@@ -1,5 +1,4 @@
 ﻿using aemarcoCommons.WpfTools.BaseModels;
-using Autofac;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows;
@@ -10,24 +9,20 @@ namespace aemarcoCommons.WpfTools.Commands;
 public class ShowWindowCommand<T> : DelegateCommand
     where T : IWindow
 {
-    public ShowWindowCommand(ILifetimeScope lifetimeScope) =>
-        CommandAction = _ => Show(lifetimeScope.Resolve<T>);
-
-    public ShowWindowCommand(IServiceProvider serviceProvider) =>
-        CommandAction = _ => Show(serviceProvider.GetRequiredService<T>);
-
-    private void Show(Func<T?> getWindow)
+    public ShowWindowCommand(IServiceProvider serviceProvider)
     {
-        foreach (Window win in Application.Current.Windows)
+        CommandAction = _ =>
         {
-            if (win is T)
+            foreach (Window win in Application.Current.Windows)
             {
-                win.WindowState = WindowState.Normal;
-                win.Activate();
-                return;
+                if (win is T)
+                {
+                    win.WindowState = WindowState.Normal;
+                    win.Activate();
+                    return;
+                }
             }
-        }
-        (getWindow() as Window)?.Show();
+            serviceProvider.GetRequiredService<T>().Show();
+        };
     }
-
 }

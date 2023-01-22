@@ -35,14 +35,14 @@ namespace aemarcoCommons.Toolbox.Oidc
 
         public string RedirectUri => $"http://127.0.0.1:{_port}/";
 
-        public async Task<BrowserResult> InvokeAsync(BrowserOptions options, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<BrowserResult> InvokeAsync(BrowserOptions options, CancellationToken cancellationToken)
         {
             using (var listener = new LoopbackHttpListener(options.EndUrl, _postLoginUrl))
             {
                 new Uri(options.StartUrl).OpenInBrowser();
                 try
                 {
-                    var result = await listener.WaitForCallbackAsync(options.Timeout);
+                    var result = await listener.WaitForCallbackAsync(options.Timeout, cancellationToken);
 
                     if (options.StartUrl.Contains("endsession"))
                     {
@@ -57,11 +57,21 @@ namespace aemarcoCommons.Toolbox.Oidc
                 }
                 catch (TaskCanceledException ex)
                 {
-                    return new BrowserResult { ResultType = BrowserResultType.Timeout, Error = ex.Message };
+                    return new BrowserResult
+                    {
+                        ResultType = cancellationToken.IsCancellationRequested
+                            ? BrowserResultType.UserCancel
+                            : BrowserResultType.Timeout,
+                        Error = ex.Message
+                    };
                 }
                 catch (Exception ex)
                 {
-                    return new BrowserResult { ResultType = BrowserResultType.UnknownError, Error = ex.Message };
+                    return new BrowserResult
+                    {
+                        ResultType = BrowserResultType.UnknownError,
+                        Error = ex.Message
+                    };
                 }
                 finally
                 {
@@ -96,9 +106,14 @@ namespace aemarcoCommons.Toolbox.Oidc
                 switch (ctx.Request.Method)
                 {
                     case "GET":
+
                         var message = string.IsNullOrWhiteSpace(ctx.Request.QueryString.Value)
                             ? "Logout success"
-                            : "Login success";
+                            : ctx.Request.QueryString.Value.Contains("error=access_denied")
+                                ? "Login aborted"
+                                : "Login success";
+
+
                         var template = string.IsNullOrWhiteSpace(ctx.Request.QueryString.Value)
                             ? AutoClose
                             : _postLoginUrl == null
@@ -163,13 +178,20 @@ namespace aemarcoCommons.Toolbox.Oidc
             }
         }
 
-        public Task<string> WaitForCallbackAsync(TimeSpan timeout)
+        public Task<string> WaitForCallbackAsync(TimeSpan timeout, CancellationToken cancellationToken)
         {
             Task.Run(async () =>
             {
-                await Task.Delay(timeout);
-                _source.TrySetCanceled();
-            });
+                try
+                {
+                    await Task.Delay(timeout, cancellationToken);
+                }
+                catch (OperationCanceledException)
+                {
+
+                }
+                _source.TrySetCanceled(cancellationToken);
+            }, cancellationToken);
             return _source.Task;
         }
 

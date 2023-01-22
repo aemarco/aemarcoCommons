@@ -16,6 +16,8 @@ using System.Reflection;
 using System.Windows;
 using Policy = Polly.Policy;
 
+#nullable enable
+
 namespace aemarcoCommons.WpfTools;
 
 /// <summary>
@@ -33,8 +35,6 @@ public interface ITransient { }
 public static class BootstrapperExtensions
 {
 
-    internal static ILifetimeScope RootScope { get; private set; }
-
     /// <summary>
     /// Call this, to register
     /// * some common stuff
@@ -46,83 +46,33 @@ public static class BootstrapperExtensions
     /// <returns>builder with registrations</returns>
     public static ContainerBuilder SetupWpfTools(this ContainerBuilder builder, params object[] externals)
     {
-        foreach (var external in externals)
+        builder.Populate(new ServiceCollection().SetupWpfTools(externals));
+        builder.RegisterBuildCallback(rootScope =>
         {
-            builder.RegisterInstance(external)
-                .AsSelf()
-                .ExternallyOwned();
-        }
-
-        var services = new ServiceCollection()
-            .SetupToolbox();
-
-
-        //* some common stuff
-        builder.RegisterInstance(Application.Current.Dispatcher);
-
-        //* WpfTools stuff
-        //--> windows getting registered
-
-        var shortestNameSpace = Assembly.GetEntryAssembly()!
-            .GetTypes()
-            .Select(x => x.Namespace)
-            .Where(x => !string.IsNullOrWhiteSpace(x))
-            .OrderBy(x => x!.Length)
-            .First(); //now only registers consumers windows
-        builder.RegisterAssemblyTypes(AppDomain.CurrentDomain.GetAssemblies())
-            .Where(x => x.Namespace?.StartsWith(shortestNameSpace) ?? false)
-            .Where(t => t.IsSubclassOf(typeof(Window)))
-            .AsSelf()
-            .AsImplementedInterfaces()
-            .InstancePerDependency();
-        //--stuff get registered which implement interfaces (overrides window registrations)
-        builder.RegisterAssemblyTypes(AppDomain.CurrentDomain.GetAssemblies())
-            .Where(t => typeof(ISingleton).IsAssignableFrom(t))
-            .AsSelf()
-            .AsImplementedInterfaces()
-            .SingleInstance();
-        builder.RegisterAssemblyTypes(AppDomain.CurrentDomain.GetAssemblies())
-            .Where(t => typeof(ITransient).IsAssignableFrom(t))
-            .AsSelf()
-            .AsImplementedInterfaces()
-            .InstancePerDependency();
-
-        builder.RegisterGeneric(typeof(OpenWindowCommand<>))
-            .FindConstructorsWith(t => new[] { t.GetConstructor(new[] { typeof(ILifetimeScope) }) });
-        builder.RegisterGeneric(typeof(OpenDialogCommand<>))
-            .FindConstructorsWith(t => new[] { t.GetConstructor(new[] { typeof(ILifetimeScope) }) });
-        builder.RegisterGeneric(typeof(ShowWindowCommand<>))
-            .FindConstructorsWith(t => new[] { t.GetConstructor(new[] { typeof(ILifetimeScope) }) });
-
-
-        services.AddSingleton<IMessenger>(_ => WeakReferenceMessenger.Default);
-
-
-        var waitAndRetry = HttpPolicyExtensions
-            .HandleTransientHttpError()
-            .WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(1));
-        var timeoutPolicy = Policy.TimeoutAsync<HttpResponseMessage>(TimeSpan.FromSeconds(10));
-
-
-        services.AddHttpClient(nameof(WallpaperSetter), c =>
-            {
-                c.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.88 Safari/537.36");
-            })
-            .AddPolicyHandler(waitAndRetry)
-            .AddPolicyHandler(timeoutPolicy);
-
-        builder.Populate(services);
-        builder.RegisterBuildCallback(rootScope => RootScope = rootScope);
-
+            ServiceProvider = new AutofacServiceProvider(rootScope);
+        });
         return builder;
     }
 
+
+    /// <summary>
+    /// Call this, to register
+    /// * some common stuff
+    /// * Toolbox stuff
+    /// * WpfTools stuff
+    /// Once you have the IServiceProvider, also call
+    /// IServiceProvider.SetupServiceProviderForWpfTools();
+    /// 
+    /// </summary>
+    /// <param name="sc">IServiceCollection to register to</param>
+    /// <param name="externals">externally owned objects</param>
+    /// <returns>IServiceCollection for chaining</returns>
     public static IServiceCollection SetupWpfTools(this IServiceCollection sc, params object[] externals)
     {
 
         foreach (var external in externals)
         {
-            sc.AddSingleton(external);
+            sc.AddSingleton(external.GetType(), external);
         }
 
         sc.SetupToolbox();
@@ -130,23 +80,26 @@ public static class BootstrapperExtensions
         //* some common stuff
         sc.AddSingleton(Application.Current.Dispatcher);
 
+
         //* WpfTools stuff
         //--> windows getting registered
-        var shortestNameSpace = Assembly.GetEntryAssembly()!
+        var shortestAppNamespace = Assembly.GetEntryAssembly()!
             .GetTypes()
             .Select(x => x.Namespace)
+            .OfType<string>()
             .Where(x => !string.IsNullOrWhiteSpace(x))
-            .OrderBy(x => x!.Length)
+            .OrderBy(x => x.Length)
             .First(); //now only registers consumers windows
+
 
         AppDomain.CurrentDomain
             .GetAssemblies()
             .SelectMany(x => x.GetTypes())
-            .Where(x => x.Namespace?.StartsWith(shortestNameSpace) ?? false)
+            .Where(x => !x.IsAbstract)
             .ToList()
             .ForEach(t =>
             {
-                if (t.IsSubclassOf(typeof(Window)))
+                if ((t.Namespace?.StartsWith(shortestAppNamespace) ?? false) && t.IsSubclassOf(typeof(Window)))
                 {
                     sc.AddTransient(t);
                     foreach (var i in t.GetInterfaces())
@@ -156,7 +109,7 @@ public static class BootstrapperExtensions
                 {
                     sc.AddSingleton(t);
                     foreach (var i in t.GetInterfaces())
-                        sc.AddSingleton(i, sp => sp.GetService(t));
+                        sc.AddSingleton(i, sp => sp.GetRequiredService(t));
                 }
                 else if (typeof(ITransient).IsAssignableFrom(t))
                 {
@@ -188,6 +141,15 @@ public static class BootstrapperExtensions
 
         return sc;
     }
+    public static IServiceProvider SetupServiceProviderForWpfTools(this IServiceProvider serviceProvider)
+    {
+        ServiceProvider = serviceProvider;
+        return serviceProvider;
+    }
+
+
+
+
 
 
     public static ContainerBuilder SetupSerilogAsILogger(this ContainerBuilder builder)
@@ -196,5 +158,10 @@ public static class BootstrapperExtensions
         builder.SetupLoggerFactory(factory);
         return builder;
     }
+
+
+
+
+    internal static IServiceProvider? ServiceProvider { get; private set; }
 
 }

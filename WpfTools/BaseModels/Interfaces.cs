@@ -10,4 +10,8 @@ public interface IBaseViewModel : IBaseNotifier
     DelegateCommand CloseCommand { get; }
 }
 
-public interface IWindow { }
+public interface IWindow
+{
+    void Show();
+    bool? ShowDialog();
+}

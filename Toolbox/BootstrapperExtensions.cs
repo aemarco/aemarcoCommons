@@ -4,6 +4,7 @@ using aemarcoCommons.Toolbox.Oidc;
 using aemarcoCommons.Toolbox.SecurityTools;
 using aemarcoCommons.Toolbox.SerializationTools;
 using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -37,15 +38,16 @@ namespace aemarcoCommons.Toolbox
             return builder;
         }
 
-
-
-
+        public static ContainerBuilder SetupToolbox(this ContainerBuilder builder)
+        {
+            builder.Populate(new ServiceCollection().SetupToolbox());
+            return builder;
+        }
         public static IServiceCollection SetupToolbox(this IServiceCollection sc) =>
             sc
                 .SetupServices()
                 .SetupPollyPolicies()
                 .SetupHttpClientStuff();
-
 
         private static IServiceCollection SetupServices(this IServiceCollection sc)
         {
