@@ -1,5 +1,4 @@
 <Project>
-  <Import Project="Version.proj" />
   <!-- this runs at the beginning -->
   <PropertyGroup>
   </PropertyGroup>

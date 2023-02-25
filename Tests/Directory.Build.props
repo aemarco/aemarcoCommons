@@ -1,5 +1,4 @@
 <Project>
-	<Import Project="..\Version.proj" />
 	<!-- Test folder, this runs at the beginning -->
 
 

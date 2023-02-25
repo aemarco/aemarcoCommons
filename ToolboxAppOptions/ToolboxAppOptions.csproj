@@ -15,6 +15,7 @@
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="7.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Options" Version="7.0.0" />
+
 		<PackageReference Include="DotNet.ReproducibleBuilds" Version="1.1.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -26,23 +27,16 @@
 	<PropertyGroup>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageId>aemarcoToolboxAppOptions</PackageId>
-		<!-- ReSharper disable UnknownProperty -->
-		<PackageVersion>$(AssemblyVersion)</PackageVersion>
-		<!-- ReSharper restore UnknownProperty -->
 		<Company>aemarco</Company>
 		<Product>aemarcoToolboxAppOptions</Product>
-
-		<PackageLicenseExpression>Unlicense</PackageLicenseExpression>
-
 		<Description>Tool for handling setup for the Options pattern</Description>
 		<PackageTags>IOptions IConfiguration</PackageTags>
 		<PackageIcon>options.png</PackageIcon>
+		<PackageLicenseExpression>Unlicense</PackageLicenseExpression>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 
-
 		<EnablePackageValidation>false</EnablePackageValidation>
-		<!-- <PackageValidationBaselineVersion>1.1.0</PackageValidationBaselineVersion> -->
-
+		<PackageValidationBaselineVersion>1.1.3</PackageValidationBaselineVersion>
 	</PropertyGroup>
 	<ItemGroup>
 	  <None Update="options.png">

@@ -13,7 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_sln", "_sln", "{F8C81839-6
 		toolbox.ico = toolbox.ico
 		toolbox.png = toolbox.png
 		version.json = version.json
-		Version.proj = Version.proj
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Extensions", "Extensions\Extensions.csproj", "{B9B17716-7869-4932-9345-D7A041094B60}"
