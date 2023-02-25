@@ -1,6 +1,5 @@
 ﻿<!--EXTERNAL_PROPERTIES: AssemblyVersion-->
 <Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\SolutionInfo.proj" />
 
   <!-- project definition -->
   <PropertyGroup>
@@ -36,10 +35,13 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="7.0.0" />
-
+	<!-- ReSharper disable VulnerablePackage -->
     <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.2.0" />
+	<!-- ReSharper restore VulnerablePackage -->
+	<!-- ReSharper disable VulnerablePackage -->
 	<PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.0" />
-    <PackageReference Include="IdentityModel.OidcClient" Version="5.2.1" />
+	<!-- ReSharper restore VulnerablePackage -->
+	<PackageReference Include="IdentityModel.OidcClient" Version="5.2.1" />
 
     <PackageReference Include="Polly.Contrib.WaitAndRetry" Version="1.1.1" />
 
@@ -81,13 +83,6 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
-  </ItemGroup>
-
-  <!--test library-->
-  <ItemGroup>
-	  <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-		  <_Parameter1>ToolboxTests</_Parameter1>
-	  </AssemblyAttribute>
   </ItemGroup>
 
 </Project>

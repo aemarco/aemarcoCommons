@@ -13,16 +13,19 @@ public class DoubleToStringConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
+        if (value == null)
+            throw new ArgumentNullException("value");
+
         double doubleType = (double)value;
-        return doubleType.ToString();
+        return doubleType.ToString(culture);
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
         string strValue = value as string;
-        if (double.TryParse(strValue, out double resultDouble))
+        if (double.TryParse(strValue, out var resultDouble))
         {
-            if (parameter is string strParameter && !String.IsNullOrWhiteSpace(strParameter))
+            if (parameter is string strParameter && !string.IsNullOrWhiteSpace(strParameter))
             {
                 var p = new DoubleToStringConverterParameter(strParameter);
                 if (p.Min != null && resultDouble < p.Min)

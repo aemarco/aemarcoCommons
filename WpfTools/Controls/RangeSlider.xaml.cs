@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Controls;
+
 
 namespace aemarcoCommons.WpfTools.Controls;
 
-/// <summary>
-/// Interaktionslogik für RangeSlider.xaml
-/// </summary>
-public partial class RangeSlider : UserControl
+
+public partial class RangeSlider
 {
     public RangeSlider()
     {

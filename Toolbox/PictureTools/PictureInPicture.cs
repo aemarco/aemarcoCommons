@@ -125,7 +125,6 @@ namespace aemarcoCommons.Toolbox.PictureTools
         /// Sets the Picture as big as possible with Black bars to keep aspect ratio
         /// </summary>
         /// <param name="image">readyToUsePicture</param>
-        /// <param name="background">color of the background</param>
         private Image GetPicture(Image image)
         {
             //shortcut if the picture already fits
@@ -175,8 +174,6 @@ namespace aemarcoCommons.Toolbox.PictureTools
         /// <summary>
         /// Sets the Picture and fills the screen by cutting the Picture
         /// </summary>
-        /// <param name="pictureToBeCut"></param>
-        /// <param name="background">color of the background</param>
         private Image GetSnapped()
         {
             var targetRatio = 1.0 * TargetArea.Width / TargetArea.Height;
@@ -212,10 +209,6 @@ namespace aemarcoCommons.Toolbox.PictureTools
         /// Cuts the Picture by the allowed amount and sets it as big as possible with black bars.
         /// Should be called only if it can´t be "Snapped"
         /// </summary>
-        /// <param name="pictureToBeCut"></param>
-        /// <param name="percentLeftRightCutAllowed"></param>
-        /// <param name="percentTopBottomCutAllowed"></param>
-        /// <param name="background">color of the background</param>
         private Image GetCutWallpaper()
         {
 

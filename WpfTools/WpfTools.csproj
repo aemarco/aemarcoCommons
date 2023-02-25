@@ -1,7 +1,5 @@
 ﻿<!--EXTERNAL_PROPERTIES: AssemblyVersion-->
 <Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\SolutionInfo.proj" />
-
 
   <!-- project definition -->
   <PropertyGroup>

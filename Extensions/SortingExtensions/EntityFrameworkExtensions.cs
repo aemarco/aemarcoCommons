@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+
 
 namespace aemarcoCommons.Extensions.SortingExtensions
 {
@@ -11,14 +13,14 @@ namespace aemarcoCommons.Extensions.SortingExtensions
             var entityType = typeof(T);
 
             //Create x=>x.PropName
-            var propertyInfo = entityType.GetProperty(propertyName);
+            var propertyInfo = entityType.GetProperty(propertyName) ?? throw new Exception($"Could not find propertyName {propertyName}");
             ParameterExpression arg = Expression.Parameter(entityType, "x");
             MemberExpression property = Expression.Property(arg, propertyName);
             var selector = Expression.Lambda(property, new ParameterExpression[] { arg });
 
             //Get System.Linq.Queryable.OrderBy() method.
-            var enumarableType = typeof(System.Linq.Queryable);
-            var method = enumarableType.GetMethods()
+            var enumerableType = typeof(Queryable);
+            var method = enumerableType.GetMethods()
                  .Where(m => m.Name == "OrderBy" && m.IsGenericMethodDefinition)
                  .Where(m =>
                  {
@@ -41,13 +43,13 @@ namespace aemarcoCommons.Extensions.SortingExtensions
             var entityType = typeof(T);
 
             //Create x=>x.PropName
-            var propertyInfo = entityType.GetProperty(propertyName);
+            var propertyInfo = entityType.GetProperty(propertyName) ?? throw new Exception($"Could not find propertyName {propertyName}");
             ParameterExpression arg = Expression.Parameter(entityType, "x");
             MemberExpression property = Expression.Property(arg, propertyName);
             var selector = Expression.Lambda(property, new ParameterExpression[] { arg });
 
             //Get System.Linq.Queryable.OrderBy() method.
-            var enumarableType = typeof(System.Linq.Queryable);
+            var enumarableType = typeof(Queryable);
             var method = enumarableType.GetMethods()
                  .Where(m => m.Name == "OrderByDescending" && m.IsGenericMethodDefinition)
                  .Where(m =>

@@ -96,7 +96,7 @@ public static partial class PowerConsole
             {
                 if (!OperatingSystem.IsWindows()) throw new NotImplementedException();
                 path = ShareSelector(list) ?? DriveSelector(list);
-            }, null));
+            }));
         }
         var menu = new ConsoleMenu("Drives", driveItems);
         menu.RunConsoleMenu();

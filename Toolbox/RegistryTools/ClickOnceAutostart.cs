@@ -4,7 +4,7 @@ namespace aemarcoCommons.Toolbox.RegistryTools
 {
     public class ClickOnceAutostart
     {
-        
+
         private string _appName;
         public string AppName
         {
@@ -14,7 +14,7 @@ namespace aemarcoCommons.Toolbox.RegistryTools
                 if (value == _appName) return;
 
                 _appName = value;
-                UpdateAppref();
+                UpdateAppRef();
             }
         }
 
@@ -29,30 +29,30 @@ namespace aemarcoCommons.Toolbox.RegistryTools
 
 
                 _publisher = value;
-                UpdateAppref();
+                UpdateAppRef();
             }
         }
 
 
-        private bool _valid = false;
-        private const string AutostartPath = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
-        private string _apprefLocation;
-        private void UpdateAppref()
+        private bool _valid;
+        private const string AutoStartPath = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
+        private string _appRefLocation;
+        private void UpdateAppRef()
         {
             if (string.IsNullOrWhiteSpace(_appName) ||
                 string.IsNullOrWhiteSpace(_publisher)) return;
 
 
-            //location needed for autostart
-            _apprefLocation = $"{Environment.GetFolderPath(Environment.SpecialFolder.Programs)}\\" +
+            //location needed for auto-start
+            _appRefLocation = $"{Environment.GetFolderPath(Environment.SpecialFolder.Programs)}\\" +
                               $"{_publisher}\\{_appName}.appref-ms";
             _valid = true;
 
             //auto-change of autostart path based on key
-            var path = RegistryEditor.GetUserValue(AutostartPath, _appName)?.ToString();
-            if (path != null && path != _apprefLocation)
+            var path = RegistryEditor.GetUserValue(AutoStartPath, _appName)?.ToString();
+            if (path != null && path != _appRefLocation)
             {
-                RegistryEditor.SetUserValue(AutostartPath, _appName, _apprefLocation);
+                RegistryEditor.SetUserValue(AutoStartPath, _appName, _appRefLocation);
             }
         }
 
@@ -62,8 +62,8 @@ namespace aemarcoCommons.Toolbox.RegistryTools
             {
                 if (!_valid) return false;
 
-                var path = RegistryEditor.GetUserValue(AutostartPath, _appName)?.ToString();
-                return path != null && path == _apprefLocation;
+                var path = RegistryEditor.GetUserValue(AutoStartPath, _appName)?.ToString();
+                return path != null && path == _appRefLocation;
             }
             set
             {
@@ -72,10 +72,10 @@ namespace aemarcoCommons.Toolbox.RegistryTools
                 switch (value)
                 {
                     case false:
-                        RegistryEditor.DeleteUserValue(AutostartPath, _appName);
+                        RegistryEditor.DeleteUserValue(AutoStartPath, _appName);
                         break;
                     case true:
-                        RegistryEditor.SetUserValue(AutostartPath, _appName, _apprefLocation);
+                        RegistryEditor.SetUserValue(AutoStartPath, _appName, _appRefLocation);
                         break;
                 }
 

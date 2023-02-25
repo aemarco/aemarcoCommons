@@ -13,7 +13,7 @@ namespace aemarcoCommons.Toolbox.RegistryTools
         /// <returns>object or null</returns>
         public static object GetUserValue(string path, string key)
         {
-            object result = null;
+            object result;
             RegistryKey reg = Registry.CurrentUser.OpenSubKey(path);
             try
             {
@@ -21,7 +21,7 @@ namespace aemarcoCommons.Toolbox.RegistryTools
             }
             finally
             {
-                reg.Close();
+                reg?.Close();
             }
             return result;
         }
@@ -37,12 +37,12 @@ namespace aemarcoCommons.Toolbox.RegistryTools
             RegistryKey reg = Registry.CurrentUser.OpenSubKey(path, true);
             try
             {
-                reg.SetValue(key, value);
+                reg?.SetValue(key, value);
 
             }
             finally
             {
-                reg.Close();
+                reg?.Close();
             }
         }
 
@@ -57,12 +57,12 @@ namespace aemarcoCommons.Toolbox.RegistryTools
             RegistryKey reg = Registry.CurrentUser.OpenSubKey(path, true);
             try
             {
-                reg.DeleteValue(key);
+                reg?.DeleteValue(key);
 
             }
             finally
             {
-                reg.Close();
+                reg?.Close();
             }
 
         }

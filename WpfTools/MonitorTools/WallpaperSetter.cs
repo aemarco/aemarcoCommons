@@ -112,7 +112,7 @@ public class WallpaperSetter : ISingleton, IDisposable
         if (OperatingSystem.IsWindowsVersionAtLeast(10, 0, 10240))
         {
             //lock screens ignore screen usage
-            foreach (var split in CreateSplits(Screen.PrimaryScreen.Bounds, nameof(LockScreen)))
+            foreach (var split in CreateSplits(Screen.PrimaryScreen!.Bounds, nameof(LockScreen)))
             {
                 yield return new LockScreen(
                     split.rect,
@@ -144,8 +144,8 @@ public class WallpaperSetter : ISingleton, IDisposable
         var verDiv = _wallpaperSetterSettings.VerticalSplit;
 
         var count = 0;
-        var minX = Screen.AllScreens.Min(x => x.Bounds.X);
-        var minY = Screen.AllScreens.Min(x => x.Bounds.Y);
+        //var minX = Screen.AllScreens.Min(x => x.Bounds.X);
+        //var minY = Screen.AllScreens.Min(x => x.Bounds.Y);
 
         var width = bounds.Width / horDiv;
         var height = bounds.Height / verDiv;

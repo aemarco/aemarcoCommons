@@ -54,7 +54,7 @@ public class OidcBrowser : IBrowser
             }
         };
 
-        window.Closing += (s, e) =>
+        window.Closing += (_, _) =>
         {
             signal.Release();
         };

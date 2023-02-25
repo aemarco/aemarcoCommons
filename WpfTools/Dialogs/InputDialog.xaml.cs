@@ -1,13 +1,9 @@
 ﻿using aemarcoCommons.WpfTools.Commands;
-using System.Windows;
 using System.Windows.Input;
 
 namespace aemarcoCommons.WpfTools.Dialogs;
 
-/// <summary>
-/// Interaktionslogik für InputDialog.xaml
-/// </summary>
-public partial class InputDialog : Window
+public partial class InputDialog
 {
     public InputDialog(string question, string defaultAnswer = "")
     {

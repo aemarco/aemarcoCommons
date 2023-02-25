@@ -29,9 +29,9 @@ public static class AutoScrollHelper
 
     public static readonly DependencyProperty AutoScrollProperty =
         DependencyProperty.RegisterAttached(
-            "AutoScroll", 
-            typeof(AutoScrollHelperMode), 
-            typeof(AutoScrollHelper), 
+            "AutoScroll",
+            typeof(AutoScrollHelperMode),
+            typeof(AutoScrollHelper),
             new PropertyMetadata(AutoScrollHelperMode.None, AutoScrollPropertyChanged));
 
     private static void AutoScrollPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -39,19 +39,19 @@ public static class AutoScrollHelper
         //ensure scroll viewer
         if (!(d is ScrollViewer scrollViewer)) return;
 
-           
+
         //ensure it set only one time
-        if ((AutoScrollHelperMode)e.OldValue != AutoScrollHelperMode.None) 
+        if ((AutoScrollHelperMode)e.OldValue != AutoScrollHelperMode.None)
             throw new ApplicationException("Cant change scroll mode");
 
-        var setValue = (AutoScrollHelperMode)e.NewValue;
+        //var setValue = (AutoScrollHelperMode)e.NewValue;
         scrollViewer.ScrollChanged += ScrollViewer_ScrollChanged;
     }
 
     private static void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
     {
 
-        var setValue = GetAutoScroll((DependencyObject) sender);
+        var setValue = GetAutoScroll((DependencyObject)sender);
         switch (setValue)
         {
             case AutoScrollHelperMode.None:

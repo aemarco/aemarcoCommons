@@ -38,11 +38,11 @@ namespace aemarcoCommons.Toolbox.NetworkTools
     {
         #region Private data
 
-        private string _server;
-        private string _netName;
-        private string _path;
-        private ShareType _shareType;
-        private string _remark;
+        private readonly string _server;
+        private readonly string _netName;
+        private readonly string _path;
+        private readonly ShareType _shareType;
+        private readonly string _remark;
 
         #endregion
 
@@ -51,8 +51,11 @@ namespace aemarcoCommons.Toolbox.NetworkTools
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="Server"></param>
-        /// <param name="shi"></param>
+        /// <param name="server"></param>
+        /// <param name="netName"></param>
+        /// <param name="path"></param>
+        /// <param name="shareType"></param>
+        /// <param name="remark"></param>
         public Share(string server, string netName, string path, ShareType shareType, string remark)
         {
             if (ShareType.Special == shareType && "IPC$" == netName)
@@ -380,14 +383,13 @@ namespace aemarcoCommons.Toolbox.NetworkTools
         protected static void EnumerateSharesNT(string server, ShareCollection shares)
         {
             int level = 2;
-            int entriesRead, totalEntries, nRet, hResume = 0;
-
             IntPtr pBuffer = IntPtr.Zero;
 
             try
             {
-                nRet = NetShareEnum(server, level, out pBuffer, -1,
-                    out entriesRead, out totalEntries, ref hResume);
+                var hResume = 0;
+                var nRet = NetShareEnum(server, level, out pBuffer, -1,
+                    out var entriesRead, out var totalEntries, ref hResume);
 
                 if (ERROR_ACCESS_DENIED == nRet)
                 {
@@ -435,8 +437,6 @@ namespace aemarcoCommons.Toolbox.NetworkTools
         protected static void EnumerateShares9x(string server, ShareCollection shares)
         {
             int level = 50;
-            int nRet = 0;
-            ushort entriesRead, totalEntries;
 
             Type t = typeof(SHARE_INFO_50);
             int size = Marshal.SizeOf(t);
@@ -446,8 +446,8 @@ namespace aemarcoCommons.Toolbox.NetworkTools
 
             try
             {
-                nRet = NetShareEnum(server, level, pBuffer, cbBuffer,
-                    out entriesRead, out totalEntries);
+                var nRet = NetShareEnum(server, level, pBuffer, cbBuffer,
+                    out var entriesRead, out var totalEntries);
 
                 if (ERROR_WRONG_LEVEL == nRet)
                 {
@@ -550,11 +550,10 @@ namespace aemarcoCommons.Toolbox.NetworkTools
             fileName = Path.GetFullPath(fileName);
             if (!IsValidFilePath(fileName)) return fileName;
 
-            int nRet = 0;
             UNIVERSAL_NAME_INFO rni = new UNIVERSAL_NAME_INFO();
             int bufferSize = Marshal.SizeOf(rni);
 
-            nRet = WNetGetUniversalName(
+            var nRet = WNetGetUniversalName(
                 fileName, UNIVERSAL_NAME_INFO_LEVEL,
                 ref rni, ref bufferSize);
 
@@ -673,7 +672,7 @@ namespace aemarcoCommons.Toolbox.NetworkTools
         #region Private Data
 
         /// <summary>The name of the server this collection represents</summary>
-        private string _server;
+        private readonly string _server;
 
         #endregion
 
@@ -691,7 +690,7 @@ namespace aemarcoCommons.Toolbox.NetworkTools
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="Server"></param>
+        /// <param name="server"></param>
         private ShareCollection(string server)
         {
             _server = server;

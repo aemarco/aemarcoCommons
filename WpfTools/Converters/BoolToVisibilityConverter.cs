@@ -13,7 +13,7 @@ public class BoolToVisibilityConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if ((bool)value)
+        if (value is not null && (bool)value)
             return Visibility.Visible;
         else
             return Visibility.Collapsed;
@@ -22,7 +22,7 @@ public class BoolToVisibilityConverter : IValueConverter
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
         string strValue = value as string;
-        if (Enum.TryParse<Visibility>(strValue, out Visibility result))
+        if (Enum.TryParse(strValue, out Visibility result))
         {
             return result;
         }

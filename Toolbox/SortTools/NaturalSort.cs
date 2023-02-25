@@ -24,7 +24,7 @@ namespace aemarcoCommons.Toolbox.SortTools
     {
         public int Compare(FileInfo a, FileInfo b)
         {
-            return SafeNativeMethods.StrCmpLogicalW(a.Name, b.Name);
+            return SafeNativeMethods.StrCmpLogicalW(a?.Name, b?.Name);
         }
     }
 }

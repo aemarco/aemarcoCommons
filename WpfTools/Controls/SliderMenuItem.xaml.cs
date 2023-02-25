@@ -1,4 +1,5 @@
-﻿using System;
+﻿using aemarcoCommons.Extensions.NumberExtensions;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
@@ -7,7 +8,7 @@ using System.Windows.Controls.Primitives;
 
 namespace aemarcoCommons.WpfTools.Controls;
 
-public partial class SliderMenuItem : MenuItem
+public partial class SliderMenuItem
 {
     private const double ThumbHeight = 11.0d;
     private Slider m_Slider;
@@ -194,7 +195,7 @@ public partial class SliderMenuItem : MenuItem
         {
             foreach (double tick in item.m_TickValueMap.Keys)
             {
-                if (item.m_TickValueMap[tick] == newValue)
+                if (item.m_TickValueMap[tick].IsNearlyEqual(newValue))
                 {
                     item.m_Slider.Value = tick;
                     return;
@@ -244,7 +245,7 @@ public partial class SliderMenuItem : MenuItem
         double[] keys = new double[item.m_TickValueMap.Keys.Count];
         item.m_TickValueMap.Keys.CopyTo(keys, 0);
 
-        int index = Array.BinarySearch<double>(keys, tickValue);
+        int index = Array.BinarySearch(keys, tickValue);
 
         Debug.Assert(index < 0, "What? How come I didn't find the key already?");
 
@@ -327,7 +328,7 @@ public partial class SliderMenuItem : MenuItem
             bottomElement = topElement;
 
         // No elements.  Nothing to do.
-        if (bottomElement == null && topElement == null)
+        if (bottomElement == null)
             return returnSize;
 
         // Calculate top, bottom margins.
@@ -351,11 +352,11 @@ public partial class SliderMenuItem : MenuItem
         {
             FrameworkElement elem = Items[i] as FrameworkElement;
 
-            if (elem is MenuItem)
-                ((MenuItem)elem).Click += new RoutedEventHandler(SliderMenuItem_Click);
+            if (elem is MenuItem item)
+                item.Click += SliderMenuItem_Click;
 
             // Move along.  Nothing to see here.
-            if ((bool)(elem.GetValue(SliderMenuItem.SkipProperty)))
+            if ((bool)(elem!.GetValue(SkipProperty)))
                 continue;
 
             // Grab the coordinates of the child menu item

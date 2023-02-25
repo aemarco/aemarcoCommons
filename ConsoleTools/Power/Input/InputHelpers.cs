@@ -31,7 +31,7 @@ public static partial class PowerConsole
             items.Add(new ConsoleMenuItem<T>("Abort", x =>
             {
                 result = x;
-            }, null));
+            }));
         }
 
         var menu = new ConsoleMenu(header, items);
