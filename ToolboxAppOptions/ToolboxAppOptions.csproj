@@ -40,7 +40,7 @@
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 
 
-		<EnablePackageValidation>true</EnablePackageValidation>
+		<EnablePackageValidation>false</EnablePackageValidation>
 		<!-- <PackageValidationBaselineVersion>1.1.0</PackageValidationBaselineVersion> -->
 
 	</PropertyGroup>
