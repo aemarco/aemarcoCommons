@@ -1,4 +1,6 @@
 ﻿using aemarcoCommons.ToolboxAppOptions.Services;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -6,19 +8,23 @@ using System;
 using System.Linq;
 using System.Reflection;
 
-
-//TODO: Save
-//TODO: Auto-Save
-//TODO: array merging?
-//TODO: Validate
-//TODO: Validate maybe fluent
-//TODO: Validate on Start
-
-
 namespace aemarcoCommons.ToolboxAppOptions
 {
     public static class IocExtensions
     {
+
+        public static ContainerBuilder AddConfigOptionsUtils(
+            this ContainerBuilder builder,
+            IConfigurationRoot config,
+            Action<ConfigurationOptionsBuilder> options = null)
+        {
+            builder.Populate(
+                new ServiceCollection()
+                    .AddConfigOptionsUtils(
+                        config,
+                        options));
+            return builder;
+        }
 
         public static IServiceCollection AddConfigOptionsUtils(
             this IServiceCollection sc,
@@ -35,11 +41,14 @@ namespace aemarcoCommons.ToolboxAppOptions
             var toolConfig = toolConfigBuilder.Build();
             sc.AddSingleton(toolConfig);
 
+
+
             foreach (var type in AppDomain.CurrentDomain
                          .GetAssemblies()
                          .SelectMany(x => x.GetTypes())
                          .Where(x => x.IsSubclassOf(typeof(SettingsBase))))
             {
+
                 //setup options build pipeline
                 sc.ConfigureOptions(typeof(AppOptionFactory<>).MakeGenericType(type));
 
@@ -53,13 +62,6 @@ namespace aemarcoCommons.ToolboxAppOptions
                         sp.GetRequiredService(optionsType),
                         Array.Empty<object>()));
             }
-
-
-            //TODO: work on ValidateOnStart
-            //sc.AddOptions<Random>().ValidateOnStart();
-            //project: Microsoft.Extensions.Hosting
-            //rather not including hosting, but ValidateOnStart could eventually be done otherwise?!
-
             return sc;
         }
     }

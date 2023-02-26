@@ -12,14 +12,11 @@
   <!-- project references -->
   <ItemGroup>
     <ProjectReference Include="..\Extensions\Extensions.csproj" />
+    <ProjectReference Include="..\ToolboxAppOptions\ToolboxAppOptions.csproj" />
   </ItemGroup>
 
-  <!-- nuget references-->
- 
-
-
+  <!-- nuget references -->
   <ItemGroup>
-
 	<PackageReference Include="Autofac" Version="6.5.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Humanizer.Core" Version="2.14.1" />
@@ -56,33 +53,14 @@
     <PackageReference Include="Serilog.Sinks.Seq" Version="5.2.2" />
   </ItemGroup>
 
-  <!-- nuget build-->
-  <PropertyGroup>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageId>aemarcoToolbox</PackageId>
-	  <!-- ReSharper disable UnknownProperty -->
-	  <PackageVersion>$(AssemblyVersion)</PackageVersion>
-	  <!-- ReSharper restore UnknownProperty -->
-	  <Authors>aemarco</Authors>
-    <Company>aemarco</Company>
-    <Product>aemarcoToolbox</Product>
-    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-    <PackageProjectUrl>https://github.com/aemarco/aemarcoCommons</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/aemarco/aemarcoCommons</RepositoryUrl>
-    <Description>c# tools collection</Description>
-    <PackageTags>Toolbox</PackageTags>
-    <PackageIcon>toolbox.png</PackageIcon>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-  </PropertyGroup>
-  <ItemGroup>
-    <None Include="..\LICENSE.md">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-    <None Include="..\toolbox.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-  </ItemGroup>
+
+	<!-- nuget build-->
+	<PropertyGroup>
+		<PackageId>aemarcoToolbox</PackageId>
+		<Product>aemarcoToolbox</Product>
+		<Description>c# tools collection</Description>
+		<PackageTags>Toolbox</PackageTags>
+	</PropertyGroup>
+	
 
 </Project>

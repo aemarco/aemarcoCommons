@@ -1,5 +1,4 @@
-﻿<!--EXTERNAL_PROPERTIES: AssemblyVersion-->
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<!-- project definition -->
 	<PropertyGroup>
@@ -8,6 +7,10 @@
 		<AssemblyName>aemarcoCommons.ToolboxAppOptions</AssemblyName>
 	</PropertyGroup>
 
+	<!-- project references -->
+	<ItemGroup>
+		<ProjectReference Include="..\Extensions\Extensions.csproj" />
+	</ItemGroup>
 
 	<!-- nuget references -->
 	<ItemGroup>
@@ -25,27 +28,20 @@
 
 	<!-- nuget build-->
 	<PropertyGroup>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageId>aemarcoToolboxAppOptions</PackageId>
-		<Company>aemarco</Company>
 		<Product>aemarcoToolboxAppOptions</Product>
 		<Description>Tool for handling setup for the Options pattern</Description>
 		<PackageTags>IOptions IConfiguration</PackageTags>
 		<PackageIcon>options.png</PackageIcon>
-		<PackageLicenseExpression>Unlicense</PackageLicenseExpression>
-		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 
 		<EnablePackageValidation>false</EnablePackageValidation>
 		<PackageValidationBaselineVersion>1.1.3</PackageValidationBaselineVersion>
 	</PropertyGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\Extensions\Extensions.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-	  <None Update="options.png">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
+		<None Update="options.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
 	</ItemGroup>
 
 </Project>

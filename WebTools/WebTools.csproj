@@ -1,59 +1,36 @@
-﻿<!--EXTERNAL_PROPERTIES: AssemblyVersion-->
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <!-- project definition -->
-  <PropertyGroup>
-    <TargetFramework>net7.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
+	<!-- project definition -->
+	<PropertyGroup>
+		<TargetFramework>net7.0-windows</TargetFramework>
+		
+		<Nullable>enable</Nullable>
+		<RootNamespace>aemarcoCommons.WebTools</RootNamespace>
+		<AssemblyName>aemarcoCommons.WebTools</AssemblyName>
+	</PropertyGroup>
 
-    <RootNamespace>aemarcoCommons.WebTools</RootNamespace>
-    <AssemblyName>aemarcoCommons.WebTools</AssemblyName>
-  </PropertyGroup>
+	<!-- project references -->
+	<ItemGroup>
+		<ProjectReference Include="..\Toolbox\Toolbox.csproj" />
+	</ItemGroup>
 
-  <!-- project references -->
-  <ItemGroup>
-    <ProjectReference Include="..\Toolbox\Toolbox.csproj" />
-  </ItemGroup>
+	<!-- nuget references-->
+	<ItemGroup>
+		<PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
+	</ItemGroup>
 
-  <!-- nuget references-->
-  <ItemGroup>
-    <PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
-   
-  </ItemGroup>
-
-  <!-- proj build-->
-  <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
+	<!-- proj build-->
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
 
 
-  <!-- nuget build-->
-  <PropertyGroup>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageId>aemarcoWebTools</PackageId>
-	  <!-- ReSharper disable UnknownProperty -->
-	  <PackageVersion>$(AssemblyVersion)</PackageVersion>
-	  <!-- ReSharper restore UnknownProperty -->
-	  <Authors>aemarco</Authors>
-    <Company>aemarco</Company>
-    <Product>aemarcoWebTools</Product>
-    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-    <PackageProjectUrl>https://github.com/aemarco/aemarcoCommons</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/aemarco/aemarcoCommons</RepositoryUrl>
-    <Description>c# web tools collection</Description>
-    <PackageTags>WebTools</PackageTags>
-    <PackageIcon>toolbox.png</PackageIcon>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-  </PropertyGroup>
-  <ItemGroup>
-    <None Include="..\LICENSE.md">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-    <None Include="..\toolbox.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-  </ItemGroup>
+	<!-- nuget build-->
+	<PropertyGroup>
+		<PackageId>aemarcoWebTools</PackageId>
+		<Product>aemarcoWebTools</Product>
+		<Description>c# web tools collection</Description>
+		<PackageTags>WebTools</PackageTags>
+	</PropertyGroup>
 
 </Project>

@@ -1,77 +1,50 @@
-﻿<!--EXTERNAL_PROPERTIES: AssemblyVersion-->
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <!-- project definition -->
-  <PropertyGroup>
-    <TargetFramework>net7.0-windows10.0.19041.0</TargetFramework>
-    <SupportedOSPlatformVersion>10.0</SupportedOSPlatformVersion>
+	<!-- project definition -->
+	<PropertyGroup>
+		<TargetFramework>net7.0-windows10.0.19041.0</TargetFramework>
+		<SupportedOSPlatformVersion>10.0</SupportedOSPlatformVersion>
+		<UseWPF>true</UseWPF>
+		<UseWindowsForms>true</UseWindowsForms>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 
-    <RootNamespace>aemarcoCommons.WpfTools</RootNamespace>
-    <AssemblyName>aemarcoCommons.WpfTools</AssemblyName>
+		<RootNamespace>aemarcoCommons.WpfTools</RootNamespace>
+		<AssemblyName>aemarcoCommons.WpfTools</AssemblyName>
+	</PropertyGroup>
 
-    <UseWPF>true</UseWPF>
-    <UseWindowsForms>true</UseWindowsForms>
 
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-  </PropertyGroup>
-  <ItemGroup>
-    <None Remove="Images\question.png" />
-  </ItemGroup>
+	<!-- project references -->
+	<ItemGroup>
+		<ProjectReference Include="..\Toolbox\Toolbox.csproj" />
+	</ItemGroup>
 
-  <!-- project references -->
-  <ItemGroup>
-    <ProjectReference Include="..\Toolbox\Toolbox.csproj" />
-  </ItemGroup>
+	<!-- nuget references-->
+	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
+		<PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
+		<PackageReference Include="FontAwesome.WPF" Version="4.7.0.9" NoWarn="NU1701" />
+		<PackageReference Include="WpfAnimatedGif" Version="2.0.2" />
+	</ItemGroup>
 
-  <!-- nuget references-->
-  <ItemGroup>
+	<!-- proj build-->
+	<ItemGroup>
+		<None Remove="Images\question.png" />
+		<Resource Include="Images\question.png" />
 
-	<PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
-	<PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
-    <PackageReference Include="FontAwesome.WPF" Version="4.7.0.9" NoWarn="NU1701" />
-	<PackageReference Include="WpfAnimatedGif" Version="2.0.2" />
-  </ItemGroup>
+		<Compile Update="Controls\RangeSlider.xaml.cs">
+			<DependentUpon>RangeSlider.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="Controls\SliderMenuItem.xaml.cs">
+			<DependentUpon>SliderMenuItem.xaml</DependentUpon>
+		</Compile>
+	</ItemGroup>
 
-  <!-- proj build-->
-  <ItemGroup>
-    <Compile Update="Controls\RangeSlider.xaml.cs">
-      <DependentUpon>RangeSlider.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Controls\SliderMenuItem.xaml.cs">
-      <DependentUpon>SliderMenuItem.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <!-- nuget build-->
-  <PropertyGroup>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageId>aemarcoWpfTools</PackageId>
-	  <!-- ReSharper disable UnknownProperty -->
-	  <PackageVersion>$(AssemblyVersion)</PackageVersion>
-	  <!-- ReSharper restore UnknownProperty -->
-	  <Authors>aemarco</Authors>
-    <Company>aemarco</Company>
-    <Product>aemarcoWpfTools</Product>
-    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-    <PackageProjectUrl>https://github.com/aemarco/aemarcoCommons</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/aemarco/aemarcoCommons</RepositoryUrl>
-    <Description>c# wpf tools collection</Description>
-    <PackageTags>WpfTools</PackageTags>
-    <PackageIcon>toolbox.png</PackageIcon>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-  </PropertyGroup>
-  <ItemGroup>
-     <None Include="..\LICENSE.md">
-        <Pack>True</Pack>
-        <PackagePath></PackagePath>
-      </None>
-    <None Include="..\toolbox.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\question.png" />
-  </ItemGroup>
+	<!-- nuget build-->
+	<PropertyGroup>
+		<PackageId>aemarcoWpfTools</PackageId>
+		<Product>aemarcoWpfTools</Product>
+		<Description>c# wpf tools collection</Description>
+		<PackageTags>WpfTools</PackageTags>
+	</PropertyGroup>
 
 </Project>

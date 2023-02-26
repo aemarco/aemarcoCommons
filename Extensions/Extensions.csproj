@@ -1,49 +1,24 @@
-﻿
-<!--EXTERNAL_PROPERTIES: AssemblyVersion-->
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <!-- project definition -->
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+	<!-- project definition -->
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<RootNamespace>aemarcoCommons.Extensions</RootNamespace>
+		<AssemblyName>aemarcoCommons.Extensions</AssemblyName>
+	</PropertyGroup>
 
-    <RootNamespace>aemarcoCommons.Extensions</RootNamespace>
-    <AssemblyName>aemarcoCommons.Extensions</AssemblyName>
-  </PropertyGroup>
-    
-  <!-- nuget references-->
-  <ItemGroup>
-    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
-  </ItemGroup>
+	<!-- nuget references-->
+	<ItemGroup>
+		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+	</ItemGroup>
 
-  <!-- nuget build-->
-  <PropertyGroup>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageId>aemarcoExtensions</PackageId>
-	  <!-- ReSharper disable UnknownProperty -->
-	  <PackageVersion>$(AssemblyVersion)</PackageVersion>
-	  <!-- ReSharper restore UnknownProperty -->
-	  <Authors>aemarco</Authors>
-    <Company>aemarco</Company>
-    <Product>aemarcoExtensions</Product>
-    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-    <PackageProjectUrl>https://github.com/aemarco/aemarcoCommons</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/aemarco/aemarcoCommons</RepositoryUrl>
-    <Description>frequently used c# extension methods</Description>
-    <PackageTags>Extensions</PackageTags>
-    <PackageIcon>toolbox.png</PackageIcon>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-  </PropertyGroup>
-  <ItemGroup>
-    <None Include="..\LICENSE.md">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-    <None Include="..\toolbox.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-  </ItemGroup>
-
-  
+	<!-- nuget build-->
+	<PropertyGroup>
+		<PackageId>aemarcoExtensions</PackageId>
+		<Product>aemarcoExtensions</Product>
+		<Description>frequently used c# extension methods</Description>
+		<PackageTags>Extensions</PackageTags>
+	</PropertyGroup>
+	
 
 </Project>
