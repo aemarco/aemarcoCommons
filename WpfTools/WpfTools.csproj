@@ -6,12 +6,10 @@
 		<SupportedOSPlatformVersion>10.0</SupportedOSPlatformVersion>
 		<UseWPF>true</UseWPF>
 		<UseWindowsForms>true</UseWindowsForms>
+		
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-
-		<RootNamespace>aemarcoCommons.WpfTools</RootNamespace>
 		<AssemblyName>aemarcoCommons.WpfTools</AssemblyName>
 	</PropertyGroup>
-
 
 	<!-- project references -->
 	<ItemGroup>
@@ -30,7 +28,6 @@
 	<ItemGroup>
 		<None Remove="Images\question.png" />
 		<Resource Include="Images\question.png" />
-
 		<Compile Update="Controls\RangeSlider.xaml.cs">
 			<DependentUpon>RangeSlider.xaml</DependentUpon>
 		</Compile>
@@ -41,8 +38,6 @@
 
 	<!-- nuget build-->
 	<PropertyGroup>
-		<PackageId>aemarcoWpfTools</PackageId>
-		<Product>aemarcoWpfTools</Product>
 		<Description>c# wpf tools collection</Description>
 		<PackageTags>WpfTools</PackageTags>
 	</PropertyGroup>

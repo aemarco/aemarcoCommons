@@ -3,8 +3,6 @@
 	<!-- project definition -->
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
-		<RootNamespace>aemarcoCommons.Extensions</RootNamespace>
-		<AssemblyName>aemarcoCommons.Extensions</AssemblyName>
 	</PropertyGroup>
 
 	<!-- nuget references-->
@@ -14,11 +12,8 @@
 
 	<!-- nuget build-->
 	<PropertyGroup>
-		<PackageId>aemarcoExtensions</PackageId>
-		<Product>aemarcoExtensions</Product>
 		<Description>frequently used c# extension methods</Description>
 		<PackageTags>Extensions</PackageTags>
 	</PropertyGroup>
-	
 
 </Project>

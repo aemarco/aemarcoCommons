@@ -11,7 +11,6 @@ namespace aemarcoCommons.ConsoleTools;
 
 public static class BootstrapperExtensions
 {
-
     public static ContainerBuilder SetupConsoleTools(this ContainerBuilder builder)
     {
         var sc = new ServiceCollection()
@@ -27,17 +26,12 @@ public static class BootstrapperExtensions
         return builder;
     }
 
-
-
     public static IServiceCollection SetupConsoleTools(this IServiceCollection services)
     {
         services.SetupToolbox();
 
         return services;
     }
-
-
-
 
     public static ContainerBuilder SetupSerilogAsILogger(this ContainerBuilder builder)
     {
@@ -46,15 +40,15 @@ public static class BootstrapperExtensions
         return builder;
     }
 
-
-
+    //Autofac
     public static ITypeRegistrar ToTypeRegistrar(this ContainerBuilder builder) =>
         new AutofacTypeRegistrar(builder);
 
-
-    //TODO create a ServiceCollection "ToTypeRegistrar"
-    // we can wrap all stuff in SearchAndDestroy in a populate... and use the serviceCollection then.
+    //Microsoft.Extensions.DependencyInjection
+    public static ITypeRegistrar ToTypeRegistrar(this IServiceCollection services) =>
+        new ServiceCollectionTypeRegistrar(services);
 }
+
 
 
 public sealed class AutofacTypeRegistrar : ITypeRegistrar
@@ -85,91 +79,54 @@ public sealed class AutofacTypeRegistrar : ITypeRegistrar
 
     public ITypeResolver Build() => new AutofacTypeResolver(_builder.Build());
 }
-
 public sealed class AutofacTypeResolver : ITypeResolver, IDisposable
 {
     private readonly ILifetimeScope _scope;
-    public AutofacTypeResolver(ILifetimeScope scope)
-    {
-        _scope = scope;
-    }
-    public object Resolve(Type type)
-    {
-        return _scope.TryResolve(type, out var instance)
+    public AutofacTypeResolver(ILifetimeScope scope) => _scope = scope;
+
+    public object Resolve(Type type) =>
+        _scope.TryResolve(type, out var instance)
             ? instance
             : null;
-    }
-    public void Dispose()
-    {
-        _scope?.Dispose();
-    }
+
+    public void Dispose() => _scope?.Dispose();
 }
 
+public sealed class ServiceCollectionTypeRegistrar : ITypeRegistrar
+{
+    private readonly IServiceCollection _builder;
 
+    public ServiceCollectionTypeRegistrar(IServiceCollection builder) =>
+        _builder = builder;
 
+    public void Register(Type service, Type implementation) =>
+        _builder.AddSingleton(service, implementation);
 
+    public void RegisterInstance(Type service, object implementation) =>
+        _builder.AddSingleton(service, implementation);
 
+    public void RegisterLazy(Type service, Func<object> factory)
+    {
+        if (factory is null)
+            throw new ArgumentNullException(nameof(factory));
+        _builder.AddSingleton(service, _ => factory());
+    }
 
+    public ITypeResolver Build() => new ServiceCollectionTypeResolver(_builder.BuildServiceProvider());
+}
+public sealed class ServiceCollectionTypeResolver : ITypeResolver, IDisposable
+{
+    private readonly IServiceProvider _provider;
+    public ServiceCollectionTypeResolver(IServiceProvider provider) => _provider = provider;
 
-//public sealed class ServiceCollectionTypeRegistrar : ITypeRegistrar
-//{
-//    private readonly IServiceCollection _builder;
+    public object Resolve(Type type) =>
+        type != null
+            ? _provider.GetService(type)
+            : null;
 
-//    public ServiceCollectionTypeRegistrar(IServiceCollection builder)
-//    {
-//        _builder = builder;
-//    }
-
-//    public ITypeResolver Build()
-//    {
-//        return new ServiceCollectionTypeResolver(_builder.BuildServiceProvider());
-//    }
-
-//    public void Register(Type service, Type implementation)
-//    {
-//        _builder.AddSingleton(service, implementation);
-//    }
-
-//    public void RegisterInstance(Type service, object implementation)
-//    {
-//        _builder.AddSingleton(service, implementation);
-//    }
-
-//    public void RegisterLazy(Type service, Func<object> func)
-//    {
-//        if (func is null)
-//        {
-//            throw new ArgumentNullException(nameof(func));
-//        }
-
-//        _builder.AddSingleton(service, (provider) => func());
-//    }
-//}
-
-//public sealed class ServiceCollectionTypeResolver : ITypeResolver, IDisposable
-//{
-//    private readonly IServiceProvider _provider;
-
-//    public ServiceCollectionTypeResolver(IServiceProvider provider)
-//    {
-//        _provider = provider ?? throw new ArgumentNullException(nameof(provider));
-//    }
-
-//    public object Resolve(Type type)
-//    {
-//        if (type == null)
-//        {
-//            return null;
-//        }
-
-//        return _provider.GetService(type);
-//    }
-
-//    public void Dispose()
-//    {
-//        if (_provider is IDisposable disposable)
-//        {
-//            disposable.Dispose();
-//        }
-//    }
-//}
+    public void Dispose()
+    {
+        if (_provider is IDisposable disposable)
+            disposable.Dispose();
+    }
+}

@@ -62,11 +62,16 @@ namespace aemarcoCommons.Extensions.NetworkExtensions
             }
             catch
             {
-                // hack because of this: https://github.com/dotnet/corefx/issues/10361
+                // because of this: https://github.com/dotnet/corefx/issues/10361
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
-                    var url = uri.AbsoluteUri.Replace("&", "^&");
-                    Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+                    Process.Start(
+                        new ProcessStartInfo(
+                            "cmd",
+                            $"/c start {uri.AbsoluteUri.Replace("&", "^&")}")
+                        {
+                            CreateNoWindow = true
+                        });
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {

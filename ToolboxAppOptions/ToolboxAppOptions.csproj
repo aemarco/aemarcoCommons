@@ -3,8 +3,6 @@
 	<!-- project definition -->
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
-		<RootNamespace>aemarcoCommons.ToolboxAppOptions</RootNamespace>
-		<AssemblyName>aemarcoCommons.ToolboxAppOptions</AssemblyName>
 	</PropertyGroup>
 
 	<!-- project references -->
@@ -28,8 +26,6 @@
 
 	<!-- nuget build-->
 	<PropertyGroup>
-		<PackageId>aemarcoToolboxAppOptions</PackageId>
-		<Product>aemarcoToolboxAppOptions</Product>
 		<Description>Tool for handling setup for the Options pattern</Description>
 		<PackageTags>IOptions IConfiguration</PackageTags>
 		<PackageIcon>options.png</PackageIcon>

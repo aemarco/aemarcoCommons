@@ -5,8 +5,6 @@
 		<TargetFramework>net7.0-windows</TargetFramework>
 		
 		<Nullable>enable</Nullable>
-		<RootNamespace>aemarcoCommons.WebTools</RootNamespace>
-		<AssemblyName>aemarcoCommons.WebTools</AssemblyName>
 	</PropertyGroup>
 
 	<!-- project references -->
@@ -27,8 +25,6 @@
 
 	<!-- nuget build-->
 	<PropertyGroup>
-		<PackageId>aemarcoWebTools</PackageId>
-		<Product>aemarcoWebTools</Product>
 		<Description>c# web tools collection</Description>
 		<PackageTags>WebTools</PackageTags>
 	</PropertyGroup>

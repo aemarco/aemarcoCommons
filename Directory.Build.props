@@ -1,7 +1,12 @@
 <Project>
-  <!-- this runs at the beginning -->
+	<!-- this runs at the beginning -->
   
   
+	<!-- project definition -->
+	<PropertyGroup>
+		<RootNamespace>aemarcoCommons.$(MSBuildProjectName)</RootNamespace>
+		<AssemblyName>aemarcoCommons.$(MSBuildProjectName)</AssemblyName>
+	</PropertyGroup>
 
 	<!-- pdb files -->
 	<PropertyGroup Condition="'$(Configuration)'=='Release'">
@@ -35,6 +40,8 @@
 	<!-- nuget build-->
 	<PropertyGroup>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageId>aemarco$(MSBuildProjectName)</PackageId>
+		<Product>aemarco$(MSBuildProjectName)</Product>
 		<Authors>aemarco</Authors>
 		<Company>aemarco</Company>
 		<PackageLicenseExpression>Unlicense</PackageLicenseExpression>

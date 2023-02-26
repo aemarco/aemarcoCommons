@@ -3,9 +3,6 @@
 	<!-- project definition -->
 	<PropertyGroup>
 		<TargetFrameworks>net7.0-windows</TargetFrameworks>
-
-		<RootNamespace>aemarcoCommons.ConsoleTools</RootNamespace>
-		<AssemblyName>aemarcoCommons.ConsoleTools</AssemblyName>
 	</PropertyGroup>
 
 	<!-- project references -->
@@ -22,8 +19,6 @@
 
 	<!-- nuget build-->
 	<PropertyGroup>
-		<PackageId>aemarcoConsoleTools</PackageId>
-		<Product>aemarcoConsoleTools</Product>
 		<Description>c# console tools collection</Description>
 		<PackageTags>ConsoleTools</PackageTags>
 	</PropertyGroup>
