@@ -37,4 +37,15 @@ public class AppOptionTestBase
         }
     }
 
+
+
+    protected ProtectedTransformer Pt
+    {
+        get
+        {
+            var r = new ProtectedTransformer("superNicePassword");
+            return r;
+        }
+    }
+
 }

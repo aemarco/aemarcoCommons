@@ -9,7 +9,6 @@ using System.Reflection;
 
 //TODO: Save
 //TODO: Auto-Save
-//TODO: Protected
 //TODO: array merging?
 //TODO: Validate
 //TODO: Validate maybe fluent
