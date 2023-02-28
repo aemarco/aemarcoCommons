@@ -66,7 +66,7 @@ public partial class LoginDialog : ILoginDialog, ITransient, INotifyPropertyChan
         };
 }
 
-public class LoginActionProvider
+public class LoginActionProvider : ITransient
 {
     public string DefaultUsername { get; set; }
     public Func<string, string, Task<bool>> LoginAction { get; set; }
