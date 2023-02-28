@@ -13,6 +13,7 @@ using Polly.Contrib.WaitAndRetry;
 using Polly.Extensions.Http;
 using System;
 using System.Net.Http;
+using System.Reflection;
 
 namespace aemarcoCommons.Toolbox
 {
@@ -22,9 +23,18 @@ namespace aemarcoCommons.Toolbox
         public static IConfigurationBuilder ConfigAppsettings(this IConfigurationBuilder builder)
         {
             var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
-            return builder
+            builder
                 .AddJsonFile("appsettings.json", false, true)
                 .AddJsonFile($"appsettings.{environmentName}.json", true, true);
+
+            if (environmentName == "Development")
+            {
+                var assembly = Assembly.GetEntryAssembly()
+                               ?? throw new Exception("Could not determine entry assembly.");
+                builder
+                    .AddUserSecrets(assembly);
+            }
+            return builder;
         }
 
         public static ContainerBuilder SetupLoggerFactory(this ContainerBuilder builder, ILoggerFactory factory)
