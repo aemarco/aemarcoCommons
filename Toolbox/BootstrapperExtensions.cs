@@ -97,7 +97,7 @@ namespace aemarcoCommons.Toolbox
         private static IServiceCollection SetupHttpClientStuff(this IServiceCollection sc)
         {
             sc.AddTransient<RateLimitingPerHostHandler>();
-            sc.AddTransient<OidcTokenRenewalHandler>();
+            sc.AddTransient(s => s.GetRequiredService<OidcTokenRenewalHandler>());
             sc.AddTransient<IgnoreServerCertificateHandler>();
             sc.AddSingleton<OidcTokenRenewalHandlerHelper>();
 
