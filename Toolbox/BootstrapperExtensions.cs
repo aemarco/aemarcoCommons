@@ -94,11 +94,11 @@ namespace aemarcoCommons.Toolbox
             return sc;
         }
 
-        private static IServiceCollection SetupHttpClientStuff(this IServiceCollection sc)
+        internal static IServiceCollection SetupHttpClientStuff(this IServiceCollection sc)
         {
             sc.AddTransient<RateLimitingPerHostHandler>();
-            sc.AddTransient(s => s.GetRequiredService<OidcTokenRenewalHandler>());
             sc.AddTransient<IgnoreServerCertificateHandler>();
+            sc.AddTransient<OidcTokenRenewalHandler>();
             sc.AddSingleton<OidcTokenRenewalHandlerHelper>();
 
             var timeoutPolicy = Policy.TimeoutAsync<HttpResponseMessage>(TimeSpan.FromSeconds(10));

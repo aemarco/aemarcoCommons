@@ -1,4 +1,6 @@
 ﻿using aemarcoCommons.Toolbox;
+using aemarcoCommons.Toolbox.Oidc;
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
@@ -7,17 +9,32 @@ public class BootstrapperExtensionsTests
 {
 
     [Test]
-    public void SetupToolbox_Works()
+    public void SetupHttpClientStuff_RegistersResolvable_OidcTokenRenewalHandler()
     {
-        var sc = new ServiceCollection();
+        var sp = new ServiceCollection()
+            .SetupHttpClientStuff()
+            .BuildServiceProvider();
 
-        sc.SetupToolbox();
+        var s = sp.GetService<OidcTokenRenewalHandler>();
 
 
-        _ = sc.BuildServiceProvider();
-
+        s.Should().NotBeNull();
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }

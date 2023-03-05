@@ -1,4 +1,5 @@
 ﻿using IdentityModel.OidcClient;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net;
 using System.Net.Http;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace aemarcoCommons.Toolbox.Oidc
 {
+
 
     /// <summary>
     /// external party holding the access and refresh token
@@ -19,31 +21,48 @@ namespace aemarcoCommons.Toolbox.Oidc
         string IdToken { get; set; }
     }
 
+
+
     /// <summary>
     /// this handler can be chained in a HttpClient, so that we try to gather a new access token when we encounter 401 responses.
     /// if this handler returns a 401, means that the access token + refresh token are no more usable
     /// </summary>
     public class OidcTokenRenewalHandler : DelegatingHandler
     {
+
+        private readonly IServiceProvider _serviceProvider;
         private readonly OidcTokenRenewalHandlerHelper _oidcTokenRenewalHandlerHelper;
-        private readonly OidcClient _oidcClient;
-        private readonly ISessionStore _sessionStore;
+
+
 
         public OidcTokenRenewalHandler(
             OidcTokenRenewalHandlerHelper oidcTokenRenewalHandlerHelper,
-            OidcClient oidcClient,
-            ISessionStore sessionStore)
+            IServiceProvider serviceProvider)
         {
             _oidcTokenRenewalHandlerHelper = oidcTokenRenewalHandlerHelper;
-            _oidcClient = oidcClient ?? throw new ArgumentNullException(nameof(oidcClient));
-            _sessionStore = sessionStore ?? throw new ArgumentNullException(nameof(sessionStore));
-
+            _serviceProvider = serviceProvider;
         }
 
+
+        private OidcClient _oidcClient;
+        private ISessionStore _sessionStore;
+        private void EnsureSetup()
+        {
+            if (_oidcClient == null)
+            {
+                _oidcClient = _serviceProvider.GetRequiredService<OidcClient>();
+            }
+            if (_sessionStore == null)
+            {
+                _sessionStore = _serviceProvider.GetRequiredService<ISessionStore>();
+            }
+        }
 
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
+            EnsureSetup();
+
             //if we have no access token, we try to get one with refresh
             var accessToken = await GetAccessTokenAsync(cancellationToken)
                 .ConfigureAwait(false);
@@ -86,11 +105,15 @@ namespace aemarcoCommons.Toolbox.Oidc
                 .ConfigureAwait(false);
         }
 
+
+
+
         private async Task<string> GetAccessTokenAsync(CancellationToken cancellationToken)
         {
-
+            //in case somebody is refreshing currently, we don´t want to return until refreshed, so locking
             var res = await _oidcTokenRenewalHandlerHelper.HandleLockedAsync(
-                    () => Task.FromResult(true), cancellationToken)
+                    () => Task.CompletedTask,
+                    cancellationToken)
                 .ConfigureAwait(false);
 
             return res
