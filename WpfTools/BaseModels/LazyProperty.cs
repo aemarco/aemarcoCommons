@@ -6,6 +6,8 @@ using System.Threading;
 using System.Threading.Tasks;
 // ReSharper disable MemberCanBePrivate.Global
 
+#nullable enable
+
 // source info: https://www.renebergelt.de/blog/2018/03/lazy-loaded-properties-in-wpf
 
 namespace aemarcoCommons.WpfTools.BaseModels;
@@ -14,9 +16,9 @@ public class LazyProperty<T> : INotifyPropertyChanged
 {
     private readonly CancellationTokenSource _cancelTokenSource = new();
     private readonly Func<CancellationToken, Task<T>> _retrievalFunc;
-    private readonly T _defaultValue;
+    private readonly T? _defaultValue;
 
-    public LazyProperty(Func<CancellationToken, Task<T>> retrievalFunc, T defaultValue = default)
+    public LazyProperty(Func<CancellationToken, Task<T>> retrievalFunc, T? defaultValue = default)
     {
         _retrievalFunc = retrievalFunc ?? throw new ArgumentNullException(nameof(retrievalFunc));
         _defaultValue = defaultValue;
@@ -50,8 +52,8 @@ public class LazyProperty<T> : INotifyPropertyChanged
 
 
     private bool _isLoaded;
-    private T _value;
-    public T Value
+    private T? _value;
+    public T? Value
     {
         get
         {
@@ -118,14 +120,14 @@ public class LazyProperty<T> : INotifyPropertyChanged
     /// This allows you to assign the value of this lazy property directly
     /// to a variable of type T
     /// </summary>        
-    public static implicit operator T(LazyProperty<T> p)
+    public static implicit operator T?(LazyProperty<T> p)
     {
         return p.Value;
     }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
-    protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
+    protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
