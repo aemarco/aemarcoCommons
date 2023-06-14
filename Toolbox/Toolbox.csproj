@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<!-- project definition -->
 	<PropertyGroup>
@@ -33,7 +33,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.2.0" />
 		<!-- ReSharper restore VulnerablePackage -->
 		<!-- ReSharper disable VulnerablePackage -->
-		<PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.3" />
 		<!-- ReSharper restore VulnerablePackage -->
 		<PackageReference Include="IdentityModel.OidcClient" Version="5.2.1" />
 
