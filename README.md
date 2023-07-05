@@ -7,5 +7,6 @@ Some Extensions, some Toolbox, some Console-, Wpf- and Web-Tools
 1. [WpfTools](https://github.com/aemarco/aemarcoCommons/tree/master/WpfTools)
 1. [ConsoleTools](https://github.com/aemarco/aemarcoCommons/tree/master/ConsoleTools)
 1. [WebTools](https://github.com/aemarco/aemarcoCommons/tree/master/WebTools)
+1. [ToolboxAppOptions](https://github.com/aemarco/aemarcoCommons/tree/master/ToolboxAppOptions)
 1. [Toolbox](https://github.com/aemarco/aemarcoCommons/tree/master/Toolbox)
 1. [Extensions](https://github.com/aemarco/aemarcoCommons/tree/master/Extensions)
