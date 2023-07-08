@@ -3,6 +3,14 @@
 	<!-- project definition -->
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
+
+
+		<EnablePackageValidation>true</EnablePackageValidation>
+		<PackageValidationBaselineVersion>1.1.12</PackageValidationBaselineVersion>
+		<EnableStrictModeForCompatibleFrameworksInPackage>true</EnableStrictModeForCompatibleFrameworksInPackage>
+		<EnableStrictModeForCompatibleTfms>true</EnableStrictModeForCompatibleTfms>
+		<GenerateCompatibilitySuppressionFile>false</GenerateCompatibilitySuppressionFile>
+
 	</PropertyGroup>
 
 	<!-- nuget references-->
