@@ -1,4 +1,4 @@
-﻿using aemarcoCommons.Extensions.AttributeExtensions;
+﻿using aemarcoCommons.Extensions;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using System;
 using System.Linq;

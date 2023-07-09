@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
+// ReSharper disable once CheckNamespace
 namespace aemarcoCommons.Extensions.CollectionExtensions
 {
+    [Obsolete("Use same method from namespace aemarcoCommons.Extensions")]
     public static class Conditionals
     {
-       
+
         /// <summary>
         /// Checks is not null and contains elements
         /// </summary>

@@ -1,14 +1,12 @@
-﻿using aemarcoCommons.Extensions.AttributeExtensions;
+﻿using aemarcoCommons.Extensions;
 using FluentAssertions;
 using NUnit.Framework;
 using System;
 using System.Linq;
 
-namespace ExtensionsTests.AttributeExtensionsTests;
-
-public class ReadingExtensionsTests
+namespace ExtensionsTests;
+public class AttributeExtensionsTests
 {
-
     [TestCase(typeof(TestClassA), null)]
     [TestCase(typeof(TestClassB), "abc")]
     public void GetAttribute_Returns_CorrectlyThroughType(Type type, string expected)
@@ -151,8 +149,6 @@ public class ReadingExtensionsTests
         result.Should().BeNull();
     }
 
-
-
     #region testclasses
 
     private sealed class TestClassA
@@ -201,4 +197,5 @@ public class ReadingExtensionsTests
     }
 
     #endregion
+
 }

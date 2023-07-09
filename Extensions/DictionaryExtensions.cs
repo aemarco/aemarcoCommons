@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace aemarcoCommons.Extensions.CollectionExtensions
+namespace aemarcoCommons.Extensions
 {
-    public static class Creation
+    public static class DictionaryExtensions
     {
         public static IDictionary<TK, TV> ToDictionary<TK, TV>(this IEnumerable<(TK, TV)> @this) =>
             @this.ToDictionary(
@@ -23,8 +23,8 @@ namespace aemarcoCommons.Extensions.CollectionExtensions
 
         public static IDictionary<TK, int> ToCountDictionary<TK, TV>(this IEnumerable<IGrouping<TK, TV>> @this) =>
             @this.ToDictionary(
-                    x => x.Key,
-                    x => x.Count());
+                x => x.Key,
+                x => x.Count());
 
         public static IDictionary<TK, int> ToCountDictionary<TK>(this IEnumerable<TK> @this) =>
             @this.GroupBy(x => x)

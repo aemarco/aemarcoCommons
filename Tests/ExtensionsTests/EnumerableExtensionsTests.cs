@@ -1,15 +1,54 @@
-﻿using aemarcoCommons.Extensions.CollectionExtensions;
+﻿using aemarcoCommons.Extensions;
 using FluentAssertions;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ExtensionsTests.CollectionTests;
+namespace ExtensionsTests;
 
-
-[TestFixture]
-public class EntryHandlingTests
+public class EnumerableExtensionsTests
 {
+
+
+    [Test]
+    public void Shuffle_Works()
+    {
+        EnumerableExtensions.Random = new Random(42);
+        var list = new List<int> { 1, 2, 3 };
+        var expected = new List<int> { 3, 2, 1 };
+
+        var result = list.Shuffle();
+
+        result.Should().BeEquivalentTo(expected);
+    }
+
+
+
+
+
+
+
+    [TestCase(null, false)]
+    [TestCase(new string[] { }, false)]
+    [TestCase(new[] { "bob" }, true)]
+    public void NotNullOrEmpty_Delivers(string[] collection, bool expected)
+    {
+
+        var result = collection.NotNullOrEmpty();
+        result.Should().Be(expected);
+    }
+
+    [TestCase(null, true)]
+    [TestCase(new string[] { }, true)]
+    [TestCase(new[] { "bob" }, false)]
+    public void NullOrEmpty_Delivers(string[] collection, bool expected)
+    {
+
+        var result = collection.NullOrEmpty();
+        result.Should().Be(expected);
+    }
+
 
     [Test]
     public void ConsolidateRanges_NoOverlap_DoesNotMerge()
@@ -102,15 +141,6 @@ public class EntryHandlingTests
         // Assert
         collection.Should().BeEquivalentTo(new[] { 1, 2, 3 });
     }
-
-
-
-
-
-
-
-
-
 
 
 }

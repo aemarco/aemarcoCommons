@@ -1,4 +1,4 @@
-﻿using aemarcoCommons.Extensions.AttributeExtensions;
+﻿using aemarcoCommons.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.ComponentModel;

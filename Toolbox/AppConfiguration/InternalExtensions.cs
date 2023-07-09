@@ -1,4 +1,4 @@
-﻿using aemarcoCommons.Extensions.AttributeExtensions;
+﻿using aemarcoCommons.Extensions;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;

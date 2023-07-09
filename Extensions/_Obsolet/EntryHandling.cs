@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
+// ReSharper disable once CheckNamespace
 namespace aemarcoCommons.Extensions.CollectionExtensions
 {
+
+    [Obsolete("Use same method from namespace aemarcoCommons.Extensions")]
     public static class EntryHandling
     {
         private static readonly Random Random = new Random();
@@ -94,6 +97,7 @@ namespace aemarcoCommons.Extensions.CollectionExtensions
             e.Dispose();
         }
 
+
         public static IEnumerable<(int Min, int Max)> ConsolidateRanges(this IEnumerable<(int Min, int Max)> ranges)
         {
             (int Min, int Max)? current = null;
@@ -139,7 +143,6 @@ namespace aemarcoCommons.Extensions.CollectionExtensions
             //return result;
         }
 
-
         public static void AddDistinct<T>(this ICollection<T> collection, T item)
         {
             if (!collection.Contains(item))
@@ -147,6 +150,7 @@ namespace aemarcoCommons.Extensions.CollectionExtensions
                 collection.Add(item);
             }
         }
+
         public static void AddRangeDistinct<T>(this ICollection<T> collection, IEnumerable<T> items)
         {
             foreach (var item in items)
