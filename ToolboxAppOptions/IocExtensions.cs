@@ -61,6 +61,16 @@ namespace aemarcoCommons.ToolboxAppOptions
                         null,
                         sp.GetRequiredService(optionsType),
                         Array.Empty<object>()));
+
+                //register 
+                var interfaces = type.GetInterfaces();
+                foreach (Type interfaceType in interfaces)
+                {
+                    sc.AddSingleton(interfaceType, s => s.GetRequiredService(type));
+
+                }
+
+
             }
             return sc;
         }
