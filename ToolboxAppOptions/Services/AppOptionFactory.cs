@@ -45,7 +45,7 @@ namespace aemarcoCommons.ToolboxAppOptions.Services
 
         public ValidateOptionsResult Validate(string name, TOptions options)
         {
-
+            //https://youtu.be/jblRYDMTtvg
             return ValidateOptionsResult.Success;
         }
     }
