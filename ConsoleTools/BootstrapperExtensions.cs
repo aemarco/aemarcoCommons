@@ -85,9 +85,11 @@ public sealed class AutofacTypeResolver : ITypeResolver, IDisposable
     public AutofacTypeResolver(ILifetimeScope scope) => _scope = scope;
 
     public object Resolve(Type type) =>
-        _scope.TryResolve(type, out var instance)
-            ? instance
-            : null;
+        type is null
+            ? null
+            : _scope.TryResolve(type, out var instance)
+                ? instance
+                : null;
 
     public void Dispose() => _scope?.Dispose();
 }

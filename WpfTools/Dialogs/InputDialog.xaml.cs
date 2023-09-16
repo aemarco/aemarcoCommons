@@ -1,9 +1,11 @@
 ﻿using aemarcoCommons.WpfTools.Commands;
+using System.Windows;
 using System.Windows.Input;
 
 namespace aemarcoCommons.WpfTools.Dialogs;
 
-public partial class InputDialog
+// ReSharper disable once RedundantExtendsListEntry
+public partial class InputDialog : Window
 {
     public InputDialog(string question, string defaultAnswer = "")
     {

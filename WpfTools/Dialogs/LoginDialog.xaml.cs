@@ -3,12 +3,14 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace aemarcoCommons.WpfTools.Dialogs;
 
 
-public partial class LoginDialog : ILoginDialog, ITransient, INotifyPropertyChanged
+// ReSharper disable once RedundantExtendsListEntry
+public partial class LoginDialog : Window, ILoginDialog, ITransient, INotifyPropertyChanged
 {
     private readonly LoginActionProvider _loginActionProvider;
 
@@ -68,6 +70,9 @@ public partial class LoginDialog : ILoginDialog, ITransient, INotifyPropertyChan
 
 public class LoginActionProvider : ITransient
 {
+    // ReSharper disable UnusedAutoPropertyAccessor.Global
     public string DefaultUsername { get; set; }
+
     public Func<string, string, Task<bool>> LoginAction { get; set; }
+    // ReSharper restore UnusedAutoPropertyAccessor.Global
 }
