@@ -14,5 +14,22 @@ namespace aemarcoCommons.Extensions.TimeExtensions
         {
             return entries.Aggregate(TimeSpan.Zero, (t1, t2) => t1 + t2);
         }
+
+
+
+        public static int ToAgeYears(this DateTimeOffset value, DateTimeOffset? target = null)
+        {
+            target = target ?? DateTimeOffset.Now;
+
+            int age = target.Value.Year - value.Year;
+            if (value.AddYears(age) > target.Value)
+                age--;
+            return age;
+        }
+
+
+
+
+
     }
 }

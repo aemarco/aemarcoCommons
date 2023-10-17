@@ -755,7 +755,7 @@ public static class MimeTypeMap
     /// <param name="mimeType">The variable to store the MIME type.</param>
     /// <returns>The MIME type.</returns>
     /// <exception cref="ArgumentNullException" />
-    public static bool TryGetMimeType(string ext, [MaybeNullWhen(false)] out string mimeType)
+    public static bool TryGetMimeType(string? ext, [MaybeNullWhen(false)] out string mimeType)
     {
         if (ext is null)
             throw new ArgumentNullException(nameof(ext));
@@ -784,7 +784,7 @@ public static class MimeTypeMap
     /// <param name="str">The filename or extension.</param>
     /// <returns>The MIME type.</returns>
     /// <exception cref="ArgumentNullException" />
-    public static string GetMimeType(string str) =>
+    public static string GetMimeType(string? str) =>
         TryGetMimeType(str, out var result)
             ? result
             : DefaultMimeType;
