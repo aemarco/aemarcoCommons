@@ -143,4 +143,61 @@ public class EnumerableExtensionsTests
     }
 
 
+
+    #region FindClosestItem
+
+    [Test]
+    public void FindClosestItem_SingleItemSequence_ReturnsItem()
+    {
+        IEnumerable<int> sequence = new List<int> { 42 };
+        const int target = 50;
+        var result = sequence.FindClosestItem(target);
+        result.Should().Be(42);
+    }
+
+    [TestCase(0, 30)]
+    [TestCase(29, 30)]
+    [TestCase(34, 30)]
+    [TestCase(39, 40)]
+    [TestCase(54, 50)]
+    [TestCase(61, 60)]
+    public void FindClosestItem_MultipleItemsSequence_ReturnsClosestItem(int target, int expected)
+    {
+        IEnumerable<int> sequence = new List<int> { 30, 40, 50, 60 };
+        var result = sequence.FindClosestItem(target);
+        result.Should().Be(expected);
+    }
+
+    [Test]
+    public void FindClosestItem_EmptySequence_ThrowsArgumentException()
+    {
+        IEnumerable<int> sequence = new List<int>();
+        const int target = 100;
+        Action action = () => sequence.FindClosestItem(target);
+        action.Should().Throw<ArgumentException>().WithMessage("Sequence is empty");
+    }
+
+    [Test]
+    public void FindClosestItem_NullSequence_ThrowsArgumentNullException()
+    {
+        IEnumerable<int> sequence = null!;
+        const int target = 100;
+        Action action = () => sequence.FindClosestItem(target);
+        action.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'sequence')");
+    }
+
+    #endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

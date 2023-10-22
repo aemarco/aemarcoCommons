@@ -93,5 +93,37 @@ namespace aemarcoCommons.Extensions
                 collection.AddDistinct(item);
             }
         }
+
+
+        /// <summary>
+        /// Finds and returns the integer in the sequence that is closest to the given target integer.
+        /// </summary>
+        /// <param name="sequence">The sequence of integers to search for the closest integer.</param>
+        /// <param name="target">The target integer to which the closest integer will be found.</param>
+        /// <returns>The integer in the sequence that is closest to the target integer.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if the input sequence is null.</exception>
+        /// <exception cref="ArgumentException">Thrown if the input sequence is empty.</exception>
+        public static int FindClosestItem(this IEnumerable<int> sequence, int target)
+        {
+            if (sequence == null)
+                throw new ArgumentNullException(nameof(sequence));
+
+            int? closest = null;
+            var minDifference = int.MaxValue;
+            foreach (var item in sequence)
+            {
+                var difference = Math.Abs(item - target);
+                if (difference >= minDifference)
+                    continue;
+
+                closest = item;
+                minDifference = difference;
+            }
+
+            return closest ?? throw new ArgumentException("Sequence is empty");
+        }
+
+
+
     }
 }
