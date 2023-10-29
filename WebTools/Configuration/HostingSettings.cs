@@ -1,5 +1,4 @@
-﻿using aemarcoCommons.Toolbox.AppConfiguration;
-
+﻿using aemarcoCommons.ToolboxAppOptions;
 
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global

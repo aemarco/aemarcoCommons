@@ -10,22 +10,8 @@ using System.Reflection;
 
 namespace aemarcoCommons.ToolboxAppOptions
 {
-    public static class IocExtensions
+    public static class ServiceCollectionExtensions
     {
-
-        public static ContainerBuilder AddConfigOptionsUtils(
-            this ContainerBuilder builder,
-            IConfigurationRoot config,
-            Action<ConfigurationOptionsBuilder> options = null)
-        {
-            builder.Populate(
-                new ServiceCollection()
-                    .AddConfigOptionsUtils(
-                        config,
-                        options));
-            return builder;
-        }
-
         public static IServiceCollection AddConfigOptionsUtils(
             this IServiceCollection sc,
             IConfigurationRoot config,
@@ -40,7 +26,6 @@ namespace aemarcoCommons.ToolboxAppOptions
             options?.Invoke(toolConfigBuilder);
             var toolConfig = toolConfigBuilder.Build();
             sc.AddSingleton(toolConfig);
-
 
 
             foreach (var type in AppDomain.CurrentDomain
@@ -62,17 +47,31 @@ namespace aemarcoCommons.ToolboxAppOptions
                         sp.GetRequiredService(optionsType),
                         Array.Empty<object>()));
 
-                //register 
+                //register also it´s interfaces
                 var interfaces = type.GetInterfaces();
                 foreach (Type interfaceType in interfaces)
                 {
                     sc.AddSingleton(interfaceType, s => s.GetRequiredService(type));
-
                 }
-
-
             }
             return sc;
         }
     }
+
+    public static class AutoFacExtensions
+    {
+        public static ContainerBuilder AddConfigOptionsUtils(
+            this ContainerBuilder builder,
+            IConfigurationRoot config,
+            Action<ConfigurationOptionsBuilder> options = null)
+        {
+            builder.Populate(
+                new ServiceCollection()
+                    .AddConfigOptionsUtils(
+                        config,
+                        options));
+            return builder;
+        }
+    }
+
 }

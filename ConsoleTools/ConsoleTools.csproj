@@ -12,9 +12,10 @@
 
 	<!-- nuget references-->
 	<ItemGroup>
-		<PackageReference Include="Spectre.Console" Version="0.45.0" />
-		<PackageReference Include="Spectre.Console.Cli" Version="0.45.0" />
+	
+		<PackageReference Include="Spectre.Console.Cli" Version="0.47.0" />
 		<PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
+		<PackageReference Include="Spectre.Console.Json" Version="0.47.0" />
 	</ItemGroup>
 
 	<!-- nuget build-->

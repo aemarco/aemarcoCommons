@@ -20,9 +20,15 @@ namespace aemarcoCommons.Toolbox
     public static class BootstrapperExtensions
     {
 
-        public static IConfigurationBuilder ConfigAppsettings(this IConfigurationBuilder builder)
+        public static IConfigurationBuilder ConfigAppsettings(this IConfigurationBuilder builder, string environmentName = null)
         {
-            var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
+
+            environmentName = environmentName
+                              ?? Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT")
+                              ?? Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
+                              ?? Environment.GetEnvironmentVariable("ENVIRONMENT")
+                              ?? "Production";
+
             builder
                 .AddJsonFile("appsettings.json", false, true)
                 .AddJsonFile($"appsettings.{environmentName}.json", true, true);
