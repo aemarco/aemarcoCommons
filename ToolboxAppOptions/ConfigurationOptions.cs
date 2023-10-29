@@ -19,7 +19,7 @@ namespace aemarcoCommons.ToolboxAppOptions
             return this;
         }
 
-        public ConfigurationOptionsBuilder AddAssemblyMarker(Type type)
+        public ConfigurationOptionsBuilder AddAssemblyMarker(params Type[] type)
         {
             _ = type;
             return this;

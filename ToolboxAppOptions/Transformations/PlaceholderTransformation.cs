@@ -26,6 +26,15 @@ namespace aemarcoCommons.ToolboxAppOptions.Transformations
 
     }
 
+    public static class ConfigurationExtensions
+    {
+        public static string GetResolvedText(this IConfiguration config, string path)
+        {
+            var unresolved = config.GetValue<string>(path);
+            var result = ((IConfigurationRoot)config).ResolvePlaceholders(unresolved);
+            return result;
+        }
+    }
 
     internal static class PlaceholderTransformationExtensions
     {

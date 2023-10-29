@@ -46,7 +46,7 @@ public static class BootstrapperExtensions
     /// <returns>builder with registrations</returns>
     public static ContainerBuilder SetupWpfTools(this ContainerBuilder builder, params object[] externals)
     {
-        builder.Populate(new ServiceCollection().SetupWpfTools(externals));
+        builder.Populate(new ServiceCollection().SetupWpfTools(externals: externals));
         builder.RegisterBuildCallback(rootScope =>
         {
             ServiceProvider = new AutofacServiceProvider(rootScope);
@@ -67,7 +67,10 @@ public static class BootstrapperExtensions
     /// <param name="sc">IServiceCollection to register to</param>
     /// <param name="externals">externally owned objects</param>
     /// <returns>IServiceCollection for chaining</returns>
-    public static IServiceCollection SetupWpfTools(this IServiceCollection sc, params object[] externals)
+    public static IServiceCollection SetupWpfTools(
+        this IServiceCollection sc,
+        bool registerWindows = true,
+        params object[] externals)
     {
 
         foreach (var external in externals)
@@ -99,7 +102,9 @@ public static class BootstrapperExtensions
             .ToList()
             .ForEach(t =>
             {
-                if ((t.Namespace?.StartsWith(shortestAppNamespace) ?? false) && t.IsSubclassOf(typeof(Window)))
+                if ((t.Namespace?.StartsWith(shortestAppNamespace) ?? false) &&
+                    t.IsSubclassOf(typeof(Window)) &&
+                    registerWindows)
                 {
                     sc.AddTransient(t);
                     foreach (var i in t.GetInterfaces())

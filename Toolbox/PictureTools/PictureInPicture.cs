@@ -44,7 +44,7 @@ namespace aemarcoCommons.Toolbox.PictureTools
 
         #region Setting the inner picture
 
-        internal void SetWallpaper(
+        public void SetWallpaper(
             Image wall,
             WallpaperMode mode,
             int percentTopBottomCutAllowed,

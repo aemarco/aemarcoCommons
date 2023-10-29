@@ -286,6 +286,7 @@ public class WallpaperSetter : ISingleton, IDisposable
             await SetLockScreenImages()
                 .ConfigureAwait(false);
         }
+
     }
 
     #endregion

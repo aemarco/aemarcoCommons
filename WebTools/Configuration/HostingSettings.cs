@@ -21,7 +21,6 @@ public class HostingSettings : SettingsBase
     /// Settings for oidc checks
     /// </summary>
     public string? OidcAuthority { get; set; }
-
     public string? OidcClientId { get; set; }
     public string? OidcClientSecret { get; set; }
 
