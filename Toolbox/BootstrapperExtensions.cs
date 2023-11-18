@@ -35,6 +35,7 @@ namespace aemarcoCommons.Toolbox
 
             if (environmentName == "Development")
             {
+                //https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-8.0&tabs=windows
                 var assembly = Assembly.GetEntryAssembly()
                                ?? throw new Exception("Could not determine entry assembly.");
                 builder
