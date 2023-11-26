@@ -1,45 +1,51 @@
 ﻿using aemarcoCommons.ToolboxAppOptions.Services;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 
 namespace aemarcoCommons.ToolboxAppOptions
 {
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddConfigOptionsUtils(
-            this IServiceCollection sc,
+            this IServiceCollection services,
             IConfigurationRoot config,
             Action<ConfigurationOptionsBuilder> options = null)
         {
+
             //register IConfiguration stuff
-            sc.AddSingleton(config);
-            sc.AddSingleton<IConfiguration>(sp => sp.GetRequiredService<IConfigurationRoot>());
+            services.AddSingleton(config);
+            services.AddSingleton<IConfiguration>(sp => sp.GetRequiredService<IConfigurationRoot>());
+
 
             //register tool config
             var toolConfigBuilder = new ConfigurationOptionsBuilder();
             options?.Invoke(toolConfigBuilder);
-            var toolConfig = toolConfigBuilder.Build();
-            sc.AddSingleton(toolConfig);
+            var toolConfig = toolConfigBuilder
+                .AddConfigurationTypes(AppDomain.CurrentDomain
+                    .GetAssemblies()
+                    .SelectMany(x => x.GetTypes())
+                    .Where(x => x.IsSubclassOf(typeof(SettingsBase)))
+                    .ToArray())
+                .Build();
+            services.AddSingleton(toolConfig);
 
-
-            foreach (var type in AppDomain.CurrentDomain
-                         .GetAssemblies()
-                         .SelectMany(x => x.GetTypes())
-                         .Where(x => x.IsSubclassOf(typeof(SettingsBase))))
+            //register all the config types
+            foreach (var type in toolConfig.ConfigurationTypes)
             {
-
                 //setup options build pipeline
-                sc.ConfigureOptions(typeof(AppOptionFactory<>).MakeGenericType(type));
+                services.ConfigureOptions(typeof(AppOptionFactory<>).MakeGenericType(type));
 
                 //register type as self resolved through options
                 Type optionsType = typeof(IOptions<>).MakeGenericType(type);
-                sc.AddSingleton(type, sp =>
+                services.AddSingleton(type, sp =>
                     optionsType.InvokeMember(
                         "Value",
                         BindingFlags.GetProperty,
@@ -51,10 +57,18 @@ namespace aemarcoCommons.ToolboxAppOptions
                 var interfaces = type.GetInterfaces();
                 foreach (Type interfaceType in interfaces)
                 {
-                    sc.AddSingleton(interfaceType, s => s.GetRequiredService(type));
+                    services.AddSingleton(interfaceType, s => s.GetRequiredService(type));
                 }
             }
-            return sc;
+
+            //so that all validators are registered
+            services.AddValidatorsFromAssemblies(toolConfig.ConfigurationAssemblies, ServiceLifetime.Singleton);
+
+            //validation during startup
+            if (toolConfig.EnableValidationOnStartup)
+                services.AddHostedService<StartupValidationService>();
+
+            return services;
         }
     }
 
@@ -70,6 +84,15 @@ namespace aemarcoCommons.ToolboxAppOptions
                     .AddConfigOptionsUtils(
                         config,
                         options));
+
+            builder.RegisterBuildCallback(scope =>
+            {
+                if (scope.TryResolve<StartupValidationService>(out var startValidator))
+                {
+                    startValidator.StartAsync(CancellationToken.None).GetAwaiter().GetResult();
+                }
+            });
+
             return builder;
         }
     }

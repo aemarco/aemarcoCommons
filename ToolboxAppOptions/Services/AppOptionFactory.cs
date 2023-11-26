@@ -1,8 +1,9 @@
 ﻿using aemarcoCommons.ToolboxAppOptions.Transformations;
+using FluentValidation;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
+using System.Linq;
 
 namespace aemarcoCommons.ToolboxAppOptions.Services
 {
@@ -12,14 +13,22 @@ namespace aemarcoCommons.ToolboxAppOptions.Services
         IValidateOptions<TOptions>
         where TOptions : class
     {
-        private readonly IServiceProvider _serviceProvider;
+
+        private readonly ConfigurationOptions _options;
         private readonly IConfigurationRoot _config;
+        private readonly IValidator<TOptions> _validator;
         public AppOptionFactory(
-            IServiceProvider serviceProvider)
+            IConfigurationRoot config,
+            ConfigurationOptions options,
+            IValidator<TOptions> validator = null)
         {
-            _serviceProvider = serviceProvider;
-            _config = serviceProvider.GetRequiredService<IConfigurationRoot>();
+            _config = config;
+            _options = options;
+            _validator = validator;
         }
+
+
+        //IConfigureOptions
         public void Configure(TOptions options)
         {
             var type = typeof(TOptions);
@@ -32,21 +41,39 @@ namespace aemarcoCommons.ToolboxAppOptions.Services
                 _config.GetSection(path).Bind(options);
         }
 
+        //IPostConfigureOptions
         public void PostConfigure(string name, TOptions options)
         {
-            var toolOptions = _serviceProvider.GetRequiredService<ConfigurationOptions>();
             //ApplyReadTransformations
-            foreach (var transformation in toolOptions.StringTransformations)
+            foreach (var transformation in _options.StringTransformations)
             {
                 StringTransformerBase.TransformObject(options, _config, transformation.PerformReadTransformation);
             }
         }
 
-
+        //IValidateOptions
         public ValidateOptionsResult Validate(string name, TOptions options)
         {
+            //inspired by Nick
             //https://youtu.be/jblRYDMTtvg
-            return ValidateOptionsResult.Success;
+
+
+            // Ensure options are provided to validate against
+            if (options is null)
+                throw new ArgumentNullException(nameof(options));
+
+
+            //if no validator is defined, we are fine
+            if (_validator is null)
+                return ValidateOptionsResult.Success;
+
+            //validate
+            var valRes = _validator.Validate(options);
+            return valRes.IsValid
+                ? ValidateOptionsResult.Success
+                : ValidateOptionsResult.Fail(valRes.Errors.Select(x =>
+                    $"Options validation failed for '{x.PropertyName}' with error: '{x.ErrorMessage}'"));
         }
+
     }
 }

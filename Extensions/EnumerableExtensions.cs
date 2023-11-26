@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace aemarcoCommons.Extensions
 {
@@ -86,6 +87,16 @@ namespace aemarcoCommons.Extensions
                 collection.Add(item);
             }
         }
+
+        public static void AddDistinct<T, TComp>(this ICollection<T> collection, T item, Expression<Func<T, TComp>> selector)
+        {
+            Func<T, TComp> func = selector.Compile();
+            if (collection.All(x => !func(x).Equals(func(item))))
+            {
+                collection.Add(item);
+            }
+        }
+
         public static void AddRangeDistinct<T>(this ICollection<T> collection, IEnumerable<T> items)
         {
             foreach (var item in items)
