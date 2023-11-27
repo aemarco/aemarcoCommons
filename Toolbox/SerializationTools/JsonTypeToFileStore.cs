@@ -41,7 +41,8 @@ namespace aemarcoCommons.Toolbox.SerializationTools
         {
             Instance.TimestampSaved = DateTimeOffset.Now;
             var di = new FileInfo(Instance.Filepath).Directory;
-            if (di != null && !di.Exists) di.Create();
+            if (di != null && !di.Exists)
+                di.Create();
 
             File.WriteAllText(Instance.Filepath, JsonConvert.SerializeObject(Instance, Formatting.Indented));
         }

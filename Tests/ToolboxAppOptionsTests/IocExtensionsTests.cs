@@ -4,6 +4,8 @@ using aemarcoCommons.ToolboxAppOptions.Transformations;
 using Autofac;
 
 namespace ToolboxAppOptionsTests;
+
+
 public class IocExtensionsTests : AppOptionTestBase
 {
     [Test]
@@ -89,13 +91,19 @@ public class IocExtensionsTests : AppOptionTestBase
             .GetRequiredService<TestSettings>();
         settings.Message.Should().Be("HelloWorld");
     }
+    [Test]
+    public void AddConfigOptionsUtils_RegistersValidators()
+    {
+        var validator = Sp.GetService<IValidator<TestSettings>>();
+        validator.Should().NotBeNull();
+    }
+
     public class TestSettings : SettingsBase
     {
         public required string ShowCaseMessage { get; set; }
         public required string Message { get; set; }
     }
-
-
+    public class TestSettingsValidator : AbstractValidator<TestSettings> { }
 
 }
 

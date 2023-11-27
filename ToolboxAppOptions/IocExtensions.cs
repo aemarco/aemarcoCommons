@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 using System.Threading;
 
 namespace aemarcoCommons.ToolboxAppOptions
@@ -46,12 +47,22 @@ namespace aemarcoCommons.ToolboxAppOptions
                 //register type as self resolved through options
                 Type optionsType = typeof(IOptions<>).MakeGenericType(type);
                 services.AddSingleton(type, sp =>
-                    optionsType.InvokeMember(
-                        "Value",
-                        BindingFlags.GetProperty,
-                        null,
-                        sp.GetRequiredService(optionsType),
-                        Array.Empty<object>()));
+                {
+                    try
+                    {
+                        return optionsType.InvokeMember(
+                            "Value",
+                            BindingFlags.GetProperty,
+                            null,
+                            sp.GetRequiredService(optionsType),
+                            Array.Empty<object>());
+                    }
+                    catch (TargetInvocationException ex) when (ex.InnerException is OptionsValidationException)
+                    {
+                        ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                        throw;
+                    }
+                });
 
                 //register also it´s interfaces
                 var interfaces = type.GetInterfaces();
