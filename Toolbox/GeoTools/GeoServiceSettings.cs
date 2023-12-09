@@ -1,4 +1,4 @@
-﻿using aemarcoCommons.Toolbox.AppConfiguration;
+﻿using aemarcoCommons.ToolboxAppOptions;
 using System;
 
 namespace aemarcoCommons.Toolbox.GeoTools
