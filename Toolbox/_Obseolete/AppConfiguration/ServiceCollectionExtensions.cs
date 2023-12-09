@@ -8,6 +8,7 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
     public static class ServiceCollectionExtensions
     {
 
+        [Obsolete("Use aemarcoCommons.ToolboxAppOptions.AddConfigOptionsUtils instead")]
         public static IConfigurationRoot AddConfigurationUtils(this IServiceCollection serviceCollection,
             IConfigurationBuilder configBuilder,
             Action<ConfigurationOptions> options = null)
@@ -83,15 +84,6 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
 
             return rootConfig;
         }
-
-
-
-
-
-
-
-
-
 
     }
 }

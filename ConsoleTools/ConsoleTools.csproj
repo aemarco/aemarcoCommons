@@ -2,7 +2,7 @@
 
 	<!-- project definition -->
 	<PropertyGroup>
-		<TargetFrameworks>net7.0-windows</TargetFrameworks>
+		<TargetFrameworks>net8.0-windows</TargetFrameworks>
 	</PropertyGroup>
 
 	<!-- project references -->
@@ -13,9 +13,9 @@
 	<!-- nuget references-->
 	<ItemGroup>
 	
-		<PackageReference Include="Spectre.Console.Cli" Version="0.47.0" />
+		<PackageReference Include="Spectre.Console.Cli" Version="0.48.0" />
 		
-		<PackageReference Include="Spectre.Console.Json" Version="0.47.0" />
+		<PackageReference Include="Spectre.Console.Json" Version="0.48.0" />
 	</ItemGroup>
 
 	<!-- nuget build-->

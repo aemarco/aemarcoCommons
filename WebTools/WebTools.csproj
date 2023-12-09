@@ -2,7 +2,7 @@
 
 	<!-- project definition -->
 	<PropertyGroup>
-		<TargetFramework>net7.0-windows</TargetFramework>
+		<TargetFramework>net8.0-windows</TargetFramework>
 		
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
@@ -14,7 +14,7 @@
 
 	<!-- nuget references-->
 	<ItemGroup>
-		<PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />
+		<PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
 	</ItemGroup>
 
 	<!-- proj build-->

@@ -15,6 +15,7 @@ namespace aemarcoCommons.Toolbox.AppConfiguration
         /// <param name="configBuilder">config builder used for registrations</param>
         /// <param name="options">optional configuration for certain features</param>
         /// <returns>given builder, so that it can be chained</returns>
+        [Obsolete("Use aemarcoCommons.ToolboxAppOptions.AddConfigOptionsUtils instead")]
         public static IConfigurationRoot AddConfigurationUtils(this ContainerBuilder builder,
             IConfigurationBuilder configBuilder,
             Action<ConfigurationOptions> options = null)

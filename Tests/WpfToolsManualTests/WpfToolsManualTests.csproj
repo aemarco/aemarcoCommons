@@ -3,7 +3,7 @@
   <!-- project definition -->
   <PropertyGroup>
     
-    <TargetFrameworks>net7.0-windows10.0.19041.0</TargetFrameworks>
+    <TargetFrameworks>net8.0-windows10.0.19041.0</TargetFrameworks>
     <SupportedOSPlatformVersion>10.0</SupportedOSPlatformVersion>
     
     <OutputType>WinExe</OutputType>

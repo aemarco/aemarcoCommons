@@ -29,7 +29,7 @@ public class EnumerableExtensionsTests
 
 
 
-    [TestCase(null, false)]
+
     [TestCase(new string[] { }, false)]
     [TestCase(new[] { "bob" }, true)]
     public void NotNullOrEmpty_Delivers(string[] collection, bool expected)
@@ -38,8 +38,18 @@ public class EnumerableExtensionsTests
         var result = collection.NotNullOrEmpty();
         result.Should().Be(expected);
     }
+    [Test]
+    public void NotNullOrEmpty_DeliversNull()
+    {
+        string[]? collection = null;
+        var result = collection.NotNullOrEmpty();
+        result.Should().Be(false);
+    }
 
-    [TestCase(null, true)]
+
+
+
+
     [TestCase(new string[] { }, true)]
     [TestCase(new[] { "bob" }, false)]
     public void NullOrEmpty_Delivers(string[] collection, bool expected)
@@ -48,7 +58,13 @@ public class EnumerableExtensionsTests
         var result = collection.NullOrEmpty();
         result.Should().Be(expected);
     }
-
+    [Test]
+    public void NullOrEmpty_DeliversNull()
+    {
+        string[]? collection = null;
+        var result = collection.NullOrEmpty();
+        result.Should().Be(true);
+    }
 
     [Test]
     public void ConsolidateRanges_NoOverlap_DoesNotMerge()

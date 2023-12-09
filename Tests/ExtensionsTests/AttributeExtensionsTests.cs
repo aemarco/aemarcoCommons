@@ -7,7 +7,7 @@ using System.Linq;
 namespace ExtensionsTests;
 public class AttributeExtensionsTests
 {
-    [TestCase(typeof(TestClassA), null)]
+
     [TestCase(typeof(TestClassB), "abc")]
     public void GetAttribute_Returns_CorrectlyThroughType(Type type, string expected)
     {
@@ -15,10 +15,19 @@ public class AttributeExtensionsTests
         var result = attr?.Info;
 
         result.Should().Be(expected);
+    }
+
+    [Test]
+    public void GetAttribute_Returns_CorrectlyThroughTypeNull()
+    {
+        var attr = typeof(TestClassA).GetAttribute<DummyAAttribute>();
+        var result = attr?.Info;
+
+        result.Should().Be(null);
 
     }
 
-    [TestCase(typeof(TestClassA), null)]
+
     [TestCase(typeof(TestClassB), "xxx")]
     public void GetAttribute_Returns_CorrectlyThroughMember(Type type, string expected)
     {
@@ -29,8 +38,17 @@ public class AttributeExtensionsTests
 
     }
 
+    [Test]
+    public void GetAttribute_Returns_CorrectlyThroughMemberNull()
+    {
+        var attr = typeof(TestClassA).GetAttribute<DummyBAttribute>(nameof(TestClassB.Info));
+        var result = attr?.Info;
 
-    [TestCase(typeof(TestClassA), null)]
+        result.Should().Be(null);
+
+    }
+
+
     [TestCase(typeof(TestClassB), "abc")]
     public void GetAttribute_Returns_CorrectlyThroughObject(Type type, string expected)
     {
@@ -39,8 +57,18 @@ public class AttributeExtensionsTests
         var result = attr?.Info;
         result.Should().Be(expected);
     }
+    [Test]
+    public void GetAttribute_Returns_CorrectlyThroughObjectNull()
+    {
+        var obj = Activator.CreateInstance(typeof(TestClassA));
+        var attr = obj.GetAttribute<DummyAAttribute>();
+        var result = attr?.Info;
+        result.Should().Be(null);
+    }
 
-    [TestCase(typeof(TestClassA), null)]
+
+
+
     [TestCase(typeof(TestClassB), "xxx")]
     public void GetAttribute_Returns_CorrectlyThroughObjectMember(Type type, string expected)
     {
@@ -49,6 +77,16 @@ public class AttributeExtensionsTests
         var result = attr?.Info;
 
         result.Should().Be(expected);
+
+    }
+    [Test]
+    public void GetAttribute_Returns_CorrectlyThroughObjectMemberNull()
+    {
+        var obj = Activator.CreateInstance(typeof(TestClassA));
+        var attr = obj.GetAttribute<DummyBAttribute>(nameof(TestClassB.Info));
+        var result = attr?.Info;
+
+        result.Should().Be(null);
 
     }
 
@@ -176,6 +214,7 @@ public class AttributeExtensionsTests
         Test4
     }
 
+    [AttributeUsage(AttributeTargets.All)]
     private sealed class DummyAAttribute : Attribute
     {
         public DummyAAttribute(string info)
@@ -186,6 +225,7 @@ public class AttributeExtensionsTests
         public string Info { get; }
     }
 
+    [AttributeUsage(AttributeTargets.All)]
     private sealed class DummyBAttribute : Attribute
     {
         public DummyBAttribute(string info)
