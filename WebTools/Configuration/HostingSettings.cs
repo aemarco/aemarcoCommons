@@ -14,8 +14,8 @@ public class HostingSettings : SettingsBase
     /// Settings for JWT Checks
     /// </summary>
     public string? JwtAuthority { get; set; }
-    public string? JwtSecret { get; set; }
-
+    public string? JwtCertPath { get; set; }
+    public string? JwtCertPwd { get; set; }
 
     /// <summary>
     /// Settings for oidc checks
