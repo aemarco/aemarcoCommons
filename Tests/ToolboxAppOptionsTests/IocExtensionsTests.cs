@@ -1,7 +1,6 @@
 ﻿// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 using aemarcoCommons.ToolboxAppOptions.Transformations;
-using Autofac;
 
 namespace ToolboxAppOptionsTests;
 
@@ -24,26 +23,6 @@ public class IocExtensionsTests : AppOptionTestBase
 
         var sp = sc.BuildServiceProvider();
         var magic = sp.GetRequiredService<ShowCaseSettings>();
-
-        magic.Message.Should().Be("awesome");
-
-    }
-    [Test]
-    public void AddConfigOptionsUtils_ContainerBuilderShowCase()
-    {
-        var config = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json")
-            .Build();
-        var sc = new ContainerBuilder()
-            .AddConfigOptionsUtils(config, x =>
-            {
-                x.AddStringTransformation(new PlaceholderTransformation());
-            });
-
-        //no need for AddOptions with ShowCaseSettings
-
-        var sp = sc.Build();
-        var magic = sp.Resolve<ShowCaseSettings>();
 
         magic.Message.Should().Be("awesome");
 

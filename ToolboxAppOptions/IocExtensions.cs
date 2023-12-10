@@ -1,6 +1,4 @@
 ﻿using aemarcoCommons.ToolboxAppOptions.Services;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,7 +7,6 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
-using System.Threading;
 
 namespace aemarcoCommons.ToolboxAppOptions
 {
@@ -82,30 +79,4 @@ namespace aemarcoCommons.ToolboxAppOptions
             return services;
         }
     }
-
-    public static class AutoFacExtensions
-    {
-        public static ContainerBuilder AddConfigOptionsUtils(
-            this ContainerBuilder builder,
-            IConfigurationRoot config,
-            Action<ConfigurationOptionsBuilder> options = null)
-        {
-            builder.Populate(
-                new ServiceCollection()
-                    .AddConfigOptionsUtils(
-                        config,
-                        options));
-
-            builder.RegisterBuildCallback(scope =>
-            {
-                if (scope.TryResolve<StartupValidationService>(out var startValidator))
-                {
-                    startValidator.StartAsync(CancellationToken.None).GetAwaiter().GetResult();
-                }
-            });
-
-            return builder;
-        }
-    }
-
 }
