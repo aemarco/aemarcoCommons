@@ -50,6 +50,18 @@
 		<PackageIcon>toolbox.png</PackageIcon>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
+
+	<PropertyGroup>
+
+		<EnablePackageValidation>true</EnablePackageValidation>
+		<PackageValidationBaselineVersion>2.0.2</PackageValidationBaselineVersion>
+		<EnableStrictModeForCompatibleFrameworksInPackage>true</EnableStrictModeForCompatibleFrameworksInPackage>
+		<EnableStrictModeForCompatibleTfms>true</EnableStrictModeForCompatibleTfms>
+		<GenerateCompatibilitySuppressionFile>false</GenerateCompatibilitySuppressionFile>
+
+	</PropertyGroup>
+
+
 	<ItemGroup>
 		<None Include="..\toolbox.png" Pack="true" PackagePath="\"/>
 		<None Include="README.md" Pack="true" PackagePath="\"/>

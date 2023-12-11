@@ -3,6 +3,8 @@
 	<!-- project definition -->
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
+
+
 	</PropertyGroup>
 
 	<!-- project references -->
@@ -14,6 +16,7 @@
 	<!-- nuget references -->
 	<ItemGroup>
 		<PackageReference Include="Autofac" Version="6.5.0" />
+		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
 		<PackageReference Include="Humanizer.Core" Version="2.14.1" />
 		<PackageReference Include="CliWrap" Version="3.6.4" />
 		<PackageReference Include="Microsoft.Extensions.Http.Polly" Version="8.0.0" />

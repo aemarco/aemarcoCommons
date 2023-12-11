@@ -12,22 +12,18 @@
 
 	<!-- nuget references -->
 	<ItemGroup>
-		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
 		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.8.1" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
-
 	</ItemGroup>
-
 
 	<!-- nuget build-->
 	<PropertyGroup>
 		<Description>Tool for handling setup for the Options pattern</Description>
 		<PackageTags>IOptions IConfiguration</PackageTags>
 		<PackageIcon>options.png</PackageIcon>
-
 		<EnablePackageValidation>false</EnablePackageValidation>
 		<PackageValidationBaselineVersion>1.1.3</PackageValidationBaselineVersion>
 	</PropertyGroup>

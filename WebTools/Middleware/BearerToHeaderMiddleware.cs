@@ -47,7 +47,7 @@ public class BearerToHeaderMiddleware
                 .ToList();
             items.RemoveAll(x => x.Key.Equals("access_token", StringComparison.OrdinalIgnoreCase));
             context.Request.QueryString = new QueryBuilder(items).ToQueryString();
-            context.Request.Headers.Add("Authorization", $"Bearer {token}");
+            context.Request.Headers.Append("Authorization", $"Bearer {token}");
 
             _logger.LogDebug("Access token moved to Authorization header");
         }
