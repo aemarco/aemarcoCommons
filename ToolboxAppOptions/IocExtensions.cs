@@ -76,6 +76,8 @@ namespace aemarcoCommons.ToolboxAppOptions
             if (toolConfig.EnableValidationOnStartup)
                 services.AddHostedService<StartupValidationService>();
 
+            services.AddTransient<AppOptionsExportService>();
+
             return services;
         }
     }
