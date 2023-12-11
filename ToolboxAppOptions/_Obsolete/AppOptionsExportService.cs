@@ -1,9 +1,12 @@
 ﻿using aemarcoCommons.ToolboxAppOptions.Transformations;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Linq;
 
+// ReSharper disable once CheckNamespace
 namespace aemarcoCommons.ToolboxAppOptions.Services
 {
+    [Obsolete("Use AppOptionsTransformationService instead")]
     public class AppOptionsExportService
     {
 

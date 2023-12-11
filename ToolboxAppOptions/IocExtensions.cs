@@ -76,7 +76,11 @@ namespace aemarcoCommons.ToolboxAppOptions
             if (toolConfig.EnableValidationOnStartup)
                 services.AddHostedService<StartupValidationService>();
 
+#pragma warning disable CS0618 // Type or member is obsolete
             services.AddTransient<AppOptionsExportService>();
+#pragma warning restore CS0618 // Type or member is obsolete
+            services.AddTransient<AppOptionsTransformationService>();
+
 
             return services;
         }
