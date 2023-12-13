@@ -9,6 +9,8 @@
 		
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AssemblyName>aemarcoCommons.WpfTools</AssemblyName>
+
+    <EnablePackageValidation>false</EnablePackageValidation>
 	</PropertyGroup>
 
 	<!-- project references -->

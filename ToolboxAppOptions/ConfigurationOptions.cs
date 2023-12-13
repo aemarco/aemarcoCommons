@@ -10,6 +10,7 @@ namespace aemarcoCommons.ToolboxAppOptions
     {
         public List<StringTransformerBase> StringTransformations { get; } = new List<StringTransformerBase>();
         public bool EnableValidationOnStartup { get; internal set; } = true;
+        public List<Assembly> Assemblies { get; } = new List<Assembly>();
 
 
         internal List<Type> ConfigurationTypes { get; } = new List<Type>();
@@ -29,6 +30,13 @@ namespace aemarcoCommons.ToolboxAppOptions
         public ConfigurationOptionsBuilder AddAssemblyMarker(params Type[] type)
         {
             _ = type;
+            return this;
+        }
+        public ConfigurationOptionsBuilder AddAssemblies(params Assembly[] assemblies)
+        {
+            //TODO AddRangeDistinct with selector
+            foreach (var assembly in assemblies)
+                _result.Assemblies.AddDistinct(assembly, x => x.FullName);
             return this;
         }
 
