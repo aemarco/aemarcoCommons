@@ -8,17 +8,18 @@ using System.Threading.Tasks;
 
 namespace aemarcoCommons.Toolbox.Oidc
 {
-    public class OtherSystemBrowser : IBrowser
+    public class SystemBrowser : IBrowser
     {
         private readonly int _port;
         private readonly string _postLoginUrl;
-        public OtherSystemBrowser(int port, string postLoginUrl)
+        public SystemBrowser(int port, string postLoginUrl = null)
         {
             //_port = GetRandomUnusedPort();
             _port = port;
             _postLoginUrl = postLoginUrl;
         }
 
+        //https://stackoverflow.com/questions/43792241/are-wildcards-allowed-in-identityserver-client-redirect-urls
         //need a flexible allow redirect url at id server first
         public string RedirectUri => $"http://{IPAddress.Loopback}:{_port}/";
 
@@ -104,18 +105,20 @@ namespace aemarcoCommons.Toolbox.Oidc
             else
             {
                 message = "Login success";
-                template = Redirect;
+                template = string.IsNullOrWhiteSpace(_postLoginUrl)
+                    ? BtnClose
+                    : Redirect;
             }
 
             var content = template
-                .Replace("{{{message}}}", $"<h1>{message}</h1>")
-                .Replace("{{{postLogoutUrl}}}", _postLoginUrl);
+                .Replace("{{{message}}}", message)
+                .Replace("{{{postLoginUrl}}}", _postLoginUrl); //redirect template
 
             return content;
         }
 
-        private const string AutoClose = "<!DOCTYPE html><html><body>{{{message}}}<script>window.addEventListener('load',function(){close();});</script></body></html>";
-        private const string Redirect = "<!DOCTYPE html><html><body>{{{message}}}<script>window.addEventListener('load',function(){window.location.assign('{{{postLogoutUrl}}}');});</script></body></html>";
-
+        private const string AutoClose = "<!DOCTYPE html><html><body><h1>{{{message}}}</h1><script>window.addEventListener('load',function(){close();});</script></body></html>";
+        private const string Redirect = "<!DOCTYPE html><html><body><h1>{{{message}}}</h1><script>window.addEventListener('load',function(){window.location.assign('{{{postLoginUrl}}}');});</script></body></html>";
+        private const string BtnClose = "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>{{{message}}}</title><style>body{display:flex;align-items:center;justify-content:center;height:100vh;margin:0;flex-direction:column}h1{margin-bottom:20px}button{padding:15px 30px;font-size:18px;color:#3498db;border:2px solid #3498db;border-radius:5px;cursor:pointer;transition:background-color 0.3s,color 0.3s}button:hover{background-color:#3498db;color:#fff}</style></head><body><h1>{{{message}}}</h1><button id=\"closeButton\">Close</button><script>document.getElementById('closeButton').addEventListener('click',function(){window.close()});</script></body></html>";
     }
 }
