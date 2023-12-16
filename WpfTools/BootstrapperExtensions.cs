@@ -65,6 +65,7 @@ public static class BootstrapperExtensions
     /// 
     /// </summary>
     /// <param name="sc">IServiceCollection to register to</param>
+    /// <param name="registerWindows"></param>
     /// <param name="externals">externally owned objects</param>
     /// <returns>IServiceCollection for chaining</returns>
     public static IServiceCollection SetupWpfTools(

@@ -84,18 +84,27 @@ namespace aemarcoCommons.Toolbox
         {
             var policyRegistry = sc.AddPolicyRegistry();
 
-            policyRegistry.Add(
-                "HttpRetry",
-                HttpPolicyExtensions.HandleTransientHttpError()
-                    .WaitAndRetryAsync(Backoff.DecorrelatedJitterBackoffV2(TimeSpan.FromSeconds(1), 5)));
+            if (!policyRegistry.ContainsKey("HttpRetry"))
+            {
+                policyRegistry.Add(
+                    "HttpRetry",
+                    HttpPolicyExtensions.HandleTransientHttpError()
+                        .WaitAndRetryAsync(Backoff.DecorrelatedJitterBackoffV2(TimeSpan.FromSeconds(1), 5)));
+            }
 
-            policyRegistry.Add(
-                "HttpCircuitBreaker",
-                HttpPolicyExtensions
-                    .HandleTransientHttpError()
-                    .CircuitBreakerAsync(
-                        handledEventsAllowedBeforeBreaking: 10,
-                        durationOfBreak: TimeSpan.FromMinutes(5)));
+            if (!policyRegistry.ContainsKey("HttpCircuitBreaker"))
+            {
+                policyRegistry.Add(
+                    "HttpCircuitBreaker",
+                    HttpPolicyExtensions
+                        .HandleTransientHttpError()
+                        .CircuitBreakerAsync(
+                            handledEventsAllowedBeforeBreaking: 10,
+                            durationOfBreak: TimeSpan.FromMinutes(5)));
+            }
+
+
+
 
             return sc;
         }

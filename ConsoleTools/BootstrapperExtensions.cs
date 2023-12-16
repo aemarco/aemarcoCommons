@@ -28,6 +28,7 @@ public static class BootstrapperExtensions
 
     public static IServiceCollection SetupConsoleTools(this IServiceCollection services)
     {
+
         services.SetupToolbox();
 
         return services;
