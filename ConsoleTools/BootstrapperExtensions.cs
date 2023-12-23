@@ -103,7 +103,7 @@ public sealed class ServiceCollectionTypeRegistrar : ITypeRegistrar
         _builder = builder;
 
     public void Register(Type service, Type implementation) =>
-        _builder.AddSingleton(service, implementation);
+        _builder.AddScoped(service, implementation);
 
     public void RegisterInstance(Type service, object implementation) =>
         _builder.AddSingleton(service, implementation);
@@ -112,7 +112,7 @@ public sealed class ServiceCollectionTypeRegistrar : ITypeRegistrar
     {
         if (factory is null)
             throw new ArgumentNullException(nameof(factory));
-        _builder.AddSingleton(service, _ => factory());
+        _builder.AddScoped(service, _ => factory());
     }
 
     public ITypeResolver Build() => new ServiceCollectionTypeResolver(_builder.BuildServiceProvider());
