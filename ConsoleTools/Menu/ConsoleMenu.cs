@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Spectre.Console;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -36,7 +37,8 @@ public class ConsoleMenu
     {
         if (!string.IsNullOrEmpty(_description))
         {
-            Console.WriteLine($"{_description}: {Environment.NewLine}");
+            AnsiConsole.MarkupLine(_description);
+            Console.WriteLine();
         }
 
         StartConsoleDrawInLoopUntilInputIsMade();
