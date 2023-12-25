@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Spectre.Console;
+using System;
 using System.Collections.Generic;
 
 
@@ -18,7 +19,13 @@ public static partial class PowerConsole
     public static T EnsureSelection<T>(string header, IEnumerable<T> selectable, Func<T, string> displayProperty)
         where T : class
     {
-        return MenuSelectionHelper(header, selectable, displayProperty, false);
+        return AnsiConsole.Prompt(
+            new SelectionPrompt<T>()
+                .Title($"[purple]{header}[/]")
+                .UseConverter(displayProperty)
+                .AddChoices([.. selectable]));
+
+        //return MenuSelectionHelper(header, selectable, displayProperty, false);
     }
 
     /// <summary>
