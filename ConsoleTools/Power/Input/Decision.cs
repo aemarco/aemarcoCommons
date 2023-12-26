@@ -1,5 +1,4 @@
-﻿using Spectre.Console;
-using System;
+﻿
 
 // ReSharper disable once CheckNamespace
 namespace aemarcoCommons.ConsoleTools;
@@ -28,16 +27,5 @@ public static partial class PowerConsole
 
         return result;
     }
-
-    //public static bool EnsureDecision(string question, bool clear = true)
-    //{
-    //    var selection = MenuSelectionHelper(
-    //        question,
-    //        new[] { "Yes", "No" },
-    //        x => x,
-    //        false,
-    //        clear);
-    //    return selection == "Yes";
-    //}
 
 }

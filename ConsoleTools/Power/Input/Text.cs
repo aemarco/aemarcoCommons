@@ -1,5 +1,4 @@
-﻿using Spectre.Console;
-using System;
+﻿
 
 // ReSharper disable once CheckNamespace
 namespace aemarcoCommons.ConsoleTools;

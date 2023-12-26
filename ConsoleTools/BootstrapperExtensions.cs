@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog.Extensions.Logging;
 using Spectre.Console.Cli;
-using System;
 
 namespace aemarcoCommons.ConsoleTools;
 

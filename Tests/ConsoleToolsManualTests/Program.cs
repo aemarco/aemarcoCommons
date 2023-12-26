@@ -166,13 +166,13 @@ internal static class Program
         items.Add(new ConsoleMenuItem<string>("Numbers", _ =>
         {
             Console.WriteLine();
-            var answer = PowerConsole.EnsureIntInput("Input 42 here");
+            var answer = PowerConsole.EnsureIntInput("Input 42 here", int.MinValue);
             if (answer != 42)
             {
                 Describe("Test failed");
                 return;
             }
-            var seven = PowerConsole.EnsureIntInputInRange("Numbers 5 - 10 are working. Try outside outside as well, but use 7 finally", 5, 10);
+            var seven = PowerConsole.EnsureIntInput("Numbers 5 - 10 are working. Try outside outside as well, but use 7 finally", 5, 10);
             if (seven != 7)
             {
                 Describe("Test failed");
@@ -193,7 +193,7 @@ internal static class Program
 
 
             //number
-            var five = PowerConsole.EnsureNullableIntInput("Input 5 here");
+            var five = PowerConsole.EnsureNullableIntInput("Input 5 here", int.MinValue);
             if (five != 5)
             {
                 Describe("Test failed");
@@ -201,7 +201,7 @@ internal static class Program
             }
 
             //null
-            var notANumber = PowerConsole.EnsureNullableIntInput("Fail with input 'aaa' here, then input nothing");
+            var notANumber = PowerConsole.EnsureNullableIntInput("Fail with input 'aaa' here, then input nothing", int.MinValue);
             if (notANumber is not null)
             {
                 Describe("Test failed");
@@ -209,7 +209,7 @@ internal static class Program
             }
 
             //range
-            var eight = PowerConsole.EnsureNullableIntInputInRange("Input 8 here", 5, 8);
+            var eight = PowerConsole.EnsureNullableIntInput("Input 8 here", 5, 8);
             if (eight != 8)
             {
                 Describe("Test failed");
@@ -217,7 +217,7 @@ internal static class Program
             }
 
             //outside range
-            var six = PowerConsole.EnsureNullableIntInputInRange("Fail with 9 first, then use 6", 5, 8);
+            var six = PowerConsole.EnsureNullableIntInput("Fail with 9 first, then use 6", 5, 8);
             if (six != 6)
             {
                 Describe("Test failed");
@@ -225,7 +225,7 @@ internal static class Program
             }
 
             //null
-            var notANumber2 = PowerConsole.EnsureNullableIntInputInRange("Fail with 'aaa' here, then input nothing", 5, 10);
+            var notANumber2 = PowerConsole.EnsureNullableIntInput("Fail with 'aaa' here, then input nothing", 5, 10);
             if (notANumber2 is not null)
             {
                 Describe("Test failed");

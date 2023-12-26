@@ -1,6 +1,4 @@
 ﻿using CliWrap;
-using Spectre.Console;
-using System;
 using System.Threading.Tasks;
 
 namespace aemarcoCommons.ConsoleTools.Interop;
