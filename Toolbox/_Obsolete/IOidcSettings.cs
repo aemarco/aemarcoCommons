@@ -1,5 +1,11 @@
-﻿namespace aemarcoCommons.Toolbox.Oidc
+﻿
+
+using System;
+
+// ReSharper disable once CheckNamespace
+namespace aemarcoCommons.Toolbox.Oidc
 {
+    [Obsolete]
     public interface IOidcSettings
     {
         int LocalPort { get; }
