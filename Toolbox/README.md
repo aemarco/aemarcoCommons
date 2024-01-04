@@ -9,6 +9,6 @@
 
 ## Packages
 
-CliWrap is a library for interacting with external command line interfaces. It provides a convenient model for launching processes, redirecting input and output streams, awaiting completion, handling cancellation, and more.
-* [CliWrap](https://github.com/Tyrrrz/CliWrap)
+[CliWrap](https://github.com/Tyrrrz/CliWrap) is a library for interacting with external command line interfaces. It provides a convenient model for launching processes, redirecting input and output streams, awaiting completion, handling cancellation, and more.
+
 
