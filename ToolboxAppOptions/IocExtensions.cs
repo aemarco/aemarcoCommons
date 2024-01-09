@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 
@@ -27,11 +26,7 @@ namespace aemarcoCommons.ToolboxAppOptions
             var toolConfigBuilder = new ConfigurationOptionsBuilder();
             options?.Invoke(toolConfigBuilder);
             var toolConfig = toolConfigBuilder
-                .AddConfigurationTypes(AppDomain.CurrentDomain
-                    .GetAssemblies()
-                    .SelectMany(x => x.GetTypes())
-                    .Where(x => x.IsSubclassOf(typeof(SettingsBase)))
-                    .ToArray())
+                .AddConfigurationTypes()
                 .Build();
             services.AddSingleton(toolConfig);
 

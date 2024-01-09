@@ -21,6 +21,7 @@ public class AppOptionTestBase
             var sc = new ServiceCollection()
                 .AddConfigOptionsUtils(Config, x =>
                 {
+                    x.AddAssemblyMarker(typeof(AppOptionTestBase));
                     x.AddStringTransformation(new PlaceholderTransformation());
                 });
             return sc;

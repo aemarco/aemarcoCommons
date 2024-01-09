@@ -2,6 +2,7 @@
 using aemarcoCommons.ToolboxAppOptions.Transformations;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace aemarcoCommons.ToolboxAppOptions
@@ -27,9 +28,13 @@ namespace aemarcoCommons.ToolboxAppOptions
             return this;
         }
 
-        public ConfigurationOptionsBuilder AddAssemblyMarker(params Type[] type)
+        public ConfigurationOptionsBuilder AddAssemblyMarker(params Type[] types)
         {
-            _ = type;
+            foreach (var type in types)
+            {
+                var assembly = Assembly.GetAssembly(type);
+                _result.Assemblies.AddDistinct(assembly, x => x.FullName);
+            }
             return this;
         }
         public ConfigurationOptionsBuilder AddAssemblies(params Assembly[] assemblies)
@@ -53,9 +58,15 @@ namespace aemarcoCommons.ToolboxAppOptions
         }
 
 
-        internal ConfigurationOptionsBuilder AddConfigurationTypes(params Type[] types)
+        internal ConfigurationOptionsBuilder AddConfigurationTypes()
         {
-            foreach (var type in types)
+            var entryAsm = Assembly.GetEntryAssembly();
+            _result.Assemblies.AddDistinct(entryAsm, x => x.FullName);
+
+            var settingsTypes = _result.Assemblies
+                    .SelectMany(x => x.GetTypes())
+                    .Where(x => x.IsSubclassOf(typeof(SettingsBase)));
+            foreach (var type in settingsTypes)
             {
                 _result.ConfigurationTypes.AddDistinct(type, x => x.FullName);
                 _result.ConfigurationAssemblies.AddDistinct(type.Assembly, x => x.FullName);
