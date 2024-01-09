@@ -1,9 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using System;
-using System.Linq;
-using System.Reflection;
-
-namespace aemarcoCommons.ToolboxAppOptions.Transformations
+﻿namespace aemarcoCommons.ToolboxAppOptions.Transformations
 {
     public abstract class StringTransformerBase
     {

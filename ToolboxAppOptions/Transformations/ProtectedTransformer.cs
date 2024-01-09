@@ -1,7 +1,4 @@
 ﻿using aemarcoCommons.Extensions.CryptoExtensions;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Reflection;
 
 namespace aemarcoCommons.ToolboxAppOptions.Transformations
 {

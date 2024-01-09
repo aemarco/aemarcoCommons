@@ -1,11 +1,4 @@
-﻿using aemarcoCommons.Extensions;
-using aemarcoCommons.ToolboxAppOptions.Transformations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-
-namespace aemarcoCommons.ToolboxAppOptions
+﻿namespace aemarcoCommons.ToolboxAppOptions
 {
     public class ConfigurationOptions
     {
@@ -21,7 +14,7 @@ namespace aemarcoCommons.ToolboxAppOptions
     public class ConfigurationOptionsBuilder
     {
 
-        private readonly ConfigurationOptions _result = new ConfigurationOptions();
+        private readonly ConfigurationOptions _result = new();
         public ConfigurationOptionsBuilder AddStringTransformation(StringTransformerBase stringTransformer)
         {
             _result.StringTransformations.Add(stringTransformer);
