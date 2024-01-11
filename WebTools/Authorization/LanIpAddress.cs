@@ -29,7 +29,7 @@ public static class LanIpAddressExtensions
         return services;
     }
 }
-public class LanIpAddressRequirement : IAuthorizationRequirement { }
+public class LanIpAddressRequirement : IAuthorizationRequirement;
 public class LanIpAddressHandler : AuthorizationHandler<LanIpAddressRequirement>
 {
     private readonly GeoService _geoService;

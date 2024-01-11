@@ -189,10 +189,7 @@ public class AttributeExtensionsTests
 
     #region testclasses
 
-    private sealed class TestClassA
-    {
-
-    }
+    private sealed class TestClassA;
 
     [DummyA("abc")]
     private sealed class TestClassB

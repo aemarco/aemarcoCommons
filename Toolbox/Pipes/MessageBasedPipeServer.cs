@@ -59,11 +59,9 @@ namespace aemarcoCommons.Toolbox.Pipes
                 try
                 {
                     namedPipeClientStream.Connect(TimeSpan.FromSeconds(3).Milliseconds);
-                    using (var writer = new StreamWriter(namedPipeClientStream)
+                    using (var writer = new StreamWriter(namedPipeClientStream))
                     {
-                        AutoFlush = true
-                    })
-                    {
+                        writer.AutoFlush = true;
                         writer.WriteLine(message);
                     }
                 }

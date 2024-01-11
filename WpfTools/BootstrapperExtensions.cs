@@ -23,12 +23,12 @@ namespace aemarcoCommons.WpfTools;
 /// <summary>
 /// Implement to get the class being registered as SingleInstance
 /// </summary>
-public interface ISingleton { }
+public interface ISingleton;
 
 /// <summary>
 /// Implement to get the class being registered as InstancePerDependency
 /// </summary>
-public interface ITransient { }
+public interface ITransient;
 
 
 

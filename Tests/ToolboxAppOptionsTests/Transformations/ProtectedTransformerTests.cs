@@ -8,7 +8,7 @@ public class ProtectedTransformerTests : AppOptionTestBase
     {
         var result = Pt.PerformReadTransformation(
             "Nj4KRDlw1axXf05Kv1dHXk3C3G91VaQVN+Xxt7MJjBMCwNqAsxVgJj/5Im/VbNPB3A==",
-            typeof(ProtectedTestSettings).GetProperty(nameof(ProtectedTestSettings.Message)),
+            typeof(ProtectedTestSettings).GetProperty(nameof(ProtectedTestSettings.Message))!,
             Config);
         result.Should().Be("Bob");
     }
@@ -17,7 +17,7 @@ public class ProtectedTransformerTests : AppOptionTestBase
     {
         var writeMessage = "Since encryption does is not deterministic, we need to do both here";
         var transformer = Pt;
-        var pi = typeof(ProtectedTestSettings).GetProperty(nameof(ProtectedTestSettings.Message));
+        var pi = typeof(ProtectedTestSettings).GetProperty(nameof(ProtectedTestSettings.Message))!;
         var config = Config;
 
 

@@ -8,7 +8,7 @@ namespace aemarcoCommons.ToolboxAppOptions.Transformations;
 /// You need to add the ProtectedTransformer during setup
 /// </summary>
 [AttributeUsage(AttributeTargets.Property)]
-public class ProtectedAttribute : Attribute { }
+public class ProtectedAttribute : Attribute;
 
 
 

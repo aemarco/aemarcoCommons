@@ -83,7 +83,7 @@ public class IocExtensionsTests : AppOptionTestBase
         public required string ShowCaseMessage { get; set; }
         public required string Message { get; set; }
     }
-    public class TestSettingsValidator : AbstractValidator<TestSettings> { }
+    public class TestSettingsValidator : AbstractValidator<TestSettings>;
 
 }
 

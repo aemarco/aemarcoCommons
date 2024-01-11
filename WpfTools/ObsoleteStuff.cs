@@ -6,10 +6,7 @@ using System.Windows;
 namespace aemarcoCommons.WpfTools.BaseModels
 {
     [Obsolete("Use BaseNotifier instead")]
-    public class BaseService : BaseNotifier
-    {
-
-    }
+    public class BaseService : BaseNotifier;
 
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
     [Obsolete("Use NotifyCallsMethodAttribute instead")]

@@ -12,4 +12,4 @@ public class SettingsPathAttribute(string path) : Attribute
     public readonly string Path = path;
 }
 
-public abstract class SettingsBase { }
+public abstract class SettingsBase;

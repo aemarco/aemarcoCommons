@@ -10,7 +10,7 @@ public class PlaceholderTransformationTests : AppOptionTestBase
         var transformer = new PlaceholderTransformation();
         var result = transformer.PerformReadTransformation(
             "{{{PlaceholderValue}}}",
-            typeof(PlaceholderTestSettings).GetProperty(nameof(PlaceholderTestSettings.Message)),
+            typeof(PlaceholderTestSettings).GetProperty(nameof(PlaceholderTestSettings.Message))!,
             Config);
         result.Should().Be("Bob");
     }
@@ -20,7 +20,7 @@ public class PlaceholderTransformationTests : AppOptionTestBase
         var transformer = new PlaceholderTransformation();
         var result = transformer.PerformWriteTransformation(
             "Bob",
-            typeof(PlaceholderTestSettings).GetProperty(nameof(PlaceholderTestSettings.Message)),
+            typeof(PlaceholderTestSettings).GetProperty(nameof(PlaceholderTestSettings.Message))!,
             Config);
         result.Should().Be("Bob");
     }
