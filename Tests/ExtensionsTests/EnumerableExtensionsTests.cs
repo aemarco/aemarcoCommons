@@ -158,6 +158,27 @@ public class EnumerableExtensionsTests
         collection.Should().BeEquivalentTo(new[] { 1, 2, 3 });
     }
 
+    [Test]
+    public void AddRangeDistinct_Should_Add_Items_To_Collection_With_Selector_If_They_Do_Not_Exist()
+    {
+        // Arrange
+        var collection = new List<(string, int)>();
+
+        // Act
+        collection.AddRangeDistinct(new[] { ("First", 1), ("Second", 2), ("Third", 3) });
+        collection.AddRangeDistinct(new[] { ("Fourth", 2) }, x => x.Item2);
+        collection.AddRangeDistinct(new[] { ("Second", 3), ("Fifth", 5) }, x => x.Item1);
+
+        // Assert
+        collection.Should().BeEquivalentTo(new[]
+        {
+            ("First", 1),
+            ("Second", 2),
+            ("Third", 3),
+            ("Fifth", 5)
+        });
+    }
+
 
 
     #region FindClosestItem
