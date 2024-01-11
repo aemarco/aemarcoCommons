@@ -1,4 +1,6 @@
-﻿namespace aemarcoCommons.ToolboxAppOptions.Services;
+﻿using System.Linq;
+
+namespace aemarcoCommons.ToolboxAppOptions.Services;
 
 public class AppOptionsTransformationService
 {

@@ -97,11 +97,11 @@ namespace aemarcoCommons.Extensions
             }
         }
 
-        public static void AddRangeDistinct<T>(this ICollection<T> collection, IEnumerable<T> items)
+        public static void AddRangeDistinct<T, TComp>(this ICollection<T> collection, IEnumerable<T> items, Expression<Func<T, TComp>> selector)
         {
             foreach (var item in items)
             {
-                collection.AddDistinct(item);
+                collection.AddDistinct(item, selector);
             }
         }
 

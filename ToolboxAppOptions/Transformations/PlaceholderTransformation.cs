@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 
 namespace aemarcoCommons.ToolboxAppOptions.Transformations;
 
@@ -35,7 +36,7 @@ public static class ConfigurationExtensions
     }
 }
 
-internal static class PlaceholderTransformationExtensions
+internal static partial class PlaceholderTransformationExtensions
 {
     /// <summary>
     /// Searches for {{{placeholder}}}, and replaces that with resolved value
@@ -47,21 +48,22 @@ internal static class PlaceholderTransformationExtensions
     {
         if (string.IsNullOrWhiteSpace(currentValue)) return currentValue;
 
-        const string pattern = @"{{3}([^|\n]+?)}{3}";
-        while (Regex.IsMatch(currentValue, pattern))
+        while (RegexPattern().IsMatch(currentValue))
         {
-            foreach (Match match in Regex.Matches(currentValue, pattern))
+            foreach (Match match in RegexPattern().Matches(currentValue))
             {
                 var search = match.Groups[1].Value;
-                var newValue = root.SearchValueInTree(search);
-                if (newValue == null) throw new Exception($"Cant resolve placeholder {search}");
-
+                var newValue = root.SearchValueInTree(search)
+                    ?? throw new Exception($"Cant resolve placeholder {search}");
                 currentValue = currentValue.Replace(match.Value, newValue);
             }
         }
 
         return currentValue;
     }
+
+    [GeneratedRegex(@"{{3}([^|\n]+?)}{3}")]
+    private static partial Regex RegexPattern();
 
 
     /// <summary>
@@ -70,7 +72,7 @@ internal static class PlaceholderTransformationExtensions
     /// <param name="section">section to search</param>
     /// <param name="key">key to search</param>
     /// <returns>the value for given key</returns>
-    private static string SearchValueInTree(this IConfiguration section, string key)
+    private static string? SearchValueInTree(this IConfiguration section, string key)
     {
         //search in section
         var result = section[key];

@@ -101,7 +101,7 @@ you may pass one of the types as assembly marker, and/or use the assemblies itse
         x => x
             .AddAssemblyMarker(typeof(MySettings))
             // and/or
-            .AddAssemblyMarker(someAssemblyArray));
+            .AddAssemblies(someAssemblyArray));
 }
 ```
 
