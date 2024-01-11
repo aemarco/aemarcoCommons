@@ -105,6 +105,14 @@ namespace aemarcoCommons.Extensions
             }
         }
 
+        public static void AddRangeDistinct<T, TComp>(this ICollection<T> collection, IEnumerable<T> items, Expression<Func<T, TComp>> selector)
+        {
+            foreach (var item in items)
+            {
+                collection.AddDistinct(item, selector);
+            }
+        }
+
 
         /// <summary>
         /// Finds and returns the integer in the sequence that is closest to the given target integer.

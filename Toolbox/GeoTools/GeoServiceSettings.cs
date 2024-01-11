@@ -1,5 +1,4 @@
-﻿using aemarcoCommons.ToolboxAppOptions;
-using System;
+﻿using System;
 
 namespace aemarcoCommons.Toolbox.GeoTools
 {
@@ -9,7 +8,7 @@ namespace aemarcoCommons.Toolbox.GeoTools
         int NumberOfCachedSunriseSunsetInfos { get; }
     }
 
-    public class GeoServiceSettings : SettingsBase, IGeoServiceSettings
+    public class GeoServiceSettings : IGeoServiceSettings
     {
         public TimeSpan MinIntervalOfIpInfoUpdate { get; set; } = TimeSpan.FromMinutes(15);
         public int NumberOfCachedSunriseSunsetInfos { get; set; } = 10;

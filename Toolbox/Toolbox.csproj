@@ -10,7 +10,6 @@
 	<!-- project references -->
 	<ItemGroup>
 		<ProjectReference Include="..\Extensions\Extensions.csproj" />
-		<ProjectReference Include="..\ToolboxAppOptions\ToolboxAppOptions.csproj" />
 	</ItemGroup>
 
 	<!-- nuget references -->

@@ -28,7 +28,7 @@ public class StartupValidationServiceTests : AppOptionTestBase
     public void StartupValidationService_ValidatingOnStartupSingle()
     {
         var app = Host.CreateApplicationBuilder();
-        app.Services.AddConfigOptionsUtils(app.Configuration);
+        app.Services.AddConfigOptionsUtils(app.Configuration, x => x.AddAssemblyMarker(typeof(AppOptionTestBase)));
         //we strip all validators, so only the Multi... is failing,
         //and therefor we get only a single exception then in StartupValidationService
         foreach (var service in app.Services

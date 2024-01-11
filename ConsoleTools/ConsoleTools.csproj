@@ -7,6 +7,7 @@
 
 	<!-- project references -->
 	<ItemGroup>
+		<ProjectReference Include="..\ToolboxAppOptions\ToolboxAppOptions.csproj" />
 		<ProjectReference Include="..\Toolbox\Toolbox.csproj" />
 	</ItemGroup>
 

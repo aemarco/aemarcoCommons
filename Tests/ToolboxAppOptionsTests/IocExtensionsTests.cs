@@ -16,6 +16,7 @@ public class IocExtensionsTests : AppOptionTestBase
         var sc = new ServiceCollection()
             .AddConfigOptionsUtils(config, x =>
             {
+                x.AddAssemblyMarker(typeof(AppOptionTestBase));
                 x.AddStringTransformation(new PlaceholderTransformation());
             });
 
