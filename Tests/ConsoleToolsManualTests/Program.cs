@@ -166,7 +166,7 @@ internal static class Program
         items.Add(new ConsoleMenuItem<string>("Numbers", _ =>
         {
             Console.WriteLine();
-            var answer = PowerConsole.EnsureIntInput("Input 42 here", int.MinValue);
+            var answer = PowerConsole.EnsureIntInput("Input 42 here");
             if (answer != 42)
             {
                 Describe("Test failed");
@@ -193,7 +193,7 @@ internal static class Program
 
 
             //number
-            var five = PowerConsole.EnsureNullableIntInput("Input 5 here", int.MinValue);
+            var five = PowerConsole.EnsureNullableIntInput("Input 5 here");
             if (five != 5)
             {
                 Describe("Test failed");
@@ -201,7 +201,7 @@ internal static class Program
             }
 
             //null
-            var notANumber = PowerConsole.EnsureNullableIntInput("Fail with input 'aaa' here, then input nothing", int.MinValue);
+            var notANumber = PowerConsole.EnsureNullableIntInput("Fail with input 'aaa' here, then input nothing");
             if (notANumber is not null)
             {
                 Describe("Test failed");
