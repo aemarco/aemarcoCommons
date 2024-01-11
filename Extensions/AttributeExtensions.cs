@@ -5,9 +5,7 @@ using System.Reflection;
 
 namespace aemarcoCommons.Extensions
 {
-
-    //TODO: rename to AttributeExtensions, once obsolete stuff is removed
-    public static class AttributeExtension
+    public static class AttributeExtensions
     {
 
         public static IEnumerable<T> GetAttributes<T>(this Type type, string memberName = null)

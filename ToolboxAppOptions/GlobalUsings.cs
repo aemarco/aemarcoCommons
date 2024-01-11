@@ -4,3 +4,6 @@ global using FluentValidation;
 global using Microsoft.Extensions.Configuration;
 global using System;
 global using System.Reflection;
+
+
+//TODO GlobalUsing´s review

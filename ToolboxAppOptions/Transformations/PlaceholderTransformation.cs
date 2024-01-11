@@ -77,7 +77,7 @@ internal static partial class PlaceholderTransformationExtensions
         var result = section[key];
         if (result == $"{{{{{{{key}}}}}}}") result = null;
 
-        //search in sub sections
+        //search in subsections
         if (result != null) return result;
         foreach (var child in section.GetChildren())
         {

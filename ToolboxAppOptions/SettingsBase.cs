@@ -12,4 +12,6 @@ public class SettingsPathAttribute(string path) : Attribute
     public readonly string Path = path;
 }
 
+
+//TODO Interface instead of inheritance
 public abstract class SettingsBase;
