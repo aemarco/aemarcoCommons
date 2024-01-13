@@ -21,9 +21,7 @@ public static class ServiceCollectionExtensions
         //register tool config
         var toolConfigBuilder = new ConfigurationOptionsBuilder();
         options?.Invoke(toolConfigBuilder);
-        var toolConfig = toolConfigBuilder
-            .AddConfigurationTypes()
-            .Build();
+        var toolConfig = toolConfigBuilder.Build();
         services.AddSingleton(toolConfig);
 
         //register all the config types
@@ -56,7 +54,7 @@ public static class ServiceCollectionExtensions
             var interfaces = type.GetInterfaces();
             foreach (Type interfaceType in interfaces)
             {
-                services.AddSingleton(interfaceType, s => s.GetRequiredService(type));
+                services.AddTransient(interfaceType, s => s.GetRequiredService(type));
             }
         }
 

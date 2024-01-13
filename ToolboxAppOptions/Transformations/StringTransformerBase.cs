@@ -34,7 +34,7 @@ public abstract class StringTransformerBase
         //handle
         foreach (var propInfo in obj.GetType().GetProperties()
             .Where(x => x.PropertyType == typeof(string))
-            .Where(x => x.CanRead && x.CanWrite))
+            .Where(x => x is { CanRead: true, CanWrite: true }))
         {
             if (propInfo.GetValue(obj) is string value)
                 propInfo.SetValue(obj, transform(value, propInfo, configRoot));
@@ -42,7 +42,7 @@ public abstract class StringTransformerBase
 
         //recurse
         foreach (var propInfo in obj.GetType().GetProperties()
-            .Where(x => typeof(SettingsBase).IsAssignableFrom(x.PropertyType))
+            .Where(x => typeof(ISettingsBase).IsAssignableFrom(x.PropertyType))
             .Where(x => x.GetValue(obj) is not null))
         {
             TransformObject(propInfo.GetValue(obj)!, configRoot, transform);

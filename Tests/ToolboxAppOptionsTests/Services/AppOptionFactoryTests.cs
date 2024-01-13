@@ -17,7 +17,7 @@ public class AppOptionFactoryTests : AppOptionTestBase
         settings.Message.Should().Be("root");
     }
     [SettingsPath("")]
-    public class RootTestSettings : SettingsBase
+    public class RootTestSettings : ISettingsBase
     {
         public required string Message { get; set; }
     }
@@ -30,7 +30,7 @@ public class AppOptionFactoryTests : AppOptionTestBase
         settings.Message.Should().Be("class");
     }
     [SettingsPath("ClassSettings")]
-    public class ClassSettings : SettingsBase
+    public class ClassSettings : ISettingsBase
     {
         public required string Message { get; set; }
     }
@@ -43,7 +43,7 @@ public class AppOptionFactoryTests : AppOptionTestBase
         settings.Message.Should().Be("nested");
     }
     [SettingsPath("NestedA:NestedB")]
-    public class NestedTestSettings : SettingsBase
+    public class NestedTestSettings : ISettingsBase
     {
         public required string Message { get; set; }
     }
@@ -56,7 +56,7 @@ public class AppOptionFactoryTests : AppOptionTestBase
         var settings = Sp.GetRequiredService<PlaceholderTestSettings>();
         settings.Message.Should().Be("Bob");
     }
-    public class PlaceholderTestSettings : SettingsBase
+    public class PlaceholderTestSettings : ISettingsBase
     {
         public required string Message { get; set; }
     }
@@ -70,7 +70,7 @@ public class AppOptionFactoryTests : AppOptionTestBase
         var settings = Sp.GetRequiredService<ValidationPassTestSettings>();
         settings.Message.Should().Be("Validated");
     }
-    public class ValidationPassTestSettings : SettingsBase
+    public class ValidationPassTestSettings : ISettingsBase
     {
         public required string Message { get; set; }
     }
@@ -90,7 +90,7 @@ public class AppOptionFactoryTests : AppOptionTestBase
         Action action = () => _ = Sp.GetRequiredService<ValidationFailTestSettings>();
         action.Should().Throw<OptionsValidationException>();
     }
-    public class ValidationFailTestSettings : SettingsBase
+    public class ValidationFailTestSettings : ISettingsBase
     {
         public required string Message { get; set; }
     }

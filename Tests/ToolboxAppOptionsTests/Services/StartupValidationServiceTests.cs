@@ -44,7 +44,7 @@ public class StartupValidationServiceTests : AppOptionTestBase
         FluentActions.Invoking(() => host.Start())
             .Should().Throw<OptionsValidationException>();
     }
-    public class SingleValidationTestSettings : SettingsBase
+    public class SingleValidationTestSettings : ISettingsBase
     {
         public required string Message { get; set; }
     }

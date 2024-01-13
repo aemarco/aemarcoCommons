@@ -50,7 +50,7 @@ public class ProtectedTransformerTests : AppOptionTestBase
 
         testSettings.Message.Should().Be("Bob");
     }
-    public class ProtectedTestSettings : SettingsBase
+    public class ProtectedTestSettings : ISettingsBase
     {
         [Protected]
         public required string Message { get; set; }

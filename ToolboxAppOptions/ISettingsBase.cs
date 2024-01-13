@@ -1,6 +1,5 @@
 ﻿namespace aemarcoCommons.ToolboxAppOptions;
 
-
 /// <summary>
 /// Custom Path in IConfiguration
 /// ex. empty string means root,
@@ -13,5 +12,4 @@ public class SettingsPathAttribute(string path) : Attribute
 }
 
 
-//TODO Interface instead of inheritance
-public abstract class SettingsBase;
+public interface ISettingsBase;

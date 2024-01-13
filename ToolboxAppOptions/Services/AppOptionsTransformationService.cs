@@ -16,7 +16,7 @@ public class AppOptionsTransformationService
     }
 
 
-    public void PerformWriteTransformation(SettingsBase options)
+    public void PerformWriteTransformation(ISettingsBase options)
     {
         var transformations = _options.StringTransformations.ToList();
         transformations.Reverse();

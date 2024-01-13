@@ -29,7 +29,7 @@ public class IocExtensionsTests : AppOptionTestBase
 
     }
     [SettingsPath("ShowCase")]
-    public class ShowCaseSettings : SettingsBase
+    public class ShowCaseSettings : ISettingsBase
     {
         public required string Message { get; set; }
     }
@@ -78,7 +78,7 @@ public class IocExtensionsTests : AppOptionTestBase
         validator.Should().NotBeNull();
     }
 
-    public class TestSettings : SettingsBase
+    public class TestSettings : ISettingsBase
     {
         public required string ShowCaseMessage { get; set; }
         public required string Message { get; set; }

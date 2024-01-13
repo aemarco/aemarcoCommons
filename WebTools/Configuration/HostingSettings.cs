@@ -7,7 +7,7 @@
 
 namespace aemarcoCommons.WebTools.Configuration;
 
-public class HostingSettings : SettingsBase
+public class HostingSettings : ISettingsBase
 {
 
     /// <summary>

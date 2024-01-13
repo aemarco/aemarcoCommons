@@ -14,7 +14,7 @@ With minimal setup, all the Option classes will be registered in the IOC contain
 - Beside registering the interfaces from Microsoft, registers the class itself as well (singleton)
 - Registers also interfaces which you put on the settings class
 - Allows text transformations between IConfiguration and the settings class
--  Option to use fluent validation on settings
+- Option to use fluent validation on settings
 - Option to validate settings during startup (on by default, opt-out in options)
 
 
@@ -29,7 +29,7 @@ During startup of the app
 Create your class representing your options
 ```
 {
-  public class MySettings : SettingsBase
+  public class MySettings : ISettingsBase
   {
     public string? Text { get; set; }
     public bool Enable { get; set; }
@@ -101,7 +101,7 @@ you may pass one of the types as assembly marker, and/or use the assemblies itse
         x => x
             .AddAssemblyMarker(typeof(MySettings))
             // and/or
-            .AddAssemblies(someAssemblyArray));
+            .AddAssemblies(someAssemblies));
 }
 ```
 
@@ -113,7 +113,7 @@ You may define your own path in the settings class
 ```
 {
   [SettingsPath("Settings")]
-  public class MySettings : SettingsBase
+  public class MySettings : ISettingsBase
   {
     public string? Text { get; set; }
     public bool Enable { get; set; }
@@ -136,7 +136,7 @@ You could even do it nested, just use the colon seperated path as you would with
 ```
 {
   [SettingsPath("Settings:Nested")]
-  public class MySettings : SettingsBase
+  public class MySettings : ISettingsBase
   {
     public string? Text { get; set; }
     public bool Enable { get; set; }

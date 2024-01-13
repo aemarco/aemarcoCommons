@@ -41,7 +41,7 @@ public class PlaceholderTransformationTests : AppOptionTestBase
 
         testSettings.Message.Should().Be("Bob");
     }
-    public class PlaceholderTestSettings : SettingsBase
+    public class PlaceholderTestSettings : ISettingsBase
     {
         public required string Message { get; set; }
     }
