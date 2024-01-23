@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace aemarcoCommons.ToolboxTopService;
 
-internal static class Extension
+public static class Extension
 {
     public static async Task<int> RunAsTopService(this IHostBuilder hostBuilder,
         Action<TopService> config)
