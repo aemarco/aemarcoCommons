@@ -2,6 +2,7 @@
 using IdentityModel.OidcClient.Browser;
 using System;
 using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,10 +13,10 @@ namespace aemarcoCommons.Toolbox.Oidc
     {
         private readonly int _port;
         private readonly string _postLoginUrl;
-        public SystemBrowser(int port, string postLoginUrl = null)
+        public SystemBrowser(int? port, string postLoginUrl = null)
         {
             //_port = GetRandomUnusedPort();
-            _port = port;
+            _port = port ?? GetRandomUnusedPort();
             _postLoginUrl = postLoginUrl;
         }
 
@@ -23,14 +24,14 @@ namespace aemarcoCommons.Toolbox.Oidc
         //need a flexible allow redirect url at id server first
         public string RedirectUri => $"http://{IPAddress.Loopback}:{_port}/";
 
-        //private static int GetRandomUnusedPort()
-        //{
-        //    var listener = new TcpListener(IPAddress.Loopback, 0);
-        //    listener.Start();
-        //    var port = ((IPEndPoint)listener.LocalEndpoint).Port;
-        //    listener.Stop();
-        //    return port;
-        //}
+        private static int GetRandomUnusedPort()
+        {
+            var listener = new TcpListener(IPAddress.Loopback, 0);
+            listener.Start();
+            var port = ((IPEndPoint)listener.LocalEndpoint).Port;
+            listener.Stop();
+            return port;
+        }
 
         public async Task<BrowserResult> InvokeAsync(BrowserOptions options, CancellationToken cancellationToken = default)
         {
