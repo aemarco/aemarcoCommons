@@ -3,7 +3,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace aemarcoCommons.ToolboxTopService;
+namespace ToolboxTopServiceManualTests;
 
 internal class SampleBackgroundService : BackgroundService
 {

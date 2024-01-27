@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ToolboxTopServiceManualTests": {
+      "commandName": "Project",
+      "commandLineArgs": ""
+    }
+  }
+}

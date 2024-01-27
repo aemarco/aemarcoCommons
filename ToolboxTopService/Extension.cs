@@ -7,79 +7,80 @@ namespace aemarcoCommons.ToolboxTopService;
 
 public static class Extension
 {
-    public static async Task<int> RunAsTopService(this IHostBuilder hostBuilder,
+
+
+    public static async Task<int> RunAsTopService(
+        this HostApplicationBuilder app,
         Action<TopService> config)
     {
-        var service = new TopService();
-        config(service);
 
+        //setup top service
         var args = Environment.GetCommandLineArgs();
-        if (args.Length <= 1)
-        {
-            hostBuilder.Build().Run();
-            return 0;
-        }
+        var topService = new TopService(args[0]);
+        config(topService);
 
-        if (args[1].Equals("install", StringComparison.CurrentCultureIgnoreCase))
-        {
-            var scCreate = await Cli.Wrap("sc.exe")
-                        .WithArguments(x => x
-                            .Add("create")
-                            .Add(service.ServiceName)
-                            .Add("binpath=")
-                            .Add("C:\\dev\\aemarcoCommons\\ToolboxTopService\\bin\\Debug\\net8.0-windows\\aemarcoCommons.ToolboxTopService.exe")
-                            .Add("displayname=")
-                            .Add(service.DisplayName)
-                            ).ExecuteAsync();
-
-            var scSetDescription = await Cli.Wrap("sc.exe")
-                .WithArguments(x => x
-                    .Add("description")
-                    .Add(service.ServiceName)
-                    .Add(service.Description)).ExecuteAsync();
-        }
-        else if (args[1].Equals("remove", StringComparison.CurrentCultureIgnoreCase))
-        {
-            var scDelete = await Cli.Wrap("sc.exe")
-                       .WithArguments(x => x
-                           .Add("delete")
-                           .Add(service.ServiceName)).ExecuteAsync();
-        }
-        else if (args[1].Equals("start", StringComparison.CurrentCultureIgnoreCase))
-        {
-            var scDelete = await Cli.Wrap("sc.exe")
-                       .WithArguments(x => x
-                           .Add("start")
-                           .Add(service.ServiceName)).ExecuteAsync();
-        }
-        else if (args[1].Equals("stop", StringComparison.CurrentCultureIgnoreCase))
-        {
-            var scDelete = await Cli.Wrap("sc.exe")
-                       .WithArguments(x => x
-                           .Add("stop")
-                           .Add(service.ServiceName)).ExecuteAsync();
-        }
+        app.Services.AddWindowsService();
 
 
+        if (args.Length > 1)
+        {
+            Func<TopService, Task> action = args[1].ToLower() switch
+            {
+                "install" => Install,
+                "uninstall" => UnInstall,
+                "start" => Start,
+                "stop" => Stop,
+                _ => x => throw new NotSupportedException()
+            };
+            await action(topService);
+        }
+        else
+            await app.Build().RunAsync();
 
-        return 0;
+        Environment.ExitCode = 0;
+        return Environment.ExitCode;
     }
 
-    public static TopService SetServiceName(this TopService service, string name)
+    private static async Task Install(TopService topService)
     {
-        service.ServiceName = name;
-        return service;
+        var exePath = $"{topService.DllPath[..^3]}exe";
+
+        var scCreate = await Cli.Wrap("sc.exe")
+            .WithArguments(x => x
+                .Add("create").Add(topService.ServiceName)
+                .Add("binpath=").Add(exePath)
+                .Add("displayname=").Add(topService.DisplayName))
+            .ExecuteAsync();
+
+        var scSetDescription = await Cli.Wrap("sc.exe")
+            .WithArguments(x => x
+                .Add("description").Add(topService.ServiceName).Add(topService.Description))
+            .ExecuteAsync();
+    }
+    private static async Task UnInstall(TopService topService)
+    {
+        var scDelete = await Cli.Wrap("sc.exe")
+            .WithArguments(x => x
+                .Add("delete").Add(topService.ServiceName))
+            .ExecuteAsync();
+    }
+    private static async Task Start(TopService topService)
+    {
+        var scStart = await Cli.Wrap("sc.exe")
+            .WithArguments(x => x
+                .Add("start").Add(topService.ServiceName))
+            .ExecuteAsync();
+    }
+    private static async Task Stop(TopService topService)
+    {
+        var scStop = await Cli.Wrap("sc.exe")
+            .WithArguments(x => x
+                .Add("stop").Add(topService.ServiceName))
+            .ExecuteAsync();
+
     }
 
-    public static TopService SetDisplayName(this TopService service, string name)
-    {
-        service.DisplayName = name;
-        return service;
-    }
 
-    public static TopService SetDescription(this TopService service, string description)
-    {
-        service.Description = description;
-        return service;
-    }
+
+
 }

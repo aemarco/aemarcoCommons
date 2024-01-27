@@ -47,6 +47,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleToolsManualTests", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToolboxTopService", "ToolboxTopService\ToolboxTopService.csproj", "{118BBF73-9E6D-4E0F-96A9-D7FBBFBB55BC}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToolboxTopServiceManualTests", "Tests\ToolboxTopServiceManualTests\ToolboxTopServiceManualTests.csproj", "{E93FFFF4-F6FE-4989-AA53-4A5A76891AC0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +107,10 @@ Global
 		{118BBF73-9E6D-4E0F-96A9-D7FBBFBB55BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{118BBF73-9E6D-4E0F-96A9-D7FBBFBB55BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{118BBF73-9E6D-4E0F-96A9-D7FBBFBB55BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E93FFFF4-F6FE-4989-AA53-4A5A76891AC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E93FFFF4-F6FE-4989-AA53-4A5A76891AC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E93FFFF4-F6FE-4989-AA53-4A5A76891AC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E93FFFF4-F6FE-4989-AA53-4A5A76891AC0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -116,6 +122,7 @@ Global
 		{952472A4-10E1-42DC-A2D0-E9E4290EE91D} = {284B28FC-9401-48CF-B5D1-27449B9BF167}
 		{47E44672-E78A-472E-BA1A-8E4830CA20DD} = {284B28FC-9401-48CF-B5D1-27449B9BF167}
 		{0DE735C0-C881-4BFE-8A5F-E1A97D568620} = {284B28FC-9401-48CF-B5D1-27449B9BF167}
+		{E93FFFF4-F6FE-4989-AA53-4A5A76891AC0} = {284B28FC-9401-48CF-B5D1-27449B9BF167}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5222E321-3FD1-438C-889C-F421ECCF1B57}
