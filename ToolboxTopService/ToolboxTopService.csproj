@@ -1,17 +1,32 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
+	<!-- project definition -->
+	<PropertyGroup>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
 
-	  <EnablePackageValidation>false</EnablePackageValidation>
-  </PropertyGroup>
+		<EnablePackageValidation>false</EnablePackageValidation>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="CliWrap" Version="3.6.4" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.0" />
-  </ItemGroup>
+	<!-- nuget references -->
+	<ItemGroup>
+		<PackageReference Include="CliWrap" Version="3.6.4" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.0" />
+	</ItemGroup>
 
+	<!-- nuget build-->
+	<PropertyGroup>
+		<Description>Tool for installing a Windows service</Description>
+		<PackageTags>WindowsService Topshelf</PackageTags>
+		<PackageIcon>service.png</PackageIcon>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Update="service.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+	
 </Project>
