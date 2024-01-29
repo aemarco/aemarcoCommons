@@ -45,7 +45,7 @@
 		<Authors>aemarco</Authors>
 		<Company>aemarco</Company>
 		<PackageLicenseExpression>Unlicense</PackageLicenseExpression>
-		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
 		<PackageProjectUrl>https://github.com/aemarco/aemarcoCommons</PackageProjectUrl>
 		<PackageIcon>toolbox.png</PackageIcon>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
