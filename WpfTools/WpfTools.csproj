@@ -46,9 +46,8 @@
 		<None Update="..\README.md" Pack="false" />
 		<None Include="README.md" Pack="true" PackagePath="\"/>
 	</ItemGroup>
-
 	<PropertyGroup>
-		<GenerateCompatibilitySuppressionFile>false</GenerateCompatibilitySuppressionFile>
+		<GenerateCompatibilitySuppressionFile>true</GenerateCompatibilitySuppressionFile>
 	</PropertyGroup>
 
 
