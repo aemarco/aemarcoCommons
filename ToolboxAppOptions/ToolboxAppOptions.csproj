@@ -24,13 +24,12 @@
 	<PropertyGroup>
 		<Description>Tool for handling setup for the Options pattern</Description>
 		<PackageTags>IOptions IConfiguration</PackageTags>
-		<PackageIcon>options.png</PackageIcon>
 	</PropertyGroup>
 	<ItemGroup>
-		<None Update="options.png">
-			<Pack>True</Pack>
-			<PackagePath>\</PackagePath>
-		</None>
+		<None Update="..\README.md" Pack="false" />
+		<None Include="README.md" Pack="true" PackagePath="\"/>
+		<None Update="..\icon.png" Pack="false" />
+		<None Include="icon.png" Pack="true" PackagePath="\"/>
 	</ItemGroup>
-
+	
 </Project>

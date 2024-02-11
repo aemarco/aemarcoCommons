@@ -4,18 +4,36 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="http://schemas.aemarco/xaml"
+        xmlns:viewModel="clr-namespace:WpfToolsManualTests.ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        d:DataContext="{d:DesignInstance viewModel:MainWindowViewModel, IsDesignTimeCreatable=False}">
     <Grid>
+        <StackPanel 
+            Orientation="Vertical"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
 
-        <controls:HoldSubmitButton 
-            Width="100" 
-            Height="100"
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Center" 
-            Click="ButtonBase_OnClick"
-            Content="Ok"
-            HoldDuration="0:0:1.5" />
+            <Button
+                Content="Window"
+                Command="{Binding WindowCommand}" />
+
+            <Button
+                Content="Dialog"
+                Command="{Binding DialogCommand}" />
+
+            <controls:HoldSubmitButton 
+                Width="100" 
+                Height="100"
+                Command="{Binding SubmitCommand}"
+                Content="Ok"
+                HoldDuration="0:0:1.5" />
+
+        </StackPanel>
+
+
+
+       
 
 
         

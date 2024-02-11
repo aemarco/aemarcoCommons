@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="WpfToolsManualTests.View.TestManualDialogView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModel="clr-namespace:WpfToolsManualTests.ViewModel"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance viewModel:TestManualDialogViewModel, IsDesignTimeCreatable=False}">
+    
+    <Grid Margin="15">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Image Grid.RowSpan="2"
+               Source="/aemarcoCommons.WpfTools;component/Images/question.png" 
+               Width="32" Height="32" Margin="20,0" />
+
+        <Label Grid.Row="0" Grid.Column="1" Content="{Binding Question, Mode=OneWay}"/>
+        <TextBox Grid.Column="1" Grid.Row="1" MinWidth="250" Text="{Binding Answer}" />
+
+        <WrapPanel Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="0" HorizontalAlignment="Right" Margin="0,15,0,0">
+            <Button IsDefault="True" MinWidth="60" Margin="0,0,10,0" Content="_Ok" 
+                    Command="{Binding OkayCommand}" />
+            <Button IsCancel="True" MinWidth="60" Content="_Cancel" />
+        </WrapPanel>
+        
+    </Grid>
+</UserControl>

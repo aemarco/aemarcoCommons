@@ -15,7 +15,7 @@ public class ShowWindowCommand<T> : DelegateCommand
         {
             foreach (Window win in Application.Current.Windows)
             {
-                if (win.GetType() == typeof(T))
+                if (win is T)
                 {
                     win.WindowState = WindowState.Normal;
                     win.Activate();

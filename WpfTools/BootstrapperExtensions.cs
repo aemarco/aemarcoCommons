@@ -1,6 +1,8 @@
 ﻿using aemarcoCommons.Toolbox;
 using aemarcoCommons.WpfTools.Commands;
+using aemarcoCommons.WpfTools.Dialogs;
 using aemarcoCommons.WpfTools.MonitorTools;
+using aemarcoCommons.WpfTools.WindowStuff;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using CommunityToolkit.Mvvm.Messaging;
@@ -130,7 +132,15 @@ public static class BootstrapperExtensions
         sc.AddTransient(typeof(OpenDialogCommand<>));
         sc.AddTransient(typeof(ShowWindowCommand<>));
 
+
+
+        sc.AddTransient<IWindowService, WindowService>();
+        IWindowService.RegisterDialog<AskInputDialogView, AskInputDialogViewModel>();
+
+
         sc.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
+
+
 
         var waitAndRetry = HttpPolicyExtensions
             .HandleTransientHttpError()

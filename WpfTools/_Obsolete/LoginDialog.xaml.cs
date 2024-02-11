@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
+// ReSharper disable once CheckNamespace
 namespace aemarcoCommons.WpfTools.Dialogs;
 
 
 // ReSharper disable once RedundantExtendsListEntry
+[Obsolete]
 public partial class LoginDialog : Window, ILoginDialog, ITransient, INotifyPropertyChanged
 {
     private readonly LoginActionProvider _loginActionProvider;

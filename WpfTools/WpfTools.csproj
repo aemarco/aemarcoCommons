@@ -9,8 +9,6 @@
 		
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AssemblyName>aemarcoCommons.WpfTools</AssemblyName>
-
-    <EnablePackageValidation>false</EnablePackageValidation>
 	</PropertyGroup>
 
 	<!-- project references -->
@@ -44,5 +42,15 @@
 		<Description>c# wpf tools collection</Description>
 		<PackageTags>WpfTools</PackageTags>
 	</PropertyGroup>
+	<ItemGroup>
+		<None Update="..\README.md" Pack="false" />
+		<None Include="README.md" Pack="true" PackagePath="\"/>
+	</ItemGroup>
+
+	<PropertyGroup>
+		<GenerateCompatibilitySuppressionFile>false</GenerateCompatibilitySuppressionFile>
+	</PropertyGroup>
+
+
 
 </Project>

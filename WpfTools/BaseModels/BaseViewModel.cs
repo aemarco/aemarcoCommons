@@ -1,5 +1,4 @@
 ﻿using aemarcoCommons.Extensions.NetworkExtensions;
-using aemarcoCommons.WpfTools.Commands;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Windows;
@@ -24,10 +23,8 @@ public partial class BaseViewModel : BaseNotifier, IBaseViewModel
                Uri.TryCreate(url, UriKind.Absolute, out _);
     }
 
-
-
-
-    public virtual DelegateCommand CloseCommand { get; } = new();
+    public bool True => true;
+    public bool False => false;
 
 
     [RelayCommand]

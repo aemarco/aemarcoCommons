@@ -3,8 +3,6 @@
 	<!-- project definition -->
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
-
-	<GenerateCompatibilitySuppressionFile>true</GenerateCompatibilitySuppressionFile>
 	</PropertyGroup>
 
 	<!-- project references -->
@@ -57,5 +55,8 @@
 		<Description>c# tools collection</Description>
 		<PackageTags>Toolbox</PackageTags>
 	</PropertyGroup>
-
+	<ItemGroup>
+		<None Update="..\README.md" Pack="false" />
+		<None Include="README.md" Pack="true" PackagePath="\"/>
+	</ItemGroup>
 </Project>

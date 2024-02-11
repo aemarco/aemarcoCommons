@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- https://learn.microsoft.com/en-us/dotnet/fundamentals/package-validation/diagnostic-ids -->
+<Suppressions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Suppression>
+    <DiagnosticId>CP0001</DiagnosticId>
+    <Target>T:aemarcoCommons.ToolboxTopService.Extension</Target>
+    <Left>lib/net8.0-windows7.0/aemarcoCommons.ToolboxTopService.dll</Left>
+    <Right>lib/net8.0-windows7.0/aemarcoCommons.ToolboxTopService.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0001</DiagnosticId>
+    <Target>T:aemarcoCommons.ToolboxTopService.TopService</Target>
+    <Left>lib/net8.0-windows7.0/aemarcoCommons.ToolboxTopService.dll</Left>
+    <Right>lib/net8.0-windows7.0/aemarcoCommons.ToolboxTopService.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0001</DiagnosticId>
+    <Target>T:aemarcoCommons.ToolboxTopService.TopServiceExtensions</Target>
+    <Left>lib/net8.0-windows7.0/aemarcoCommons.ToolboxTopService.dll</Left>
+    <Right>lib/net8.0-windows7.0/aemarcoCommons.ToolboxTopService.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+</Suppressions>

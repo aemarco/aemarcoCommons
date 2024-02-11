@@ -3,9 +3,6 @@
 	<!-- project definition -->
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
-
-
-
 	</PropertyGroup>
 
 	<!-- nuget references-->
@@ -18,6 +15,9 @@
 		<Description>frequently used c# extension methods</Description>
 		<PackageTags>Extensions</PackageTags>
 	</PropertyGroup>
-
+	<ItemGroup>
+		<None Update="..\README.md" Pack="false" />
+		<None Include="README.md" Pack="true" PackagePath="\"/>
+	</ItemGroup>
 
 </Project>

@@ -28,5 +28,9 @@
 		<Description>c# web tools collection</Description>
 		<PackageTags>WebTools</PackageTags>
 	</PropertyGroup>
+	<ItemGroup>
+		<None Update="..\README.md" Pack="false" />
+		<None Include="README.md" Pack="true" PackagePath="\"/>
+	</ItemGroup>
 
 </Project>

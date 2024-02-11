@@ -1,8 +1,8 @@
 ﻿namespace WpfToolsManualTests.View;
 
-public partial class MainWindow
+public partial class TestManualDialogView
 {
-    public MainWindow()
+    public TestManualDialogView()
     {
         InitializeComponent();
     }

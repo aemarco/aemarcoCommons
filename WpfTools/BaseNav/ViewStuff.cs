@@ -1,5 +1,4 @@
 ﻿using aemarcoCommons.WpfTools.BaseModels;
-using aemarcoCommons.WpfTools.Commands;
 
 namespace aemarcoCommons.WpfTools.BaseNav;
 
@@ -39,12 +38,8 @@ public abstract class BaseNavViewModel : BaseViewModel, INavViewModel
     public virtual string Title => null;
 
 
-    public override DelegateCommand CloseCommand =>
-        new()
-        {
-            CommandAction = _ =>
-            {
-                WindowViewModel?.Window?.Close();
-            }
-        };
+    protected override void Close()
+    {
+        WindowViewModel?.Window?.Close();
+    }
 }

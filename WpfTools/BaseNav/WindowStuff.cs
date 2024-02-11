@@ -1,5 +1,4 @@
 ﻿using aemarcoCommons.WpfTools.BaseModels;
-using aemarcoCommons.WpfTools.Commands;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -90,15 +89,10 @@ public abstract class BaseNavWindowViewModel : BaseViewModel //inherit this in w
         return result;
     }
 
-
-    public override DelegateCommand CloseCommand =>
-        new()
-        {
-            CommandAction = _ =>
-            {
-                Window?.Close();
-            }
-        };
+    protected override void Close()
+    {
+        Window?.Close();
+    }
 }
 
 public record NavigationCompleted(Type ViewModelType);

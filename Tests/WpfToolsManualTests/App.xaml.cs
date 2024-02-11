@@ -1,22 +1,23 @@
-﻿using System.Windows;
+﻿using aemarcoCommons.WpfTools.WindowStuff;
+using System.Windows;
 using WpfToolsManualTests.View;
 using WpfToolsManualTests.ViewModel;
 
 namespace WpfToolsManualTests;
 
-/// <summary>
-/// Interaction logic for App.xaml
-/// </summary>
 public partial class App
 {
-    protected override void OnStartup(StartupEventArgs e)
+    private void App_OnStartup(object sender, StartupEventArgs e)
     {
+        IWindowService.RegisterView<TestWindow, TestViewModel>();
+        IWindowService.RegisterDialog<TestManualDialogView, TestManualDialogViewModel>();
+
+        var windowService = new WindowService();
+
         MainWindow = new MainWindow()
         {
-            DataContext = new MainWindowViewModel()
+            DataContext = new MainWindowViewModel(windowService)
         };
         MainWindow.Show();
-
-        base.OnStartup(e);
     }
 }
