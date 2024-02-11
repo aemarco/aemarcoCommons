@@ -24,12 +24,11 @@ public static class HostApplicationBuilderExtension
             : null;
         Func<Task> act = command switch
         {
-            null => RunApp,
             "install" => service.Install,
             "uninstall" => service.UnInstall,
             "start" => service.Start,
             "stop" => service.Stop,
-            _ => () => throw new NotSupportedException()
+            _ => RunApp
         };
         await act();
 
