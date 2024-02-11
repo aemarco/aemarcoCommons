@@ -15,9 +15,10 @@ public static class HostApplicationBuilderExtension
         config(serviceBuilder);
         var service = serviceBuilder.Build();
 
-        app.Services.AddWindowsService();
-
-
+        app.Services.AddWindowsService(c =>
+        {
+            c.ServiceName = service.ServiceName;
+        });
 
         var command = args.Length > 1
             ? args[1].ToLower()
