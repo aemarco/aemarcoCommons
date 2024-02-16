@@ -58,6 +58,7 @@ public class WindowCloser
             window.Closing -= ClosingEventHandler;
 
 
+            // ReSharper disable once SuspiciousTypeConversion.Global
             if (windowCloser is IDisposable dis)
                 dis.Dispose();
         }

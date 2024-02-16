@@ -14,7 +14,7 @@
 
 	<!-- nuget references-->
 	<ItemGroup>
-		<PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
+		<PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
 	</ItemGroup>
 
 	<!-- proj build-->
@@ -30,7 +30,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<None Update="..\README.md" Pack="false" />
-		<None Include="README.md" Pack="true" PackagePath="\"/>
+		<None Include="README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 </Project>
