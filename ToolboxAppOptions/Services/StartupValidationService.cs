@@ -35,7 +35,8 @@ internal class StartupValidationService : BackgroundService
             }
             catch (OptionsValidationException ex)
             {
-                exceptions ??= [ex];
+                exceptions ??= [];
+                exceptions.Add(ex);
             }
         }
 
