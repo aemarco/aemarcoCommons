@@ -1,6 +1,7 @@
 ﻿using aemarcoCommons.ToolboxAppOptions.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using System.Linq;
 using System.Runtime.ExceptionServices;
 
 namespace aemarcoCommons.ToolboxAppOptions;
@@ -58,8 +59,14 @@ public static class ServiceCollectionExtensions
             }
         }
 
-        //so that all validators are registered
-        services.AddValidatorsFromAssemblies(toolConfig.ConfigurationAssemblies, ServiceLifetime.Singleton);
+        //so that all validators are registered, but only those which are covered by our lib
+        services.AddValidatorsFromAssemblies(
+            toolConfig.ConfigurationAssemblies,
+            ServiceLifetime.Transient,
+            x => x.ValidatorType.BaseType?
+                .GetGenericArguments()
+                .FirstOrDefault()?
+                .IsAssignableTo(typeof(ISettingsBase)) ?? false);
 
         //validation during startup
         if (toolConfig.EnableValidationOnStartup)
