@@ -40,7 +40,7 @@ internal class StartupValidationService : BackgroundService
             }
         }
 
-        if (exceptions is null || exceptions.Count == 0)
+        if (exceptions is not { Count: > 0 })
             return Task.CompletedTask;
 
         if (exceptions.Count == 1)
@@ -49,12 +49,7 @@ internal class StartupValidationService : BackgroundService
             ExceptionDispatchInfo.Capture(exceptions[0]).Throw();
         }
 
-        if (exceptions.Count > 1)
-        {
-            // Aggregate if we have many errors
-            throw new AggregateException(exceptions);
-        }
+        throw new AggregateException(exceptions);
 
-        return Task.CompletedTask;
     }
 }
