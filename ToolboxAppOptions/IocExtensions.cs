@@ -54,7 +54,7 @@ public static class ServiceCollectionExtensions
             var interfaces = type.GetInterfaces();
             foreach (Type interfaceType in interfaces)
             {
-                services.AddTransient(interfaceType, s => s.GetRequiredService(type));
+                services.AddSingleton(interfaceType, s => s.GetRequiredService(type));
             }
         }
 
