@@ -4,6 +4,30 @@ namespace aemarcoCommons.Extensions.TextExtensions
 {
     public static class Manipulation
     {
+
+        /// <summary>
+        /// Removes the specified substring from the beginning of the current string.
+        /// </summary>
+        /// <param name="this">The current string instance.</param>
+        /// <param name="startToRemove">The substring to remove from the beginning of the current string.</param>
+        /// <returns>
+        /// A string that is equivalent to the current string except that it does not begin with the specified substring.
+        /// If the current string is null, the method returns null.
+        /// If the specified substring is null, the method returns the original string unchanged.
+        /// </returns>
+        public static string TrimStart(this string @this, string startToRemove)
+        {
+            if (@this is null)
+                return null;
+            if (startToRemove is null)
+                return @this;
+
+            if (!@this.StartsWith(startToRemove, StringComparison.Ordinal))
+                return @this;
+
+            return @this.Substring(startToRemove.Length);
+        }
+
         /// <summary>
         /// Removes given endingToRemove from the end of the string
         /// returns it unchanged, if it´s not ending with given endingToRemove
@@ -15,11 +39,14 @@ namespace aemarcoCommons.Extensions.TextExtensions
         {
             if (@this is null)
                 return null;
+            if (endingToRemove is null)
+                return @this;
             if (!@this.EndsWith(endingToRemove, StringComparison.Ordinal))
                 return @this;
             //if it´s ending with our endingToRemove, LastIndexOf works right.
 
             return @this.Substring(0, @this.LastIndexOf(endingToRemove, StringComparison.Ordinal));
         }
+
     }
 }
