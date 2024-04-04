@@ -10,12 +10,13 @@ public class StartupValidationServiceTests : AppOptionTestBase
     public void StartupValidationService_ValidatingOnStartup()
     {
         var app = Host.CreateApplicationBuilder();
-        app.Services.AddConfigOptionsUtils(app.Configuration);
+        app.Services.AddConfigOptionsUtils(app.Configuration, x => x.AddAssemblyMarker(typeof(AppOptionTestBase)));
         var host = app.Build();
 
         try
         {
             host.Start();
+            Assert.Fail();
         }
         catch (AggregateException ex)
         {
@@ -39,7 +40,6 @@ public class StartupValidationServiceTests : AppOptionTestBase
             app.Services.Remove(service);
         }
         var host = app.Build();
-
 
         FluentActions.Invoking(() => host.Start())
             .Should().Throw<OptionsValidationException>();
