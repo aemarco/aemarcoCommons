@@ -1,13 +1,14 @@
 ﻿using aemarcoCommons.Extensions.TextExtensions;
 using FluentAssertions;
 using NUnit.Framework;
+using System;
 
+// ReSharper disable once CheckNamespace
 namespace ExtensionsTests.TextExtensionsTests;
 
+[Obsolete]
 public class ManipulationTests
 {
-
-
     [TestCase(null, "Abc", null)]
     [TestCase("PrefixText", null, "PrefixText")]
     [TestCase("", "Prefix", "")]
@@ -36,5 +37,7 @@ public class ManipulationTests
         var result = text.TrimEnd(remove);
         result.Should().Be(expected);
     }
+
+
 
 }

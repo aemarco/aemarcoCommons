@@ -1,5 +1,6 @@
 ﻿using System;
 
+// ReSharper disable once CheckNamespace
 namespace aemarcoCommons.Extensions.TextExtensions
 {
     public static class Manipulation
@@ -15,6 +16,7 @@ namespace aemarcoCommons.Extensions.TextExtensions
         /// If the current string is null, the method returns null.
         /// If the specified substring is null, the method returns the original string unchanged.
         /// </returns>
+        [Obsolete("use aemarcoCommons.Extensions.TrimStart(...) instead")]
         public static string TrimStart(this string @this, string startToRemove)
         {
             if (@this is null)
@@ -35,6 +37,7 @@ namespace aemarcoCommons.Extensions.TextExtensions
         /// <param name="this">text where to remove some ending</param>
         /// <param name="endingToRemove">ending to remove</param>
         /// <returns>modified string</returns>
+        [Obsolete("use aemarcoCommons.Extensions.TrimEnd(...) instead")]
         public static string TrimEnd(this string @this, string endingToRemove)
         {
             if (@this is null)
@@ -44,8 +47,7 @@ namespace aemarcoCommons.Extensions.TextExtensions
             if (!@this.EndsWith(endingToRemove, StringComparison.Ordinal))
                 return @this;
             //if it´s ending with our endingToRemove, LastIndexOf works right.
-
-            return @this.Substring(0, @this.LastIndexOf(endingToRemove, StringComparison.Ordinal));
+            return @this.Substring(0, @this.Length - endingToRemove.Length);
         }
 
     }
