@@ -13,6 +13,11 @@ namespace aemarcoCommons.WpfTools.BaseModels;
 //Docs: https://learn.microsoft.com/de-de/dotnet/communitytoolkit/mvvm/
 //Samples Github: https://github.com/CommunityToolkit/MVVM-Samples
 //Samples AppStore: https://apps.microsoft.com/store/detail/mvvm-toolkit-sample-app/9NKLCF1LVZ5H?hl=en-us&gl=us
+
+//Announcing 8.0 https://devblogs.microsoft.com/dotnet/announcing-the-dotnet-community-toolkit-800/
+//Announcing 8.1 https://devblogs.microsoft.com/dotnet/announcing-the-dotnet-community-toolkit-810/
+//Announcing 8.2 https://devblogs.microsoft.com/dotnet/announcing-the-dotnet-community-toolkit-820/
+
 public class BaseNotifier : ObservableObject
 {
 
@@ -59,7 +64,7 @@ public class BaseNotifier : ObservableObject
             {
                 eventHandler.Method.Invoke(
                     eventHandler.Target,
-                    new object[] { this, EventArgs.Empty });
+                    [this, EventArgs.Empty]);
             }
         }
 
