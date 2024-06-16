@@ -1,4 +1,5 @@
 ﻿using aemarcoCommons.ToolboxAppOptions;
+using System;
 
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
@@ -26,8 +27,7 @@ public class HostingSettings : ISettingsBase
 
 
 
-    /// <summary>
-    /// Enables DeveloperExceptionPage
-    /// </summary>
+
+    [Obsolete("Use WebPipeSettings.UseDeveloperExceptionPage instead.")]
     public bool UseDeveloperExceptionPage { get; set; }
 }
