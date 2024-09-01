@@ -12,4 +12,11 @@ public class SettingsPathAttribute(string path) : Attribute
 }
 
 
+/// <summary>
+/// Skips registration of IOptions, itself etc...
+/// </summary>
+[AttributeUsage(AttributeTargets.Class)]
+public class SkipRegistrationAttribute : Attribute;
+
+
 public interface ISettingsBase;

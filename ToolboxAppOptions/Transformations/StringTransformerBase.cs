@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Linq;
 
 namespace aemarcoCommons.ToolboxAppOptions.Transformations;
 
@@ -47,5 +48,74 @@ public abstract class StringTransformerBase
         {
             TransformObject(propInfo.GetValue(obj)!, configRoot, transform);
         }
+
+
+        // Recurse through collections of ISettingsBase
+        foreach (var propInfo in obj.GetType().GetProperties())
+        {
+            var value = propInfo.GetValue(obj);
+            if (value is IDictionary dictionary)
+            {
+                // Handle dictionaries
+                var dictType = propInfo.PropertyType;
+                var keyType = dictType.GetGenericArguments().FirstOrDefault();
+                var valueType = dictType.GetGenericArguments().Skip(1).FirstOrDefault();
+
+                if (keyType != null && typeof(ISettingsBase).IsAssignableFrom(keyType))
+                {
+                    // Process keys
+                    foreach (var key in dictionary.Keys)
+                    {
+                        if (key is ISettingsBase settingsBaseKey)
+                        {
+                            TransformObject(settingsBaseKey, configRoot, transform);
+                        }
+                    }
+                }
+
+                if (valueType != null && typeof(ISettingsBase).IsAssignableFrom(valueType))
+                {
+                    // Process values
+                    foreach (var val in dictionary.Values)
+                    {
+                        if (val is ISettingsBase settingsBaseValue)
+                        {
+                            TransformObject(settingsBaseValue, configRoot, transform);
+                        }
+                    }
+                }
+            }
+            else if (value is not string && value is IEnumerable collection)
+            {
+                Type? genericElementType = null;
+                if (propInfo.PropertyType.IsGenericType)
+                {
+                    // For generic types like List<T>, Array, etc.
+                    genericElementType = propInfo.PropertyType.GetGenericArguments().FirstOrDefault();
+                }
+                else if (propInfo.PropertyType.IsArray)
+                {
+                    // For arrays
+                    genericElementType = propInfo.PropertyType.GetElementType();
+                }
+
+                if (genericElementType is not null && typeof(ISettingsBase).IsAssignableFrom(genericElementType))
+                {
+                    foreach (var item in collection)
+                    {
+                        if (item is ISettingsBase settingsBase)
+                        {
+                            TransformObject(settingsBase, configRoot, transform);
+                        }
+                    }
+                }
+            }
+
+        }
+
+
+
+
+
     }
 }
