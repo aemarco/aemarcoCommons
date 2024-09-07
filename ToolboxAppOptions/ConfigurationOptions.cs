@@ -14,6 +14,8 @@ public record ConfigurationOptions
 
 
     internal IReadOnlyList<Type> ConfigurationTypes { get; set; } = [];
+    internal IReadOnlyList<Type> IocConfigurationTypes { get; set; } = [];
+    internal IReadOnlyList<Type> NonIocConfigurationTypes { get; set; } = [];
     internal IReadOnlyList<Assembly> ConfigurationAssemblies { get; set; } = [];
 }
 
@@ -62,6 +64,16 @@ public class ConfigurationOptionsBuilder
                 x.IsAssignableTo(typeof(ISettingsBase)) &&
                 x is { IsAbstract: false, IsInterface: false })
             .ToList();
+
+        _result.NonIocConfigurationTypes = _result.ConfigurationTypes
+            .Where(x => x.HasAttribute<SkipRegistrationAttribute>())
+            .ToList();
+
+        _result.IocConfigurationTypes = _result.ConfigurationTypes
+            .Where(x => !_result.NonIocConfigurationTypes.Contains(x))
+            .ToList();
+
+
         _result.ConfigurationAssemblies = _result.ConfigurationTypes
             .Select(x => x.Assembly)
             .Distinct()
