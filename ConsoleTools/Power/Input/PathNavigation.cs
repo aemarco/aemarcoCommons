@@ -20,9 +20,10 @@ public static partial class PowerConsole
     /// <returns>selected path</returns>
     public static string PathSelector(string path, IEnumerable<string> includedServers = null, bool showHidden = false)
     {
-        var serverItems = includedServers?.ToArray();
+        var serverItems = includedServers?.Distinct().ToArray();
         var dir = new DirectoryInfo(path);
-        if (!dir.Exists) throw new DirectoryNotFoundException($"{path}");
+        if (!dir.Exists)
+            throw new DirectoryNotFoundException($"{path}");
         Console.Clear();
 
         //one level up
@@ -43,8 +44,7 @@ public static partial class PowerConsole
         // ReSharper disable once LoopCanBeConvertedToQuery
         foreach (var sub in dir
                      .GetDirectories()
-                     .Where(x => showHidden || !x.Attributes.HasFlag(FileAttributes.Hidden)
-                     ))
+                     .Where(x => showHidden || !x.Attributes.HasFlag(FileAttributes.Hidden)))
         {
             var temp = sub;
             dirItems.Add(new ConsoleMenuItem<DirectoryInfo>(temp.Name, x =>
@@ -93,8 +93,9 @@ public static partial class PowerConsole
             driveItems.Add(new ConsoleMenuSeparator());
             driveItems.Add(new ConsoleMenuItem<DriveInfo>("Network", _ =>
             {
-                if (!OperatingSystem.IsWindows()) throw new NotImplementedException();
-                path = ShareSelector(list) ?? DriveSelector(list);
+                if (!OperatingSystem.IsWindows())
+                    throw new NotImplementedException();
+                path = ServerSelector(list) ?? DriveSelector(list);
             }));
         }
         var menu = new ConsoleMenu("Drives", driveItems);
@@ -109,7 +110,16 @@ public static partial class PowerConsole
     /// <param name="servers">servers which can be selected</param>
     /// <returns></returns>
     [SupportedOSPlatform("windows")]
-    public static string ShareSelector(IEnumerable<string> servers)
+    [Obsolete("Use ServerSelector instead.")]
+    public static string ShareSelector(IEnumerable<string> servers) => ServerSelector(servers);
+
+    /// <summary>
+    /// Selection of a share for given servers
+    /// </summary>
+    /// <param name="servers">servers which can be selected</param>
+    /// <returns></returns>
+    [SupportedOSPlatform("windows")]
+    public static string ServerSelector(IEnumerable<string> servers)
     {
         var serverItems = servers.ToList();
         switch (serverItems.Count)
@@ -121,10 +131,11 @@ public static partial class PowerConsole
         }
 
         //rely on a selection of which server to use
-        var serverItem = AbortableSelection("Server", serverItems, x => x);
+        var serverItem = AbortableSelection("Server", serverItems, x => x.TrimStart('\\'));
         var path = ShareSelector(serverItem);
         return path;
     }
+
 
     /// <summary>
     /// Selection of a share for given server
@@ -133,13 +144,16 @@ public static partial class PowerConsole
     [SupportedOSPlatform("windows")]
     public static string ShareSelector(string server)
     {
+        server = server.TrimStart('\\');
         Console.Clear();
         string path = null;
         var shares = new List<ConsoleMenuItem<DirectoryInfo>>();
         // ReSharper disable once LoopCanBeConvertedToQuery
         foreach (Share share in ShareCollection.GetShares(server))
         {
-            if (!share.IsFileSystem || share.ShareType != ShareType.Disk) continue;
+            if (!share.IsFileSystem ||
+                share.ShareType != ShareType.Disk)
+                continue;
 
             var temp = share.Root;
             shares.Add(new ConsoleMenuItem<DirectoryInfo>($"{share.Server} --> {share.NetName}", x =>
@@ -147,7 +161,8 @@ public static partial class PowerConsole
                 path = x.FullName;
             }, temp));
         }
-        if (shares.Count == 0) return path;
+        if (shares.Count == 0)
+            return path;
 
         var menu = new ConsoleMenu($"{server} shares", shares);
         menu.RunConsoleMenu();

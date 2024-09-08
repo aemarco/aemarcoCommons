@@ -30,92 +30,87 @@ public abstract class StringTransformerBase
     /// <param name="obj">object which needs transformation</param>
     /// <param name="configRoot"></param>
     /// <param name="transform">transformation which should be performed</param>
-    internal static void TransformObject(object obj, IConfigurationRoot configRoot, Func<string, PropertyInfo, IConfigurationRoot, string> transform)
+    internal static void TransformObject(object? obj, IConfigurationRoot configRoot, Func<string, PropertyInfo, IConfigurationRoot, string> transform)
     {
+        if (obj is null)
+            return;
+
         //handle
-        foreach (var propInfo in obj.GetType().GetProperties()
-            .Where(x => x.PropertyType == typeof(string))
-            .Where(x => x is { CanRead: true, CanWrite: true }))
-        {
-            if (propInfo.GetValue(obj) is string value)
-                propInfo.SetValue(obj, transform(value, propInfo, configRoot));
-        }
-
-        //recurse
-        foreach (var propInfo in obj.GetType().GetProperties()
-            .Where(x => typeof(ISettingsBase).IsAssignableFrom(x.PropertyType))
-            .Where(x => x.GetValue(obj) is not null))
-        {
-            TransformObject(propInfo.GetValue(obj)!, configRoot, transform);
-        }
-
-
-        // Recurse through collections of ISettingsBase
         foreach (var propInfo in obj.GetType().GetProperties())
         {
             var value = propInfo.GetValue(obj);
-            if (value is IDictionary dictionary)
+
+            // Handle strings
+            if (value is string unresolved)
             {
-                // Handle dictionaries
-                var dictType = propInfo.PropertyType;
-                var keyType = dictType.GetGenericArguments().FirstOrDefault();
-                var valueType = dictType.GetGenericArguments().Skip(1).FirstOrDefault();
-
-                if (keyType != null && typeof(ISettingsBase).IsAssignableFrom(keyType))
-                {
-                    // Process keys
-                    foreach (var key in dictionary.Keys)
-                    {
-                        if (key is ISettingsBase settingsBaseKey)
-                        {
-                            TransformObject(settingsBaseKey, configRoot, transform);
-                        }
-                    }
-                }
-
-                if (valueType != null && typeof(ISettingsBase).IsAssignableFrom(valueType))
-                {
-                    // Process values
-                    foreach (var val in dictionary.Values)
-                    {
-                        if (val is ISettingsBase settingsBaseValue)
-                        {
-                            TransformObject(settingsBaseValue, configRoot, transform);
-                        }
-                    }
-                }
-            }
-            else if (value is not string && value is IEnumerable collection)
-            {
-                Type? genericElementType = null;
-                if (propInfo.PropertyType.IsGenericType)
-                {
-                    // For generic types like List<T>, Array, etc.
-                    genericElementType = propInfo.PropertyType.GetGenericArguments().FirstOrDefault();
-                }
-                else if (propInfo.PropertyType.IsArray)
-                {
-                    // For arrays
-                    genericElementType = propInfo.PropertyType.GetElementType();
-                }
-
-                if (genericElementType is not null && typeof(ISettingsBase).IsAssignableFrom(genericElementType))
-                {
-                    foreach (var item in collection)
-                    {
-                        if (item is ISettingsBase settingsBase)
-                        {
-                            TransformObject(settingsBase, configRoot, transform);
-                        }
-                    }
-                }
+                if (propInfo is { CanRead: true, CanWrite: true })
+                    propInfo.SetValue(obj, transform(unresolved, propInfo, configRoot));
+                continue;
             }
 
+            // Handle dictionaries
+            if (value is IDictionary dict)
+            {
+                var valueType = propInfo.PropertyType.GetGenericArguments().Skip(1).FirstOrDefault();
+                if (valueType == typeof(string))
+                {
+                    var keys = dict.Keys.Cast<object>().ToList();
+                    foreach (var key in keys)
+                    {
+                        if (dict[key] is string val)
+                        {
+                            dict[key] = transform(val, propInfo, configRoot);
+                        }
+                    }
+                }
+                else if (valueType?.IsClass is true)
+                {
+                    foreach (var val in dict.Values)
+                    {
+                        TransformObject(val, configRoot, transform);
+                    }
+                }
+                continue;
+            }
+
+            // Handle lists
+            if (value is IList list)
+            {
+                var valueType = propInfo.PropertyType.IsGenericType
+                    ? propInfo.PropertyType.GetGenericArguments().FirstOrDefault()
+                    : propInfo.PropertyType.IsArray
+                        ? propInfo.PropertyType.GetElementType()
+                        : null;
+                if (valueType == typeof(string))
+                {
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        if (list[i] is string listText)
+                        {
+                            list[i] = transform(listText, propInfo, configRoot);
+                        }
+                    }
+                }
+                else if (valueType?.IsClass is true)
+                {
+                    foreach (var val in list)
+                    {
+                        TransformObject(val, configRoot, transform);
+                    }
+                }
+                continue;
+            }
+
+            // Handle nested objects
+            if (propInfo.PropertyType.IsClass)
+            {
+                TransformObject(value, configRoot, transform);
+                //continue;
+            }
         }
-
-
-
-
-
     }
+
+
+
+
 }

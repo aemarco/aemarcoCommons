@@ -26,7 +26,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton(toolConfig);
 
         //register all the config types
-        foreach (var type in toolConfig.IocConfigurationTypes)
+        foreach (var type in toolConfig.ConfigurationTypes)
         {
             //setup options build pipeline
             services.ConfigureOptions(typeof(AppOptionFactory<>).MakeGenericType(type));

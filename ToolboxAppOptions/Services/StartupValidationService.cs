@@ -27,7 +27,7 @@ internal class StartupValidationService : BackgroundService
 
         List<Exception>? exceptions = null;
 
-        foreach (var type in _configurationOptions.IocConfigurationTypes)
+        foreach (var type in _configurationOptions.ConfigurationTypes)
         {
             try
             {
