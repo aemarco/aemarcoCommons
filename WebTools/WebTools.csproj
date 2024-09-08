@@ -14,7 +14,7 @@
 
 	<!-- nuget references-->
 	<ItemGroup>
-		<PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
+		<PackageReference Include="Serilog.AspNetCore" Version="8.0.2" />
 	</ItemGroup>
 
 	<!-- proj build-->
