@@ -62,7 +62,7 @@
 
 	<!-- PackageValidation-->
 	<PropertyGroup>
-		<EnablePackageValidation>false</EnablePackageValidation>
+		<EnablePackageValidation>true</EnablePackageValidation>
 		<PackageValidationBaselineVersion>4.0.2</PackageValidationBaselineVersion>
 		<EnableStrictModeForCompatibleFrameworksInPackage>true</EnableStrictModeForCompatibleFrameworksInPackage>
 		<EnableStrictModeForCompatibleTfms>true</EnableStrictModeForCompatibleTfms>
