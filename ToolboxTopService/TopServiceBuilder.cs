@@ -1,6 +1,6 @@
 ﻿namespace aemarcoCommons.ToolboxTopService;
 
-public partial class TopServiceBuilder
+public class TopServiceBuilder
 {
 
     private readonly string _dllPath;
