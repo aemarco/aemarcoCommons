@@ -1,4 +1,4 @@
-﻿_ = await Host.CreateApplicationBuilder(args)
+﻿await Host.CreateApplicationBuilder(args)
     .SetupSampleService()
     .RunAsTopService(x => x
         .ServiceName("SomeService")

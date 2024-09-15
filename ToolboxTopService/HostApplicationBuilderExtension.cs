@@ -10,16 +10,13 @@ public static class HostApplicationBuilderExtension
         Action<TopServiceBuilder> config)
     {
         //setup service
-        var args = Environment.GetCommandLineArgs();
-        var serviceBuilder = new TopServiceBuilder(args[0]);
+        var serviceBuilder = new TopServiceBuilder(app);
         config(serviceBuilder);
         var service = serviceBuilder.Build();
 
-        app.Services.AddWindowsService(c =>
-        {
-            c.ServiceName = service.ServiceName;
-        });
+        app.Services.AddWindowsService(c => c.ServiceName = service.ServiceName);
 
+        var args = Environment.GetCommandLineArgs();
         var command = args.Length > 1
             ? args[1].ToLower()
             : null;
@@ -29,16 +26,11 @@ public static class HostApplicationBuilderExtension
             "uninstall" => service.UnInstall,
             "start" => service.Start,
             "stop" => service.Stop,
-            _ => RunApp
+            _ => () => app.Build().RunAsync()
         };
         await act();
 
         return Environment.ExitCode;
-
-        async Task RunApp()
-        {
-            await app.Build().RunAsync();
-        }
     }
 }
 

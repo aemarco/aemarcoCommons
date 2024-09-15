@@ -4,19 +4,23 @@ public class TopServiceBuilder
 {
 
     private readonly string _dllPath;
-    public TopServiceBuilder(string dllPath)
+    internal TopServiceBuilder(HostApplicationBuilder app)
     {
-        _dllPath = dllPath;
+        _serviceName = app.Environment.ApplicationName;
+        _displayName = app.Environment.ApplicationName;
+
+        var args = Environment.GetCommandLineArgs();
+        _dllPath = args[0];
     }
 
-    private string _serviceName = "DefaultServiceName";
+    private string _serviceName;
     public TopServiceBuilder ServiceName(string serviceName)
     {
         _serviceName = serviceName;
         return this;
     }
 
-    private string _displayName = "DefaultDisplayName";
+    private string _displayName;
     public TopServiceBuilder DisplayName(string displayName)
     {
         _displayName = displayName;

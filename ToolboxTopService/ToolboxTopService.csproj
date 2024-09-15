@@ -4,16 +4,14 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0-windows</TargetFramework>
 		<Nullable>enable</Nullable>
+
+
+		<GenerateCompatibilitySuppressionFile>false</GenerateCompatibilitySuppressionFile>
 	</PropertyGroup>
 
 	<!-- nuget references -->
 	<ItemGroup>
-		<!-- remove in version 4 -->
-		<PackageReference Include="Topshelf" Version="4.3.0" />
-
 		<PackageReference Include="CliWrap" Version="3.6.6" />
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.0" />
 	</ItemGroup>
 
@@ -29,5 +27,4 @@
 		<None Include="icon.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
 	
-
 </Project>

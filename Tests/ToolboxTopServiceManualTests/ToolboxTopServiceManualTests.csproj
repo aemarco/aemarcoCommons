@@ -6,11 +6,12 @@
     <Nullable>enable</Nullable>
 	<ServerGarbageCollection>false</ServerGarbageCollection>
 
-	<AssemblyName>SomeService</AssemblyName>
+	<AssemblyName>SomeServiceTest</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\ToolboxTopService\ToolboxTopService.csproj" />
   </ItemGroup>
 
+	 
 </Project>
