@@ -16,10 +16,46 @@ namespace aemarcoCommons.Toolbox.Oidc
     /// </summary>
     public interface ISessionStore
     {
+        event EventHandler AccessTokenChanged;
+
+
+        string IdToken { get; set; }
         string AccessToken { get; set; }
         string RefreshToken { get; set; }
-        string IdToken { get; set; }
+
     }
+
+    /// <summary>
+    /// default in memory session store
+    /// </summary>
+    public class SessionStore : ISessionStore
+    {
+        public event EventHandler AccessTokenChanged;
+        protected void OnAccessTokenChanged()
+        {
+            AccessTokenChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        public virtual string IdToken { get; set; }
+
+        private string _accessToken;
+        public virtual string AccessToken
+        {
+            get => _accessToken;
+            set
+            {
+                if (_accessToken == value)
+                    return;
+
+                _accessToken = value;
+                OnAccessTokenChanged();
+            }
+        }
+
+        public virtual string RefreshToken { get; set; }
+    }
+
+
 
 
 

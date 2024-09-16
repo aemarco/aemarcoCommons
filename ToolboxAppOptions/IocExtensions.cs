@@ -52,7 +52,7 @@ public static class ServiceCollectionExtensions
             });
 
             //register also it´s interfaces
-            var interfaces = type.GetInterfaces();
+            var interfaces = type.GetInterfaces().Where(x => x != typeof(ISettingsBase));
             foreach (Type interfaceType in interfaces)
             {
                 services.AddSingleton(interfaceType, s => s.GetRequiredService(type));
