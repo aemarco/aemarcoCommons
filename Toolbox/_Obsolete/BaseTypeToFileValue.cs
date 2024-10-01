@@ -1,7 +1,10 @@
 ﻿using System;
 
+// ReSharper disable once CheckNamespace
 namespace aemarcoCommons.Toolbox.SerializationTools
 {
+
+    [Obsolete("Use TypeofToFileValue instead.")]
     public abstract class BaseTypeToFileValue : ITypeToFileValue
     {
         public abstract string Filepath { get; }
