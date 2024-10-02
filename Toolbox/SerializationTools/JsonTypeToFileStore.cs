@@ -101,6 +101,10 @@ namespace aemarcoCommons.Toolbox.SerializationTools
         {
             //we primarily use interface
             var file = new T().Filepath;
+            if (!Path.IsPathRooted(file))
+                file = new FileInfo(file).FullName;
+
+
 
             //directory
             var dir = Path.GetDirectoryName(file);
