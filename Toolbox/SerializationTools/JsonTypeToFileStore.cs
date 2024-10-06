@@ -1,7 +1,10 @@
-﻿using aemarcoCommons.Extensions.FileExtensions;
+﻿using aemarcoCommons.Extensions;
+using aemarcoCommons.Extensions.FileExtensions;
 using Newtonsoft.Json;
 using System;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace aemarcoCommons.Toolbox.SerializationTools
 {
@@ -22,6 +25,7 @@ namespace aemarcoCommons.Toolbox.SerializationTools
     {
 
         private readonly IJsonTypeToFileSettings _settings;
+        private readonly bool _isUserProtected;
         public JsonTypeToFileStore()
             : this(new JsonTypeToFileSettings())
         { }
@@ -29,6 +33,7 @@ namespace aemarcoCommons.Toolbox.SerializationTools
         public JsonTypeToFileStore(IJsonTypeToFileSettings settings)
         {
             _settings = settings;
+            _isUserProtected = typeof(T).HasAttribute<UserProtectedAttribute>();
 
             LoadExistingOrDefault();
         }
@@ -43,10 +48,23 @@ namespace aemarcoCommons.Toolbox.SerializationTools
             var filePath = GetStorageFilePath();
             Directory.CreateDirectory(Path.GetDirectoryName(filePath) ?? throw new Exception("FilePath unclear"));
 
-            File.WriteAllText(
-                filePath,
-                JsonConvert.SerializeObject(Instance, _settings.Formatting));
+            if (_isUserProtected)
+            {
+                File.WriteAllBytes(
+                    filePath,
+                    ProtectedData.Protect(
+                        Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(Instance)),
+                        null,
+                        DataProtectionScope.CurrentUser));
+            }
+            else
+            {
+                File.WriteAllText(
+                    filePath,
+                    JsonConvert.SerializeObject(Instance, _settings.Formatting));
+            }
         }
+
 
         public T CommitReset()
         {
@@ -77,7 +95,13 @@ namespace aemarcoCommons.Toolbox.SerializationTools
             {
                 try
                 {
-                    Instance = JsonConvert.DeserializeObject<T>(File.ReadAllText(file));
+                    string json = _isUserProtected
+                        ? Encoding.UTF8.GetString(ProtectedData.Unprotect(
+                            File.ReadAllBytes(file),
+                            null,
+                            DataProtectionScope.CurrentUser))
+                        : File.ReadAllText(file);
+                    Instance = JsonConvert.DeserializeObject<T>(json);
                 }
                 catch
                 {
@@ -101,24 +125,25 @@ namespace aemarcoCommons.Toolbox.SerializationTools
         {
             //we primarily use interface
             var file = new T().Filepath;
-            if (!Path.IsPathRooted(file))
-                file = new FileInfo(file).FullName;
 
+            //directory (1. from file, 2. from settings)
+            var dir = file != null
+                ? new FileInfo(file).DirectoryName ?? throw new Exception("Could not locate file")
+                : _settings.StorageDirectory ?? throw new Exception("Storage directory could not be determined. Either configure general path in IJsonTypeToFileSettings or specify in ITypeToFileValue.");
 
-
-            //directory
-            var dir = Path.GetDirectoryName(file);
-            if (string.IsNullOrWhiteSpace(dir))
-                dir = _settings.StorageDirectory ?? throw new Exception("Storage directory could not be determined. Either configure general path in IJsonTypeToFileSettings or specify in ITypeToFileValue.");
-
-
-            var fileName = Path.GetFileName(file);
-            if (string.IsNullOrWhiteSpace(fileName))
-                fileName = $"{typeof(T).Name}.json";
+            //fileName (1. from file, 2. from type)
+            var fileName = file != null
+                ? Path.GetFileName(file)
+                : _isUserProtected
+                    ? $"{typeof(T).Name}.bin"
+                    : $"{typeof(T).Name}.json";
 
             var result = Path.Combine(dir, fileName);
             return result;
         }
+
+
+
 
 
     }

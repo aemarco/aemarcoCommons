@@ -4,6 +4,13 @@ using System;
 namespace aemarcoCommons.Toolbox.SerializationTools
 {
 
+    [AttributeUsage(AttributeTargets.Class)]
+    public class UserProtectedAttribute : Attribute
+    {
+
+    }
+
+
     public interface ITypeToFileValue
     {
         /// <summary>
