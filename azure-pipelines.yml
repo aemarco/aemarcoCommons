@@ -21,6 +21,10 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'custom'
+    custom: 'workload update'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet build'
