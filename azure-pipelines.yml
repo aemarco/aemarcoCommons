@@ -24,7 +24,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'custom'
-    custom: 'workload update'
+    arguments: 'workload update'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet build'
