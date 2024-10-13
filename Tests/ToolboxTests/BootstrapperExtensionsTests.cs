@@ -12,7 +12,7 @@ public class BootstrapperExtensionsTests
     public void SetupHttpClientStuff_RegistersResolvable_OidcTokenRenewalHandler()
     {
         var sp = new ServiceCollection()
-            .SetupHttpClientStuff()
+            .SetupToolbox()
             .BuildServiceProvider();
 
         var s = sp.GetService<OidcTokenRenewalHandler>();

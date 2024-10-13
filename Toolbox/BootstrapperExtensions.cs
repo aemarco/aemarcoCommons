@@ -3,11 +3,8 @@ using aemarcoCommons.Toolbox.NetworkTools;
 using aemarcoCommons.Toolbox.Oidc;
 using aemarcoCommons.Toolbox.SecurityTools;
 using aemarcoCommons.Toolbox.SerializationTools;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Contrib.WaitAndRetry;
 using Polly.Extensions.Http;
@@ -17,7 +14,7 @@ using System.Reflection;
 
 namespace aemarcoCommons.Toolbox
 {
-    public static class BootstrapperExtensions
+    public static partial class BootstrapperExtensions
     {
 
         public static IConfigurationBuilder ConfigAppsettings(this IConfigurationBuilder builder, string environmentName = null)
@@ -44,30 +41,9 @@ namespace aemarcoCommons.Toolbox
             return builder;
         }
 
-        public static ContainerBuilder SetupLoggerFactory(this ContainerBuilder builder, ILoggerFactory factory)
+        public static IServiceCollection SetupToolbox(this IServiceCollection sc)
         {
-            builder.RegisterInstance(factory)
-                .As<ILoggerFactory>()
-                .SingleInstance();
-            builder.RegisterGeneric(typeof(Logger<>))
-                .As(typeof(ILogger<>))
-                .SingleInstance();
-            return builder;
-        }
-
-        public static ContainerBuilder SetupToolbox(this ContainerBuilder builder)
-        {
-            builder.Populate(new ServiceCollection().SetupToolbox());
-            return builder;
-        }
-        public static IServiceCollection SetupToolbox(this IServiceCollection sc) =>
-            sc
-                .SetupServices()
-                .SetupPollyPolicies()
-                .SetupHttpClientStuff();
-
-        private static IServiceCollection SetupServices(this IServiceCollection sc)
-        {
+            //services
             sc.AddSingleton<Random>();
             sc.AddSingleton(typeof(ITypeToFileStore<>), typeof(JsonTypeToFileStore<>));
             sc.AddTransient<IEmbeddedResourceQuery, EmbeddedResourceQuery>();
@@ -77,13 +53,9 @@ namespace aemarcoCommons.Toolbox
 
             sc.AddSingleton<GeoService>();
 
-            return sc;
-        }
 
-        private static IServiceCollection SetupPollyPolicies(this IServiceCollection sc)
-        {
+            //polly
             var policyRegistry = sc.AddPolicyRegistry();
-
             if (!policyRegistry.ContainsKey("HttpRetry"))
             {
                 policyRegistry.Add(
@@ -91,7 +63,6 @@ namespace aemarcoCommons.Toolbox
                     HttpPolicyExtensions.HandleTransientHttpError()
                         .WaitAndRetryAsync(Backoff.DecorrelatedJitterBackoffV2(TimeSpan.FromSeconds(1), 5)));
             }
-
             if (!policyRegistry.ContainsKey("HttpCircuitBreaker"))
             {
                 policyRegistry.Add(
@@ -104,13 +75,7 @@ namespace aemarcoCommons.Toolbox
             }
 
 
-
-
-            return sc;
-        }
-
-        internal static IServiceCollection SetupHttpClientStuff(this IServiceCollection sc)
-        {
+            //httpclient
             sc.AddTransient<RateLimitingPerHostHandler>();
             sc.AddTransient<IgnoreServerCertificateHandler>();
             sc.AddTransient<OidcTokenRenewalHandler>();
@@ -124,7 +89,6 @@ namespace aemarcoCommons.Toolbox
 
             return sc;
         }
-
 
     }
 }

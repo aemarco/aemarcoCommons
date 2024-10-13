@@ -1,16 +1,13 @@
 ﻿using aemarcoCommons.Toolbox;
+using aemarcoCommons.WpfTools.BaseNav;
 using aemarcoCommons.WpfTools.Commands;
 using aemarcoCommons.WpfTools.Dialogs;
 using aemarcoCommons.WpfTools.MonitorTools;
 using aemarcoCommons.WpfTools.WindowStuff;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Extensions.Http;
-using Serilog.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Net.Http;
@@ -34,28 +31,8 @@ public interface ITransient;
 
 
 
-public static class BootstrapperExtensions
+public static partial class BootstrapperExtensions
 {
-
-    /// <summary>
-    /// Call this, to register
-    /// * some common stuff
-    /// * Toolbox stuff
-    /// * WpfTools stuff
-    /// </summary>
-    /// <param name="builder">builder to register to</param>
-    /// <param name="externals">externally owned objects</param>
-    /// <returns>builder with registrations</returns>
-    public static ContainerBuilder SetupWpfTools(this ContainerBuilder builder, params object[] externals)
-    {
-        builder.Populate(new ServiceCollection().SetupWpfTools(externals: externals));
-        builder.RegisterBuildCallback(rootScope =>
-        {
-            ServiceProvider = new AutofacServiceProvider(rootScope);
-        });
-        return builder;
-    }
-
 
     /// <summary>
     /// Call this, to register
@@ -155,29 +132,10 @@ public static class BootstrapperExtensions
             .AddPolicyHandler(waitAndRetry)
             .AddPolicyHandler(timeoutPolicy);
 
+
+        sc.AddHostedService<NavigationSetupService>();
+
         return sc;
     }
-    public static IServiceProvider SetupServiceProviderForWpfTools(this IServiceProvider serviceProvider)
-    {
-        ServiceProvider = serviceProvider;
-        return serviceProvider;
-    }
-
-
-
-
-
-
-    public static ContainerBuilder SetupSerilogAsILogger(this ContainerBuilder builder)
-    {
-        var factory = new LoggerFactory(new ILoggerProvider[] { new SerilogLoggerProvider() });
-        builder.SetupLoggerFactory(factory);
-        return builder;
-    }
-
-
-
-
-    internal static IServiceProvider? ServiceProvider { get; private set; }
 
 }

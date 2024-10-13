@@ -68,14 +68,16 @@ public abstract class BaseNavWindowViewModel : BaseViewModel //inherit this in w
     public virtual string Title => ViewViewModel?.Title ?? Window.Title;
 
 
+    internal static IServiceProvider ServiceProvider { get; set; }
+
+
     /// <summary>
     /// Resolve requested INavViewModel. Override if DiExtension is not used!
     /// </summary>
     /// <returns>requested view model</returns>
     protected virtual object Resolve(Type type)
     {
-        var serviceProvider = BootstrapperExtensions.ServiceProvider;
-        if (serviceProvider is null)
+        if (ServiceProvider is null)
         {
             throw new Exception("""
                 ServiceProvider unavailable.
@@ -85,7 +87,7 @@ public abstract class BaseNavWindowViewModel : BaseViewModel //inherit this in w
                 """);
         }
 
-        var result = serviceProvider.GetRequiredService(type);
+        var result = ServiceProvider.GetRequiredService(type);
         return result;
     }
 
