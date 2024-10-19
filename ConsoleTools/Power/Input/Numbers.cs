@@ -18,7 +18,7 @@ public static partial class PowerConsole
             Console.Clear();
 
         var result = AnsiConsole.Prompt(
-            new TextPrompt<int>($"[purple]{prompt}[/]")
+            new TextPrompt<int>($"[purple]{prompt.EscapeMarkup()}[/]")
                 .PromptStyle("green")
                 .Validate(number =>
                 {
