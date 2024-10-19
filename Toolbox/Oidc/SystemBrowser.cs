@@ -35,10 +35,15 @@ namespace aemarcoCommons.Toolbox.Oidc
 
         public async Task<BrowserResult> InvokeAsync(BrowserOptions options, CancellationToken cancellationToken = default)
         {
+
             using (var listener = new HttpListener())
             {
                 listener.Prefixes.Add(RedirectUri);
                 listener.Start();
+                var abort = cancellationToken.Register(x =>
+                {
+                    ((HttpListener)x).Abort();
+                }, listener);
 
                 new Uri(options.StartUrl).OpenInBrowser();
                 try
@@ -85,6 +90,7 @@ namespace aemarcoCommons.Toolbox.Oidc
                 }
                 finally
                 {
+                    abort.Dispose();
                     listener.Stop();
                 }
             }

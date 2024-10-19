@@ -4,6 +4,7 @@ using Spectre.Console.Cli;
 using System.Linq;
 using System.Threading.Tasks;
 
+
 namespace aemarcoCommons.ConsoleTools.SpectreHost;
 
 #nullable enable
@@ -15,7 +16,7 @@ public static class HostApplicationBuilderExtensions
         this HostApplicationBuilder app,
         Action<IConfigurator>? configureCommandApp = null)
     {
-        var commandApp = new CommandApp(new ServiceCollectionTypeRegistrar(app.Services));
+        var commandApp = new CommandApp(new SpectreInfrastructure.ServiceCollectionTypeRegistrar(app.Services));
         await app.RunCommandApp(commandApp, configureCommandApp);
     }
 
@@ -24,7 +25,7 @@ public static class HostApplicationBuilderExtensions
         Action<IConfigurator>? configureCommandApp = null)
         where TDefaultCommand : class, ICommand
     {
-        var commandApp = new CommandApp<TDefaultCommand>(new ServiceCollectionTypeRegistrar(app.Services));
+        var commandApp = new CommandApp<TDefaultCommand>(new SpectreInfrastructure.ServiceCollectionTypeRegistrar(app.Services));
         await app.RunCommandApp(commandApp, configureCommandApp);
     }
 
