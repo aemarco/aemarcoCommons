@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Linq;
-
-namespace aemarcoCommons.ToolboxAppOptions.Transformations;
+﻿namespace aemarcoCommons.ToolboxAppOptions.Transformations;
 
 public abstract class StringTransformerBase
 {

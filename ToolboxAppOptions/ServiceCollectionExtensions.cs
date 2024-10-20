@@ -1,10 +1,4 @@
-﻿using aemarcoCommons.ToolboxAppOptions.Services;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using System.Linq;
-using System.Runtime.ExceptionServices;
-
-namespace aemarcoCommons.ToolboxAppOptions;
+﻿namespace aemarcoCommons.ToolboxAppOptions;
 
 public static class ServiceCollectionExtensions
 {

@@ -46,6 +46,7 @@ public class StartupValidationServiceTests : AppOptionTestBase
     }
     public class SingleValidationTestSettings : ISettingsBase
     {
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public required string Message { get; set; }
     }
     public class SingleValidationTestSettingsValidator : AbstractValidator<SingleValidationTestSettings>

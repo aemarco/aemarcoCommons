@@ -1,18 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-// ReSharper disable MemberCanBePrivate.Global
-
+﻿//TODO 6.0 move to correct namespace and rename "ToolboxAppOptionsSettingsBuilder"
+// ReSharper disable once CheckNamespace
 namespace aemarcoCommons.ToolboxAppOptions;
-
-public record ConfigurationOptions
-{
-    public List<StringTransformerBase> StringTransformations { get; } = [];
-    public List<Assembly> Assemblies { get; } = [];
-    public bool EnableValidationOnStartup { get; internal set; } = true;
-
-    internal IReadOnlyList<Type> ConfigurationTypes { get; set; } = [];
-    internal IReadOnlyList<Assembly> ConfigurationAssemblies { get; set; } = [];
-}
 
 public class ConfigurationOptionsBuilder
 {

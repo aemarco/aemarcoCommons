@@ -1,12 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
-using System.Collections.Generic;
-using System.Runtime.ExceptionServices;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace aemarcoCommons.ToolboxAppOptions.Services;
+﻿namespace aemarcoCommons.ToolboxAppOptions.Services;
 
 internal class StartupValidationService : BackgroundService
 {

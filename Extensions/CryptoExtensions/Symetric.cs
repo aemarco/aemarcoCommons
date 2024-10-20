@@ -6,6 +6,7 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
 {
     public static class Symetric
     {
+
         public static string EncryptToBase64(this string clearText, string password, KeySize keySize = KeySize.Normal_128)
         {
             using (var memory = new MemoryStream())
@@ -112,7 +113,7 @@ namespace aemarcoCommons.Extensions.CryptoExtensions
         #region internal logic
 
         //this internal logic encrypts stuff symetrical with aes with given pw and keysize
-        //the resulting bytes are build up as following: salt + iv + key size + data
+        //the resulting bytes are build up as following: salt + iv + keysize + data
 
         private const int DerivationPasswordIterations = 10000;
 

@@ -1,9 +1,17 @@
 ﻿global using aemarcoCommons.Extensions;
+global using aemarcoCommons.ToolboxAppOptions.Services;
 global using aemarcoCommons.ToolboxAppOptions.Transformations;
 global using FluentValidation;
 global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Hosting;
+global using Microsoft.Extensions.Options;
 global using System;
+global using System.Collections;
+global using System.Collections.Generic;
+global using System.Linq;
 global using System.Reflection;
-
-
-//TODO GlobalUsing´s review
+global using System.Runtime.ExceptionServices;
+global using System.Text.RegularExpressions;
+global using System.Threading;
+global using System.Threading.Tasks;

@@ -5,7 +5,7 @@ using aemarcoCommons.ToolboxAppOptions.Transformations;
 namespace ToolboxAppOptionsTests;
 
 
-public class IocExtensionsTests : AppOptionTestBase
+public class ServiceCollectionExtensionsTests : AppOptionTestBase
 {
     [Test]
     public void AddConfigOptionsUtils_ServiceCollectionShowCase()
@@ -80,7 +80,6 @@ public class IocExtensionsTests : AppOptionTestBase
 
     public class TestSettings : ISettingsBase
     {
-        public required string ShowCaseMessage { get; set; }
         public required string Message { get; set; }
     }
     public class TestSettingsValidator : AbstractValidator<TestSettings>;

@@ -10,7 +10,7 @@ public class SymetricTests
 {
     [TestCase("test")]
     [TestCase("77B80F6DE365762B070048D1F59ABB39")]
-    [TestCase(@"C:\Users\someUser\someDir\someOtherDirrrrrr\someTestDir\bin\Debug\net6.0\dataFolder\someFile-000-111.file")]
+    [TestCase(@"C:\Users\someUser\someDir\someOtherDir\someTestDir\bin\Debug\net6.0\dataFolder\someFile-000-111.file")]
     public void EncryptDecrypt_ShouldWork(string text)
     {
         var encrypted = text.EncryptToBase64("password");
@@ -22,13 +22,13 @@ public class SymetricTests
     [Test]
     public void EncryptDecryptFile_ShouldWork()
     {
-        var bytes = Symetric.GetRandomBytes(1024 * 1024 * 8);
+        var bytes = Symetric.GetRandomBytes(8 * 1024 * 1024); //1mb
 
-        var fileInfo = new FileInfo("testfile.fi");
+        var fileInfo = new FileInfo("testFile.fi");
         File.WriteAllBytes(fileInfo.FullName, bytes);
 
-        fileInfo.EncryptFileInPlace("passs", KeySize.Highest_256);
-        fileInfo.DecryptFileInPlace("passs");
+        fileInfo.EncryptFileInPlace("pass", KeySize.Highest_256);
+        fileInfo.DecryptFileInPlace("pass");
 
         var fromFile = File.ReadAllBytes(fileInfo.FullName);
         fileInfo.Delete();
@@ -41,17 +41,17 @@ public class SymetricTests
     [Explicit]
     public void EncryptDecryptLargeFile_ShouldWork()
     {
-        var fileInfo = new FileInfo("largetestfile.fi");
+        var fileInfo = new FileInfo("largeTestFile.fi");
         using (var ws = fileInfo.OpenWrite())
         {
-            for (int i = 0; i < 1024 * 3; i++) //3Gb --> 1Mb per round
+            for (int i = 0; i < 3 * 1024; i++) //3Gb --> 1Mb per round
             {
-                ws.Write(Symetric.GetRandomBytes(1024 * 1024 * 8));
+                ws.Write(Symetric.GetRandomBytes(8 * 1024 * 1024));
             }
         }
 
-        var crypted = fileInfo.EncryptFile("passs", false, KeySize.Highest_256);
-        var decrypted = crypted.DecryptFile("passs", true);
+        var crypted = fileInfo.EncryptFile("pass", false, KeySize.Highest_256);
+        var decrypted = crypted.DecryptFile("pass", true);
 
 
         var result = fileInfo.Base64HashFromFile() == decrypted.Base64HashFromFile();

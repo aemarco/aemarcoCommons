@@ -16,25 +16,22 @@ public class ProtectedTransformerTests : AppOptionTestBase
     public void PerformWriteTransformation_DoesEncrypt()
     {
         var writeMessage = "Since encryption does is not deterministic, we need to do both here";
-        var transformer = Pt;
         var pi = typeof(ProtectedTestSettings).GetProperty(nameof(ProtectedTestSettings.Message))!;
-        var config = Config;
 
-
-        var encrypted = transformer.PerformWriteTransformation(
+        var encrypted = Pt.PerformWriteTransformation(
             writeMessage,
             pi,
-            config);
+            Config);
 
         var result = Pt.PerformReadTransformation(
             encrypted,
             pi,
-            config);
+            Config);
 
         result.Should().Be(writeMessage);
     }
     [Test]
-    public void TransformObject_DoesResolvePlaceholders()
+    public void TransformObject_DoesTransform()
     {
         var config = Config;
         var transformer = Pt;
@@ -55,13 +52,5 @@ public class ProtectedTransformerTests : AppOptionTestBase
         [Protected]
         public required string Message { get; set; }
     }
-
-
-
-
-
-
-
-
 
 }

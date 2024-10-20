@@ -1,6 +1,4 @@
-﻿using System.Text.RegularExpressions;
-
-namespace aemarcoCommons.ToolboxAppOptions.Transformations;
+﻿namespace aemarcoCommons.ToolboxAppOptions.Transformations;
 
 /// <summary>
 /// This Transformer replaces placeholders in strings with values defined for the key in the placeholder.

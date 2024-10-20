@@ -1,17 +1,14 @@
-﻿using Microsoft.Extensions.Options;
-using System.Linq;
-
-namespace aemarcoCommons.ToolboxAppOptions.Services;
+﻿namespace aemarcoCommons.ToolboxAppOptions.Services;
 
 public class AppOptionFactory<TOptions> :
     IConfigureOptions<TOptions>,
     IPostConfigureOptions<TOptions>,
     IValidateOptions<TOptions>
-    where TOptions : class
+    where TOptions : class, ISettingsBase
 {
 
-    private readonly ConfigurationOptions _options;
     private readonly IConfigurationRoot _config;
+    private readonly ConfigurationOptions _options;
     private readonly IValidator<TOptions>? _validator;
     public AppOptionFactory(
         IConfigurationRoot config,
@@ -23,14 +20,14 @@ public class AppOptionFactory<TOptions> :
         _validator = validator;
     }
 
-
     //IConfigureOptions
     public void Configure(TOptions options)
     {
         var type = typeof(TOptions);
-        var path = Attribute.GetCustomAttribute(type, typeof(SettingsPathAttribute)) is SettingsPathAttribute pathAttribute
+        var path = type.GetAttribute<SettingsPathAttribute>() is { } pathAttribute
             ? pathAttribute.Path
             : type.Name;
+
         if (string.IsNullOrWhiteSpace(path))
             _config.Bind(options);
         else
