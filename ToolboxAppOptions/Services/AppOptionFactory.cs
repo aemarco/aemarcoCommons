@@ -4,7 +4,9 @@ public class AppOptionFactory<TOptions> :
     IConfigureOptions<TOptions>,
     IPostConfigureOptions<TOptions>,
     IValidateOptions<TOptions>
-    where TOptions : class, ISettingsBase
+    where TOptions : class
+    //TODO 6.0
+    //, ISettingsBase
 {
 
     private readonly IConfigurationRoot _config;

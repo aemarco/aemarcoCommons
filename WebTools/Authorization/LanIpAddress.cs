@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace aemarcoCommons.WebTools.Authorization;
@@ -35,6 +36,8 @@ public class LanIpAddressHandler : AuthorizationHandler<LanIpAddressRequirement>
     private readonly GeoService _geoService;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly ILogger<LanIpAddressHandler> _logger;
+    private readonly string _subnetAddress = "192.168.0.0";
+    private readonly int _subnetMaskBits = 16;
 
     public LanIpAddressHandler(
         GeoService geoService,
@@ -77,6 +80,9 @@ public class LanIpAddressHandler : AuthorizationHandler<LanIpAddressRequirement>
             return;
         }
 
+        _logger.LogInformation("WAN: {wanAddress}, Remote: {remote}, Local: {local}", wanAddress, remoteAddress, localAddress);
+
+
         var whitelist = new[]
         {
             "127.0.0.1", // check if localhost
@@ -84,14 +90,44 @@ public class LanIpAddressHandler : AuthorizationHandler<LanIpAddressRequirement>
             localAddress, // compare with local address
             wanAddress // check if from own ip 
         };
-        if (!whitelist.Contains(remoteAddress))
+        // Check if remoteAddress is in whitelist or in subnet range
+        if (!whitelist.Contains(remoteAddress) && !IsInSubnet(remoteAddress, _subnetAddress, _subnetMaskBits))
         {
             _logger.LogWarning("Access denied to {remoteAddress}", remoteAddress);
             context.Fail();
             return;
         }
+        //if (!whitelist.Contains(remoteAddress))
+        //{
+        //    _logger.LogWarning("Access denied to {remoteAddress}", remoteAddress);
+        //    context.Fail();
+        //    return;
+        //}
 
         _logger.LogDebug("Access granted to {remoteAddress}", remoteAddress);
         context.Succeed(requirement);
+    }
+    private bool IsInSubnet(string ipAddress, string subnetAddress, int subnetMaskBits)
+    {
+        var addressBytes = IPAddress.Parse(ipAddress).GetAddressBytes();
+        var subnetBytes = IPAddress.Parse(subnetAddress).GetAddressBytes();
+
+        int maskFullBytes = subnetMaskBits / 8;
+        int maskRemainingBits = subnetMaskBits % 8;
+
+        // Check bytes covered by full bytes in the subnet mask
+        for (int i = 0; i < maskFullBytes; i++)
+        {
+            if (addressBytes[i] != subnetBytes[i]) return false;
+        }
+
+        // Check the remaining bits in the subnet mask
+        if (maskRemainingBits > 0)
+        {
+            byte mask = (byte)~(0xFF >> maskRemainingBits);
+            if ((addressBytes[maskFullBytes] & mask) != (subnetBytes[maskFullBytes] & mask)) return false;
+        }
+
+        return true;
     }
 }
