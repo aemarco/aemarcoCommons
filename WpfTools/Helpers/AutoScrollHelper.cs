@@ -77,7 +77,7 @@ public static class AutoScrollHelper
                     return;
                 }
             default:
-                throw new NotImplementedException();
+                throw new NotSupportedException();
         }
 
 

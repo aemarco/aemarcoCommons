@@ -330,7 +330,7 @@ public class WallpaperSetter : ISingleton, IDisposable
         {
             RealEstateType.Virtual => _wallpaperSetterSettings.VirtualWallpaperFilePath,
             RealEstateType.Monitor => _wallpaperSetterSettings.CombinedWallpaperFilePath,
-            _ => throw new NotImplementedException($"Mode {_currentMode} not supported")
+            _ => throw new NotSupportedException($"Mode {_currentMode} not supported")
         };
 
         targets.CreateImageFile(filePath);

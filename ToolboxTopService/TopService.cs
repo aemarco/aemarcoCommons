@@ -50,7 +50,7 @@ internal record TopService(
                 StartupType.Auto => "auto",
                 StartupType.AutoDelayed => "delayed-auto",
                 StartupType.Disabled => "disabled",
-                _ => throw new NotImplementedException()
+                _ => throw new NotSupportedException()
             };
 
             var startupCmd = Cli.Wrap("sc.exe")

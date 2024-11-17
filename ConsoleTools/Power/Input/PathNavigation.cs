@@ -94,7 +94,7 @@ public static partial class PowerConsole
             driveItems.Add(new ConsoleMenuItem<DriveInfo>("Network", _ =>
             {
                 if (!OperatingSystem.IsWindows())
-                    throw new NotImplementedException();
+                    throw new NotSupportedException();
                 path = ServerSelector(list) ?? DriveSelector(list);
             }));
         }
