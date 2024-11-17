@@ -8,7 +8,7 @@ using System.Windows.Data;
 namespace aemarcoCommons.WpfTools.Converters;
 
 [ValueConversion(typeof(TimeSpan?), typeof(string))]
-public class TimespanToStringConverter : IValueConverter
+public class TimespanToString : IValueConverter
 {
     /// <summary>
     /// One-way converter from TimeSpan? to string 

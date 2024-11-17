@@ -1,19 +1,24 @@
 <Project>
 	<!-- this runs at the beginning -->
   
-  
 	<!-- project definition -->
+
+	<!-- 
 	<PropertyGroup>
-		<RootNamespace>aemarcoCommons.$(MSBuildProjectName)</RootNamespace>
+		
 		<AssemblyName>aemarcoCommons.$(MSBuildProjectName)</AssemblyName>
+		<RootNamespace>aemarcoCommons.$(MSBuildProjectName)</RootNamespace>
 	</PropertyGroup>
+-->
+
 
 	<!-- pdb files -->
 	<PropertyGroup Condition="'$(Configuration)'=='Release'">
 		<DebugType>embedded</DebugType>
 		<DebugSymbols>true</DebugSymbols>
 	</PropertyGroup>
-  
+
+
 	<!-- test internals -->
 	<ItemGroup>
 		<InternalsVisibleTo Include="$(AssemblyName)Tests" />
@@ -22,6 +27,7 @@
 		<InternalsVisibleTo Include="$(MSBuildProjectName).Tests" />
 	</ItemGroup>
 
+	
 	<!-- tooling -->
 	<ItemGroup>
 		<!-- auto versioning tool -->
@@ -59,7 +65,6 @@
 		</None>
 	</ItemGroup>
 
-
 	<!-- PackageValidation-->
 	<PropertyGroup>
 		<EnablePackageValidation>false</EnablePackageValidation>
@@ -68,5 +73,6 @@
 		<EnableStrictModeForCompatibleTfms>true</EnableStrictModeForCompatibleTfms>
 		<GenerateCompatibilitySuppressionFile>false</GenerateCompatibilitySuppressionFile>
 	</PropertyGroup>
+	
 
 </Project>

@@ -10,7 +10,7 @@ namespace aemarcoCommons.WpfTools.Converters;
 /// One-way converter from System.Drawing.Image to System.Windows.Media.ImageSource
 /// </summary>
 [ValueConversion(typeof(System.Drawing.Image), typeof(System.Windows.Media.ImageSource))]
-public class ImageToImageSourceConverter : IValueConverter
+public class ImageToImageSource : IValueConverter
 {
     public object Convert(object value, Type targetType,
         object parameter, CultureInfo culture)

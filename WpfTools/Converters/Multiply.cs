@@ -4,7 +4,7 @@ using System.Windows.Data;
 
 namespace aemarcoCommons.WpfTools.Converters;
 
-public class MultiplyConverter : IValueConverter
+public class Multiply : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {

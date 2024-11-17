@@ -8,6 +8,7 @@
 		<UseWindowsForms>true</UseWindowsForms>
 		
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<RootNamespace>aemarcoCommons.WpfTools</RootNamespace>
 		<AssemblyName>aemarcoCommons.WpfTools</AssemblyName>
 	
 		<GenerateCompatibilitySuppressionFile>true</GenerateCompatibilitySuppressionFile>
@@ -32,14 +33,18 @@
 
 	<!-- proj build-->
 	<ItemGroup>
+
 		<None Remove="Images\question.png" />
 		<Resource Include="Images\question.png" />
+
 		<Compile Update="Controls\RangeSlider.xaml.cs">
 			<DependentUpon>RangeSlider.xaml</DependentUpon>
 		</Compile>
+
 		<Compile Update="Controls\SliderMenuItem.xaml.cs">
 			<DependentUpon>SliderMenuItem.xaml</DependentUpon>
 		</Compile>
+
 	</ItemGroup>
 
 	<!-- nuget build-->

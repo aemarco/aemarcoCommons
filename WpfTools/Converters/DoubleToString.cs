@@ -9,7 +9,7 @@ namespace aemarcoCommons.WpfTools.Converters;
 /// Two-way converter from double to string
 /// </summary>
 [ValueConversion(typeof(double), typeof(string))]
-public class DoubleToStringConverter : IValueConverter
+public class DoubleToString : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {

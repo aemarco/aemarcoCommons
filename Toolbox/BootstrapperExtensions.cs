@@ -14,7 +14,7 @@ using System.Reflection;
 
 namespace aemarcoCommons.Toolbox
 {
-    public static partial class BootstrapperExtensions
+    public static class BootstrapperExtensions
     {
 
         public static IConfigurationBuilder ConfigAppsettings(this IConfigurationBuilder builder, string environmentName = null)

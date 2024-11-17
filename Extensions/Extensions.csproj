@@ -3,6 +3,9 @@
 	<!-- project definition -->
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
+
+		<RootNamespace>aemarcoCommons.Extensions</RootNamespace>
+		<AssemblyName>aemarcoCommons.Extensions</AssemblyName>
 	</PropertyGroup>
 
 	<!-- nuget references-->

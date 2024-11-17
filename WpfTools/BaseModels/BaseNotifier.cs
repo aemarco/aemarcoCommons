@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.ComponentModel;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Windows.Threading;
 
@@ -41,43 +40,7 @@ public class BaseNotifier : ObservableObject
                 ?.Invoke(this, methodAttribute.Parameters);
         }
 
-
-
-
-        //*** To be remove when NotifyTriggersEventAttribute being removed ***
-        //*** To be remove when NotifyTriggersEventAttribute being removed ***
-        //*** To be remove when NotifyTriggersEventAttribute being removed ***
-
-
-        //NotifyTriggersEventAttribute
-#pragma warning disable CS0618
-        foreach (var eventAttribute in this.GetAttributes<NotifyTriggersEventAttribute>(e.PropertyName))
-#pragma warning restore CS0618
-        {
-            if (GetType()
-                    .GetField(eventAttribute.EventName, BindingFlags.Instance | BindingFlags.NonPublic)
-                    ?.GetValue(this)
-                is not MulticastDelegate multiDelegate)
-                continue;
-
-            foreach (var eventHandler in multiDelegate.GetInvocationList())
-            {
-                eventHandler.Method.Invoke(
-                    eventHandler.Target,
-                    [this, EventArgs.Empty]);
-            }
-        }
-
-        //*** To be remove when NotifyTriggersEventAttribute being removed ***
-        //*** To be remove when NotifyTriggersEventAttribute being removed ***
-        //*** To be remove when NotifyTriggersEventAttribute being removed ***
     }
-
-
-    [Obsolete("Use OnPropertyChanged instead")]
-    protected virtual void NotifyPropertyChanged(
-        [CallerMemberName] string propertyName = null) => OnPropertyChanged(propertyName);
-
 
 }
 

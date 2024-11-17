@@ -4,7 +4,7 @@ using Spectre.Console.Cli;
 
 namespace aemarcoCommons.ConsoleTools;
 
-public static partial class BootstrapperExtensions
+public static class BootstrapperExtensions
 {
 
     public static IServiceCollection SetupConsoleTools(this IServiceCollection services)

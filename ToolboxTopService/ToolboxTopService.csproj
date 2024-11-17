@@ -5,6 +5,8 @@
 		<TargetFramework>net8.0-windows</TargetFramework>
 		<Nullable>enable</Nullable>
 
+		<RootNamespace>aemarcoCommons.ToolboxTopService</RootNamespace>
+		<AssemblyName>aemarcoCommons.ToolboxTopService</AssemblyName>
 
 		<GenerateCompatibilitySuppressionFile>false</GenerateCompatibilitySuppressionFile>
 	</PropertyGroup>

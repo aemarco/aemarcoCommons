@@ -31,7 +31,7 @@ public interface ITransient;
 
 
 
-public static partial class BootstrapperExtensions
+public static class BootstrapperExtensions
 {
 
     /// <summary>
