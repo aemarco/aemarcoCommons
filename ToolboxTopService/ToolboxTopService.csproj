@@ -8,7 +8,6 @@
 		<RootNamespace>aemarcoCommons.ToolboxTopService</RootNamespace>
 		<AssemblyName>aemarcoCommons.ToolboxTopService</AssemblyName>
 
-		<GenerateCompatibilitySuppressionFile>false</GenerateCompatibilitySuppressionFile>
 	</PropertyGroup>
 
 	<!-- nuget references -->

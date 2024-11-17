@@ -67,8 +67,8 @@
 
 	<!-- PackageValidation-->
 	<PropertyGroup>
-		<EnablePackageValidation>false</EnablePackageValidation>
-		<PackageValidationBaselineVersion>8</PackageValidationBaselineVersion>
+		<EnablePackageValidation>true</EnablePackageValidation>
+		<PackageValidationBaselineVersion>8.0.3</PackageValidationBaselineVersion>
 		<EnableStrictModeForCompatibleFrameworksInPackage>true</EnableStrictModeForCompatibleFrameworksInPackage>
 		<EnableStrictModeForCompatibleTfms>true</EnableStrictModeForCompatibleTfms>
 		<GenerateCompatibilitySuppressionFile>false</GenerateCompatibilitySuppressionFile>
