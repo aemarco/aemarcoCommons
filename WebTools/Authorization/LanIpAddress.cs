@@ -14,13 +14,23 @@ public static class LanIpAddressExtensions
 {
     public static IServiceCollection AddLanIpAddressPolicy(this IServiceCollection services, params string[] names)
     {
+        services.AddLanIpAddressPolicyWithScheme(null, names);
+        return services;
+    }
+
+    public static IServiceCollection AddLanIpAddressPolicyWithScheme(this IServiceCollection services, string? scheme, params string[] names)
+    {
         services.AddAuthorization(config =>
         {
             foreach (var name in names)
             {
                 config.AddPolicy(name, builder =>
                 {
-                    builder.AddRequirements(new LanIpAddressRequirement());
+                    if (scheme is not null)
+                        builder.AddAuthenticationSchemes(scheme);
+
+                    builder
+                        .AddRequirements(new LanIpAddressRequirement());
                 });
             }
         });
