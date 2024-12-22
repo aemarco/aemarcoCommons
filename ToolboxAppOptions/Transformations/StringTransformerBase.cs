@@ -35,6 +35,9 @@ public abstract class StringTransformerBase
         //handle
         foreach (var propInfo in obj.GetType().GetProperties())
         {
+            if (!propInfo.CanWrite)
+                continue;
+
             var value = propInfo.GetValue(obj);
 
             // Handle strings
