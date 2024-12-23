@@ -11,6 +11,7 @@
 		<RootNamespace>aemarcoCommons.WpfTools</RootNamespace>
 		<AssemblyName>aemarcoCommons.WpfTools</AssemblyName>
 
+		<GenerateCompatibilitySuppressionFile>true</GenerateCompatibilitySuppressionFile>
 	</PropertyGroup>
 
 
