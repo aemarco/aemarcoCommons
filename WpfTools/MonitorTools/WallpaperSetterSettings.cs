@@ -1,6 +1,8 @@
 ﻿using aemarcoCommons.Toolbox.MonitorTools;
 using System;
+using System.Collections.Generic;
 using System.IO;
+
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
@@ -12,12 +14,12 @@ public interface IWallpaperSetterSettings : IWallpaperRealEstateSettings
     string CombinedWallpaperFilePath { get; }
     string VirtualWallpaperFilePath { get; }
     string LockScreenFilePath { get; }
+    List<FileImageSettings> FileImages { get; }
 
     event EventHandler SplitSettingsChanged;
     public int HorizontalSplit { get; set; }
     public int VerticalSplit { get; set; }
     ScreenUsage ScreenUsage { get; set; }
-
 }
 
 public class WallpaperSetterSettings : ISingleton, IWallpaperSetterSettings
@@ -101,4 +103,7 @@ public class WallpaperSetterSettings : ISingleton, IWallpaperSetterSettings
     /// Defines if the entire area is used, or only it´s working area
     /// </summary>
     public ScreenUsage ScreenUsage { get; set; } = ScreenUsage.All;
+
+    public List<FileImageSettings> FileImages { get; } = [];
+
 }

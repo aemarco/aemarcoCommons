@@ -8,8 +8,7 @@ namespace aemarcoCommons.Toolbox.MonitorTools
         string DeviceName { get; }
         RealEstateType Type { get; }
         string FriendlyName { get; }
-
-
+        string TargetFilePath { get; }
 
         void SetWallpaper(Image image, Color? background = null);
     }

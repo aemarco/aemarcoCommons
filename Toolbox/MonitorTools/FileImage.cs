@@ -1,5 +1,4 @@
 ﻿using aemarcoCommons.Extensions.FileExtensions;
-using aemarcoCommons.Extensions.TextExtensions;
 using aemarcoCommons.Toolbox.PictureTools;
 using System;
 using System.Drawing;
@@ -7,38 +6,34 @@ using System.IO;
 
 namespace aemarcoCommons.Toolbox.MonitorTools
 {
-    public class LockScreen : PictureInPicture, IWallpaperRealEstate
+    public class FileImage : PictureInPicture, IWallpaperRealEstate
     {
-        private readonly IWallpaperRealEstateSettings _settings;
 
-        public LockScreen(
-            Rectangle rect,
-            string deviceName,
-            string sourceFile,
-            IWallpaperRealEstateSettings settings)
-            : base(rect)
+        private readonly FileImageSettings _settings;
+        public FileImage(FileImageSettings settings)
+            : base(new Rectangle(
+                settings.X,
+                settings.Y,
+                settings.Width,
+                settings.Height))
         {
-            DeviceName = deviceName;
             _settings = settings;
-            TargetFilePath = sourceFile;
-
-            TrySetFromPreviousImage(TargetFilePath);
+            TrySetFromPreviousImage();
         }
-
-        private void TrySetFromPreviousImage(string sourceFile)
+        private void TrySetFromPreviousImage()
         {
             // ReSharper disable once InvertIf
-            if (!string.IsNullOrWhiteSpace(sourceFile) && File.Exists(sourceFile))
+            if (!string.IsNullOrWhiteSpace(TargetFilePath) && File.Exists(TargetFilePath))
             {
                 try
                 {
-                    using (var old = new Bitmap(sourceFile))
+                    using (var old = new Bitmap(TargetFilePath))
                     {
                         if (old.Width >= (TargetArea.X + TargetArea.Width) &&
                             old.Height >= (TargetArea.Y + TargetArea.Height))
                         {
                             Current = new Bitmap(old.Clone(TargetArea, old.PixelFormat));
-                            Timestamp = new DateTimeOffset(new FileInfo(sourceFile).LastWriteTime);
+                            Timestamp = new DateTimeOffset(new FileInfo(TargetFilePath).LastWriteTime);
                             ChangedSinceDrawn = false;
                             return;
                         }
@@ -47,7 +42,7 @@ namespace aemarcoCommons.Toolbox.MonitorTools
                 }
                 catch
                 {
-                    new FileInfo(sourceFile).TryDelete();
+                    new FileInfo(TargetFilePath).TryDelete();
                 }
             }
             //defaults to a black image
@@ -57,10 +52,11 @@ namespace aemarcoCommons.Toolbox.MonitorTools
 
 
 
-        public string DeviceName { get; }
-        public RealEstateType Type => RealEstateType.LockScreen;
-        public string FriendlyName => $"Lock Screen {string.Join("-", DeviceName.GetNumbersFromText())}";
-        public string TargetFilePath { get; }
+        public string DeviceName => _settings.DeviceName;
+        public RealEstateType Type => RealEstateType.FileImage;
+        public string FriendlyName => _settings.DeviceName;
+        public string TargetFilePath => _settings.FilePath;
+
 
         public void SetWallpaper(Image image, Color? background = null) =>
             SetWallpaper(
@@ -70,4 +66,5 @@ namespace aemarcoCommons.Toolbox.MonitorTools
                 _settings.PercentLeftRightCutAllowed,
                 background);
     }
+
 }

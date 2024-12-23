@@ -12,12 +12,12 @@ namespace aemarcoCommons.Toolbox.MonitorTools
 
         #region ctor
 
-        private readonly IWallpaperRealEstateSettings _monitorSettings;
+        private readonly IWallpaperRealEstateSettings _settings;
         public Monitor(
             Rectangle rect,
             string deviceName,
             string sourceFile,
-            IWallpaperRealEstateSettings monitorSettings,
+            IWallpaperRealEstateSettings settings,
             RealEstateType realEstateType)
             : base(rect)
         {
@@ -27,9 +27,9 @@ namespace aemarcoCommons.Toolbox.MonitorTools
 
             DeviceName = deviceName;
             Type = realEstateType;
-            _monitorSettings = monitorSettings;
-
-            TrySetFromPreviousImage(sourceFile);
+            _settings = settings;
+            TargetFilePath = sourceFile;
+            TrySetFromPreviousImage(TargetFilePath);
         }
 
         private void TrySetFromPreviousImage(string sourceFile)
@@ -49,7 +49,7 @@ namespace aemarcoCommons.Toolbox.MonitorTools
                             ChangedSinceDrawn = false;
                             return;
                         }
-                        //if the previous file is not compatible in size, then we default without exception
+                        //if the previous file has no compatible size, then we default without exception
                     }
                 }
                 catch
@@ -79,14 +79,14 @@ namespace aemarcoCommons.Toolbox.MonitorTools
                 }
             }
         }
-
+        public string TargetFilePath { get; }
 
         public void SetWallpaper(Image wall, Color? background = null) =>
             SetWallpaper(
                 wall,
-                _monitorSettings.WallpaperMode,
-                _monitorSettings.PercentTopBottomCutAllowed,
-                _monitorSettings.PercentLeftRightCutAllowed,
+                _settings.WallpaperMode,
+                _settings.PercentTopBottomCutAllowed,
+                _settings.PercentLeftRightCutAllowed,
                 background);
 
     }

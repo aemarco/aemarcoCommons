@@ -33,7 +33,8 @@ namespace aemarcoCommons.Toolbox.MonitorTools
     {
         Monitor,
         Virtual,
-        LockScreen
+        LockScreen,
+        FileImage
     }
 
     public enum ScreenUsage

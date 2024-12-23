@@ -66,7 +66,7 @@ public class WallpaperSetter : ISingleton, IDisposable
             var oldMon = oldMons.First(x => x.DeviceName == re.DeviceName);
             re.SetWallpaper(oldMon.Current);
         }
-        SetBackgroundImages(_currentMode);
+        SetBackgroundImages(UpdateFiles());
     }
     private void Settings_SplitSettingsChanged(object sender, EventArgs e)
     {
@@ -78,11 +78,12 @@ public class WallpaperSetter : ISingleton, IDisposable
     private IEnumerable<IWallpaperRealEstate> GetRealEstates()
     {
         //virtual
-        foreach (var split in CreateSplits(SystemInformation.VirtualScreen, "Virtual"))
+        foreach ((Rectangle rect, var name) in CreateSplits(SystemInformation.VirtualScreen, "Virtual"))
         {
+
             yield return new Monitor(
-                GetAbsoluteBasedFromMonitorBased(split.rect),
-                split.name,
+                GetAbsoluteBasedFromMonitorBased(rect),
+                name,
                 _wallpaperSetterSettings.VirtualWallpaperFilePath,
                 _wallpaperSetterSettings,
                 RealEstateType.Virtual);
@@ -97,11 +98,11 @@ public class WallpaperSetter : ISingleton, IDisposable
                 _ => scr.Bounds
             };
             bounds = GetAbsoluteBasedFromMonitorBased(bounds);
-            foreach (var split in CreateSplits(bounds, scr.DeviceName))
+            foreach ((Rectangle rect, var name) in CreateSplits(bounds, scr.DeviceName))
             {
                 yield return new Monitor(
-                    split.rect,
-                    split.name,
+                    rect,
+                    name,
                     _wallpaperSetterSettings.CombinedWallpaperFilePath,
                     _wallpaperSetterSettings,
                     RealEstateType.Monitor);
@@ -112,28 +113,21 @@ public class WallpaperSetter : ISingleton, IDisposable
         if (OperatingSystem.IsWindowsVersionAtLeast(10, 0, 10240))
         {
             //lock screens ignore screen usage
-            foreach (var split in CreateSplits(Screen.PrimaryScreen!.Bounds, nameof(LockScreen)))
+            foreach ((Rectangle rect, var name) in CreateSplits(Screen.PrimaryScreen!.Bounds, nameof(LockScreen)))
             {
                 yield return new LockScreen(
-                    split.rect,
-                    split.name,
+                    rect,
+                    name,
                     _wallpaperSetterSettings.LockScreenFilePath,
                     _wallpaperSetterSettings);
             }
         }
 
-        //var testBounds = new Rectangle(2400, 270, 960, 540);
-        //foreach (var split in CreateSplits(testBounds, "Test"))
-        //{
-        //    yield return new Monitor(
-        //        split.rect,
-        //        split.name,
-        //        _wallpaperSetterSettings.CombinedWallpaperFilePath,
-        //        _wallpaperSetterSettings,
-        //        RealEstateType.Monitor);
-        //}
-
-
+        //file images
+        foreach (var fileImageSettings in _wallpaperSetterSettings.FileImages)
+        {
+            yield return new FileImage(fileImageSettings);
+        }
     }
 
     private IEnumerable<(Rectangle rect, string name)> CreateSplits(
@@ -271,27 +265,46 @@ public class WallpaperSetter : ISingleton, IDisposable
         var targets = _wallpaperTargets
             .Where(x => screens.Contains(x.DeviceName))
             .ToArray();
+
+        var dict = new Dictionary<string, Image>();
         foreach (var target in targets)
         {
-            target.SetWallpaper(images[screens.IndexOf(target.DeviceName)]);
+            dict.Add(target.DeviceName, images[screens.IndexOf(target.DeviceName)]);
         }
+        await HandleUpdates(dict);
+    }
 
-        var mode = targets.Any(x => x.Type == RealEstateType.Virtual)
-            ? RealEstateType.Virtual
-            : RealEstateType.Monitor;
-        SetBackgroundImages(mode);
-
-        if (OperatingSystem.IsWindowsVersionAtLeast(10, 0, 10240))
+    public async Task HandleUpdates(Dictionary<string, Image> updates)
+    {
+        foreach (var (mon, image) in updates)
         {
-            await SetLockScreenImages()
-                .ConfigureAwait(false);
+            if (_wallpaperTargets.FirstOrDefault(x => x.DeviceName == mon) is { } target)
+            {
+                target.SetWallpaper(image);
+            }
         }
-
+        await HandleUpdates();
     }
 
     #endregion
 
     #region private
+
+
+    private async Task HandleUpdates()
+    {
+        //update files
+        var changes = UpdateFiles();
+
+        //virtual and monitors
+        SetBackgroundImages(changes);
+
+        //lock screen
+        if (OperatingSystem.IsWindowsVersionAtLeast(10, 0, 10240))
+            await SetLockScreenImages(changes)
+                .ConfigureAwait(false);
+
+    }
 
     protected async Task<Image> GetImage(string fileOrUrl)
     {
@@ -314,38 +327,40 @@ public class WallpaperSetter : ISingleton, IDisposable
     }
 
 
-    private RealEstateType _currentMode = RealEstateType.Monitor;
-    private void SetBackgroundImages(RealEstateType mode)
+    private string[] UpdateFiles()
+
     {
-        _currentMode = mode;
-
-        var targets = _wallpaperTargets
-            .Where(x => x.Type == _currentMode)
-            .ToArray();
-        if (!targets.Any(x => x.ChangedSinceDrawn))
-            return;
-
-
-        var filePath = _currentMode switch
+        List<string> result = [];
+        var fileImages = _wallpaperTargets
+            .GroupBy(x => x.TargetFilePath)
+            .ToDictionary(x => x.Key, x => x.ToArray());
+        foreach ((var file, IWallpaperRealEstate[] estates) in fileImages)
         {
-            RealEstateType.Virtual => _wallpaperSetterSettings.VirtualWallpaperFilePath,
-            RealEstateType.Monitor => _wallpaperSetterSettings.CombinedWallpaperFilePath,
-            _ => throw new NotSupportedException($"Mode {_currentMode} not supported")
-        };
+            if (!estates.Any(x => x.ChangedSinceDrawn))
+                continue;
 
-        targets.CreateImageFile(filePath);
-        WallpaperHelper.SetWallpaper(filePath, WindowsWallpaperStyle.Tile);
+            estates.CreateImageFile(file);
+            result.Add(file);
+        }
+        return [.. result];
+    }
+
+    private void SetBackgroundImages(string[] changes)
+    {
+        var toSet = changes.Contains(_wallpaperSetterSettings.VirtualWallpaperFilePath)
+            ? _wallpaperSetterSettings.VirtualWallpaperFilePath
+            : changes.Contains(_wallpaperSetterSettings.CombinedWallpaperFilePath)
+                ? _wallpaperSetterSettings.CombinedWallpaperFilePath
+                : null;
+        if (toSet is not null)
+            WallpaperHelper.SetWallpaper(toSet, WindowsWallpaperStyle.Tile);
     }
 
     [SupportedOSPlatform("windows10.0.10240")]
-    private async Task SetLockScreenImages()
+    private async Task SetLockScreenImages(string[] changes)
     {
-        var lockTargets = _wallpaperTargets
-            .Where(x => x.Type == RealEstateType.LockScreen)
-            .ToArray();
-        if (lockTargets.Any(x => x.ChangedSinceDrawn))
+        if (changes.Any(x => x == _wallpaperSetterSettings.LockScreenFilePath))
         {
-            lockTargets.CreateImageFile(_wallpaperSetterSettings.LockScreenFilePath);
             //use win api to set the lock screen
             await using FileStream stream = File.OpenRead(_wallpaperSetterSettings.LockScreenFilePath);
             await Windows.System.UserProfile.LockScreen.SetImageStreamAsync(stream.AsRandomAccessStream());

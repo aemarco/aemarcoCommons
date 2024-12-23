@@ -6,6 +6,10 @@
 
 		<RootNamespace>aemarcoCommons.Toolbox</RootNamespace>
 		<AssemblyName>aemarcoCommons.Toolbox</AssemblyName>
+
+
+		
+		<GenerateCompatibilitySuppressionFile>true</GenerateCompatibilitySuppressionFile>
 	</PropertyGroup>
 
 	<!-- project references -->
