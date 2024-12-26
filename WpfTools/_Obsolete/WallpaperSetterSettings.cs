@@ -7,8 +7,11 @@ using System.IO;
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 
+// ReSharper disable once CheckNamespace
 namespace aemarcoCommons.WpfTools.MonitorTools;
 
+
+[Obsolete]
 public interface IWallpaperSetterSettings : IWallpaperRealEstateSettings
 {
     string CombinedWallpaperFilePath { get; }
@@ -22,6 +25,8 @@ public interface IWallpaperSetterSettings : IWallpaperRealEstateSettings
     ScreenUsage ScreenUsage { get; set; }
 }
 
+
+[Obsolete]
 public class WallpaperSetterSettings : ISingleton, IWallpaperSetterSettings
 {
 

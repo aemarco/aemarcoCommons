@@ -125,7 +125,9 @@ public static class BootstrapperExtensions
         var timeoutPolicy = Policy.TimeoutAsync<HttpResponseMessage>(TimeSpan.FromSeconds(10));
 
 
+#pragma warning disable CS0612 // Type or member is obsolete
         sc.AddHttpClient(nameof(WallpaperSetter), c =>
+#pragma warning restore CS0612 // Type or member is obsolete
             {
                 c.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.88 Safari/537.36");
             })

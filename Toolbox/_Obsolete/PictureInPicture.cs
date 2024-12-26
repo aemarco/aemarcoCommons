@@ -5,8 +5,10 @@ using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
+// ReSharper disable once CheckNamespace
 namespace aemarcoCommons.Toolbox.PictureTools
 {
+    [Obsolete("Use ImageInImage instead.")]
     public class PictureInPicture : IPictureInPicture
     {
         #region ctor

@@ -1,5 +1,10 @@
-﻿namespace aemarcoCommons.Toolbox.MonitorTools
+﻿using System;
+
+// ReSharper disable once CheckNamespace
+namespace aemarcoCommons.Toolbox.MonitorTools
 {
+
+    [Obsolete("Use FileFixedImageInImageSettings instead.")]
     public class FileImageSettings : IWallpaperRealEstateSettings
     {
         public string DeviceName { get; set; }

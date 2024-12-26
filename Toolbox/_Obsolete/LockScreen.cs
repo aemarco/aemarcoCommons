@@ -1,39 +1,46 @@
 ﻿using aemarcoCommons.Extensions.FileExtensions;
+using aemarcoCommons.Extensions.TextExtensions;
 using aemarcoCommons.Toolbox.PictureTools;
 using System;
 using System.Drawing;
 using System.IO;
 
+// ReSharper disable once CheckNamespace
 namespace aemarcoCommons.Toolbox.MonitorTools
 {
-    public class FileImage : PictureInPicture, IWallpaperRealEstate
+    [Obsolete]
+    public class LockScreen : PictureInPicture, IWallpaperRealEstate
     {
+        private readonly IWallpaperRealEstateSettings _settings;
 
-        private readonly FileImageSettings _settings;
-        public FileImage(FileImageSettings settings)
-            : base(new Rectangle(
-                settings.X,
-                settings.Y,
-                settings.Width,
-                settings.Height))
+        public LockScreen(
+            Rectangle rect,
+            string deviceName,
+            string sourceFile,
+            IWallpaperRealEstateSettings settings)
+            : base(rect)
         {
+            DeviceName = deviceName;
             _settings = settings;
-            TrySetFromPreviousImage();
+            TargetFilePath = sourceFile;
+
+            TrySetFromPreviousImage(TargetFilePath);
         }
-        private void TrySetFromPreviousImage()
+
+        private void TrySetFromPreviousImage(string sourceFile)
         {
             // ReSharper disable once InvertIf
-            if (!string.IsNullOrWhiteSpace(TargetFilePath) && File.Exists(TargetFilePath))
+            if (!string.IsNullOrWhiteSpace(sourceFile) && File.Exists(sourceFile))
             {
                 try
                 {
-                    using (var old = new Bitmap(TargetFilePath))
+                    using (var old = new Bitmap(sourceFile))
                     {
                         if (old.Width >= (TargetArea.X + TargetArea.Width) &&
                             old.Height >= (TargetArea.Y + TargetArea.Height))
                         {
                             Current = new Bitmap(old.Clone(TargetArea, old.PixelFormat));
-                            Timestamp = new DateTimeOffset(new FileInfo(TargetFilePath).LastWriteTime);
+                            Timestamp = new DateTimeOffset(new FileInfo(sourceFile).LastWriteTime);
                             ChangedSinceDrawn = false;
                             return;
                         }
@@ -42,7 +49,7 @@ namespace aemarcoCommons.Toolbox.MonitorTools
                 }
                 catch
                 {
-                    new FileInfo(TargetFilePath).TryDelete();
+                    new FileInfo(sourceFile).TryDelete();
                 }
             }
             //defaults to a black image
@@ -52,11 +59,10 @@ namespace aemarcoCommons.Toolbox.MonitorTools
 
 
 
-        public string DeviceName => _settings.DeviceName;
-        public RealEstateType Type => RealEstateType.FileImage;
-        public string FriendlyName => _settings.DeviceName;
-        public string TargetFilePath => _settings.FilePath;
-
+        public string DeviceName { get; }
+        public RealEstateType Type => RealEstateType.LockScreen;
+        public string FriendlyName => $"Lock Screen {string.Join("-", DeviceName.GetNumbersFromText())}";
+        public string TargetFilePath { get; }
 
         public void SetWallpaper(Image image, Color? background = null) =>
             SetWallpaper(
@@ -66,5 +72,4 @@ namespace aemarcoCommons.Toolbox.MonitorTools
                 _settings.PercentLeftRightCutAllowed,
                 background);
     }
-
 }

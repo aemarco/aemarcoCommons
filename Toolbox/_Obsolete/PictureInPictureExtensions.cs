@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 
+// ReSharper disable once CheckNamespace
 namespace aemarcoCommons.Toolbox.PictureTools
 {
+
+    [Obsolete("Use ImageInImageExtensions instead.")]
     public static class PictureInPictureExtensions
     {
 

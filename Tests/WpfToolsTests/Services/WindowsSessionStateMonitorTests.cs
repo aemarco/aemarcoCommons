@@ -1,9 +1,11 @@
 ﻿using aemarcoCommons.WpfTools.Services;
 using FluentAssertions;
 using Microsoft.Win32;
+using System;
 
 namespace WpfToolsTests.Services;
 
+[Obsolete]
 [TestFixture]
 public class WindowsSessionStateMonitorTests
 {

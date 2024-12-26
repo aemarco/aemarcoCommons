@@ -1,13 +1,16 @@
 ﻿using aemarcoCommons.Toolbox.MonitorTools;
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 
+// ReSharper disable once CheckNamespace
 namespace aemarcoCommons.Toolbox.PictureTools
 {
     public static class PictureResize
     {
 
+        [Obsolete("Use aemarcoCommons.ToolboxImage.ImageScale.Resize instead")]
         public static MemoryStream ResizePicture(
             Stream stream,
             int targetWidth,
@@ -29,6 +32,7 @@ namespace aemarcoCommons.Toolbox.PictureTools
             return ms;
         }
 
+        [Obsolete("Use aemarcoCommons.ToolboxImage.ImageScale.Resize instead")]
         public static Image ResizePicture(
             Image sourceImage,
             int targetWidth,

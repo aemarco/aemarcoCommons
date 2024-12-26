@@ -1,8 +1,13 @@
 ﻿using aemarcoCommons.Toolbox.PictureTools;
+using System;
 using System.Drawing;
 
+// ReSharper disable once CheckNamespace
 namespace aemarcoCommons.Toolbox.MonitorTools
 {
+
+
+    [Obsolete]
     public interface IWallpaperRealEstate : IPictureInPicture
     {
         string DeviceName { get; }

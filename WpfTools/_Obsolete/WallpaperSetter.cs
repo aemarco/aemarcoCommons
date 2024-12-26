@@ -16,8 +16,10 @@ using System.Windows.Forms;
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable MemberCanBePrivate.Global
 
+// ReSharper disable once CheckNamespace
 namespace aemarcoCommons.WpfTools.MonitorTools;
 
+[Obsolete]
 public class WallpaperSetter : ISingleton, IDisposable
 {
     #region ctor
@@ -308,22 +310,25 @@ public class WallpaperSetter : ISingleton, IDisposable
 
     protected async Task<Image> GetImage(string fileOrUrl)
     {
+        var stream = await GetImageStream(fileOrUrl);
+        var result = Image.FromStream(stream);
+        return result;
+    }
+    protected async Task<Stream> GetImageStream(string fileOrUrl)
+    {
+        Stream result;
         if (fileOrUrl.StartsWith("http"))
         {
-
             using var client = _httpClientFactory.CreateClient(nameof(WallpaperSetter));
             var resp = await client.GetAsync(fileOrUrl, HttpCompletionOption.ResponseHeadersRead);
             resp.EnsureSuccessStatusCode();
-
-            await using var stream = await resp.Content.ReadAsStreamAsync();
-            return Image.FromStream(stream);
-
+            result = await resp.Content.ReadAsStreamAsync();
         }
         else
         {
-            using var bmpTemp = new Bitmap(fileOrUrl);
-            return new Bitmap(bmpTemp);
+            result = File.OpenRead(fileOrUrl);
         }
+        return result;
     }
 
 

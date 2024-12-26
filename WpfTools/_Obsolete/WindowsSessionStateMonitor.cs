@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using System;
 
+// ReSharper disable once CheckNamespace
 namespace aemarcoCommons.WpfTools.Services;
 
 #nullable enable
@@ -16,7 +17,8 @@ namespace aemarcoCommons.WpfTools.Services;
 /// - react through OnPropertyChanged
 /// - react through WindowsSessionStateChanged message through IMessenger
 /// </summary>
-public class WindowsSessionStateMonitor : BaseNotifier, ISingleton, IDisposable
+[Obsolete]
+public partial class WindowsSessionStateMonitor : BaseNotifier, ISingleton, IDisposable
 {
     public WindowsSessionStateMonitor()
     {

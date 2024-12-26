@@ -1,7 +1,10 @@
 ﻿using aemarcoCommons.Toolbox.Interop;
+using System;
 
+// ReSharper disable once CheckNamespace
 namespace aemarcoCommons.Toolbox.MonitorTools
 {
+    [Obsolete]
     public enum WallpaperMode
     {
         /// <summary>
@@ -28,7 +31,7 @@ namespace aemarcoCommons.Toolbox.MonitorTools
         Fill
     }
 
-
+    [Obsolete]
     public enum RealEstateType
     {
         Monitor,
@@ -37,6 +40,7 @@ namespace aemarcoCommons.Toolbox.MonitorTools
         FileImage
     }
 
+    [Obsolete]
     public enum ScreenUsage
     {
         All,

@@ -5,23 +5,32 @@ using System;
 using System.Drawing;
 using System.IO;
 
+// ReSharper disable once CheckNamespace
 namespace aemarcoCommons.Toolbox.MonitorTools
 {
-    public class LockScreen : PictureInPicture, IWallpaperRealEstate
+    [Obsolete]
+    public class Monitor : PictureInPicture, IWallpaperRealEstate
     {
-        private readonly IWallpaperRealEstateSettings _settings;
 
-        public LockScreen(
+        #region ctor
+
+        private readonly IWallpaperRealEstateSettings _settings;
+        public Monitor(
             Rectangle rect,
             string deviceName,
             string sourceFile,
-            IWallpaperRealEstateSettings settings)
+            IWallpaperRealEstateSettings settings,
+            RealEstateType realEstateType)
             : base(rect)
         {
+            if (string.IsNullOrWhiteSpace(deviceName))
+                throw new NullReferenceException("Screen could not be initialized");
+
+
             DeviceName = deviceName;
+            Type = realEstateType;
             _settings = settings;
             TargetFilePath = sourceFile;
-
             TrySetFromPreviousImage(TargetFilePath);
         }
 
@@ -55,19 +64,32 @@ namespace aemarcoCommons.Toolbox.MonitorTools
             Timestamp = DateTimeOffset.MinValue;
         }
 
-
+        #endregion
 
         public string DeviceName { get; }
-        public RealEstateType Type => RealEstateType.LockScreen;
-        public string FriendlyName => $"Lock Screen {string.Join("-", DeviceName.GetNumbersFromText())}";
+        public RealEstateType Type { get; }
+        public string FriendlyName
+        {
+            get
+            {
+                switch (Type)
+                {
+                    case RealEstateType.Virtual:
+                        return $"All Monitors {string.Join("-", DeviceName.GetNumbersFromText())}";
+                    default:
+                        return $"Monitor {string.Join("-", DeviceName.GetNumbersFromText())}";
+                }
+            }
+        }
         public string TargetFilePath { get; }
 
-        public void SetWallpaper(Image image, Color? background = null) =>
+        public void SetWallpaper(Image wall, Color? background = null) =>
             SetWallpaper(
-                image,
+                wall,
                 _settings.WallpaperMode,
                 _settings.PercentTopBottomCutAllowed,
                 _settings.PercentLeftRightCutAllowed,
                 background);
+
     }
 }
