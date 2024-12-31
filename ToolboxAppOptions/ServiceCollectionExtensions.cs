@@ -60,7 +60,8 @@ public static class ServiceCollectionExtensions
             x => x.ValidatorType.BaseType?
                 .GetGenericArguments()
                 .FirstOrDefault()?
-                .IsAssignableTo(typeof(ISettingsBase)) ?? false);
+                .IsAssignableTo(typeof(ISettingsBase)) ?? false,
+            true);
 
         //validation during startup
         if (toolConfig.EnableValidationOnStartup)

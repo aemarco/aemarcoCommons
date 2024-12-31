@@ -14,21 +14,15 @@
  * limitations under the License.
  */
 
-namespace aemarcoCommons.ToolboxImage.Contracts;
+namespace aemarcoCommons.ToolboxImage.Configuration;
 
-public interface IImageInImage : IDisposable
+public record FixedImageInImageSettings
 {
-    Rectangle TargetArea { get; }
-
-    Image Image { get; }
-    DateTimeOffset Timestamp { get; }
-    bool ChangedSinceDrawn { get; }
-
-    public void SetImage(
-        Image image,
-        ImageScaleMode mode,
-        int maxHorizontalCropPercentage,
-        int maxVerticalCropPercentage);
-
-    void DrawToImage(Image image);
+    public int X { get; init; }
+    public int Y { get; init; }
+    public int Width { get; init; } = 1920;
+    public int Height { get; init; } = 1080;
+    public ImageScaleMode ImageScaleMode { get; init; } = ImageScaleMode.FillAndFit;
+    public int MaxHorizontalCropPercentage { get; init; } = 20;
+    public int MaxVerticalCropPercentage { get; init; } = 10;
 }

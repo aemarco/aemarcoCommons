@@ -16,9 +16,11 @@
 
 // Global using directives
 
-global using aemarcoCommons.ToolboxImage.Combining;
+global using aemarcoCommons.Extensions.PictureExtensions;
+global using aemarcoCommons.ToolboxImage.Configuration;
 global using aemarcoCommons.ToolboxImage.Contracts;
-global using aemarcoCommons.ToolboxImage.Processing;
+global using aemarcoCommons.ToolboxImage.Extensions;
+global using aemarcoCommons.ToolboxImage.Model.Enums;
 global using SixLabors.ImageSharp;
 global using SixLabors.ImageSharp.Formats.Jpeg;
 global using SixLabors.ImageSharp.PixelFormats;

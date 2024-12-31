@@ -14,32 +14,61 @@
  * limitations under the License.
  */
 
-using aemarcoCommons.Extensions.PictureExtensions;
+namespace aemarcoCommons.ToolboxImage.Extensions;
 
-namespace aemarcoCommons.ToolboxImage.Processing;
-
-internal static class Scaling
+public static class ImageExtensions
 {
 
     /// <summary>
-    /// Resizes the given image based on the specified scale mode and other parameters.
+    /// Creates a resized clone of the specified image using the given parameters.
     /// </summary>
-    /// <param name="image">The image to resize.</param>
-    /// <param name="width">The target width.</param>
-    /// <param name="height">The target height.</param>
-    /// <param name="mode">The scale mode.</param>
-    /// <param name="maxVerticalCropPercentage">Percentage of height that can be cut for resizing.</param>
-    /// <param name="maxHorizontalCropPercentage">Percentage of width that can be cut for resizing.</param>
-    /// <returns>The resized image.</returns>
-    public static Image Resize(
-        Image image,
+    /// <param name="image">The image to resize and clone.</param>
+    /// <param name="width">The target width for the resized image.</param>
+    /// <param name="height">The target height for the resized image.</param>
+    /// <param name="mode">The resizing mode to use (defaults to <see cref="ImageScaleMode.FillAndFit"/>).</param>
+    /// <param name="maxVerticalCropPercentage">The maximum vertical crop percentage allowed for resizing (defaults to 10%).</param>
+    /// <param name="maxHorizontalCropPercentage">The maximum horizontal crop percentage allowed for resizing (defaults to 20%).</param>
+    /// <returns>A new instance of <see cref="Image"/> that is a resized version of the original image.</returns>
+    /// <remarks>
+    /// This method will not modify the original image. Instead, it will clone the source image, resize it according 
+    /// to the specified parameters, and return the modified clone. The original image remains unmodified.
+    /// </remarks>
+    public static Image ResizeClone(
+        this Image image,
         int width,
         int height,
-        ImageScaleMode mode,
-        int maxHorizontalCropPercentage,
-        int maxVerticalCropPercentage)
-
+        ImageScaleMode mode = ImageScaleMode.FillAndFit,
+        int maxHorizontalCropPercentage = 20,
+        int maxVerticalCropPercentage = 10)
     {
+        var result = image.Clone(_ => { });
+        result.ResizeMutate(width, height, mode, maxHorizontalCropPercentage, maxVerticalCropPercentage);
+        return result;
+    }
+
+
+    /// <summary>
+    /// Resizes the current image to the specified dimensions and modifies it in-place.
+    /// </summary>
+    /// <param name="image">The image to resize.</param>
+    /// <param name="width">The target width for the resized image.</param>
+    /// <param name="height">The target height for the resized image.</param>
+    /// <param name="mode">The resizing mode to use (defaults to <see cref="ImageScaleMode.FillAndFit"/>).</param>
+    /// <param name="maxVerticalCropPercentage">The maximum vertical crop percentage allowed for resizing (defaults to 10%).</param>
+    /// <param name="maxHorizontalCropPercentage">The maximum horizontal crop percentage allowed for resizing (defaults to 20%).</param>
+    /// <remarks>
+    /// This method modifies the original image directly by resizing it according to the specified dimensions 
+    /// and crop settings. The resized image will reflect the given mode (FillAndFit, Fill, or Fit) and crop limits.
+    /// </remarks>
+    public static void ResizeMutate(
+        this Image image,
+        int width,
+        int height,
+        ImageScaleMode mode = ImageScaleMode.FillAndFit,
+        int maxHorizontalCropPercentage = 20,
+        int maxVerticalCropPercentage = 10)
+    {
+
         // Aspect ratios
         var imageRatio = 1.0 * image.Width / image.Height;
         var targetRatio = 1.0 * width / height;
@@ -51,9 +80,9 @@ internal static class Scaling
 
         var cropAllowed = minRatio <= imageRatio && imageRatio <= maxRatio;
         var toWide = imageRatio > targetRatio;
-        var cutWidth = (int)((maxHorizontalCropPercentage / 100.0) * image.Width);
-        var cutHeight = (int)((maxVerticalCropPercentage / 100.0) * image.Height);
-        return (mode, cropAllowed, toWide) switch
+        var cutWidth = (int)(maxHorizontalCropPercentage / 100.0 * image.Width);
+        var cutHeight = (int)(maxVerticalCropPercentage / 100.0 * image.Height);
+        _ = (mode, cropAllowed, toWide) switch
         {
             // Resize the image while preserving the aspect ratio, but crop to fit the target area.
             (ImageScaleMode.FillAndFit, true, _) => image
@@ -79,6 +108,7 @@ internal static class Scaling
             _ => throw new NotSupportedException("Nope")
         };
     }
+
 
     private static Image MutateCrop(this Image image, int x, int y, int width, int height)
     {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace aemarcoCommons.ToolboxImage;
+namespace aemarcoCommons.ToolboxImage.Model.Enums;
 
 public enum ImageScaleMode
 {

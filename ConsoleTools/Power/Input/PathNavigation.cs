@@ -110,15 +110,6 @@ public static partial class PowerConsole
     /// <param name="servers">servers which can be selected</param>
     /// <returns></returns>
     [SupportedOSPlatform("windows")]
-    [Obsolete("Use ServerSelector instead.")]
-    public static string ShareSelector(IEnumerable<string> servers) => ServerSelector(servers);
-
-    /// <summary>
-    /// Selection of a share for given servers
-    /// </summary>
-    /// <param name="servers">servers which can be selected</param>
-    /// <returns></returns>
-    [SupportedOSPlatform("windows")]
     public static string ServerSelector(IEnumerable<string> servers)
     {
         var serverItems = servers.ToList();
@@ -135,7 +126,6 @@ public static partial class PowerConsole
         var path = ShareSelector(serverItem);
         return path;
     }
-
 
     /// <summary>
     /// Selection of a share for given server
