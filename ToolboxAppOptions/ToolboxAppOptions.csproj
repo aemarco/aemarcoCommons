@@ -4,9 +4,11 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
-
 		<RootNamespace>aemarcoCommons.ToolboxAppOptions</RootNamespace>
 		<AssemblyName>aemarcoCommons.ToolboxAppOptions</AssemblyName>
+
+		<!-- PackageValidation-->
+		<EnablePackageValidation>false</EnablePackageValidation>
 	</PropertyGroup>
 
 	<!-- project references -->
@@ -34,5 +36,5 @@
 		<None Update="..\icon.png" Pack="false" />
 		<None Include="Resources\icon.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
-	
+
 </Project>

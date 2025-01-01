@@ -5,7 +5,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddConfigOptionsUtils(
         this IServiceCollection services,
         IConfigurationRoot config,
-        Action<ConfigurationOptionsBuilder>? options = null)
+        Action<ToolboxAppOptionsSettingsBuilder>? options = null)
     {
 
         //register IConfiguration stuff
@@ -14,7 +14,7 @@ public static class ServiceCollectionExtensions
 
 
         //register tool config
-        var toolConfigBuilder = new ConfigurationOptionsBuilder();
+        var toolConfigBuilder = new ToolboxAppOptionsSettingsBuilder();
         options?.Invoke(toolConfigBuilder);
         var toolConfig = toolConfigBuilder.Build();
         services.AddSingleton(toolConfig);

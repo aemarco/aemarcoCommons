@@ -14,7 +14,7 @@ public class DoubleToString : IValueConverter
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         if (value == null)
-            throw new ArgumentNullException("value");
+            throw new ArgumentNullException(nameof(value));
 
         double doubleType = (double)value;
         return doubleType.ToString(culture);

@@ -3,10 +3,10 @@
 public class AppOptionsTransformationService
 {
 
-    private readonly ConfigurationOptions _options;
+    private readonly ToolboxAppOptionsSettings _options;
     private readonly IConfigurationRoot _config;
     public AppOptionsTransformationService(
-        ConfigurationOptions options,
+        ToolboxAppOptionsSettings options,
         IConfigurationRoot config)
     {
         _options = options;

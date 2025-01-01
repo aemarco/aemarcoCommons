@@ -11,7 +11,8 @@
 		<RootNamespace>aemarcoCommons.WpfTools</RootNamespace>
 		<AssemblyName>aemarcoCommons.WpfTools</AssemblyName>
 
-		<GenerateCompatibilitySuppressionFile>true</GenerateCompatibilitySuppressionFile>
+		<!-- PackageValidation-->
+		<EnablePackageValidation>false</EnablePackageValidation>
 	</PropertyGroup>
 
 

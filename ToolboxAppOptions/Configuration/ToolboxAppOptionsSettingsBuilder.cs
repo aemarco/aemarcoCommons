@@ -1,23 +1,22 @@
-﻿//TODO 6.0 move to correct namespace and rename "ToolboxAppOptionsSettingsBuilder"
-// ReSharper disable once CheckNamespace
+﻿// ReSharper disable once CheckNamespace
 namespace aemarcoCommons.ToolboxAppOptions;
 
-public class ConfigurationOptionsBuilder
+public class ToolboxAppOptionsSettingsBuilder
 {
 
-    private readonly ConfigurationOptions _result = new();
+    private readonly ToolboxAppOptionsSettings _result = new();
 
-    public ConfigurationOptionsBuilder AddStringTransformation(StringTransformerBase stringTransformer)
+    public ToolboxAppOptionsSettingsBuilder AddStringTransformation(StringTransformerBase stringTransformer)
     {
         _result.StringTransformations.Add(stringTransformer);
         return this;
     }
-    public ConfigurationOptionsBuilder AddAssemblyMarker(params Type[] types)
+    public ToolboxAppOptionsSettingsBuilder AddAssemblyMarker(params Type[] types)
     {
         AddAssemblies([.. types.Select(x => x.Assembly)]);
         return this;
     }
-    public ConfigurationOptionsBuilder AddAssemblies(params Assembly[] assemblies)
+    public ToolboxAppOptionsSettingsBuilder AddAssemblies(params Assembly[] assemblies)
     {
         _result.Assemblies.AddRangeDistinct(
             assemblies,
@@ -29,14 +28,14 @@ public class ConfigurationOptionsBuilder
     /// </summary>
     /// <param name="enableValidationOnStartup"></param>
     /// <returns></returns>
-    public ConfigurationOptionsBuilder EnableValidationOnStartup(bool enableValidationOnStartup = true)
+    public ToolboxAppOptionsSettingsBuilder EnableValidationOnStartup(bool enableValidationOnStartup = true)
     {
         _result.EnableValidationOnStartup = enableValidationOnStartup;
         return this;
     }
 
 
-    internal ConfigurationOptions Build()
+    internal ToolboxAppOptionsSettings Build()
     {
         if (Assembly.GetEntryAssembly() is { } entry)
             _result.Assemblies.AddDistinct(entry, x => x.FullName);
@@ -55,5 +54,4 @@ public class ConfigurationOptionsBuilder
 
         return _result;
     }
-
 }

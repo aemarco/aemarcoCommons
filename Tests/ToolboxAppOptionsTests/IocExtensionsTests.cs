@@ -53,7 +53,7 @@ public class ServiceCollectionExtensionsTests : AppOptionTestBase
     [Test]
     public void AddConfigOptionsUtils_RegistersConfigurationOptions()
     {
-        var config = Sp.GetService<ConfigurationOptions>();
+        var config = Sp.GetService<ToolboxAppOptionsSettings>();
         config.Should().NotBeNull();
     }
     [Test]

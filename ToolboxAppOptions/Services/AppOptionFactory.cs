@@ -8,11 +8,11 @@ public class AppOptionFactory<TOptions> :
 {
 
     private readonly IConfigurationRoot _config;
-    private readonly ConfigurationOptions _options;
+    private readonly ToolboxAppOptionsSettings _options;
     private readonly IValidator<TOptions>? _validator;
     public AppOptionFactory(
         IConfigurationRoot config,
-        ConfigurationOptions options,
+        ToolboxAppOptionsSettings options,
         IValidator<TOptions>? validator = null)
     {
         _config = config;

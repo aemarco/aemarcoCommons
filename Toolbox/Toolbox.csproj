@@ -3,13 +3,11 @@
 	<!-- project definition -->
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
-
 		<RootNamespace>aemarcoCommons.Toolbox</RootNamespace>
 		<AssemblyName>aemarcoCommons.Toolbox</AssemblyName>
 
-
-		
-		<GenerateCompatibilitySuppressionFile>true</GenerateCompatibilitySuppressionFile>
+		<!-- PackageValidation-->
+		<EnablePackageValidation>false</EnablePackageValidation>
 	</PropertyGroup>
 
 	<!-- project references -->

@@ -10,7 +10,7 @@ public class ToolboxAppOptionsSettingsBuilderTests : AppOptionTestBase
     public void AddStringTransformation_Works()
     {
 
-        var builder = new ConfigurationOptionsBuilder();
+        var builder = new ToolboxAppOptionsSettingsBuilder();
         var transformation = new PlaceholderTransformation();
 
         _ = builder.AddStringTransformation(transformation);
@@ -23,7 +23,7 @@ public class ToolboxAppOptionsSettingsBuilderTests : AppOptionTestBase
     [Test]
     public void AddAssemblyMarker_Works()
     {
-        var builder = new ConfigurationOptionsBuilder();
+        var builder = new ToolboxAppOptionsSettingsBuilder();
         var targetType = typeof(ToolboxAppOptionsSettingsBuilderTests);
         var targetAssName = targetType.Assembly.FullName;
         var entryAssName = Assembly.GetEntryAssembly()?.FullName;
@@ -40,7 +40,7 @@ public class ToolboxAppOptionsSettingsBuilderTests : AppOptionTestBase
     [Test]
     public void AddAssemblies_Works()
     {
-        var builder = new ConfigurationOptionsBuilder();
+        var builder = new ToolboxAppOptionsSettingsBuilder();
         var targetAss = typeof(ToolboxAppOptionsSettingsBuilderTests).Assembly;
         var entryAssName = Assembly.GetEntryAssembly()?.FullName;
 
@@ -57,7 +57,7 @@ public class ToolboxAppOptionsSettingsBuilderTests : AppOptionTestBase
     [TestCase(false)]
     public void EnableValidationOnStartup_Works(bool enable)
     {
-        var builder = new ConfigurationOptionsBuilder();
+        var builder = new ToolboxAppOptionsSettingsBuilder();
 
         _ = builder.EnableValidationOnStartup(enable);
 
@@ -69,7 +69,7 @@ public class ToolboxAppOptionsSettingsBuilderTests : AppOptionTestBase
     public void Build_ShouldNarrowDownConfigurationAssemblies()
     {
         var targetAss = typeof(ToolboxAppOptionsSettingsBuilderTests).Assembly;
-        var builder = new ConfigurationOptionsBuilder().AddAssemblies(targetAss);
+        var builder = new ToolboxAppOptionsSettingsBuilder().AddAssemblies(targetAss);
 
         var result = builder.Build();
 
@@ -82,7 +82,7 @@ public class ToolboxAppOptionsSettingsBuilderTests : AppOptionTestBase
     [Test]
     public void Build_ShouldNotTouchDefaults()
     {
-        var builder = new ConfigurationOptionsBuilder();
+        var builder = new ToolboxAppOptionsSettingsBuilder();
         var entryAssName = Assembly.GetEntryAssembly()?.FullName;
 
         var result = builder.Build();

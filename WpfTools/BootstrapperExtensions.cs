@@ -2,18 +2,13 @@
 using aemarcoCommons.WpfTools.BaseNav;
 using aemarcoCommons.WpfTools.Commands;
 using aemarcoCommons.WpfTools.Dialogs;
-using aemarcoCommons.WpfTools.MonitorTools;
 using aemarcoCommons.WpfTools.WindowStuff;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
-using Polly;
-using Polly.Extensions.Http;
 using System;
 using System.Linq;
-using System.Net.Http;
 using System.Reflection;
 using System.Windows;
-using Policy = Polly.Policy;
 
 #nullable enable
 
@@ -119,20 +114,20 @@ public static class BootstrapperExtensions
 
 
 
-        var waitAndRetry = HttpPolicyExtensions
-            .HandleTransientHttpError()
-            .WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(1));
-        var timeoutPolicy = Policy.TimeoutAsync<HttpResponseMessage>(TimeSpan.FromSeconds(10));
+        //var waitAndRetry = HttpPolicyExtensions
+        //    .HandleTransientHttpError()
+        //    .WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(1));
+        //var timeoutPolicy = Policy.TimeoutAsync<HttpResponseMessage>(TimeSpan.FromSeconds(10));
 
 
-#pragma warning disable CS0612 // Type or member is obsolete
-        sc.AddHttpClient(nameof(WallpaperSetter), c =>
-#pragma warning restore CS0612 // Type or member is obsolete
-            {
-                c.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.88 Safari/537.36");
-            })
-            .AddPolicyHandler(waitAndRetry)
-            .AddPolicyHandler(timeoutPolicy);
+        //#pragma warning disable CS0612 // Type or member is obsolete
+        //        sc.AddHttpClient(nameof(WallpaperSetter), c =>
+        //#pragma warning restore CS0612 // Type or member is obsolete
+        //            {
+        //                c.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.88 Safari/537.36");
+        //            })
+        //            .AddPolicyHandler(waitAndRetry)
+        //            .AddPolicyHandler(timeoutPolicy);
 
 
         sc.AddHostedService<NavigationSetupService>();

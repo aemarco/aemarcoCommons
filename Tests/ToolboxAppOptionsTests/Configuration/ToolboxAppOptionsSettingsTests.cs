@@ -6,7 +6,7 @@ public class ToolboxAppOptionsSettingsTests : AppOptionTestBase
     [Test]
     public void HasExpectedDefaults()
     {
-        var result = new ConfigurationOptions();
+        var result = new ToolboxAppOptionsSettings();
 
         result.StringTransformations.Should().HaveCount(0);
         result.Assemblies.Should().HaveCount(0);

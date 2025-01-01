@@ -4,10 +4,10 @@ internal class StartupValidationService : BackgroundService
 {
 
     private readonly IServiceProvider _serviceProvider;
-    private readonly ConfigurationOptions _configurationOptions;
+    private readonly ToolboxAppOptionsSettings _configurationOptions;
     public StartupValidationService(
         IServiceProvider serviceProvider,
-        ConfigurationOptions configurationOptions)
+        ToolboxAppOptionsSettings configurationOptions)
     {
         _serviceProvider = serviceProvider;
         _configurationOptions = configurationOptions;

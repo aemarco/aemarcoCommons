@@ -4,10 +4,8 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0-windows</TargetFramework>
 		<Nullable>enable</Nullable>
-
 		<RootNamespace>aemarcoCommons.ToolboxTopService</RootNamespace>
 		<AssemblyName>aemarcoCommons.ToolboxTopService</AssemblyName>
-
 	</PropertyGroup>
 
 	<!-- nuget references -->

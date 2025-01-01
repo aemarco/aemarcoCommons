@@ -1,8 +1,7 @@
-﻿//TODO 6.0 move to correct namespace and rename "ToolboxAppOptionsSettings"
-// ReSharper disable once CheckNamespace
+﻿// ReSharper disable once CheckNamespace
 namespace aemarcoCommons.ToolboxAppOptions;
 
-public record ConfigurationOptions
+public record ToolboxAppOptionsSettings
 {
     public List<StringTransformerBase> StringTransformations { get; } = [];
     public List<Assembly> Assemblies { get; } = [];

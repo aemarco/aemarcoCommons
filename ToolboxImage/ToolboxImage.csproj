@@ -6,6 +6,9 @@
 		<Nullable>enable</Nullable>
 		<RootNamespace>aemarcoCommons.ToolboxImage</RootNamespace>
 		<AssemblyName>aemarcoCommons.ToolboxImage</AssemblyName>
+
+		<!-- PackageValidation-->
+		<EnablePackageValidation>false</EnablePackageValidation>
 	</PropertyGroup>
 
 	<!-- project references -->
@@ -32,10 +35,5 @@
 		<None Include="LICENSE.md" Pack="true" PackagePath="\" />
 		<None Include="NOTICE.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
-	
-	<!-- PackageValidation-->
-	<PropertyGroup>
-		<EnablePackageValidation>false</EnablePackageValidation>
-	</PropertyGroup>
 
 </Project>

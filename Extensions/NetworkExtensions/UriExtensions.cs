@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace aemarcoCommons.Extensions.NetworkExtensions
 {
-    public static partial class UriExtensions
+    public static class UriExtensions
     {
 
         public static bool TcpPing(this Uri uri)

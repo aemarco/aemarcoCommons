@@ -2,10 +2,12 @@
 
 	<!-- project definition -->
 	<PropertyGroup>
-		<TargetFrameworks>net8.0-windows</TargetFrameworks>
-
+		<TargetFrameworks>net8.0</TargetFrameworks>
 		<RootNamespace>aemarcoCommons.ConsoleTools</RootNamespace>
 		<AssemblyName>aemarcoCommons.ConsoleTools</AssemblyName>
+
+		<!-- PackageValidation-->
+		<EnablePackageValidation>false</EnablePackageValidation>
 	</PropertyGroup>
 
 	<!-- project references -->
