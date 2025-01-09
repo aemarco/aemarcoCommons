@@ -6,8 +6,7 @@
 		<RootNamespace>aemarcoCommons.Extensions</RootNamespace>
 		<AssemblyName>aemarcoCommons.Extensions</AssemblyName>
 
-		<!-- PackageValidation-->
-		<EnablePackageValidation>false</EnablePackageValidation>
+		<!-- PackageValidation??-->
 	</PropertyGroup>
 
 	<!-- nuget references-->

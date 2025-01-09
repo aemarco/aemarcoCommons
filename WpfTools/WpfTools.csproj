@@ -11,8 +11,7 @@
 		<RootNamespace>aemarcoCommons.WpfTools</RootNamespace>
 		<AssemblyName>aemarcoCommons.WpfTools</AssemblyName>
 
-		<!-- PackageValidation-->
-		<EnablePackageValidation>false</EnablePackageValidation>
+		<!-- PackageValidation??-->
 	</PropertyGroup>
 
 

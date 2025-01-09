@@ -6,8 +6,7 @@
 		<RootNamespace>aemarcoCommons.Toolbox</RootNamespace>
 		<AssemblyName>aemarcoCommons.Toolbox</AssemblyName>
 
-		<!-- PackageValidation-->
-		<EnablePackageValidation>false</EnablePackageValidation>
+		<!-- PackageValidation??-->
 	</PropertyGroup>
 
 	<!-- project references -->

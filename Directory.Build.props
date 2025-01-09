@@ -11,6 +11,15 @@
 	</PropertyGroup>
 -->
 
+	<!-- PackageValidation-->
+	<PropertyGroup>
+		<EnablePackageValidation>false</EnablePackageValidation>
+		<PackageValidationBaselineVersion>8.2</PackageValidationBaselineVersion>
+		<EnableStrictModeForCompatibleFrameworksInPackage>true</EnableStrictModeForCompatibleFrameworksInPackage>
+		<EnableStrictModeForCompatibleTfms>true</EnableStrictModeForCompatibleTfms>
+		<GenerateCompatibilitySuppressionFile>false</GenerateCompatibilitySuppressionFile>
+	</PropertyGroup>
+
 
 	<!-- pdb files -->
 	<PropertyGroup Condition="'$(Configuration)'=='Release'">
@@ -65,14 +74,6 @@
 		</None>
 	</ItemGroup>
 
-	<!-- PackageValidation-->
-	<PropertyGroup>
-		<EnablePackageValidation>true</EnablePackageValidation>
-		<PackageValidationBaselineVersion>8.0.3</PackageValidationBaselineVersion>
-		<EnableStrictModeForCompatibleFrameworksInPackage>true</EnableStrictModeForCompatibleFrameworksInPackage>
-		<EnableStrictModeForCompatibleTfms>true</EnableStrictModeForCompatibleTfms>
-		<GenerateCompatibilitySuppressionFile>false</GenerateCompatibilitySuppressionFile>
-	</PropertyGroup>
 	
 
 </Project>

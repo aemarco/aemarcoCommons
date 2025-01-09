@@ -6,8 +6,7 @@
 		<RootNamespace>aemarcoCommons.ConsoleTools</RootNamespace>
 		<AssemblyName>aemarcoCommons.ConsoleTools</AssemblyName>
 
-		<!-- PackageValidation-->
-		<EnablePackageValidation>false</EnablePackageValidation>
+		<!-- PackageValidation??-->
 	</PropertyGroup>
 
 	<!-- project references -->
