@@ -49,6 +49,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToolboxTopServiceManualTest
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolboxImage", "ToolboxImage\ToolboxImage.csproj", "{C47DFE9F-B898-40A5-A7CF-E87B8E6AE2A9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolboxFluentValidation", "ToolboxFluentValidation\ToolboxFluentValidation.csproj", "{D86E2485-0B2F-4A1C-9E21-8A2953EEEC7D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -115,6 +117,10 @@ Global
 		{C47DFE9F-B898-40A5-A7CF-E87B8E6AE2A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C47DFE9F-B898-40A5-A7CF-E87B8E6AE2A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C47DFE9F-B898-40A5-A7CF-E87B8E6AE2A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D86E2485-0B2F-4A1C-9E21-8A2953EEEC7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D86E2485-0B2F-4A1C-9E21-8A2953EEEC7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D86E2485-0B2F-4A1C-9E21-8A2953EEEC7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D86E2485-0B2F-4A1C-9E21-8A2953EEEC7D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

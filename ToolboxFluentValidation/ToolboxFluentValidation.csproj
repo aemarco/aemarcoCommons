@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<!-- project definition -->
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<RootNamespace>aemarcoCommons.ToolboxFluentValidation</RootNamespace>
+		<AssemblyName>aemarcoCommons.ToolboxFluentValidation</AssemblyName>
+
+		<!-- PackageValidation??-->
+		<EnablePackageValidation>false</EnablePackageValidation>
+	</PropertyGroup>
+	
+	<!-- nuget references -->
+	<ItemGroup>
+	  <PackageReference Include="FluentValidation" Version="11.11.0" />
+	  <PackageReference Include="CronExpressionDescriptor" Version="2.38.0" />
+	</ItemGroup>
+
+	<!-- nuget build-->
+	<PropertyGroup>
+		<Description>Tooling for FluentValidation with additional Validators and Extensions</Description>
+		<PackageTags>FluentValidation</PackageTags>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Update="..\README.md" Pack="false" />
+		<None Include="README.md" Pack="true" PackagePath="\" />
+		<None Update="..\icon.png" Pack="false" />
+		<None Include="Resources\icon.png" Pack="true" PackagePath="\" />
+		<None Include="LICENSE.md" Pack="true" PackagePath="\" />
+		<None Include="NOTICE.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+	
+</Project>
