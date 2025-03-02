@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 // ReSharper disable once CheckNamespace
 namespace aemarcoCommons.ConsoleTools;
@@ -42,6 +43,16 @@ public static partial class PowerConsole
                 new SpinnerColumn())
             .StartAsync(work);
     }
+
+    public static async Task StartProgressAsync<T>(
+        Func<ProgressContext, T, CancellationToken, Task> work,
+        T request,
+        CancellationToken cancellationToken)
+    {
+        await StartProgressAsync(async ctx =>
+            await work(ctx, request, cancellationToken));
+    }
+
 
     public static async Task<T> StartProgressAsync<T>(Func<ProgressContext, Task<T>> work)
     {

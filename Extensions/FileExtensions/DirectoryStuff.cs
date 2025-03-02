@@ -11,17 +11,17 @@ namespace aemarcoCommons.Extensions.FileExtensions
         }
 
         //so that is home is not visible to others
-        private static readonly string[] _ignoredFiles = 
+        private static readonly string[] IgnoredFiles =
         {
             "desktop.ini",
             "thumbs.db",
         };
 
-        private static readonly string[] _ignoredExtensions = 
+        private static readonly string[] IgnoredExtensions =
         {
             ".tmp"
         };
-        
+
         private static void TryDeleteEmptySubfolders(string path, bool isHome = true)
         {
             try
@@ -37,12 +37,12 @@ namespace aemarcoCommons.Extensions.FileExtensions
                 }
                 // never delete home
                 if (isHome) return;
-                
-                
+
+
                 // delete from bottom up
                 if (!new DirectoryInfo(path).GetFiles("*", SearchOption.AllDirectories).Any(x =>
-                    !_ignoredFiles.Contains(x.Name.ToLower()) ||
-                    !_ignoredExtensions.Contains(x.Extension.ToLower())))
+                    !IgnoredFiles.Contains(x.Name.ToLower()) ||
+                    !IgnoredExtensions.Contains(x.Extension.ToLower())))
                 {
                     Directory.Delete(path, true);
                 }

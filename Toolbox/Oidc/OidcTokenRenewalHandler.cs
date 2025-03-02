@@ -165,6 +165,7 @@ namespace aemarcoCommons.Toolbox.Oidc
                 return false;
             }
 
+
             return await _oidcTokenRenewalHandlerHelper.HandleLockedAsync(async () =>
             {
                 var response = await _oidcClient.RefreshTokenAsync(refreshToken, cancellationToken: cancellationToken)
@@ -185,6 +186,7 @@ namespace aemarcoCommons.Toolbox.Oidc
 
             }, cancellationToken)
                 .ConfigureAwait(false);
+
         }
 
 
@@ -207,6 +209,10 @@ namespace aemarcoCommons.Toolbox.Oidc
                     await action()
                         .ConfigureAwait(false);
                     return true;
+                }
+                catch
+                {
+                    return false;
                 }
                 finally
                 {
