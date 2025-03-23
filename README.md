@@ -2,6 +2,9 @@
 
 Some Extensions, some Toolbox, some Console-, Wpf- and Web-Tools
 
+## Donating?
+If you want to show some love, ETH donations are very welcome @ 0x95378259e5140Fe6D78811790A679AC6b9554866
+
 ## Packages
 
 1. [WpfTools](https://github.com/aemarco/aemarcoCommons/tree/master/WpfTools)
