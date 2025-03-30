@@ -16,6 +16,16 @@ public static class StringRuleBuilderExtensions
                 : "'{PropertyName}' must be a valid Web-Uri without a trailing slash");
     }
 
+    public static IRuleBuilderOptions<T, string?> BeWithoutTrailingSlash<T>(
+        this IRuleBuilder<T, string?> ruleBuilder)
+    {
+        return ruleBuilder
+            .Must(text => text is null || !text.EndsWith('/'))
+            .WithMessage("'{PropertyName}' must not end with /");
+    }
+
+
+
     private static bool IsAbsoluteWebUri(string url, bool allowTrailingSlash) =>
         !string.IsNullOrWhiteSpace(url) &&
         (!url.EndsWith('/') || allowTrailingSlash) &&
