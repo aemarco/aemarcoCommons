@@ -8,11 +8,11 @@
 		<AssemblyName>aemarcoCommons.WebTools</AssemblyName>
 
 		<!-- PackageValidation??-->
+		<EnablePackageValidation>false</EnablePackageValidation>
 	</PropertyGroup>
 
 	<!-- project references -->
 	<ItemGroup>
-		<ProjectReference Include="..\ToolboxAppOptions\ToolboxAppOptions.csproj" />
 		<ProjectReference Include="..\Toolbox\Toolbox.csproj" />
 	</ItemGroup>
 
