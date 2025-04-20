@@ -3,13 +3,5 @@
   "version": "8.3",
   "buildNumberOffset": 1,
   "pathFilters": [ "." ],
-  "publicReleaseRefSpec": [
-    "^refs/heads/master$",
-    "^refs/heads/v\\d+(?:\\.\\d+)?$"
-  ],
-  "cloudBuild": {
-    "buildNumber": {
-      "enabled": true
-    }
-  }
+  "inherit": true
 }
