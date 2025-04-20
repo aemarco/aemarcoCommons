@@ -1,13 +1,7 @@
 {
-  "buildNumberOffset": 0,
-  "publicReleaseRefSpec": [
-    "^refs/heads/master$",
-    "^refs/heads/v\\d+(?:\\.\\d+)?$"
-  ],
-  "cloudBuild": {
-    "buildNumber": {
-      "enabled": true
-    }
-  },
-  "inherit": false
+  "$schema": "https://raw.githubusercontent.com/dotnet/Nerdbank.GitVersioning/master/src/NerdBank.GitVersioning/version.schema.json",
+  "version": "8.3",
+  "buildNumberOffset": 1,
+  "pathFilters": [ "." ],
+  "inherit": true
 }
