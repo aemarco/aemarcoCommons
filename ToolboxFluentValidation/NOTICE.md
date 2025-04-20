@@ -21,5 +21,3 @@ For more information, see: https://github.com/bradymholt/cron-expression-descrip
 ---
 
 This NOTICE file is provided for information purposes only and includes important licensing details required for the third-party components referenced by aemarcoToolboxFluentValidation.
-
-
