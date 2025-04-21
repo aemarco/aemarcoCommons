@@ -9,6 +9,7 @@ public static partial class PowerConsole
     public static void WriteAsJson(object o)
     {
         AnsiConsole.Write(new JsonText(JsonConvert.SerializeObject(o)));
+        AnsiConsole.WriteLine();
     }
 
 }
