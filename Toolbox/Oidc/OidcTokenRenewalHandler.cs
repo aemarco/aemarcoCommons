@@ -9,56 +9,6 @@ using System.Threading.Tasks;
 
 namespace aemarcoCommons.Toolbox.Oidc
 {
-
-
-    /// <summary>
-    /// external party holding the access and refresh token
-    /// </summary>
-    public interface ISessionStore
-    {
-        event EventHandler AccessTokenChanged;
-
-
-        string IdToken { get; set; }
-        string AccessToken { get; set; }
-        string RefreshToken { get; set; }
-
-    }
-
-    /// <summary>
-    /// default in memory session store
-    /// </summary>
-    public class SessionStore : ISessionStore
-    {
-        public event EventHandler AccessTokenChanged;
-        protected void OnAccessTokenChanged()
-        {
-            AccessTokenChanged?.Invoke(this, EventArgs.Empty);
-        }
-
-        public virtual string IdToken { get; set; }
-
-        private string _accessToken;
-        public virtual string AccessToken
-        {
-            get => _accessToken;
-            set
-            {
-                if (_accessToken == value)
-                    return;
-
-                _accessToken = value;
-                OnAccessTokenChanged();
-            }
-        }
-
-        public virtual string RefreshToken { get; set; }
-    }
-
-
-
-
-
     /// <summary>
     /// this handler can be chained in a HttpClient, so that we try to gather a new access token when we encounter 401 responses.
     /// if this handler returns a 401, means that the access token + refresh token are no more usable
@@ -100,21 +50,31 @@ namespace aemarcoCommons.Toolbox.Oidc
             EnsureSetup();
 
             //if we have no access token, we try to get one with refresh
-            var accessToken = await GetAccessTokenAsync(cancellationToken)
+            var session = await GetAccessTokenAsync(cancellationToken)
                 .ConfigureAwait(false);
 
-            if (string.IsNullOrWhiteSpace(accessToken) &&
-                !await RefreshTokensAsync(cancellationToken).ConfigureAwait(false))
+            if (string.IsNullOrWhiteSpace(session?.AccessToken))
             {
-                //otherwise we fail
-                return new HttpResponseMessage(HttpStatusCode.Unauthorized)
+                if (await RefreshTokensAsync(session, cancellationToken)
+                        .ConfigureAwait(false))
                 {
-                    RequestMessage = request
-                };
+                    //seems we will get a new session
+                    session = await _sessionStore.GetSession();
+                    if (string.IsNullOrWhiteSpace(session?.AccessToken))
+                    {
+                        //otherwise we fail
+                        return new HttpResponseMessage(HttpStatusCode.Unauthorized) { RequestMessage = request };
+                    }
+                }
+                else
+                {
+                    //otherwise we fail
+                    return new HttpResponseMessage(HttpStatusCode.Unauthorized) { RequestMessage = request };
+                }
             }
 
-            //so seems we have a access token, so try to use it
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _sessionStore.AccessToken);
+            //so seems we have an access token, so try to use it
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", session.AccessToken);
             var response = await base.SendAsync(request, cancellationToken)
                 .ConfigureAwait(false);
 
@@ -126,17 +86,20 @@ namespace aemarcoCommons.Toolbox.Oidc
             }
 
             //if we get 401, we try to refresh the access token
-            if (!await RefreshTokensAsync(cancellationToken).ConfigureAwait(false))
+            if (!await RefreshTokensAsync(session, cancellationToken).ConfigureAwait(false))
             {
                 //we cant refresh
                 return response;
             }
 
+            //seems we refreshed the token
+            session = await _sessionStore.GetSession()
+                .ConfigureAwait(false);
 
             response.Dispose(); // This 401 response will not be used for anything so is disposed to unblock the socket.
 
             //we refreshed the token, so we try the same request once more
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _sessionStore.AccessToken);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", session.AccessToken);
             return await base.SendAsync(request, cancellationToken)
                 .ConfigureAwait(false);
         }
@@ -144,7 +107,7 @@ namespace aemarcoCommons.Toolbox.Oidc
 
 
 
-        private async Task<string> GetAccessTokenAsync(CancellationToken cancellationToken)
+        private async Task<Session> GetAccessTokenAsync(CancellationToken cancellationToken)
         {
             //in case somebody is refreshing currently, we don´t want to return until refreshed, so locking
             var res = await _oidcTokenRenewalHandlerHelper.HandleLockedAsync(
@@ -153,36 +116,33 @@ namespace aemarcoCommons.Toolbox.Oidc
                 .ConfigureAwait(false);
 
             return res
-                ? _sessionStore.AccessToken
+                ? await _sessionStore.GetSession()
                 : null;
         }
 
-        private async Task<bool> RefreshTokensAsync(CancellationToken cancellationToken)
+        private async Task<bool> RefreshTokensAsync(Session session, CancellationToken cancellationToken)
         {
-            var refreshToken = _sessionStore.RefreshToken;
-            if (string.IsNullOrWhiteSpace(refreshToken))
+            if (string.IsNullOrWhiteSpace(session?.RefreshToken))
             {
                 return false;
             }
 
-
             return await _oidcTokenRenewalHandlerHelper.HandleLockedAsync(async () =>
             {
-                var response = await _oidcClient.RefreshTokenAsync(refreshToken, cancellationToken: cancellationToken)
+                var response = await _oidcClient.RefreshTokenAsync(session.RefreshToken, cancellationToken: cancellationToken)
                     .ConfigureAwait(false);
 
                 if (response.IsError)
                     throw new Exception("Could not refresh token");
 
-                if (!string.IsNullOrWhiteSpace(response.IdentityToken))
-                {
-                    _sessionStore.IdToken = response.IdentityToken;
-                }
-                if (!string.IsNullOrWhiteSpace(response.RefreshToken))
-                {
-                    _sessionStore.RefreshToken = response.RefreshToken;
-                }
-                _sessionStore.AccessToken = response.AccessToken;
+                await _sessionStore.SetSession(
+                        new Session
+                        {
+                            IdToken = response.IdentityToken,
+                            AccessToken = response.AccessToken,
+                            RefreshToken = response.RefreshToken
+                        })
+                    .ConfigureAwait(false);
 
             }, cancellationToken)
                 .ConfigureAwait(false);
