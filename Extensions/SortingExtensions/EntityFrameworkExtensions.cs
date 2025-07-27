@@ -16,7 +16,7 @@ namespace aemarcoCommons.Extensions.SortingExtensions
             var propertyInfo = entityType.GetProperty(propertyName) ?? throw new Exception($"Could not find propertyName {propertyName}");
             ParameterExpression arg = Expression.Parameter(entityType, "x");
             MemberExpression property = Expression.Property(arg, propertyName);
-            var selector = Expression.Lambda(property, new ParameterExpression[] { arg });
+            var selector = Expression.Lambda(property, arg);
 
             //Get System.Linq.Queryable.OrderBy() method.
             var enumerableType = typeof(Queryable);
@@ -46,11 +46,11 @@ namespace aemarcoCommons.Extensions.SortingExtensions
             var propertyInfo = entityType.GetProperty(propertyName) ?? throw new Exception($"Could not find propertyName {propertyName}");
             ParameterExpression arg = Expression.Parameter(entityType, "x");
             MemberExpression property = Expression.Property(arg, propertyName);
-            var selector = Expression.Lambda(property, new ParameterExpression[] { arg });
+            var selector = Expression.Lambda(property, arg);
 
             //Get System.Linq.Queryable.OrderBy() method.
-            var enumarableType = typeof(Queryable);
-            var method = enumarableType.GetMethods()
+            var enumerableType = typeof(Queryable);
+            var method = enumerableType.GetMethods()
                  .Where(m => m.Name == "OrderByDescending" && m.IsGenericMethodDefinition)
                  .Where(m =>
                  {
