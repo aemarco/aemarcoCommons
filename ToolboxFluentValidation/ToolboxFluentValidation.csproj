@@ -14,7 +14,7 @@
 	<!-- nuget references -->
 	<ItemGroup>
 	  <PackageReference Include="FluentValidation" Version="11.11.0" />
-	  <PackageReference Include="CronExpressionDescriptor" Version="2.38.0" />
+	  <PackageReference Include="CronExpressionDescriptor" Version="2.44.0" />
 	</ItemGroup>
 
 	<!-- nuget build-->
