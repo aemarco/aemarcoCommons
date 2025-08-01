@@ -23,8 +23,8 @@
 
 	<!-- nuget references-->
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.7" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1" />
 		<PackageReference Include="FontAwesome.WPF" Version="4.7.0.9" NoWarn="NU1701" />
 		<PackageReference Include="WpfAnimatedGif" Version="2.0.2" />
