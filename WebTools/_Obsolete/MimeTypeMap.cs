@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
+// ReSharper disable once CheckNamespace
 namespace aemarcoCommons.WebTools.Mime;
+
+[Obsolete("Use MimeMap from aemarcoCommons.WebTools.Mime instead")]
 public static class MimeTypeMap
 {
     private const string Dot = ".";
