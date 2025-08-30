@@ -17,13 +17,11 @@ namespace aemarcoCommons.Toolbox.NetworkTools
         }
 
 
-        private static readonly ConcurrentDictionary<string, RateLimitingInfo> _rateLimits = new ConcurrentDictionary<string, RateLimitingInfo>();
+        private static readonly ConcurrentDictionary<string, RateLimitingInfo> RateLimits = new ConcurrentDictionary<string, RateLimitingInfo>();
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             var host = request.RequestUri.Host;
-            RateLimitingInfo info = null;
-            if (_rateLimits.ContainsKey(host) &&
-                _rateLimits.TryGetValue(host, out info))
+            if (RateLimits.TryGetValue(host, out RateLimitingInfo info))
             {
                 var earliest = info.LastRequest.AddMilliseconds(info.Delay);
                 await earliest.WaitTill(cancellationToken)
@@ -47,7 +45,7 @@ namespace aemarcoCommons.Toolbox.NetworkTools
             info.Delay = Math.Min(info.Delay + 100, 1000);
             info.LastRequest = DateTimeOffset.Now;
 
-            _rateLimits.AddOrUpdate(host, info, (key, val) => info);
+            RateLimits.AddOrUpdate(host, info, (key, val) => info);
             _logger.LogWarning("Rate limiting {info}", info);
 
 
