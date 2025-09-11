@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace aemarcoCommons.Extensions.FileExtensions
 {
@@ -52,6 +54,65 @@ namespace aemarcoCommons.Extensions.FileExtensions
                 // ignored
             }
         }
+
+
+
+
+
+
+
+
+
+        /// <summary>
+        /// Ensures that <paramref name="targetFolder"/> contains exactly the given files by *file name*.
+        /// 
+        /// - Existing files with matching names are kept as-is.
+        /// - Files not listed are deleted.
+        /// - Files listed but missing are copied from their source paths.
+        /// - Duplicate file names ?? First file wins, others are ignored
+        /// 
+        /// Note: Matching is done by file name only (not content or path).
+        /// </summary>
+        /// <param name="targetFolder">absolute target folder path</param>
+        /// <param name="sourceFiles">absolute file paths for source files</param>
+        /// <param name="cancellationToken">cancellation</param>
+        public static void SyncFolderByFileName(this DirectoryInfo targetFolder, IEnumerable<string> sourceFiles, CancellationToken cancellationToken = default)
+        {
+            targetFolder.Create();
+            var desiredFiles = sourceFiles
+                .Select(x => new FileInfo(x))
+                .ToDictionary(
+                    x => x.FullName,
+                    x => Path.Combine(targetFolder.FullName, x.Name));
+
+            var existingFiles = targetFolder
+                .GetFiles("*.*", SearchOption.AllDirectories)
+                .ToList();
+
+            //delete obsolete files
+            foreach (var file in existingFiles
+                         .Where(x => !desiredFiles.ContainsValue(x.FullName)))
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                file.TryDelete();
+            }
+
+
+            //copy new files
+            foreach (var kvp in desiredFiles)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                if (File.Exists(kvp.Value))
+                    continue;
+
+                File.Copy(kvp.Key, kvp.Value);
+            }
+        }
+
+
+
+
+
 
     }
 }
