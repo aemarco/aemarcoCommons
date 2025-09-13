@@ -22,7 +22,9 @@ jobs:
       version: ${{ steps.get-version.outputs.build_version }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with: 
+          fetch-depth: 0  # holt komplette Historie, NICHT shallow
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
