@@ -18,21 +18,20 @@ env:
 jobs:
   build:
     runs-on: windows-latest
-    outputs:
-      version: ${{ steps.get-version.outputs.build_version }}
+  
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with: 
           fetch-depth: 0  # holt komplette Historie, NICHT shallow
 
+      - name: Show NBGV version
+        run: nbgv get-version
+        
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.x'
-
-      - name: Install NBGV
-        run: dotnet tool install --global nbgv
 
       - name: Restore packages
         run: dotnet restore
@@ -42,9 +41,6 @@ jobs:
 
       - name: Run Unit Tests
         run: dotnet test --configuration Release --no-build --verbosity normal
-
-      - name: Show NBGV version
-        run: nbgv get-version
 
       - name: Collect NuGet packages
         run: |
