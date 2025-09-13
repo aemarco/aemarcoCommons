@@ -7,7 +7,6 @@ on:
       - develop
   pull_request:
     branches:
-      - main
       - develop
   workflow_dispatch:
 
