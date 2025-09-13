@@ -1,7 +1,13 @@
 ﻿using System;
+using System.Runtime.Versioning;
 
+#pragma warning disable IDE0130
+// ReSharper disable once CheckNamespace
 namespace aemarcoCommons.Toolbox.RegistryTools
+#pragma warning restore IDE0130
 {
+    [Obsolete("Will be removed in next major")]
+    [SupportedOSPlatform("windows")]
     public class ClickOnceAutostart
     {
 

@@ -45,11 +45,13 @@ namespace aemarcoCommons.Toolbox.SerializationTools
             Instance.TimestampSaved = DateTimeOffset.Now;
             Instance.Version = Instance.CurrentVersion;
 
-            var filePath = GetStorageFilePath();
+            var filePath = GetStorageFilePath(false);
             Directory.CreateDirectory(Path.GetDirectoryName(filePath) ?? throw new Exception("FilePath unclear"));
 
-            if (_isUserProtected)
+
+            if (_isUserProtected && OperatingSystem.IsWindows())
             {
+                filePath = GetStorageFilePath(true);
                 File.WriteAllBytes(
                     filePath,
                     ProtectedData.Protect(
@@ -89,23 +91,41 @@ namespace aemarcoCommons.Toolbox.SerializationTools
         /// <exception cref="Exception">when neither config nor instance provide folder and or name for file</exception>
         private void LoadExistingOrDefault()
         {
-            var file = GetStorageFilePath();
 
-            if (File.Exists(file))
+
+            if (_isUserProtected && OperatingSystem.IsWindows())
             {
-                try
+                var file = GetStorageFilePath(true);
+                if (File.Exists(file))
                 {
-                    string json = _isUserProtected
-                        ? Encoding.UTF8.GetString(ProtectedData.Unprotect(
-                            File.ReadAllBytes(file),
-                            null,
-                            DataProtectionScope.CurrentUser))
-                        : File.ReadAllText(file);
-                    Instance = JsonConvert.DeserializeObject<T>(json);
+                    try
+                    {
+                        string json = Encoding.UTF8.GetString(ProtectedData.Unprotect(
+                                File.ReadAllBytes(file),
+                                null,
+                                DataProtectionScope.CurrentUser));
+                        Instance = JsonConvert.DeserializeObject<T>(json);
+                    }
+                    catch
+                    {
+                        new FileInfo(file).TryDelete();
+                    }
                 }
-                catch
+            }
+            else
+            {
+                var file = GetStorageFilePath(false);
+                if (File.Exists(file))
                 {
-                    new FileInfo(file).TryDelete();
+                    try
+                    {
+                        string json = File.ReadAllText(file);
+                        Instance = JsonConvert.DeserializeObject<T>(json);
+                    }
+                    catch
+                    {
+                        new FileInfo(file).TryDelete();
+                    }
                 }
             }
 
@@ -121,7 +141,7 @@ namespace aemarcoCommons.Toolbox.SerializationTools
         /// </summary>
         /// <returns>The absolute file path for the instance</returns>
         /// <exception cref="Exception">when neither config nor instance provide folder and or name for file</exception>
-        private string GetStorageFilePath()
+        private string GetStorageFilePath(bool isProtected)
         {
             //we primarily use interface
             var file = new T().Filepath;
@@ -134,7 +154,7 @@ namespace aemarcoCommons.Toolbox.SerializationTools
             //fileName (1. from file, 2. from type)
             var fileName = file != null
                 ? Path.GetFileName(file)
-                : _isUserProtected
+                : isProtected
                     ? $"{typeof(T).Name}.bin"
                     : $"{typeof(T).Name}.json";
 

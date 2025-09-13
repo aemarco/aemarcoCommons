@@ -2,11 +2,14 @@
 using System;
 using System.IO;
 using System.IO.Pipes;
+using System.Runtime.Versioning;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace aemarcoCommons.Toolbox.Pipes
 {
+
+    [SupportedOSPlatform("windows")]
     public class MessageBasedPipeServer
     {
         private readonly string _pipeName;

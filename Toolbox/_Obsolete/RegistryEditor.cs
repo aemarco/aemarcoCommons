@@ -1,7 +1,15 @@
 ﻿using Microsoft.Win32;
+using System;
+using System.Runtime.Versioning;
 
+
+#pragma warning disable IDE0130
+// ReSharper disable once CheckNamespace
 namespace aemarcoCommons.Toolbox.RegistryTools
+#pragma warning restore IDE0130
 {
+    [Obsolete("Will be removed in next major")]
+    [SupportedOSPlatform("windows")]
     public static class RegistryEditor
     {
 
@@ -14,7 +22,7 @@ namespace aemarcoCommons.Toolbox.RegistryTools
         public static object GetUserValue(string path, string key)
         {
             object result;
-            RegistryKey reg = Registry.CurrentUser.OpenSubKey(path);
+            var reg = Registry.CurrentUser.OpenSubKey(path);
             try
             {
                 result = reg?.GetValue(key);
