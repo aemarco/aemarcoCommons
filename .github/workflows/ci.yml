@@ -70,14 +70,15 @@ jobs:
           name: drop
           path: ./artifacts
 
-      - name: Debug API key
-        shell: pwsh
-        run: Write-Host "API key length:$($env:NUGET_API_KEY.Length)"
-          
       - name: Push packages to NuGet.org
         shell: pwsh
         run: |
+          Write-Host "Found the following packages:"
+          Get-ChildItem ./artifacts -Filter *.nupkg | ForEach-Object { Write-Host $_.FullName }
+
           Get-ChildItem ./artifacts -Filter *.nupkg | ForEach-Object {
-            dotnet nuget push $_.FullName --source https://api.nuget.org/v3/index.json --api-key $env:NUGET_API_KEY --skip-duplicate
-            Write-Host "API key length: $($env:NUGET_API_KEY.Length)"
+            dotnet nuget push $_.FullName `
+              --source https://api.nuget.org/v3/index.json `
+              --api-key ${{ secrets.NUGET_API_KEY }} `
+              --skip-duplicate
           }
