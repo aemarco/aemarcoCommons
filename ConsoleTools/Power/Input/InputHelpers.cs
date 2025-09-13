@@ -6,10 +6,10 @@ namespace aemarcoCommons.ConsoleTools;
 
 public static partial class PowerConsole
 {
-    private static T MenuSelectionHelper<T>(string header, IEnumerable<T> selectable, Func<T, string> displayProperty, bool abortable, bool clear = true)
+    private static T? MenuSelectionHelper<T>(string header, IEnumerable<T> selectable, Func<T, string> displayProperty, bool abortable, bool clear = true)
         where T : class
     {
-        T result = null;
+        T? result = null;
 
         if (clear) Console.Clear();
         var items = new List<ConsoleMenuItem>();

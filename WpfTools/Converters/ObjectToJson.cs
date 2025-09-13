@@ -11,14 +11,14 @@ namespace aemarcoCommons.WpfTools.Converters;
 [ValueConversion(typeof(object), typeof(string))]
 public class ObjectToJson : IValueConverter
 {
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         return value != null
             ? JsonConvert.SerializeObject(value, Formatting.Indented)
             : string.Empty;
     }
 
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         return value != null
             ? JsonConvert.DeserializeObject((string)value, targetType)

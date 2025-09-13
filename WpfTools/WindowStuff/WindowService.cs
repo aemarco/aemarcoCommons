@@ -8,7 +8,7 @@ namespace aemarcoCommons.WpfTools.WindowStuff;
 public class WindowService : IWindowService
 {
 
-    private readonly IServiceProvider _serviceProvider;
+    private readonly IServiceProvider? _serviceProvider;
     public WindowService() { }
     public WindowService(IServiceProvider serviceProvider)
     {
@@ -82,7 +82,7 @@ public class WindowService : IWindowService
             }
         }
 
-        var window = (Window)Activator.CreateInstance(viewType)
+        var window = (Window)Activator.CreateInstance(viewType)!
                      ?? throw new Exception($"Window {viewType.FullName} could not be created.");
         window.DataContext = viewModel;
         window.Show();
@@ -99,7 +99,7 @@ public class WindowService : IWindowService
         var result = dialog.ShowDialog();
         return result;
 
-        void CloseEventHandler(object s, bool? e)
+        void CloseEventHandler(object? s, bool? e)
         {
             dialog.DialogResult = e;
             viewModel.CloseDialog -= CloseEventHandler;

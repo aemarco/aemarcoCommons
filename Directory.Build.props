@@ -2,14 +2,9 @@
 	<!-- this runs at the beginning -->
   
 	<!-- project definition -->
-
-	<!-- 
 	<PropertyGroup>
-		
-		<AssemblyName>aemarcoCommons.$(MSBuildProjectName)</AssemblyName>
-		<RootNamespace>aemarcoCommons.$(MSBuildProjectName)</RootNamespace>
+		<Nullable>enable</Nullable>
 	</PropertyGroup>
--->
 
 	<!-- PackageValidation-->
 	<PropertyGroup>

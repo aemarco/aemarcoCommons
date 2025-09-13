@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-#nullable enable
 
 namespace aemarcoCommons.WpfTools.Commands;
 

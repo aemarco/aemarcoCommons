@@ -10,7 +10,6 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 
-#nullable enable
 
 namespace aemarcoCommons.WpfTools;
 

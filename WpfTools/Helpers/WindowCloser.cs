@@ -46,7 +46,7 @@ public class WindowCloser
             windowCloser.CloseAction = () => window.Close();
         }
 
-        void ClosingEventHandler(object sender, CancelEventArgs cancelArgs)
+        void ClosingEventHandler(object? sender, CancelEventArgs cancelArgs)
         {
             if (!windowCloser.CanClose)
             {

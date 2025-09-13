@@ -6,11 +6,11 @@ public class ProgressHelper
 {
     private int _countDone;
     readonly int _countTotal;
-    readonly EventHandler<ProgressEventArgs> _progress;
-    private readonly EventHandler _completed;
+    readonly EventHandler<ProgressEventArgs>? _progress;
+    private readonly EventHandler? _completed;
     readonly object _caller;
 
-    public ProgressHelper(int countTotal, EventHandler<ProgressEventArgs> progress, EventHandler completed, object caller)
+    public ProgressHelper(int countTotal, EventHandler<ProgressEventArgs>? progress, EventHandler? completed, object caller)
     {
         _countDone = 0;
         _countTotal = countTotal;

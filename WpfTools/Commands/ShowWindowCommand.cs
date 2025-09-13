@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows;
 
-#nullable enable
 namespace aemarcoCommons.WpfTools.Commands;
 
 public class ShowWindowCommand<T> : DelegateCommand

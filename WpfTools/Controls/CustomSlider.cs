@@ -6,7 +6,7 @@ namespace aemarcoCommons.WpfTools.Controls;
 
 public class CustomSlider : Slider
 {
-    private Binding SupressedBinding { get; set; }
+    private Binding? SupressedBinding { get; set; }
 
     protected override void OnThumbDragStarted(DragStartedEventArgs e)
     {

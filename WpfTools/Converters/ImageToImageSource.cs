@@ -12,8 +12,7 @@ namespace aemarcoCommons.WpfTools.Converters;
 [ValueConversion(typeof(System.Drawing.Image), typeof(System.Windows.Media.ImageSource))]
 public class ImageToImageSource : IValueConverter
 {
-    public object Convert(object value, Type targetType,
-        object parameter, CultureInfo culture)
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         // empty images are empty...
         if (value == null)
@@ -34,8 +33,7 @@ public class ImageToImageSource : IValueConverter
         return bitmap;
     }
 
-    public object ConvertBack(object value, Type targetType,
-        object parameter, CultureInfo culture)
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         throw new NotSupportedException();
     }

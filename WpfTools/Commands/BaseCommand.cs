@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
-#nullable enable
+
 
 namespace aemarcoCommons.WpfTools.Commands;
 

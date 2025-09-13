@@ -11,7 +11,7 @@ namespace aemarcoCommons.WpfTools.Converters;
 [ValueConversion(typeof(double), typeof(string))]
 public class DoubleToString : IValueConverter
 {
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value == null)
             throw new ArgumentNullException(nameof(value));
@@ -20,9 +20,9 @@ public class DoubleToString : IValueConverter
         return doubleType.ToString(culture);
     }
 
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        string strValue = value as string;
+        string? strValue = value as string;
         if (double.TryParse(strValue, out var resultDouble))
         {
             if (parameter is string strParameter && !string.IsNullOrWhiteSpace(strParameter))

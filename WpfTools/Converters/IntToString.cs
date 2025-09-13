@@ -11,7 +11,7 @@ namespace aemarcoCommons.WpfTools.Converters;
 [ValueConversion(typeof(int), typeof(string))]
 public class IntToString : IValueConverter
 {
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value == null)
             throw new ArgumentNullException(nameof(value));
@@ -20,9 +20,9 @@ public class IntToString : IValueConverter
         return intType.ToString();
     }
 
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        string strValue = value as string;
+        string? strValue = value as string;
         if (int.TryParse(strValue, out int resultInt))
         {
             return resultInt;
