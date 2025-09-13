@@ -73,8 +73,6 @@ jobs:
         shell: pwsh
         run: |
           Get-ChildItem ./artifacts -Filter *.nupkg | ForEach-Object {
-            dotnet nuget push $_.FullName `
-              --source https://api.nuget.org/v3/index.json `
-              --api-key $env:NUGET_API_KEY `
-              --skip-duplicate
+            dotnet nuget push $_.FullName --source https://api.nuget.org/v3/index.json --api-key $env:NUGET_API_KEY --skip-duplicate
+            Write-Host "API key length: $($env:NUGET_API_KEY.Length)"
           }
