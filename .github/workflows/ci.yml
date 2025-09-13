@@ -69,8 +69,11 @@ jobs:
         with:
           name: drop
           path: ./artifacts
+      
       - name: List artifacts
-        run: dir ./artifacts /S
+        shell: pwsh
+        run: Get-ChildItem ./artifacts -Recurse
+
 
       - name: Push packages to NuGet.org
         run: dotnet nuget push ./artifacts/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
