@@ -15,7 +15,7 @@ public class TimespanToString : IValueConverter
     /// </summary>
 
 
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         var val = (TimeSpan?)value;
 
@@ -28,7 +28,7 @@ public class TimespanToString : IValueConverter
             : human;
     }
 
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         throw new NotSupportedException();
     }

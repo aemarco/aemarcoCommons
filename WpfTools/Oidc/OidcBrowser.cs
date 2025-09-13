@@ -9,7 +9,7 @@ namespace aemarcoCommons.WpfTools.Oidc;
 
 public class OidcBrowser : IBrowser
 {
-    private BrowserOptions _options;
+    private BrowserOptions _options = null!;
 
 
     public async Task<BrowserResult> InvokeAsync(BrowserOptions options, CancellationToken cancellationToken = default)

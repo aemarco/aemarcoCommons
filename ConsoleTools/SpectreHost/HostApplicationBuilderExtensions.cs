@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace aemarcoCommons.ConsoleTools.SpectreHost;
 
-#nullable enable
+
 
 public static class HostApplicationBuilderExtensions
 {
@@ -51,7 +51,7 @@ public static class HostApplicationBuilderExtensions
 
         //start our command app
         var commandAppTask = commandApp.RunAsync(Environment.GetCommandLineArgs().Skip(1).ToArray());
-        var host = _registrar!.Host;
+        var host = _registrar!.Host!;
 
         //start our host wrapper
         await Task.Run(async () =>

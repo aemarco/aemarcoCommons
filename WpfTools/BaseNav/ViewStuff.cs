@@ -14,7 +14,7 @@ public interface INavViewModel : IBaseViewModel //inherit in specific interface 
 {
     BaseNavWindowViewModel WindowViewModel { get; set; }
     INavView View { get; set; }
-    string Title { get; }
+    string? Title { get; }
 }
 
 
@@ -33,13 +33,13 @@ public abstract class BaseNavViewModel : BaseViewModel, INavViewModel
     public INavView View { get; set; }
 
 
-    public BaseNavWindowViewModel WindowViewModel { get; set; }
+    public BaseNavWindowViewModel WindowViewModel { get; set; } = null!;
 
-    public virtual string Title => null;
+    public virtual string? Title => null;
 
 
     protected override void Close()
     {
-        WindowViewModel?.Window?.Close();
+        WindowViewModel.Window.Close();
     }
 }

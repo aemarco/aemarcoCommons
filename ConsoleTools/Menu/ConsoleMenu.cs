@@ -133,18 +133,18 @@ public abstract class ConsoleMenuItem
 
 public class ConsoleMenuItem<T> : ConsoleMenuItem
 {
-    private readonly Action<T> _callBack;
-    private readonly Func<T, Task> _asyncCallBack;
-    private readonly T _underlyingObject;
+    private readonly Action<T?>? _callBack;
+    private readonly Func<T?, Task>? _asyncCallBack;
+    private readonly T? _underlyingObject;
 
-    public ConsoleMenuItem(string label, Action<T> callback, T underlyingObject = default)
+    public ConsoleMenuItem(string label, Action<T?> callback, T? underlyingObject = default)
         : base(label)
     {
         _callBack = callback;
         _underlyingObject = underlyingObject;
     }
 
-    public ConsoleMenuItem(string label, Func<T, Task> callback, T underlyingObject = default)
+    public ConsoleMenuItem(string label, Func<T?, Task> callback, T? underlyingObject = default)
         : base(label)
     {
         _asyncCallBack = callback;

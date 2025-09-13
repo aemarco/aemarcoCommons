@@ -3,7 +3,6 @@
 	<!-- project definition -->
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
-		<Nullable>enable</Nullable>
 		<RootNamespace>aemarcoCommons.ToolboxFluentValidation</RootNamespace>
 		<AssemblyName>aemarcoCommons.ToolboxFluentValidation</AssemblyName>
 

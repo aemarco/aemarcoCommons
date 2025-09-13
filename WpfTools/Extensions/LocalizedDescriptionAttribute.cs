@@ -20,7 +20,7 @@ public class LocalizedDescriptionAttribute : DescriptionAttribute
     }
 
 
-    private static ResourceManager _cacheResourceManager;
+    private static ResourceManager? _cacheResourceManager;
     public LocalizedDescriptionAttribute(string resourceKey)
     {
         _resourceKey = resourceKey;
@@ -33,7 +33,7 @@ public class LocalizedDescriptionAttribute : DescriptionAttribute
                                ?? throw new Exception("Could not find Strings Type");
             var propInfo = resourceType.GetProperty("ResourceManager")
                            ?? throw new Exception("Could not find ResourceManager in Strings");
-            _cacheResourceManager = (ResourceManager)propInfo.GetValue(null);
+            _cacheResourceManager = (ResourceManager)propInfo.GetValue(null)!;
         }
         _resourceManager = _cacheResourceManager;
     }
@@ -43,7 +43,7 @@ public class LocalizedDescriptionAttribute : DescriptionAttribute
     {
         get
         {
-            string description = _resourceManager.GetString(_resourceKey);
+            string? description = _resourceManager.GetString(_resourceKey);
             return string.IsNullOrWhiteSpace(description)
                 ? $"[[{_resourceKey}]]"
                 : description;

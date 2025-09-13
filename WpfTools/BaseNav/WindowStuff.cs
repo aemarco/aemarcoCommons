@@ -55,20 +55,20 @@ public abstract class BaseNavWindowViewModel : BaseViewModel //inherit this in w
     /// <summary>
     /// The viewmodel for the current view can be accessed here.
     /// </summary>
-    public INavViewModel ViewViewModel { get; set; }
+    public INavViewModel? ViewViewModel { get; set; }
 
     /// <summary>
     /// Bind this to get the navigation view
     /// </summary>
-    public INavView View { get; set; }
+    public INavView? View { get; set; }
 
     /// <summary>
     /// Bind this to get the Title
     /// </summary>
-    public virtual string Title => ViewViewModel?.Title ?? Window.Title;
+    public virtual string? Title => ViewViewModel?.Title ?? Window.Title;
 
 
-    internal static IServiceProvider ServiceProvider { get; set; }
+    internal static IServiceProvider? ServiceProvider { get; set; }
 
 
     /// <summary>
@@ -93,7 +93,7 @@ public abstract class BaseNavWindowViewModel : BaseViewModel //inherit this in w
 
     protected override void Close()
     {
-        Window?.Close();
+        Window.Close();
     }
 }
 

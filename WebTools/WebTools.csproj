@@ -3,7 +3,6 @@
 	<!-- project definition -->
 	<PropertyGroup>
 		<TargetFramework>net8.0-windows</TargetFramework>
-		<Nullable>enable</Nullable>
 		<RootNamespace>aemarcoCommons.WebTools</RootNamespace>
 		<AssemblyName>aemarcoCommons.WebTools</AssemblyName>
 

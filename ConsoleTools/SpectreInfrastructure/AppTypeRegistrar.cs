@@ -7,7 +7,7 @@ namespace aemarcoCommons.ConsoleTools.SpectreInfrastructure;
 public sealed class AppTypeRegistrar : ITypeRegistrar
 {
     private readonly HostApplicationBuilder _builder;
-    internal IHost Host { get; private set; }
+    internal IHost? Host { get; private set; }
 
     public AppTypeRegistrar(HostApplicationBuilder builder) =>
         _builder = builder;

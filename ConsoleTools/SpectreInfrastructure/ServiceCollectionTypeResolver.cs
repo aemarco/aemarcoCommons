@@ -11,7 +11,7 @@ public sealed class ServiceCollectionTypeResolver : ITypeResolver, IDisposable
     private readonly IServiceProvider _provider;
     public ServiceCollectionTypeResolver(IServiceProvider provider) => _provider = provider;
 
-    public object Resolve(Type type) =>
+    public object? Resolve(Type? type) =>
         type != null
             ? _provider.GetService(type)
             : null;

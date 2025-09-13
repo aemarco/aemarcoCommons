@@ -3,8 +3,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 
-#nullable enable
-
 namespace aemarcoCommons.WpfTools.BaseModels;
 public partial class BaseViewModel : ICloseWindow
 {

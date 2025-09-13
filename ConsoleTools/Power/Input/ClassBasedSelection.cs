@@ -34,7 +34,7 @@ public static partial class PowerConsole
     /// <param name="displayProperty">Displayed as</param>
     /// <returns>Selected item or null on abort</returns>
 
-    public static T AbortableSelection<T>(string header, IEnumerable<T> selectable, Func<T, string> displayProperty)
+    public static T? AbortableSelection<T>(string header, IEnumerable<T> selectable, Func<T, string> displayProperty)
         where T : class
     {
         return MenuSelectionHelper(header, selectable, displayProperty, true);

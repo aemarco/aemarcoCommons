@@ -11,14 +11,14 @@ namespace aemarcoCommons.WpfTools.Converters;
 [ValueConversion(typeof(bool), typeof(Visibility))]
 public class BoolToVisibilityInvers : IValueConverter
 {
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         return value is true
             ? Visibility.Collapsed
             : Visibility.Visible;
     }
 
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is string strValue && Enum.TryParse(strValue, out Visibility result))
         {

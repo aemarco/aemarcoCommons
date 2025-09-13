@@ -1,7 +1,6 @@
 ﻿using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Media;
-#nullable enable
 
 namespace aemarcoCommons.WpfTools.Extensions;
 

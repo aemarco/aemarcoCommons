@@ -18,7 +18,7 @@ public static partial class PowerConsole
     /// <param name="includedServers">servers to include for share selection</param>
     /// <param name="showHidden">shot hidden folders</param>
     /// <returns>selected path</returns>
-    public static string PathSelector(string path, IEnumerable<string> includedServers = null, bool showHidden = false)
+    public static string PathSelector(string path, IEnumerable<string>? includedServers = null, bool showHidden = false)
     {
         var serverItems = includedServers?.Distinct().ToArray();
         var dir = new DirectoryInfo(path);
@@ -47,19 +47,19 @@ public static partial class PowerConsole
                      .Where(x => showHidden || !x.Attributes.HasFlag(FileAttributes.Hidden)))
         {
             var temp = sub;
-            dirItems.Add(new ConsoleMenuItem<DirectoryInfo>(temp.Name, x =>
+            dirItems.Add(new ConsoleMenuItem<DirectoryInfo>(temp.Name, _ =>
             {
-                path = PathSelector(x.FullName, serverItems, showHidden);
-            }, temp));
+                path = PathSelector(temp.FullName, serverItems, showHidden);
+            }));
         }
 
         //select
         dirItems.Add(new ConsoleMenuSeparator());
-        dirItems.Add(new ConsoleMenuItem<DirectoryInfo>("Select", x =>
+        dirItems.Add(new ConsoleMenuItem<DirectoryInfo>("Select", _ =>
         {
-            path = x.FullName;
+            path = dir.FullName;
 
-        }, dir));
+        }));
 
         var menu = new ConsoleMenu(dir.FullName, dirItems);
         menu.RunConsoleMenu();
@@ -71,9 +71,9 @@ public static partial class PowerConsole
     /// Selection of a drive in a ConsoleMenu
     /// </summary>
     /// <returns></returns>
-    public static string DriveSelector(IEnumerable<string> servers = null)
+    public static string DriveSelector(IEnumerable<string>? servers = null)
     {
-        string path = null;
+        string? path = null;
         Console.Clear();
 
         var driveItems = new List<ConsoleMenuItem>();
@@ -82,13 +82,13 @@ public static partial class PowerConsole
                      .Where(x => x.IsReady))
         {
             var temp = drive;
-            driveItems.Add(new ConsoleMenuItem<DriveInfo>($"{temp.Name} ({temp.VolumeLabel})", x =>
+            driveItems.Add(new ConsoleMenuItem<DriveInfo>($"{temp.Name} ({temp.VolumeLabel})", _ =>
             {
-                path = x.RootDirectory.FullName;
-            }, temp));
+                path = temp.RootDirectory.FullName;
+            }));
         }
 
-        if (OperatingSystem.IsWindows() && servers != null && servers.ToList() is var list && list.Count > 0)
+        if (OperatingSystem.IsWindows() && servers?.ToList() is { Count: > 0 } list)
         {
             driveItems.Add(new ConsoleMenuSeparator());
             driveItems.Add(new ConsoleMenuItem<DriveInfo>("Network", _ =>
@@ -101,7 +101,7 @@ public static partial class PowerConsole
         var menu = new ConsoleMenu("Drives", driveItems);
         menu.RunConsoleMenu();
 
-        return path;
+        return path!;
     }
 
     /// <summary>
@@ -110,13 +110,11 @@ public static partial class PowerConsole
     /// <param name="servers">servers which can be selected</param>
     /// <returns></returns>
     [SupportedOSPlatform("windows")]
-    public static string ServerSelector(IEnumerable<string> servers)
+    public static string? ServerSelector(IEnumerable<string> servers)
     {
         var serverItems = servers.ToList();
         switch (serverItems.Count)
         {
-            case 0:
-                return null; //shortcut for no server
             case 1:
                 return ShareSelector(serverItems[0]); //shortcut for one server
         }
@@ -132,11 +130,14 @@ public static partial class PowerConsole
     /// </summary>
     /// <returns>unc path to share or null when no shares are available</returns>
     [SupportedOSPlatform("windows")]
-    public static string ShareSelector(string server)
+    public static string? ShareSelector(string? server)
     {
+        if (server is null)
+            return null;
+
         server = server.TrimStart('\\');
         Console.Clear();
-        string path = null;
+        string? path = null;
         var shares = new List<ConsoleMenuItem<DirectoryInfo>>();
         // ReSharper disable once LoopCanBeConvertedToQuery
         foreach (Share share in ShareCollection.GetShares(server))
@@ -146,10 +147,10 @@ public static partial class PowerConsole
                 continue;
 
             var temp = share.Root;
-            shares.Add(new ConsoleMenuItem<DirectoryInfo>($"{share.Server} --> {share.NetName}", x =>
+            shares.Add(new ConsoleMenuItem<DirectoryInfo>($"{share.Server} --> {share.NetName}", _ =>
             {
-                path = x.FullName;
-            }, temp));
+                path = temp.FullName;
+            }));
         }
         if (shares.Count == 0)
             return path;

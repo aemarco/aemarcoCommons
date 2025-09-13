@@ -3,11 +3,9 @@
 	<!-- project definition -->
 	<PropertyGroup>
 		<TargetFramework>net8.0-windows</TargetFramework>
-		<Nullable>enable</Nullable>
+		
 		<RootNamespace>aemarcoCommons.ToolboxTopService</RootNamespace>
 		<AssemblyName>aemarcoCommons.ToolboxTopService</AssemblyName>
-
-		<!-- PackageValidation??-->
 	</PropertyGroup>
 
 	<!-- nuget references -->

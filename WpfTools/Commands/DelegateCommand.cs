@@ -1,6 +1,5 @@
 ﻿using System;
 
-#nullable enable
 
 namespace aemarcoCommons.WpfTools.Commands;
 
@@ -9,7 +8,7 @@ namespace aemarcoCommons.WpfTools.Commands;
 /// </summary>
 public class DelegateCommand : BaseCommand
 {
-    public Func<object?,bool>? CanExecuteFunc { get; set; }
+    public Func<object?, bool>? CanExecuteFunc { get; set; }
     public override bool CanExecute(object? parameter)
     {
         return CanExecuteFunc == null || CanExecuteFunc(parameter);

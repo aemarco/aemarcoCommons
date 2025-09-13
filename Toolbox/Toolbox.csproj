@@ -6,6 +6,7 @@
 		<RootNamespace>aemarcoCommons.Toolbox</RootNamespace>
 		<AssemblyName>aemarcoCommons.Toolbox</AssemblyName>
 
+		<Nullable>disable</Nullable>
 	</PropertyGroup>
 
 	<!-- project references -->

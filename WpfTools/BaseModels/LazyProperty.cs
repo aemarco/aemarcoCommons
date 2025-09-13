@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 // ReSharper disable MemberCanBePrivate.Global
 
-#nullable enable
 
 // source info: https://www.renebergelt.de/blog/2018/03/lazy-loaded-properties-in-wpf
 
