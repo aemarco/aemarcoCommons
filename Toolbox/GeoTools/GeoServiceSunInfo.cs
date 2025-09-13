@@ -146,10 +146,11 @@ namespace aemarcoCommons.Toolbox.GeoTools
             //if okay, we return info
             if (response.Status == "OK")
             {
-                foreach (var propInfo in typeof(SunriseSunsetInfo).GetProperties()
+                foreach (var propInfo in typeof(SunriseSunsetInfo)
+                             .GetProperties()
                              .Where(x => x.PropertyType == typeof(DateTimeOffset)))
                 {
-                    var val = (DateTimeOffset)propInfo.GetValue(response.Results);
+                    var val = (DateTimeOffset)propInfo.GetValue(response.Results)!;
                     propInfo.SetValue(response.Results, val.ToLocalTime());
                 }
                 return response.Results;

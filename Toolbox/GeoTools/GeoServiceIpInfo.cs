@@ -59,16 +59,13 @@ namespace aemarcoCommons.Toolbox.GeoTools
             {
                 try
                 {
-                    using (var response = await _geoClient
-                               .GetAsync("http://checkip.dyndns.org")
-                               .ConfigureAwait(false))
-                    {
-                        response.EnsureSuccessStatusCode();
-                        var info = await response.Content.ReadAsStringAsync();
-                        var match = Regex.Match(info ?? string.Empty, @"(?:\d{1,3}.){3}.\d{1,3}");
-                        if (match.Success && IPAddress.TryParse(match.Value, out IPAddress test))
-                            result = test.ToString();
-                    }
+                    using var response = await _geoClient.GetAsync("http://checkip.dyndns.org")
+                        .ConfigureAwait(false);
+                    response.EnsureSuccessStatusCode();
+                    var info = await response.Content.ReadAsStringAsync();
+                    var match = Regex.Match(info, @"(?:\d{1,3}.){3}.\d{1,3}");
+                    if (match.Success && IPAddress.TryParse(match.Value, out IPAddress test))
+                        result = test.ToString();
                 }
                 catch (Exception ex)
                 {

@@ -7,8 +7,6 @@
 		<RootNamespace>aemarcoCommons.WebTools</RootNamespace>
 		<AssemblyName>aemarcoCommons.WebTools</AssemblyName>
 
-		<!-- PackageValidation??-->
-		<EnablePackageValidation>false</EnablePackageValidation>
 	</PropertyGroup>
 
 	<!-- project references -->

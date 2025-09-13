@@ -7,8 +7,6 @@
 		<RootNamespace>aemarcoCommons.ToolboxFluentValidation</RootNamespace>
 		<AssemblyName>aemarcoCommons.ToolboxFluentValidation</AssemblyName>
 
-		<!-- PackageValidation??-->
-		<EnablePackageValidation>false</EnablePackageValidation>
 	</PropertyGroup>
 	
 	<!-- nuget references -->

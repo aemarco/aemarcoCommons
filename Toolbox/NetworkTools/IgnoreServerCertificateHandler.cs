@@ -7,7 +7,7 @@ namespace aemarcoCommons.Toolbox.NetworkTools
         public IgnoreServerCertificateHandler()
         {
             ServerCertificateCustomValidationCallback =
-                (r, c, ch, e) => true;
+                (_, _, _, _) => true;
         }
     }
 }

@@ -28,7 +28,7 @@ namespace aemarcoCommons.Toolbox.GeoTools
                 geoServiceSettings,
                 new HttpClient(new HttpClientHandler
                 {
-                    ServerCertificateCustomValidationCallback = (r, c, chain, errors) => true
+                    ServerCertificateCustomValidationCallback = (_, _, _, _) => true
                 }))
         { }
 

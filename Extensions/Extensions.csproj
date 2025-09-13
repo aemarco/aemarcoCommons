@@ -2,7 +2,7 @@
 
 	<!-- project definition -->
 	<PropertyGroup>
-		<TargetFramework>netstandard2.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<RootNamespace>aemarcoCommons.Extensions</RootNamespace>
 		<AssemblyName>aemarcoCommons.Extensions</AssemblyName>
 

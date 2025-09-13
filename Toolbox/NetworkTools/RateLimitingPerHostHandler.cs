@@ -20,36 +20,37 @@ namespace aemarcoCommons.Toolbox.NetworkTools
         private static readonly ConcurrentDictionary<string, RateLimitingInfo> RateLimits = new ConcurrentDictionary<string, RateLimitingInfo>();
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var host = request.RequestUri.Host;
-            if (RateLimits.TryGetValue(host, out RateLimitingInfo info))
+            if (request.RequestUri is not null)
             {
-                var earliest = info.LastRequest.AddMilliseconds(info.Delay);
-                await earliest.WaitTill(cancellationToken)
+                var host = request.RequestUri.Host;
+                if (RateLimits.TryGetValue(host, out RateLimitingInfo info))
+                {
+                    var earliest = info.LastRequest.AddMilliseconds(info.Delay);
+                    await earliest.WaitTill(cancellationToken)
+                        .ConfigureAwait(false);
+                }
+
+                HttpResponseMessage response = await base.SendAsync(request, cancellationToken)
                     .ConfigureAwait(false);
-            }
 
-            HttpResponseMessage response = await base.SendAsync(request, cancellationToken)
-                .ConfigureAwait(false);
+                //we remember timestamp for rate limited hosts
+                if (info != null)
+                    info.LastRequest = DateTimeOffset.Now;
 
-            //we remember timestamp for rate limited hosts
-            if (info != null)
+                //we skip all but 429
+                if ((int)response.StatusCode != 429)
+                    return response;
+
+                info ??= new RateLimitingInfo();
+
+                info.Delay = Math.Min(info.Delay + 100, 1000);
                 info.LastRequest = DateTimeOffset.Now;
 
-            //we skip all but 429
-            if ((int)response.StatusCode != 429)
-                return response;
+                RateLimits.AddOrUpdate(host, info, (_, _) => info);
+                _logger.LogWarning("Rate limiting {info}", info);
+            }
 
-            if (info == null)
-                info = new RateLimitingInfo();
-
-            info.Delay = Math.Min(info.Delay + 100, 1000);
-            info.LastRequest = DateTimeOffset.Now;
-
-            RateLimits.AddOrUpdate(host, info, (key, val) => info);
-            _logger.LogWarning("Rate limiting {info}", info);
-
-
-            return await SendAsync(request, cancellationToken)
+            return await base.SendAsync(request, cancellationToken)
                 .ConfigureAwait(false);
         }
 

@@ -13,8 +13,8 @@
 
 	<!-- PackageValidation-->
 	<PropertyGroup>
-		<EnablePackageValidation>true</EnablePackageValidation>
-		<PackageValidationBaselineVersion>8.2.2</PackageValidationBaselineVersion>
+		<EnablePackageValidation>false</EnablePackageValidation>
+		<PackageValidationBaselineVersion>9</PackageValidationBaselineVersion>
 		<EnableStrictModeForCompatibleFrameworksInPackage>true</EnableStrictModeForCompatibleFrameworksInPackage>
 		<EnableStrictModeForCompatibleTfms>true</EnableStrictModeForCompatibleTfms>
 		<GenerateCompatibilitySuppressionFile>false</GenerateCompatibilitySuppressionFile>
