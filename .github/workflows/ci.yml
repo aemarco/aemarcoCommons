@@ -1,4 +1,4 @@
-name: CI
+name: CI_CD
 
 on:
   push:
@@ -52,16 +52,13 @@ jobs:
           name: drop
           path: ./artifacts
 
-  push-nuget:
+  publish:
     needs: build
     runs-on: windows-latest
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     environment:
       name: push-to-nuget-org
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
@@ -74,8 +71,4 @@ jobs:
           path: ./artifacts
 
       - name: Push packages to NuGet.org
-        run: |
-          dotnet nuget push ./artifacts/*.nupkg \
-            --source https://api.nuget.org/v3/index.json \
-            --api-key ${{ secrets.NUGET_API_KEY }} \
-            --skip-duplicate
+        run: dotnet nuget push ./artifacts/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
