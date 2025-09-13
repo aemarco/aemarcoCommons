@@ -46,11 +46,11 @@ jobs:
       - name: Show NBGV version
         run: nbgv get-version
 
-      - name: Pack NuGet packages
-        run: dotnet pack **/*.csproj \
-              --configuration Release  \
-              --output ./artifacts 
-
+      - name: Collect NuGet packages
+        run: |
+          mkdir artifacts
+          copy **/bin/Release/*.nupkg artifacts/
+          
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
