@@ -69,9 +69,12 @@ jobs:
         with:
           name: drop
           path: ./artifacts
-
-
       - name: Push packages to NuGet.org
         shell: pwsh
-        run: dotnet nuget push ./artifacts/*.nupkg --source https://api.nuget.org/v3/index.json --api-key $env:NUGET_API_KEY --skip-duplicate
-      
+        run: |
+          Get-ChildItem ./artifacts -Filter *.nupkg | ForEach-Object {
+            dotnet nuget push $_.FullName `
+            --source https://api.nuget.org/v3/index.json `
+            --api-key $env:NUGET_API_KEY `
+            --skip-duplicate
+          }
