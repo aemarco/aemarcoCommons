@@ -39,10 +39,12 @@ jobs:
 
       - name: Get NBGV version
         id: get-version
+        shell: pwsh
         run: |
-          BUILD_VERSION=$(nbgv get-version --version-packaging NuGet)
-          echo "Build version: $BUILD_VERSION"
-          echo "build_version=$BUILD_VERSION" >> $GITHUB_OUTPUT
+          $BUILD_VERSION = (nbgv get-version --version-packaging NuGet)
+          Write-Host "Build version: $BUILD_VERSION"
+          echo "build_version=$BUILD_VERSION" >> $env:GITHUB_OUTPUT
+
 
       - name: Pack NuGet packages
         run: dotnet pack **/*.csproj \
