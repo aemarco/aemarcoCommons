@@ -74,7 +74,7 @@ jobs:
         run: |
           Get-ChildItem ./artifacts -Filter *.nupkg | ForEach-Object {
             dotnet nuget push $_.FullName `
-            --source https://api.nuget.org/v3/index.json `
-            --api-key $env:NUGET_API_KEY `
-            --skip-duplicate
+              --source https://api.nuget.org/v3/index.json `
+              --api-key $env:NUGET_API_KEY `
+              --skip-duplicate
           }
