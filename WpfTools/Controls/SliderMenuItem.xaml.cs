@@ -11,7 +11,7 @@ namespace aemarcoCommons.WpfTools.Controls;
 public partial class SliderMenuItem
 {
     private const double ThumbHeight = 11.0d;
-    private Slider m_Slider;
+    private Slider m_Slider = null!;
     private readonly SortedDictionary<double, double> m_TickValueMap;
 
     /// §§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
@@ -275,7 +275,7 @@ public partial class SliderMenuItem
     {
         base.OnApplyTemplate();
 
-        this.m_Slider = this.Template.FindName("PART_Slider", this) as Slider;
+        m_Slider = (Template.FindName("PART_Slider", this) as Slider)!;
 
         if (m_Slider == null)
             throw new InvalidOperationException("Control template is missing part Slider_PART");
@@ -294,12 +294,12 @@ public partial class SliderMenuItem
     {
         Size returnSize = base.ArrangeOverride(arrangeBounds);
 
-        FrameworkElement topElement = null;
-        FrameworkElement bottomElement = null;
+        FrameworkElement? topElement = null;
+        FrameworkElement? bottomElement = null;
 
         for (int i = 0; i < Items.Count; i++)
         {
-            FrameworkElement elem = Items[i] as FrameworkElement;
+            FrameworkElement? elem = Items[i] as FrameworkElement;
 
             Debug.Assert(elem != null, "Added an object that wasn't a FrameworkElement??");
 
@@ -334,7 +334,7 @@ public partial class SliderMenuItem
         // Calculate top, bottom margins.
         // This margin enables the thumb stop at 0 and 100 to line up with
         // the center of the top and bottom menu items.
-        Rect bound = LayoutInformation.GetLayoutSlot(topElement);
+        Rect bound = LayoutInformation.GetLayoutSlot(topElement!);
 
         double topMargin = bound.Top + ThumbHeight / 2;
         double pointZero = bound.Top + bound.Height / 2.0;
@@ -350,7 +350,7 @@ public partial class SliderMenuItem
 
         for (int i = 0; i < Items.Count; i++)
         {
-            FrameworkElement elem = Items[i] as FrameworkElement;
+            FrameworkElement? elem = Items[i] as FrameworkElement;
 
             if (elem is MenuItem item)
                 item.Click += SliderMenuItem_Click;
