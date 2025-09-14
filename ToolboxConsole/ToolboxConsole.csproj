@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<!-- project definition -->
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<RootNamespace>aemarcoCommons.ToolboxConsole</RootNamespace>
+		<AssemblyName>aemarcoCommons.ToolboxConsole</AssemblyName>
+	</PropertyGroup>
+	
+
+	<!-- nuget references-->
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.7" />
+		<PackageReference Include="Spectre.Console.Cli" Version="0.48.0" />
+		<PackageReference Include="Spectre.Console.Json" Version="0.48.0" />
+		<PackageReference Include="Serilog" Version="4.2.0" />
+		<PackageReference Include="CliWrap" Version="3.9.0" />
+	</ItemGroup>
+
+
+	<!-- nuget build-->
+	<PropertyGroup>
+		<Description>Tooling around Console-Apps</Description>
+		<PackageTags>ConsoleApp, Spectre, IOC</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Update="..\README.md" Pack="false" />
+		<None Include="README.md" Pack="true" PackagePath="\" />
+		<None Update="..\icon.png" Pack="false" />
+		<None Include="Resources\icon.png" Pack="true" PackagePath="\" />
+		<None Include="LICENSE.md" />
+		<None Include="NOTICE.md" />
+	</ItemGroup>
+
+</Project>

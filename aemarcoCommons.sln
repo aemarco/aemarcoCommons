@@ -51,6 +51,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolboxImage", "ToolboxImag
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolboxFluentValidation", "ToolboxFluentValidation\ToolboxFluentValidation.csproj", "{D86E2485-0B2F-4A1C-9E21-8A2953EEEC7D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolboxConsole", "ToolboxConsole\ToolboxConsole.csproj", "{56184DAD-89D7-4C05-8282-4FABD4D62284}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -121,6 +123,10 @@ Global
 		{D86E2485-0B2F-4A1C-9E21-8A2953EEEC7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D86E2485-0B2F-4A1C-9E21-8A2953EEEC7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D86E2485-0B2F-4A1C-9E21-8A2953EEEC7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56184DAD-89D7-4C05-8282-4FABD4D62284}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56184DAD-89D7-4C05-8282-4FABD4D62284}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56184DAD-89D7-4C05-8282-4FABD4D62284}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56184DAD-89D7-4C05-8282-4FABD4D62284}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
