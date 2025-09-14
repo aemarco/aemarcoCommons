@@ -1,13 +1,12 @@
 ﻿using System.Net.Http;
 
-namespace aemarcoCommons.Toolbox.NetworkTools
+namespace aemarcoCommons.Toolbox.NetworkTools;
+
+public class IgnoreServerCertificateHandler : HttpClientHandler
 {
-    public class IgnoreServerCertificateHandler : HttpClientHandler
+    public IgnoreServerCertificateHandler()
     {
-        public IgnoreServerCertificateHandler()
-        {
-            ServerCertificateCustomValidationCallback =
-                (_, _, _, _) => true;
-        }
+        ServerCertificateCustomValidationCallback =
+            (_, _, _, _) => true;
     }
 }

@@ -6,167 +6,164 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace aemarcoCommons.Toolbox.SerializationTools
+namespace aemarcoCommons.Toolbox.SerializationTools;
+
+public interface IJsonTypeToFileSettings
 {
-    public interface IJsonTypeToFileSettings
+    string StorageDirectory { get; }
+    Formatting Formatting { get; }
+}
+public class JsonTypeToFileSettings : IJsonTypeToFileSettings
+{
+    public string StorageDirectory { get; set; }
+    public Formatting Formatting { get; set; }
+}
+
+
+public class JsonTypeToFileStore<T> : ITypeToFileStore<T>
+    where T : class, ITypeToFileValue, new()
+{
+
+    private readonly IJsonTypeToFileSettings _settings;
+    private readonly bool _isUserProtected;
+    public JsonTypeToFileStore()
+        : this(new JsonTypeToFileSettings())
+    { }
+    // ReSharper disable once MemberCanBePrivate.Global
+    public JsonTypeToFileStore(IJsonTypeToFileSettings settings)
     {
-        string StorageDirectory { get; }
-        Formatting Formatting { get; }
+        _settings = settings;
+        _isUserProtected = typeof(T).HasAttribute<UserProtectedAttribute>();
+
+        LoadExistingOrDefault();
     }
-    public class JsonTypeToFileSettings : IJsonTypeToFileSettings
+
+    public T Instance { get; private set; }
+
+    public void SaveChanges()
     {
-        public string StorageDirectory { get; set; }
-        public Formatting Formatting { get; set; }
-    }
+        Instance.TimestampSaved = DateTimeOffset.Now;
+        Instance.Version = Instance.CurrentVersion;
+
+        var filePath = GetStorageFilePath(false);
+        Directory.CreateDirectory(Path.GetDirectoryName(filePath) ?? throw new Exception("FilePath unclear"));
 
 
-    public class JsonTypeToFileStore<T> : ITypeToFileStore<T>
-        where T : class, ITypeToFileValue, new()
-    {
-
-        private readonly IJsonTypeToFileSettings _settings;
-        private readonly bool _isUserProtected;
-        public JsonTypeToFileStore()
-            : this(new JsonTypeToFileSettings())
-        { }
-        // ReSharper disable once MemberCanBePrivate.Global
-        public JsonTypeToFileStore(IJsonTypeToFileSettings settings)
+        if (_isUserProtected && OperatingSystem.IsWindows())
         {
-            _settings = settings;
-            _isUserProtected = typeof(T).HasAttribute<UserProtectedAttribute>();
-
-            LoadExistingOrDefault();
+            filePath = GetStorageFilePath(true);
+            File.WriteAllBytes(
+                filePath,
+                ProtectedData.Protect(
+                    Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(Instance)),
+                    null,
+                    DataProtectionScope.CurrentUser));
         }
-
-        public T Instance { get; private set; }
-
-        public void SaveChanges()
+        else
         {
-            Instance.TimestampSaved = DateTimeOffset.Now;
-            Instance.Version = Instance.CurrentVersion;
+            File.WriteAllText(
+                filePath,
+                JsonConvert.SerializeObject(Instance, _settings.Formatting));
+        }
+    }
 
-            var filePath = GetStorageFilePath(false);
-            Directory.CreateDirectory(Path.GetDirectoryName(filePath) ?? throw new Exception("FilePath unclear"));
+
+    public T CommitReset()
+    {
+        Instance = new T
+        {
+            TimestampCreated = DateTimeOffset.Now,
+        };
+        Instance.Version = Instance.CurrentVersion; //save the version we have
+        SaveChanges();
+        return Instance;
+    }
+
+    public void Dispose()
+    {
+        SaveChanges();
+    }
 
 
-            if (_isUserProtected && OperatingSystem.IsWindows())
+    /// <summary>
+    /// Possibly loads Instance from file or defaults back to new Instance
+    /// </summary>
+    /// <exception cref="Exception">when neither config nor instance provide folder and or name for file</exception>
+    private void LoadExistingOrDefault()
+    {
+
+
+        if (_isUserProtected && OperatingSystem.IsWindows())
+        {
+            var file = GetStorageFilePath(true);
+            if (File.Exists(file))
             {
-                filePath = GetStorageFilePath(true);
-                File.WriteAllBytes(
-                    filePath,
-                    ProtectedData.Protect(
-                        Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(Instance)),
+                try
+                {
+                    string json = Encoding.UTF8.GetString(ProtectedData.Unprotect(
+                        File.ReadAllBytes(file),
                         null,
                         DataProtectionScope.CurrentUser));
-            }
-            else
-            {
-                File.WriteAllText(
-                    filePath,
-                    JsonConvert.SerializeObject(Instance, _settings.Formatting));
-            }
-        }
-
-
-        public T CommitReset()
-        {
-            Instance = new T
-            {
-                TimestampCreated = DateTimeOffset.Now,
-            };
-            Instance.Version = Instance.CurrentVersion; //save the version we have
-            SaveChanges();
-            return Instance;
-        }
-
-        public void Dispose()
-        {
-            SaveChanges();
-        }
-
-
-        /// <summary>
-        /// Possibly loads Instance from file or defaults back to new Instance
-        /// </summary>
-        /// <exception cref="Exception">when neither config nor instance provide folder and or name for file</exception>
-        private void LoadExistingOrDefault()
-        {
-
-
-            if (_isUserProtected && OperatingSystem.IsWindows())
-            {
-                var file = GetStorageFilePath(true);
-                if (File.Exists(file))
+                    Instance = JsonConvert.DeserializeObject<T>(json);
+                }
+                catch
                 {
-                    try
-                    {
-                        string json = Encoding.UTF8.GetString(ProtectedData.Unprotect(
-                                File.ReadAllBytes(file),
-                                null,
-                                DataProtectionScope.CurrentUser));
-                        Instance = JsonConvert.DeserializeObject<T>(json);
-                    }
-                    catch
-                    {
-                        new FileInfo(file).TryDelete();
-                    }
+                    new FileInfo(file).TryDelete();
                 }
             }
-            else
+        }
+        else
+        {
+            var file = GetStorageFilePath(false);
+            if (File.Exists(file))
             {
-                var file = GetStorageFilePath(false);
-                if (File.Exists(file))
+                try
                 {
-                    try
-                    {
-                        string json = File.ReadAllText(file);
-                        Instance = JsonConvert.DeserializeObject<T>(json);
-                    }
-                    catch
-                    {
-                        new FileInfo(file).TryDelete();
-                    }
+                    string json = File.ReadAllText(file);
+                    Instance = JsonConvert.DeserializeObject<T>(json);
+                }
+                catch
+                {
+                    new FileInfo(file).TryDelete();
                 }
             }
-
-            if (Instance is null ||
-                (Instance.CurrentVersion != 0 && Instance.CurrentVersion != Instance.Version))
-            {
-                CommitReset();
-            }
         }
 
-        /// <summary>
-        /// Figure out which path the Instance should be saved to
-        /// </summary>
-        /// <returns>The absolute file path for the instance</returns>
-        /// <exception cref="Exception">when neither config nor instance provide folder and or name for file</exception>
-        private string GetStorageFilePath(bool isProtected)
+        if (Instance is null ||
+            (Instance.CurrentVersion != 0 && Instance.CurrentVersion != Instance.Version))
         {
-            //we primarily use interface
-            var file = new T().Filepath;
-
-            //directory (1. from file, 2. from settings)
-            var dir = file != null
-                ? new FileInfo(file).DirectoryName ?? throw new Exception("Could not locate file")
-                : _settings.StorageDirectory ?? throw new Exception("Storage directory could not be determined. Either configure general path in IJsonTypeToFileSettings or specify in ITypeToFileValue.");
-
-            //fileName (1. from file, 2. from type)
-            var fileName = file != null
-                ? Path.GetFileName(file)
-                : isProtected
-                    ? $"{typeof(T).Name}.bin"
-                    : $"{typeof(T).Name}.json";
-
-            var result = Path.Combine(dir, fileName);
-            return result;
+            CommitReset();
         }
-
-
-
-
-
     }
+
+    /// <summary>
+    /// Figure out which path the Instance should be saved to
+    /// </summary>
+    /// <returns>The absolute file path for the instance</returns>
+    /// <exception cref="Exception">when neither config nor instance provide folder and or name for file</exception>
+    private string GetStorageFilePath(bool isProtected)
+    {
+        //we primarily use interface
+        var file = new T().Filepath;
+
+        //directory (1. from file, 2. from settings)
+        var dir = file != null
+            ? new FileInfo(file).DirectoryName ?? throw new Exception("Could not locate file")
+            : _settings.StorageDirectory ?? throw new Exception("Storage directory could not be determined. Either configure general path in IJsonTypeToFileSettings or specify in ITypeToFileValue.");
+
+        //fileName (1. from file, 2. from type)
+        var fileName = file != null
+            ? Path.GetFileName(file)
+            : isProtected
+                ? $"{typeof(T).Name}.bin"
+                : $"{typeof(T).Name}.json";
+
+        var result = Path.Combine(dir, fileName);
+        return result;
+    }
+
+
+
 
 
 }

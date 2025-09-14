@@ -8,6 +8,11 @@
 
 		<Nullable>disable</Nullable>
 	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Remove="RegistryTools\**" />
+	  <EmbeddedResource Remove="RegistryTools\**" />
+	  <None Remove="RegistryTools\**" />
+	</ItemGroup>
 
 	<!-- project references -->
 	<ItemGroup>
@@ -58,8 +63,5 @@
 	<ItemGroup>
 		<None Update="..\README.md" Pack="false" />
 		<None Include="README.md" Pack="true" PackagePath="\" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="RegistryTools\" />
 	</ItemGroup>
 </Project>
