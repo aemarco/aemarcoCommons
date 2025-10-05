@@ -26,6 +26,17 @@ public static class HashStuff
         return stream.ToBase64HashString();
     }
 
+    public static string HashTheThing(this byte[] bytes)
+    {
+        using var ms = new MemoryStream(bytes);
+        return ms.ToBase64HashString();
+    }
+
+
+
+
+
+
     /// <summary>
     /// Async version that reads file or web address content and creates a base64 hash (SHA256).
     /// </summary>
