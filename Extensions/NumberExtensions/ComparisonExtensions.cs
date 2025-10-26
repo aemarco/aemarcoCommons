@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace aemarcoCommons.Extensions.NumberExtensions;
+﻿namespace aemarcoCommons.Extensions.NumberExtensions;
 
 public static class ComparisonExtensions
 {

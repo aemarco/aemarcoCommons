@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace aemarcoCommons.Extensions.MonadExtensions;
+﻿namespace aemarcoCommons.Extensions.MonadExtensions;
 
 public static class Mapping
 {

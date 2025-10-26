@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace aemarcoCommons.Extensions.TimeExtensions;
+﻿namespace aemarcoCommons.Extensions.TimeExtensions;
 
 public static class ComparisonExtensions
 {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace aemarcoCommons.Extensions;
+﻿namespace aemarcoCommons.Extensions;
 
 public static class StringManipulationExtensions
 {

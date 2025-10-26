@@ -1,5 +1,4 @@
 ﻿using aemarcoCommons.Extensions.FileExtensions;
-using System;
 using System.IO;
 using System.Linq;
 

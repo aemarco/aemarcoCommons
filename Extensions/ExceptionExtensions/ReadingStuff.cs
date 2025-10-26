@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace aemarcoCommons.Extensions.ExceptionExtensions;
+﻿namespace aemarcoCommons.Extensions.ExceptionExtensions;
 
 public static class ReadingStuff
 {
