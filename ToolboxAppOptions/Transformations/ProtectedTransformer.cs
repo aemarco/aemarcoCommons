@@ -22,7 +22,7 @@ public class ProtectedTransformer : StringTransformerBase
         string password)
     {
         _password = password;
-        ArgumentException.ThrowIfNullOrWhiteSpace(password, nameof(password));
+        ArgumentException.ThrowIfNullOrWhiteSpace(password);
     }
 
     public override string PerformReadTransformation(string currentValue, PropertyInfo propertyInfo, IConfigurationRoot configRoot)

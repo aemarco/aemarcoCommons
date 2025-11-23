@@ -17,37 +17,53 @@ public static class FileStuff
     /// <returns>True if file exists and locked, false if the file does not exist or is available</returns>
     public static bool IsFileLocked(this FileInfo file)
     {
-        FileStream stream = null;
+        file.Refresh();
+        if (!file.Exists)
+            return false;
+
+
 
         try
         {
-            stream = file.Open(FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+            using var stream = file.Open(FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+            return false;
         }
-        catch (IOException)
+        catch (IOException ex)
         {
-
-            if (File.Exists(file.FullName))
+            int errorCode = ex.HResult & 0xFFFF;
+            if (errorCode is 0x20 or 0x21)
             {
-                //the file is unavailable because it is:
-                //still being written to
-                //or being processed by another thread
                 return true;
             }
-            else
-            {
-                //the file is unavailable because it is:
-                //does not exist (has already been processed)
-                return false;
-            }
+
+            // If it's another IOException (e.g., Disk Full, Device Not Ready), rethrow it
+            // because waiting won't fix it.
+            throw;
+
+
+            //if (File.Exists(file.FullName))
+            //{
+            //    //the file is unavailable because it is:
+            //    //still being written to
+            //    //or being processed by another thread
+            //    return true;
+            //}
+            //else
+            //{
+            //    //the file is unavailable because it is:
+            //    //does not exist (has already been processed)
+            //    return false;
+            //}
         }
-        finally
+        catch (UnauthorizedAccessException)
         {
-            if (stream != null)
-                stream.Close();
+            // Optional: Handle permission errors (File is Read-Only or User has no rights)
+            // If you only need to READ the file, change FileAccess.ReadWrite to FileAccess.Read
+            return true;
         }
 
         //file is not locked
-        return false;
+        //return false;
     }
 
 
@@ -75,6 +91,7 @@ public static class FileStuff
             await Task.Delay(1000, token);
         }
 
+        file.Refresh();
         return File.Exists(file.FullName);
     }
 
