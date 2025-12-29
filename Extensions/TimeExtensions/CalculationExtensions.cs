@@ -18,7 +18,7 @@ public static class CalculationExtensions
 
     public static int ToAgeYears(this DateTimeOffset value, DateTimeOffset? target = null)
     {
-        target = target ?? DateTimeOffset.Now;
+        target ??= DateTimeOffset.Now;
 
         int age = target.Value.Year - value.Year;
         if (value.AddYears(age) > target.Value)

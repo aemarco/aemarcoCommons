@@ -34,4 +34,84 @@ public class RegexExtensionsTests
         var result = email.IsValidEmail();
         result.Should().Be(expected);
     }
+
+
+
+
+
+
+
+
+    [TestCase("2023-12-31", 2023, 12, 31)]
+    [TestCase("31-12-23", 2023, 12, 31)]
+    [TestCase("12-31-23", 2023, 12, 31)]
+    [TestCase("20231231", 2023, 12, 31)]
+    [TestCase("31/12/23", 2023, 12, 31)]
+    [TestCase("2023_12_31", 2023, 12, 31)]
+    [TestCase("2023.12.31", 2023, 12, 31)]
+    [TestCase("2023/12/31", 2023, 12, 31)]
+    [TestCase("2023", 2023, 1, 1)]
+    [TestCase("1080", null, null, null)] // ignored
+    [TestCase("random text 2024-05-06 extra", 2024, 5, 6)]
+    [TestCase("text 06-05-24 random", 2024, 5, 6)]
+    [TestCase("only numbers 720", null, null, null)]
+    [TestCase("", null, null, null)]
+    [TestCase(null, null, null, null)]
+    public void ToDateTimeOffset_VariousFormats_ReturnsExpected(
+        string input,
+        int? expectedYear, int? expectedMonth, int? expectedDay)
+    {
+        var result = input.ToDateTimeOffset(2020, 2025);
+
+        if (expectedYear == null || expectedMonth is null || expectedDay is null)
+        {
+            Assert.That(result, Is.Null);
+        }
+        else
+        {
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result!.Value.Year, Is.EqualTo(expectedYear.Value));
+            Assert.That(result.Value.Month, Is.EqualTo(expectedMonth.Value));
+            Assert.That(result.Value.Day, Is.EqualTo(expectedDay.Value));
+        }
+    }
+
+    [Test]
+    public void ToDateTimeOffset_CustomFormatsAndIgnoreList_Works()
+    {
+        const string input = "2020 2022-01-01 12|05|24 test";
+        var customFormats = new[] { "dd|MM|yy" };
+        var ignore = new[] { "2020" };
+
+        var result = input.ToDateTimeOffset(
+            2020, 2025,
+            formats: customFormats,
+            ignoreList: ignore);
+
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result!.Value.Year, Is.EqualTo(2024));
+        Assert.That(result.Value.Month, Is.EqualTo(5));
+        Assert.That(result.Value.Day, Is.EqualTo(12));
+    }
+
+    [Test]
+    public void ToDateTimeOffset_MultipleDates_ReturnsFirstValid()
+    {
+        const string input = "2022-01-01 some text 2024-12-31";
+
+        var result = input.ToDateTimeOffset(2020, 2025);
+
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result!.Value.Year, Is.EqualTo(2022));
+        Assert.That(result.Value.Month, Is.EqualTo(1));
+        Assert.That(result.Value.Day, Is.EqualTo(1));
+    }
+
+    [TestCase("2019-01-01")]
+    [TestCase("2026-01-01")]
+    public void ToDateTimeOffset_OutOfRangeYears_ReturnsNull(string input)
+    {
+        var result = input.ToDateTimeOffset(2020, 2025);
+        Assert.That(result, Is.Null);
+    }
 }

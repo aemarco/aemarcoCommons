@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
 
 namespace aemarcoCommons.Extensions.TextExtensions;
 
-public static class RegexExtensions
+public static partial class RegexExtensions
 {
     public static bool IsValidEmail(this string email)
     {
@@ -73,5 +74,71 @@ public static class RegexExtensions
     }
 
 
+#nullable enable
 
+    private static readonly string[] DefaultFormats =
+    [
+        "yyyyMMdd", "MMddyyyy", "ddMMyyyy", "MMddyy", "ddMMyy", "yyMMdd",
+        "yyyy-MM-dd", "dd-MM-yy", "MM-dd-yy", "yy-MM-dd",
+        "yyyy_MM_dd", "dd_MM_yy", "MM_dd_yy", "yy_MM_dd",
+        "yyyy.MM.dd", "dd.MM.yy", "MM.dd.yy", "yy.MM.dd",
+        "yyyy/MM/dd", "MM/dd/yy", "dd/MM/yy", "yy/MM/dd",
+        "yyyy|MM|dd", "MM|dd|yy", "dd|MM|yy", "yy|MM|dd",
+    ];
+
+
+    [GeneratedRegex(@"(\d{8})|\d{2,4}([\-_.|\/]\d{1,2}){0,2}", RegexOptions.Compiled)]
+    private static partial Regex DatePattern();
+
+    public static DateTimeOffset? ToDateTimeOffset(
+        this string input,
+        int? minYear = null,
+        int? maxYear = null,
+        IEnumerable<string>? formats = null,
+        IEnumerable<string>? ignoreList = null)
+    {
+        if (string.IsNullOrWhiteSpace(input))
+            return null;
+
+        var min = minYear ?? 1980;
+        var max = maxYear ?? DateTimeOffset.Now.Year;
+
+        var formatsInternal = formats?.ToArray() ?? DefaultFormats;
+        var ignore = ignoreList != null
+            ? new HashSet<string>(ignoreList)
+            : [];
+
+        var matches = DatePattern().Matches(input);
+        var ci = (CultureInfo)CultureInfo.InvariantCulture.Clone();
+        ci.Calendar.TwoDigitYearMax = DateTimeOffset.Now.Year;
+        foreach (var m in matches.OrderByDescending(x => x.Value.Length))
+        {
+            var value = m.Value;
+
+            if (ignore.Contains(value))
+                continue;
+
+            // format-Match
+            if (DateTimeOffset.TryParseExact(
+                    value,
+                    formatsInternal,
+                    ci,
+                    DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal,
+                    out var dt))
+            {
+                if (dt.Year >= min && dt.Year <= max)
+                    return dt;
+                continue;
+            }
+
+            // only year
+            if (int.TryParse(value, out var year) &&
+                year >= min && year <= max)
+            {
+                return new DateTimeOffset(year, 1, 1, 0, 0, 0, TimeSpan.Zero);
+            }
+        }
+
+        return null;
+    }
 }
