@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<!-- project definition -->
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<RootNamespace>aemarcoCommons.ToolboxVlc</RootNamespace>
+		<AssemblyName>aemarcoCommons.ToolboxVlc</AssemblyName>
+	</PropertyGroup>
+
+
+	<!-- nuget build-->
+	<PropertyGroup>
+		<Description>Tooling for VLC player</Description>
+		<PackageTags>VLC</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Update="..\README.md" Pack="false" />
+		<None Include="README.md" Pack="true" PackagePath="\" />
+		<None Update="..\icon.png" Pack="false" />
+		<None Include="Resources\icon.png" Pack="true" PackagePath="\" />
+		<None Include="LICENSE.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+</Project>
