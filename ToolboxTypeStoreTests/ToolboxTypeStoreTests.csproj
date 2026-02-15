@@ -11,7 +11,7 @@
 
 	<!-- project references -->
 	<ItemGroup>
-		<ProjectReference Include="..\ToolboxVlc\ToolboxVlc.csproj" />
+		<ProjectReference Include="..\ToolboxTypeStore\ToolboxTypeStore.csproj" />
 	</ItemGroup>
 
 	<!-- nuget references-->

@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<!-- project definition -->
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<RootNamespace>aemarcoCommons.ToolboxTypeStore</RootNamespace>
+		<AssemblyName>aemarcoCommons.ToolboxTypeStore</AssemblyName>
+	</PropertyGroup>
+
+	<!-- nuget references -->
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.9" />
+	</ItemGroup>
+
+	<!-- nuget build-->
+	<PropertyGroup>
+		<Description>Tooling for presistance of objects</Description>
+		<PackageTags>TypeStore</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Update="..\README.md" Pack="false" />
+		<None Include="README.md" Pack="true" PackagePath="\" />
+		<None Update="..\icon.png" Pack="false" />
+		<None Include="Resources\icon.png" Pack="true" PackagePath="\" />
+		<None Include="LICENSE.md" />
+	</ItemGroup>
+
+
+
+</Project>
