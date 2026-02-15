@@ -2,7 +2,7 @@
 
 	<!-- project definition -->
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net8.0-windows</TargetFramework>
 		<RootNamespace>aemarcoCommons.ToolboxTypeStore</RootNamespace>
 		<AssemblyName>aemarcoCommons.ToolboxTypeStore</AssemblyName>
 	</PropertyGroup>
@@ -10,6 +10,7 @@
 	<!-- nuget references -->
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.9" />
+		<PackageReference Include="Microsoft.Windows.Compatibility" Version="9.0.7" />
 	</ItemGroup>
 
 	<!-- nuget build-->
@@ -24,6 +25,9 @@
 		<None Update="..\icon.png" Pack="false" />
 		<None Include="Resources\icon.png" Pack="true" PackagePath="\" />
 		<None Include="LICENSE.md" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Extensions\Extensions.csproj" />
 	</ItemGroup>
 
 
