@@ -2,11 +2,17 @@
 
 	<!-- project definition -->
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net8.0-windows</TargetFramework>
 		<RootNamespace>aemarcoCommons.ToolboxVlc</RootNamespace>
 		<AssemblyName>aemarcoCommons.ToolboxVlc</AssemblyName>
 	</PropertyGroup>
 
+	<!-- nuget references -->
+	<ItemGroup>
+		<PackageReference Include="CliWrap" Version="3.9.0" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="9.0.9" />
+		<PackageReference Include="System.Net.Http.Json" Version="9.0.13" />
+	</ItemGroup>
 
 	<!-- nuget build-->
 	<PropertyGroup>
@@ -21,5 +27,6 @@
 		<None Include="Resources\icon.png" Pack="true" PackagePath="\" />
 		<None Include="LICENSE.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
+	
 
 </Project>

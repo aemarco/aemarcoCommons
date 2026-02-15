@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.3.11505.172 d18.3
+VisualStudioVersion = 18.3.11505.172
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_sln", "_sln", "{F8C81839-68CB-4E7F-A09F-5C275ACC36D7}"
 	ProjectSection(SolutionItems) = preProject
@@ -54,6 +54,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolboxConsole", "ToolboxConsole\ToolboxConsole.csproj", "{56184DAD-89D7-4C05-8282-4FABD4D62284}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolboxVlc", "ToolboxVlc\ToolboxVlc.csproj", "{A7C9B734-E958-41A9-916C-2D2C770C280B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolboxVlcTests", "ToolboxVlcTests\ToolboxVlcTests.csproj", "{8C912372-A7FA-42EA-90EE-416ACE65B0CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -133,6 +135,10 @@ Global
 		{A7C9B734-E958-41A9-916C-2D2C770C280B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7C9B734-E958-41A9-916C-2D2C770C280B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7C9B734-E958-41A9-916C-2D2C770C280B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C912372-A7FA-42EA-90EE-416ACE65B0CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C912372-A7FA-42EA-90EE-416ACE65B0CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C912372-A7FA-42EA-90EE-416ACE65B0CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C912372-A7FA-42EA-90EE-416ACE65B0CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -145,6 +151,7 @@ Global
 		{47E44672-E78A-472E-BA1A-8E4830CA20DD} = {284B28FC-9401-48CF-B5D1-27449B9BF167}
 		{0DE735C0-C881-4BFE-8A5F-E1A97D568620} = {284B28FC-9401-48CF-B5D1-27449B9BF167}
 		{E93FFFF4-F6FE-4989-AA53-4A5A76891AC0} = {284B28FC-9401-48CF-B5D1-27449B9BF167}
+		{8C912372-A7FA-42EA-90EE-416ACE65B0CE} = {284B28FC-9401-48CF-B5D1-27449B9BF167}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5222E321-3FD1-438C-889C-F421ECCF1B57}
