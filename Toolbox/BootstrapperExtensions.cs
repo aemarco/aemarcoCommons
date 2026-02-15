@@ -45,7 +45,10 @@ public static class BootstrapperExtensions
     {
         //services
         sc.AddSingleton<Random>();
+
+#pragma warning disable CS0618 // Type or member is obsolete
         sc.AddSingleton(typeof(ITypeToFileStore<>), typeof(JsonTypeToFileStore<>));
+#pragma warning restore CS0618 // Type or member is obsolete
         sc.AddTransient<IEmbeddedResourceQuery, EmbeddedResourceQuery>();
 
         //SecurityTools

@@ -101,8 +101,9 @@ public class TypeToFileStore<T> : ITypeToFileStore<T>
     public void SaveChanges()
     {
         var filePath = GetStorageFilePath();
-        if (Path.GetDirectoryName(filePath) is { } dir)
-            Directory.CreateDirectory(dir);
+        var fileInfo = new FileInfo(filePath);
+        if (fileInfo.Directory is { } dir)
+            dir.Create();
 
         // Serialize Instance to a JsonNode and add metadata
         Instance.OnSaving(); // Allow the instance to perform pre-save logic

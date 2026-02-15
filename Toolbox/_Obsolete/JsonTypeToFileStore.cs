@@ -6,20 +6,25 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
+#pragma warning disable IDE0130
 namespace aemarcoCommons.Toolbox.SerializationTools;
+#pragma warning restore IDE0130
 
+[Obsolete("Use ToolboxTypeStore instead.")]
 public interface IJsonTypeToFileSettings
 {
     string StorageDirectory { get; }
     Formatting Formatting { get; }
 }
+
+[Obsolete("Use ToolboxTypeStore instead.")]
 public class JsonTypeToFileSettings : IJsonTypeToFileSettings
 {
     public string StorageDirectory { get; set; }
     public Formatting Formatting { get; set; }
 }
 
-
+[Obsolete("Use ToolboxTypeStore instead.")]
 public class JsonTypeToFileStore<T> : ITypeToFileStore<T>
     where T : class, ITypeToFileValue, new()
 {
