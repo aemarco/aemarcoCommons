@@ -6,28 +6,20 @@ namespace aemarcoCommons.ToolboxTypeStore;
 public interface ITypeToFileValue
 {
     /// <summary>
-    /// Gets or sets the timestamp, the instance was created
+    /// Gets a custom absolute file path where this instance should be stored.
+    /// Return null for default store logic.
     /// </summary>
-    DateTimeOffset TimestampCreated { get; set; }
+    string? GetCustomFilePath() => null;
 
     /// <summary>
-    /// Gets or sets the timestamp, the instance was saved
+    /// Called by the store just before the instance is saved.
+    /// Use this to perform any pre-save logic.
     /// </summary>
-    DateTimeOffset? TimestampSaved { get; set; }
+    void OnSaving() { }
 
     /// <summary>
-    /// Gets or sets the version of the data
+    /// Called by the store just after the instance has been successfully saved to disk.
+    /// Use this to perform any post-save logic.
     /// </summary>
-    int Version { get; set; }
-
-    /// <summary>
-    /// Gets the current version of the data structure
-    /// </summary>
-    int CurrentVersion { get; }
-
-    /// <summary>
-    /// Gets the path where this file should be stored.
-    /// Default is null, so store decides based on its settings
-    /// </summary>
-    string? Filepath { get; }
+    void OnSaved() { }
 }
