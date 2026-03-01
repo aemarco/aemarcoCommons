@@ -1,5 +1,6 @@
 ﻿using System;
 
+// ReSharper disable CheckNamespace
 #pragma warning disable IDE0130
 namespace aemarcoCommons.Toolbox.SerializationTools;
 #pragma warning restore IDE0130

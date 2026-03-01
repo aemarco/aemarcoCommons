@@ -6,6 +6,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
+// ReSharper disable CheckNamespace
 #pragma warning disable IDE0130
 namespace aemarcoCommons.Toolbox.SerializationTools;
 #pragma warning restore IDE0130

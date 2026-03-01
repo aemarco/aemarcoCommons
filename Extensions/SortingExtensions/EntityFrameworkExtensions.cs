@@ -66,4 +66,55 @@ public static class EntityFrameworkExtensions
         var newQuery = (IOrderedQueryable<T>)genericMethod.Invoke(genericMethod, new object[] { query, selector });
         return newQuery;
     }
+
+
+
+
+    public static IOrderedQueryable<T> ThenBy<T>(this IOrderedQueryable<T> query, string propertyName)
+    {
+        var entityType = typeof(T);
+        var propertyInfo = entityType.GetProperty(propertyName) ?? throw new Exception($"Could not find propertyName {propertyName}");
+        ParameterExpression arg = Expression.Parameter(entityType, "x");
+        MemberExpression property = Expression.Property(arg, propertyName);
+        var selector = Expression.Lambda(property, arg);
+
+        var enumerableType = typeof(Queryable);
+        var method = enumerableType.GetMethods()
+            .Where(m => m.Name == "ThenBy" && m.IsGenericMethodDefinition)
+            .Where(m =>
+            {
+                var parameters = m.GetParameters().ToList();
+                // ThenBy takes (IOrderedQueryable, Expression)
+                return parameters.Count == 2;
+            }).Single();
+
+        MethodInfo genericMethod = method.MakeGenericMethod(entityType, propertyInfo.PropertyType);
+
+        return (IOrderedQueryable<T>)genericMethod.Invoke(genericMethod, new object[] { query, selector })!;
+    }
+
+    public static IOrderedQueryable<T> ThenByDescending<T>(this IOrderedQueryable<T> query, string propertyName)
+    {
+        var entityType = typeof(T);
+        var propertyInfo = entityType.GetProperty(propertyName) ?? throw new Exception($"Could not find propertyName {propertyName}");
+        ParameterExpression arg = Expression.Parameter(entityType, "x");
+        MemberExpression property = Expression.Property(arg, propertyName);
+        var selector = Expression.Lambda(property, arg);
+
+        var enumerableType = typeof(Queryable);
+        var method = enumerableType.GetMethods()
+            .Where(m => m.Name == "ThenByDescending" && m.IsGenericMethodDefinition)
+            .Where(m =>
+            {
+                var parameters = m.GetParameters().ToList();
+                return parameters.Count == 2;
+            }).Single();
+
+        MethodInfo genericMethod = method.MakeGenericMethod(entityType, propertyInfo.PropertyType);
+
+        return (IOrderedQueryable<T>)genericMethod.Invoke(genericMethod, new object[] { query, selector })!;
+    }
+
+
+
 }
