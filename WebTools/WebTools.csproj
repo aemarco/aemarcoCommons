@@ -2,7 +2,7 @@
 
 	<!-- project definition -->
 	<PropertyGroup>
-		<TargetFramework>net8.0-windows</TargetFramework>
+		<TargetFramework>net9.0-windows</TargetFramework>
 		<RootNamespace>aemarcoCommons.WebTools</RootNamespace>
 		<AssemblyName>aemarcoCommons.WebTools</AssemblyName>
 
@@ -15,7 +15,12 @@
 
 	<!-- nuget references-->
 	<ItemGroup>
+
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0" />
 		<PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+		<PackageReference Include="Riok.Mapperly" Version="4.2.1" ExcludeAssets="runtime" PrivateAssets="all" />
+
 	</ItemGroup>
 
 	<!-- proj build-->
@@ -34,6 +39,9 @@
 	<ItemGroup>
 		<None Update="..\README.md" Pack="false" />
 		<None Include="README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Mapping\" />
 	</ItemGroup>
 
 </Project>

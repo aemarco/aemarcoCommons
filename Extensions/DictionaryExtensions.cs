@@ -5,28 +5,28 @@ namespace aemarcoCommons.Extensions;
 
 public static class DictionaryExtensions
 {
-    public static IDictionary<TK, TV> ToDictionary<TK, TV>(this IEnumerable<(TK, TV)> @this) =>
+    public static IDictionary<Tk, Tv> ToDictionary<Tk, Tv>(this IEnumerable<(Tk, Tv)> @this) =>
         @this.ToDictionary(
             x => x.Item1,
             x => x.Item2);
 
-    public static IDictionary<TK, TV> ToDictionary<TK, TV>(this IEnumerable<KeyValuePair<TK, TV>> @this) =>
+    public static IDictionary<Tk, Tv> ToDictionary<Tk, Tv>(this IEnumerable<KeyValuePair<Tk, Tv>> @this) =>
         @this.ToDictionary(
             x => x.Key,
             x => x.Value);
 
-    public static IDictionary<TK, ICollection<TV>> ToDictionary<TK, TV>(this IEnumerable<IGrouping<TK, TV>> @this) =>
+    public static IDictionary<Tk, ICollection<Tv>> ToDictionary<Tk, Tv>(this IEnumerable<IGrouping<Tk, Tv>> @this) =>
         @this.ToDictionary(
             x => x.Key,
-            x => (ICollection<TV>)x.ToList());
+            x => (ICollection<Tv>)x.ToList());
 
 
-    public static IDictionary<TK, int> ToCountDictionary<TK, TV>(this IEnumerable<IGrouping<TK, TV>> @this) =>
+    public static IDictionary<Tk, int> ToCountDictionary<Tk, Tv>(this IEnumerable<IGrouping<Tk, Tv>> @this) =>
         @this.ToDictionary(
             x => x.Key,
             x => x.Count());
 
-    public static IDictionary<TK, int> ToCountDictionary<TK>(this IEnumerable<TK> @this) =>
+    public static IDictionary<Tk, int> ToCountDictionary<Tk>(this IEnumerable<Tk> @this) =>
         @this.GroupBy(x => x)
             .ToCountDictionary();
 }
