@@ -23,9 +23,12 @@ public class PlaceholderTransformation : StringTransformerBase
 
 public static class ConfigurationExtensions
 {
-    public static string GetResolvedText(this IConfiguration config, string path)
+    public static string? GetResolvedText(this IConfiguration config, string path)
     {
-        var unresolved = config.GetValue<string>(path);
+        var unresolved = config.GetValue<string?>(path);
+        if (unresolved is null)
+            return null;
+
         var result = ((IConfigurationRoot)config)
             .ResolvePlaceholders(unresolved
                 ?? throw new NullReferenceException(path));
