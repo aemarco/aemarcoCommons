@@ -11,7 +11,9 @@ namespace aemarcoCommons.WpfTools.Controls;
 public partial class SliderMenuItem
 {
     private const double ThumbHeight = 11.0d;
+    // ReSharper disable once InconsistentNaming
     private Slider m_Slider = null!;
+    // ReSharper disable once InconsistentNaming
     private readonly SortedDictionary<double, double> m_TickValueMap;
 
     /// §§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
@@ -380,6 +382,7 @@ public partial class SliderMenuItem
                 double lastTickSpot = m_Slider.Ticks[m_Slider.Ticks.Count - 1];
                 double division = (thisTickSpot - lastTickSpot) / steps;
 
+                // ReSharper disable once InconsistentNaming
                 for (int current_step = 1; current_step < steps; current_step++)
                 {
                     double intermediateTickSpot = lastTickSpot + current_step * division;
