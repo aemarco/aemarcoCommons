@@ -1,7 +1,7 @@
 # `aemarcoConsoleTools`
 
-<a href=https://www.nuget.org/packages/aemarcoConsoleTools><img src="https://buildstats.info/nuget/aemarcoConsoleTools"> </a><br/>
-
+[![NuGet](https://img.shields.io/nuget/v/aemarcoConsoleTools.svg)](https://www.nuget.org/packages/aemarcoConsoleTools/)
+![NuGet](https://img.shields.io/nuget/dt/aemarcoConsoleTools.svg)
 
 ## Overview
 

@@ -1,6 +1,8 @@
 # `aemarcoToolboxTypeStore`
 
-<a href=https://www.nuget.org/packages/aemarcoToolboxTypeStore><img src="https://buildstats.info/nuget/aemarcoToolboxTypeStore"></a><br/>
+[![NuGet](https://img.shields.io/nuget/v/aemarcoToolboxTypeStore.svg)](https://www.nuget.org/packages/aemarcoToolboxTypeStore/)
+![NuGet](https://img.shields.io/nuget/dt/aemarcoToolboxTypeStore.svg)
+
 
 The `aemarcoToolboxTypeStore` library provides a robust, flexible, and non-intrusive way to persist single instances of Plain Old CLR Objects (POCOs) to disk. It's ideal for managing application settings, session data, or any small, mutable data structure that needs to be loaded on startup and saved on exit.
 

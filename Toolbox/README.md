@@ -1,6 +1,7 @@
 # `aemarcoToolbox`
 
-<a href=https://www.nuget.org/packages/aemarcoToolbox><img src="https://buildstats.info/nuget/aemarcoToolbox"></a><br/>
+[![NuGet](https://img.shields.io/nuget/v/aemarcoToolbox.svg)](https://www.nuget.org/packages/aemarcoToolbox/)
+![NuGet](https://img.shields.io/nuget/dt/aemarcoToolbox.svg)
 
 ## Table of Contents
 

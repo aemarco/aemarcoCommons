@@ -1,6 +1,7 @@
 # `aemarcoToolboxTopService`
 
-<a href=https://www.nuget.org/packages/aemarcoToolboxTopService><img src="https://buildstats.info/nuget/aemarcoToolboxTopService"></a><br/>
+[![NuGet](https://img.shields.io/nuget/v/aemarcoToolboxTopService.svg)](https://www.nuget.org/packages/aemarcoToolboxTopService/)
+![NuGet](https://img.shields.io/nuget/dt/aemarcoToolboxTopService.svg)
 
 ## Overview
 This package injects some commands into the Application, to make it easier to use.
