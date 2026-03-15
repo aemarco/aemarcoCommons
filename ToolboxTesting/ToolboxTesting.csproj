@@ -2,22 +2,24 @@
 
 	<!-- project definition -->
 	<PropertyGroup>
-		<TargetFramework>net8.0-windows</TargetFramework>
-		<RootNamespace>aemarcoCommons.ToolboxVlc</RootNamespace>
-		<AssemblyName>aemarcoCommons.ToolboxVlc</AssemblyName>
+		<TargetFramework>net8.0</TargetFramework>
+
+		<RootNamespace>aemarcoCommons.ToolboxTesting</RootNamespace>
+		<AssemblyName>aemarcoCommons.ToolboxTesting</AssemblyName>
 	</PropertyGroup>
 
-	<!-- nuget references -->
+	<!-- nuget references-->
 	<ItemGroup>
-		<PackageReference Include="CliWrap" />
-		<PackageReference Include="Microsoft.Extensions.Http" />
-		<PackageReference Include="System.Net.Http.Json" />
+		
+		<!-- nunit -->
+		<PackageReference Include="NUnit" />
+
 	</ItemGroup>
 
 	<!-- nuget build-->
 	<PropertyGroup>
-		<Description>Tooling for VLC player</Description>
-		<PackageTags>VLC</PackageTags>
+		<Description>Tooling for unit testing</Description>
+		<PackageTags>NUnit;Testing</PackageTags>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	</PropertyGroup>
 	<ItemGroup>
@@ -27,6 +29,5 @@
 		<None Include="Resources\icon.png" Pack="true" PackagePath="\" />
 		<None Include="LICENSE.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
-	
 
 </Project>

@@ -2,13 +2,16 @@
 
 	<!-- project definition -->
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+
 		<IsPackable>false</IsPackable>
+		<IsTestProject>true</IsTestProject>
 	</PropertyGroup>
 
 	<!-- project references -->
 	<ItemGroup>
-		<ProjectReference Include="..\..\Extensions\Extensions.csproj" />
+		<ProjectReference Include="..\..\ToolboxVlc\ToolboxVlc.csproj" />
 	</ItemGroup>
 
 </Project>

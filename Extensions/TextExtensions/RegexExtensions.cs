@@ -149,7 +149,7 @@ public static partial class RegexExtensions
     private static partial Regex YearOnlyPattern();
 
     public static DateTimeOffset? ToDateTimeOffset(
-        this string input,
+        this string? input,
         int? minYear = null,
         int? maxYear = null)
     {

@@ -4,6 +4,7 @@
 	<!-- project definition -->
 	<PropertyGroup>
 		<Nullable>enable</Nullable>
+		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 	</PropertyGroup>
 
 	<!-- PackageValidation-->
@@ -29,6 +30,7 @@
 		<InternalsVisibleTo Include="$(AssemblyName).Tests" />
 		<InternalsVisibleTo Include="$(MSBuildProjectName)Tests" />
 		<InternalsVisibleTo Include="$(MSBuildProjectName).Tests" />
+		<InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
 	</ItemGroup>
 
 	
@@ -37,11 +39,10 @@
 		<!-- auto versioning tool -->
 		<PackageReference Include="Nerdbank.GitVersioning" Condition="!Exists('packages.config')">
 			<PrivateAssets>all</PrivateAssets>
-			<Version>3.7.115</Version>
 		</PackageReference>
 
 		<!-- auto github link etc -->
-		<PackageReference Include="DotNet.ReproducibleBuilds" Version="1.2.25">
+		<PackageReference Include="DotNet.ReproducibleBuilds">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>

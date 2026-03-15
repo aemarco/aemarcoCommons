@@ -10,8 +10,8 @@
 	
 	<!-- nuget references -->
 	<ItemGroup>
-		<PackageReference Include="FluentValidation" Version="12.0.0" />
-		<PackageReference Include="CronExpressionDescriptor" Version="2.44.0" />
+		<PackageReference Include="FluentValidation" />
+		<PackageReference Include="CronExpressionDescriptor" />
 	</ItemGroup>
 
 	<!-- nuget build-->

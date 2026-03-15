@@ -57,7 +57,7 @@ public class RegexExtensionsTests
     [TestCase("", null, null, null)]
     [TestCase(null, null, null, null)]
     public void ToDateTimeOffset_VariousFormats_ReturnsExpected(
-        string input,
+        string? input,
         int? expectedYear, int? expectedMonth, int? expectedDay)
     {
         var result = input.ToDateTimeOffset(2020, 2025);

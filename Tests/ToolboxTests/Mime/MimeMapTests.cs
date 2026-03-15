@@ -53,7 +53,7 @@ public class MimeMapTests
     [TestCase("text/plain", ".txt")]
     [TestCase("application/pdf", ".pdf")]
     [TestCase("application/unknown", null)]
-    public void GetExtension_ReturnsExpectedExtension(string mimeType, string expectedExt)
+    public void GetExtension_ReturnsExpectedExtension(string mimeType, string? expectedExt)
     {
         var result = MimeMap.GetExtension(mimeType);
         result.Should().Be(expectedExt);

@@ -1,0 +1,11 @@
+<Project>
+	<!-- Test folder, this runs at the beginning -->
+
+
+	<PropertyGroup>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+
+
+</Project>

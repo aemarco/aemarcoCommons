@@ -10,8 +10,8 @@
 
 	<!-- nuget references -->
 	<ItemGroup>
-		<PackageReference Include="CliWrap" Version="3.9.0" />
-		<PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.7" />
+		<PackageReference Include="CliWrap" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" />
 	</ItemGroup>
 
 	<!-- nuget build-->

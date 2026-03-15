@@ -1,11 +1,38 @@
+<!-- Tests -->
 <Project>
-	<!-- Test folder, this runs at the beginning -->
 
-
+	<!-- project definition -->
 	<PropertyGroup>
 		<Nullable>enable</Nullable>
+		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 	</PropertyGroup>
 
+	<!-- nuget references -->
+	<ItemGroup>
 
+		<!-- basics -->
+		<PackageReference Include="Microsoft.NET.Test.Sdk" />
+		<PackageReference Include="coverlet.collector">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+
+		<!-- nunit -->
+		<PackageReference Include="NUnit" />
+		<PackageReference Include="NUnit.Analyzers" />
+		<PackageReference Include="NUnit3TestAdapter" />
+
+		<!-- mocking -->
+		<PackageReference Include="NSubstitute" />
+		<PackageReference Include="NSubstitute.Analyzers.CSharp">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+
+		<!-- assertion -->
+		<PackageReference Include="Shouldly" />
+		<PackageReference Include="FluentAssertions" />
+
+	</ItemGroup>
 
 </Project>
