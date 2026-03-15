@@ -73,10 +73,20 @@ public class TypeToFileStore<T> : ITypeToFileStore<T>
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Error loading file for type {typeof(T).Name}. File: {filePath}. Deleting corrupt file.");
+            _logger.LogError(
+                ex,
+                "Error loading file for type {typeName}. File: {filePath}. Deleting corrupt file.",
+                typeof(T).Name, filePath);
 
             loadedInstance = null;
-            fileInfo.TryDelete(); // File is corrupt or unreadable
+            try
+            {
+                fileInfo.Delete();
+            }
+            catch
+            {
+                // ignored
+            }
         }
 
         if (loadedInstance is null)
