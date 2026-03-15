@@ -1,4 +1,6 @@
-# aemarcoCommons [![Build Status](https://dev.azure.com/aemarco/aemarcoCommons/_apis/build/status/aemarco.aemarcoCommons?branchName=master)](https://dev.azure.com/aemarco/aemarcoCommons/_build/latest?definitionId=10&branchName=master)
+# aemarcoCommons
+
+[![Build](https://github.com/aemarco/aemarcoCommons/actions/workflows/build.yml/badge.svg)](https://github.com/aemarco/aemarcoCommons/actions/workflows/build.yml)
 
 Some Extensions, some Toolbox, some Console-, Wpf- and Web-Tools
 
