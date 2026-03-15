@@ -1,11 +1,10 @@
+<!-- TestsManual -->
 <Project>
-	<!-- Test folder, this runs at the beginning -->
 
-
+	<!-- project definition -->
 	<PropertyGroup>
 		<Nullable>enable</Nullable>
+		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 	</PropertyGroup>
-
-
 
 </Project>

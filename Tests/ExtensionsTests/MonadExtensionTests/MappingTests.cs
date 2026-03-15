@@ -1,6 +1,4 @@
-﻿using aemarcoCommons.Extensions.MonadExtensions;
-using FluentAssertions;
-using NUnit.Framework;
+using aemarcoCommons.Extensions.MonadExtensions;
 
 namespace ExtensionsTests.MonadExtensionTests;
 
@@ -10,7 +8,7 @@ public class MappingTests
     public void Map_Maps()
     {
         var r = 5.Map(x => x * 2);
-        r.Should().Be(10);
+        r.ShouldBe(10);
     }
 
 

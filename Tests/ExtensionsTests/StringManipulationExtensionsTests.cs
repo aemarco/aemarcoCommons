@@ -1,9 +1,7 @@
-﻿using aemarcoCommons.Extensions;
-using FluentAssertions;
-using NUnit.Framework;
-using System;
+using aemarcoCommons.Extensions;
 
 namespace ExtensionsTests;
+
 internal class StringManipulationExtensionsTests
 {
 
@@ -18,7 +16,7 @@ internal class StringManipulationExtensionsTests
     public void TrimStart_Works_WithOrdinal(string? text, string? remove, string? expected)
     {
         var result = text.TrimStart(remove);
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
     }
 
 
@@ -33,7 +31,7 @@ internal class StringManipulationExtensionsTests
     public void TrimStart_Works_WithOrdinalIgnoreCase(string? text, string? remove, string? expected)
     {
         var result = text.TrimStart(remove, StringComparison.OrdinalIgnoreCase);
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
     }
 
 
@@ -48,7 +46,7 @@ internal class StringManipulationExtensionsTests
     public void TrimEnd_Works_WithOrdinal(string? text, string? remove, string? expected)
     {
         var result = text.TrimEnd(remove);
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
     }
 
 
@@ -63,7 +61,7 @@ internal class StringManipulationExtensionsTests
     public void TrimEnd_Works_WithOrdinalIgnoreCase(string? text, string? remove, string? expected)
     {
         var result = text.TrimEnd(remove, StringComparison.OrdinalIgnoreCase);
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
     }
 
 }

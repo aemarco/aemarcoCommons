@@ -2,11 +2,7 @@
 
 	<!-- project definition -->
 	<PropertyGroup>
-		<TargetFramework>net8.0-windows</TargetFramework>
-		<ImplicitUsings>enable</ImplicitUsings>
-
-		<IsPackable>false</IsPackable>
-		<IsTestProject>true</IsTestProject>
+		<TargetFramework>$(DefaultNetVersion)-windows</TargetFramework>
 	</PropertyGroup>
 
 	<!-- project references -->

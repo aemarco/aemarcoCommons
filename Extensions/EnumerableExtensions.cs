@@ -4,14 +4,9 @@ using System.Linq.Expressions;
 
 namespace aemarcoCommons.Extensions;
 
-public static class EnumerableExtensions
+public static partial class EnumerableExtensions
 {
-    internal static Random Random { get; set; } = new Random();
-    public static List<T> Shuffle<T>(this IEnumerable<T> list)
-    {
-        var result = list.OrderBy(_ => Random.Next()).ToList();
-        return result;
-    }
+
 
     /// <summary>
     /// Checks is not null and contains elements

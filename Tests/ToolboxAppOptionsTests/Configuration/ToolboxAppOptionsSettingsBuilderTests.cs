@@ -16,8 +16,8 @@ public class ToolboxAppOptionsSettingsBuilderTests : AppOptionTestBase
         _ = builder.AddStringTransformation(transformation);
 
         var result = builder.Build();
-        result.StringTransformations.Should().HaveCount(1);
-        result.StringTransformations[0].Should().BeSameAs(transformation);
+        result.StringTransformations.Count.ShouldBe(1);
+        result.StringTransformations[0].ShouldBeSameAs(transformation);
     }
 
     [Test]
@@ -31,10 +31,10 @@ public class ToolboxAppOptionsSettingsBuilderTests : AppOptionTestBase
         _ = builder.AddAssemblyMarker(targetType);
 
         var result = builder.Build();
-        result.Assemblies.Should().HaveCount(2);
-        result.Assemblies[0].Should().Match(x => x.FullName == targetAssName);
+        result.Assemblies.Count.ShouldBe(2);
+        result.Assemblies[0].FullName.ShouldBe(targetAssName);
         //builder adds entry assembly if not already in there
-        result.Assemblies[1].Should().Match(x => x.FullName == entryAssName);
+        result.Assemblies[1].FullName.ShouldBe(entryAssName);
     }
 
     [Test]
@@ -47,10 +47,10 @@ public class ToolboxAppOptionsSettingsBuilderTests : AppOptionTestBase
         _ = builder.AddAssemblies(targetAss);
 
         var result = builder.Build();
-        result.Assemblies.Should().HaveCount(2);
-        result.Assemblies[0].Should().Match(x => x.FullName == targetAss.FullName);
+        result.Assemblies.Count.ShouldBe(2);
+        result.Assemblies[0].FullName.ShouldBe(targetAss.FullName);
         //builder adds entry assembly if not already in there
-        result.Assemblies[1].Should().Match(x => x.FullName == entryAssName);
+        result.Assemblies[1].FullName.ShouldBe(entryAssName);
     }
 
     [TestCase(true)]
@@ -62,7 +62,7 @@ public class ToolboxAppOptionsSettingsBuilderTests : AppOptionTestBase
         _ = builder.EnableValidationOnStartup(enable);
 
         var result = builder.Build();
-        result.EnableValidationOnStartup.Should().Be(enable);
+        result.EnableValidationOnStartup.ShouldBe(enable);
     }
 
     [Test]
@@ -73,8 +73,8 @@ public class ToolboxAppOptionsSettingsBuilderTests : AppOptionTestBase
 
         var result = builder.Build();
 
-        result.ConfigurationAssemblies.Should().HaveCount(1);
-        result.ConfigurationAssemblies[0].Should().Match(x => x.FullName == targetAss.FullName);
+        result.ConfigurationAssemblies.Count.ShouldBe(1);
+        result.ConfigurationAssemblies[0].FullName.ShouldBe(targetAss.FullName);
     }
 
 
@@ -87,13 +87,13 @@ public class ToolboxAppOptionsSettingsBuilderTests : AppOptionTestBase
 
         var result = builder.Build();
 
-        result.StringTransformations.Should().HaveCount(0);
-        result.Assemblies.Should().HaveCount(1);
+        result.StringTransformations.ShouldBeEmpty();
+        result.Assemblies.Count.ShouldBe(1);
         //builder adds entry assembly if not already in there
-        result.Assemblies[0].Should().Match(x => x.FullName == entryAssName);
-        result.EnableValidationOnStartup.Should().Be(true);
-        result.ConfigurationTypes.Should().HaveCount(0);
-        result.ConfigurationAssemblies.Should().HaveCount(0);
+        result.Assemblies[0].FullName.ShouldBe(entryAssName);
+        result.EnableValidationOnStartup.ShouldBeTrue();
+        result.ConfigurationTypes.ShouldBeEmpty();
+        result.ConfigurationAssemblies.ShouldBeEmpty();
     }
 
 }

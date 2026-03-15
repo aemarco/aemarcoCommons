@@ -1,6 +1,4 @@
-﻿using aemarcoCommons.Extensions.TextExtensions;
-using FluentAssertions;
-using NUnit.Framework;
+using aemarcoCommons.Extensions.TextExtensions;
 
 namespace ExtensionsTests.TextExtensionsTests;
 
@@ -32,7 +30,7 @@ public class RegexExtensionsTests
     public void Email_ValidatesCorrect(string email, bool expected)
     {
         var result = email.IsValidEmail();
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
     }
 
 

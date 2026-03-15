@@ -3,15 +3,28 @@
 
 	<!-- project definition -->
 	<PropertyGroup>
+		<DefaultNetVersion>net10.0</DefaultNetVersion>
 		<Nullable>enable</Nullable>
-		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+
+		<IsPackable>false</IsPackable>
+		<IsTestProject>true</IsTestProject>
 	</PropertyGroup>
 
+	<!-- project references -->
+	<ItemGroup>
+		<ProjectReference Include="$(MSBuildThisFileDirectory)..\ToolboxTesting\ToolboxTesting.csproj" />
+	</ItemGroup>
+
 	<!-- nuget references -->
+	<PropertyGroup>
+		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+	</PropertyGroup>
 	<ItemGroup>
 
 		<!-- basics -->
 		<PackageReference Include="Microsoft.NET.Test.Sdk" />
+		<PackageReference Include="Microsoft.Extensions.Configuration" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" />
 		<PackageReference Include="coverlet.collector">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -31,8 +44,24 @@
 
 		<!-- assertion -->
 		<PackageReference Include="Shouldly" />
-		<PackageReference Include="FluentAssertions" />
 
+	</ItemGroup>
+
+	<!-- global usings -->
+	<ItemGroup>
+		<Using Include="System" />
+		<Using Include="System.Collections" />
+		<Using Include="System.Collections.Generic" />
+		<Using Include="System.IO" />
+		<Using Include="System.Text.Json" />
+		<Using Include="System.Threading" />
+		<Using Include="System.Threading.Tasks" />
+		<Using Include="Microsoft.Extensions.Configuration" />
+		<Using Include="Microsoft.Extensions.DependencyInjection" />
+		<Using Include="NSubstitute" />
+		<Using Include="NUnit.Framework" />
+		<Using Include="Shouldly" />
+		<Using Include="aemarcoCommons.ToolboxTesting" />
 	</ItemGroup>
 
 </Project>

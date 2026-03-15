@@ -2,8 +2,7 @@
 
 	<!-- project definition -->
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
-		<IsPackable>false</IsPackable>
+		<TargetFramework>$(DefaultNetVersion)</TargetFramework>
 	</PropertyGroup>
 
 	<!-- project references -->
@@ -14,7 +13,6 @@
 	<!-- nuget references -->
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Hosting" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection" />
 	</ItemGroup>
 
 	<!-- nuget build-->

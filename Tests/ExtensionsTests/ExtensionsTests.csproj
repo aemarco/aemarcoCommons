@@ -2,8 +2,7 @@
 
 	<!-- project definition -->
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
-		<IsPackable>false</IsPackable>
+		<TargetFramework>$(DefaultNetVersion)</TargetFramework>
 	</PropertyGroup>
 
 	<!-- project references -->

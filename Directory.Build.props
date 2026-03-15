@@ -1,6 +1,6 @@
+<!-- aemarcoCommons -->
 <Project>
-	<!-- this runs at the beginning -->
-  
+	
 	<!-- project definition -->
 	<PropertyGroup>
 		<Nullable>enable</Nullable>

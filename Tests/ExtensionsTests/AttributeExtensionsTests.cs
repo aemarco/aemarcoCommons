@@ -1,10 +1,8 @@
-﻿using aemarcoCommons.Extensions;
-using FluentAssertions;
-using NUnit.Framework;
-using System;
+using aemarcoCommons.Extensions;
 using System.Linq;
 
 namespace ExtensionsTests;
+
 public class AttributeExtensionsTests
 {
 
@@ -14,7 +12,7 @@ public class AttributeExtensionsTests
         var attr = type.GetAttribute<DummyAAttribute>();
         var result = attr?.Info;
 
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
     }
 
     [Test]
@@ -23,7 +21,7 @@ public class AttributeExtensionsTests
         var attr = typeof(TestClassA).GetAttribute<DummyAAttribute>();
         var result = attr?.Info;
 
-        result.Should().Be(null);
+        result.ShouldBeNull();
 
     }
 
@@ -34,7 +32,7 @@ public class AttributeExtensionsTests
         var attr = type.GetAttribute<DummyBAttribute>(nameof(TestClassB.Info));
         var result = attr?.Info;
 
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
 
     }
 
@@ -44,7 +42,7 @@ public class AttributeExtensionsTests
         var attr = typeof(TestClassA).GetAttribute<DummyBAttribute>(nameof(TestClassB.Info));
         var result = attr?.Info;
 
-        result.Should().Be(null);
+        result.ShouldBeNull();
 
     }
 
@@ -55,7 +53,7 @@ public class AttributeExtensionsTests
         var obj = Activator.CreateInstance(type);
         var attr = obj.GetAttribute<DummyAAttribute>();
         var result = attr?.Info;
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
     }
     [Test]
     public void GetAttribute_Returns_CorrectlyThroughObjectNull()
@@ -63,7 +61,7 @@ public class AttributeExtensionsTests
         var obj = Activator.CreateInstance(typeof(TestClassA));
         var attr = obj.GetAttribute<DummyAAttribute>();
         var result = attr?.Info;
-        result.Should().Be(null);
+        result.ShouldBeNull();
     }
 
 
@@ -76,7 +74,7 @@ public class AttributeExtensionsTests
         var attr = obj.GetAttribute<DummyBAttribute>(nameof(TestClassB.Info));
         var result = attr?.Info;
 
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
 
     }
     [Test]
@@ -86,7 +84,7 @@ public class AttributeExtensionsTests
         var attr = obj.GetAttribute<DummyBAttribute>(nameof(TestClassB.Info));
         var result = attr?.Info;
 
-        result.Should().Be(null);
+        result.ShouldBeNull();
 
     }
 
@@ -98,7 +96,7 @@ public class AttributeExtensionsTests
         var obj = Activator.CreateInstance(type);
         var result = obj.HasAttribute<DummyAAttribute>();
 
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
 
     }
 
@@ -109,7 +107,7 @@ public class AttributeExtensionsTests
         var obj = Activator.CreateInstance(type);
         var result = obj.HasAttribute<DummyBAttribute>(nameof(TestClassB.Info));
 
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
 
     }
 
@@ -122,7 +120,7 @@ public class AttributeExtensionsTests
         var result = list.Count();
 
 
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
     }
 
     [TestCase(typeof(TestClassA), 0)]
@@ -134,7 +132,7 @@ public class AttributeExtensionsTests
         var result = list.Count();
 
 
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
     }
 
 
@@ -146,7 +144,7 @@ public class AttributeExtensionsTests
         var result = list.Count();
 
 
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
     }
 
     [TestCase(typeof(TestClassA), 0)]
@@ -158,7 +156,7 @@ public class AttributeExtensionsTests
         var result = list.Count();
 
 
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
     }
 
 
@@ -169,14 +167,14 @@ public class AttributeExtensionsTests
     public void GetAttribute_Returns_CorrectlyA(TestEnum value, string info)
     {
         var result = value.GetAttribute<DummyAAttribute>();
-        result.Info.Should().Be(info);
+        result.Info.ShouldBe(info);
     }
 
     [TestCase(TestEnum.Test4, "444")]
     public void GetAttribute_Returns_CorrectlyB(TestEnum value, string info)
     {
         var result = value.GetAttribute<DummyBAttribute>();
-        result.Info.Should().Be(info);
+        result.Info.ShouldBe(info);
     }
 
     [Test]
@@ -184,7 +182,7 @@ public class AttributeExtensionsTests
     {
         const TestEnum value = TestEnum.Test4;
         var result = value.GetAttribute<DummyAAttribute>();
-        result.Should().BeNull();
+        result.ShouldBeNull();
     }
 
     #region testclasses

@@ -1,6 +1,4 @@
-﻿using aemarcoCommons.Extensions.CryptoExtensions;
-using FluentAssertions;
-using NUnit.Framework;
+using aemarcoCommons.Extensions.CryptoExtensions;
 
 namespace ExtensionsTests.CryptoExtensionsTests;
 
@@ -14,7 +12,7 @@ public class HexStuffTests
     {
 
         var result = text.ToHexHashString();
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
     }
 
 

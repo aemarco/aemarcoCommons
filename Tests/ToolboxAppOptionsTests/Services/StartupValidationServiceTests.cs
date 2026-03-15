@@ -20,7 +20,7 @@ public class StartupValidationServiceTests : AppOptionTestBase
         }
         catch (AggregateException ex)
         {
-            ex.InnerExceptions.Should().AllBeOfType<OptionsValidationException>();
+            ex.InnerExceptions.ShouldAllBe(e => e is OptionsValidationException);
         }
     }
 
@@ -41,8 +41,7 @@ public class StartupValidationServiceTests : AppOptionTestBase
         }
         var host = app.Build();
 
-        FluentActions.Invoking(() => host.Start())
-            .Should().Throw<OptionsValidationException>();
+        Should.Throw<OptionsValidationException>(() => host.Start());
     }
     public class SingleValidationTestSettings : ISettingsBase
     {

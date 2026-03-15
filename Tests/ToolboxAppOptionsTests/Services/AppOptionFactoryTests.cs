@@ -14,7 +14,7 @@ public class AppOptionFactoryTests : AppOptionTestBase
     public void Configure_DoesSettingsPath_WithRoot()
     {
         var settings = Sp.GetRequiredService<RootTestSettings>();
-        settings.Message.Should().Be("root");
+        settings.Message.ShouldBe("root");
     }
     [SettingsPath("")]
     public class RootTestSettings : ISettingsBase
@@ -27,7 +27,7 @@ public class AppOptionFactoryTests : AppOptionTestBase
     public void Configure_DoesSettingsPath_WithClass()
     {
         var settings = Sp.GetRequiredService<ClassSettings>();
-        settings.Message.Should().Be("class");
+        settings.Message.ShouldBe("class");
     }
     [SettingsPath("ClassSettings")]
     public class ClassSettings : ISettingsBase
@@ -40,7 +40,7 @@ public class AppOptionFactoryTests : AppOptionTestBase
     public void Configure_DoesSettingsPath_Nested()
     {
         var settings = Sp.GetRequiredService<NestedTestSettings>();
-        settings.Message.Should().Be("nested");
+        settings.Message.ShouldBe("nested");
     }
     [SettingsPath("NestedA:NestedB")]
     public class NestedTestSettings : ISettingsBase
@@ -54,7 +54,7 @@ public class AppOptionFactoryTests : AppOptionTestBase
     public void PostConfigure_DoesStringTransformations()
     {
         var settings = Sp.GetRequiredService<PlaceholderTestSettings>();
-        settings.Message.Should().Be("Bob");
+        settings.Message.ShouldBe("Bob");
     }
     public class PlaceholderTestSettings : ISettingsBase
     {
@@ -68,7 +68,7 @@ public class AppOptionFactoryTests : AppOptionTestBase
     public void Validate_DoesPassValidate()
     {
         var settings = Sp.GetRequiredService<ValidationPassTestSettings>();
-        settings.Message.Should().Be("Validated");
+        settings.Message.ShouldBe("Validated");
     }
     public class ValidationPassTestSettings : ISettingsBase
     {
@@ -88,7 +88,7 @@ public class AppOptionFactoryTests : AppOptionTestBase
     public void Validate_DoesFailValidate()
     {
         Action action = () => _ = Sp.GetRequiredService<ValidationFailTestSettings>();
-        action.Should().Throw<OptionsValidationException>();
+        Should.Throw<OptionsValidationException>(action);
     }
     public class ValidationFailTestSettings : ISettingsBase
     {

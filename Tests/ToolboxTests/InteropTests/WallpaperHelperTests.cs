@@ -1,6 +1,4 @@
 ﻿using aemarcoCommons.Toolbox.Interop;
-using NUnit.Framework;
-using System;
 using System.Diagnostics;
 
 namespace ToolboxTests.InteropTests;
