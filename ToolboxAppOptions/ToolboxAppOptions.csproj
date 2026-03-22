@@ -12,6 +12,7 @@
 	<!-- project references -->
 	<ItemGroup>
 		<ProjectReference Include="..\Extensions\Extensions.csproj" />
+		<ProjectReference Include="..\ToolboxFluentValidation\ToolboxFluentValidation.csproj" />
 	</ItemGroup>
 
 	<!-- nuget references -->
