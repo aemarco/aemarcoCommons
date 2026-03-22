@@ -21,7 +21,9 @@ public static class HostApplicationBuilderExtensions
     {
         _registrar = new AppTypeRegistrar(app);
         var commandApp = new CommandApp(_registrar);
-        await app.RunCommandApp(commandApp, configureCommandApp);
+        await app.RunCommandApp(
+            commandApp,
+            (_, x) => configureCommandApp?.Invoke(x));
     }
 
     public static async Task RunAsSpectreCommandApp<TDefaultCommand>(
@@ -31,27 +33,63 @@ public static class HostApplicationBuilderExtensions
     {
         _registrar = new AppTypeRegistrar(app);
         var commandApp = new CommandApp<TDefaultCommand>(_registrar);
-        await app.RunCommandApp(commandApp, configureCommandApp);
+        await app.RunCommandApp(
+            commandApp,
+            (_, x) => configureCommandApp?.Invoke(x));
     }
 
+
+    public static async Task RunAsSpectreCommandApp(
+        this HostApplicationBuilder app,
+        Action<HostApplicationBuilder, IConfigurator>? configureCommandApp = null)
+    {
+        _registrar = new AppTypeRegistrar(app);
+        var commandApp = new CommandApp(_registrar);
+        await app.RunCommandApp(commandApp, configureCommandApp);
+    }
+    public static async Task RunAsSpectreCommandApp<TDefaultCommand>(
+        this HostApplicationBuilder app,
+        Action<HostApplicationBuilder, IConfigurator>? configureCommandApp = null)
+        where TDefaultCommand : class, ICommand
+    {
+        _registrar = new AppTypeRegistrar(app);
+        var commandApp = new CommandApp<TDefaultCommand>(_registrar);
+        await app.RunCommandApp(commandApp, configureCommandApp);
+    }
 
 
     private static async Task RunCommandApp(
         this HostApplicationBuilder app,
         ICommandApp commandApp,
-        Action<IConfigurator>? configureCommandApp)
+        Action<HostApplicationBuilder, IConfigurator>? configureCommandApp)
     {
-        if (configureCommandApp is not null)
-            commandApp.Configure(configureCommandApp);
+
+        //run configuration of command app
+        commandApp.Configure(x =>
+        {
+            x.SetApplicationName(app.Environment.ApplicationName);
+            configureCommandApp?.Invoke(app, x);
+        });
+
 
         //so that we don´t get the startup / shutdown messages
-        app.Services.Configure<ConsoleLifetimeOptions>(options => options.SuppressStatusMessages = true);
+        app.Services.Configure<ConsoleLifetimeOptions>(options =>
+            options.SuppressStatusMessages = true);
 
 
 
         //start our command app
-        var commandAppTask = commandApp.RunAsync(Environment.GetCommandLineArgs().Skip(1).ToArray());
-        var host = _registrar!.Host!;
+        var args = Environment.GetCommandLineArgs().Skip(1).ToArray();
+        var commandAppTask = commandApp.RunAsync(args);
+        if (commandAppTask.Status is TaskStatus.RanToCompletion)
+        {
+            //command app has ended by itself
+            Environment.ExitCode = await commandAppTask;
+            return;
+        }
+
+        if (_registrar?.Host is not { } host)
+            return; //we are already done
 
         //start our host wrapper
         await Task.Run(async () =>
