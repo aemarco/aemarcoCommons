@@ -2,8 +2,7 @@
 
 	<!-- project definition -->
 	<PropertyGroup>
-		<TargetFramework>net8.0-windows</TargetFramework>
-		
+		<TargetFramework>$(DefaultNetVersion)-windows</TargetFramework>
 		<RootNamespace>aemarcoCommons.ToolboxTopService</RootNamespace>
 		<AssemblyName>aemarcoCommons.ToolboxTopService</AssemblyName>
 	</PropertyGroup>

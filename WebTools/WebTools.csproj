@@ -2,7 +2,7 @@
 
 	<!-- project definition -->
 	<PropertyGroup>
-		<TargetFramework>net9.0-windows</TargetFramework>
+		<TargetFramework>$(DefaultNetVersion)-windows</TargetFramework>
 		<RootNamespace>aemarcoCommons.WebTools</RootNamespace>
 		<AssemblyName>aemarcoCommons.WebTools</AssemblyName>
 

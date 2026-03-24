@@ -3,6 +3,7 @@
 
 	<!-- project definition -->
 	<PropertyGroup>
+		<DefaultNetVersion>net10.0</DefaultNetVersion>
 		<Nullable>enable</Nullable>
 		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 	</PropertyGroup>

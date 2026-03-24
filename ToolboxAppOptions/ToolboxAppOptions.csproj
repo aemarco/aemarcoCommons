@@ -2,7 +2,7 @@
 
 	<!-- project definition -->
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>$(DefaultNetVersion)</TargetFramework>
 		<RootNamespace>aemarcoCommons.ToolboxAppOptions</RootNamespace>
 		<AssemblyName>aemarcoCommons.ToolboxAppOptions</AssemblyName>
 
