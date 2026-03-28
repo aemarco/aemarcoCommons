@@ -2,7 +2,7 @@
 using System.Text;
 
 namespace aemarcoCommons.Extensions.CryptoExtensions;
-
+#nullable enable
 public static class HexStuff
 {
     /// <summary>

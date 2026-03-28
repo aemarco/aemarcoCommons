@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace aemarcoCommons.Extensions.FileExtensions;
+﻿namespace aemarcoCommons.Extensions.FileExtensions;
 
 public static class StorageSizeStuff
 {

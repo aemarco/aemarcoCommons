@@ -5,13 +5,12 @@
 		<TargetFramework>$(DefaultNetVersion)</TargetFramework>
 		<RootNamespace>aemarcoCommons.Extensions</RootNamespace>
 		<AssemblyName>aemarcoCommons.Extensions</AssemblyName>
-		<Nullable>disable</Nullable>
 
+		<Nullable>disable</Nullable>
 	</PropertyGroup>
 
 	<!-- nuget references-->
 	<ItemGroup>
-		<PackageReference Include="System.Threading.Tasks.Extensions" />
 	</ItemGroup>
 
 	<!-- nuget build-->
