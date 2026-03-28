@@ -4,7 +4,8 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace aemarcoCommons.Extensions.CryptoExtensions;
-#nullable enable
+
+
 public static class Symetric
 {
 

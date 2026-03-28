@@ -1,4 +1,6 @@
-﻿namespace aemarcoCommons.Extensions;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace aemarcoCommons.Extensions;
 
 public static class StringManipulationExtensions
 {
@@ -14,7 +16,8 @@ public static class StringManipulationExtensions
     /// If the current string is null, the method returns null.
     /// If the specified substring is null, the method returns the original string unchanged.
     /// </returns>
-    public static string TrimStart(this string @this, string startToRemove, StringComparison comparison = StringComparison.Ordinal)
+    [return: NotNullIfNotNull(nameof(@this))]
+    public static string? TrimStart(this string? @this, string? startToRemove, StringComparison comparison = StringComparison.Ordinal)
     {
         if (@this is null)
             return null;
@@ -24,7 +27,7 @@ public static class StringManipulationExtensions
         if (!@this.StartsWith(startToRemove, comparison))
             return @this;
 
-        return @this.Substring(startToRemove.Length);
+        return @this[startToRemove.Length..];
     }
 
     /// <summary>
@@ -35,7 +38,8 @@ public static class StringManipulationExtensions
     /// <param name="endingToRemove">ending to remove</param>
     /// <param name="comparison">how to compare given endingToRemove</param>
     /// <returns>modified string</returns>
-    public static string TrimEnd(this string @this, string endingToRemove, StringComparison comparison = StringComparison.Ordinal)
+    [return: NotNullIfNotNull(nameof(@this))]
+    public static string? TrimEnd(this string? @this, string? endingToRemove, StringComparison comparison = StringComparison.Ordinal)
     {
         if (@this is null)
             return null;
@@ -44,8 +48,7 @@ public static class StringManipulationExtensions
         if (!@this.EndsWith(endingToRemove, comparison))
             return @this;
         //if it´s ending with our endingToRemove, LastIndexOf works right.
-        return @this.Substring(0, @this.Length - endingToRemove.Length);
+        return @this[..^endingToRemove.Length];
     }
-
 
 }

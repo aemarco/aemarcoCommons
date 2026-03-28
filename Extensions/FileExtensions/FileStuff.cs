@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
+
 namespace aemarcoCommons.Extensions.FileExtensions;
 
 public static class FileStuff
@@ -39,21 +40,6 @@ public static class FileStuff
             // If it's another IOException (e.g., Disk Full, Device Not Ready), rethrow it
             // because waiting won't fix it.
             throw;
-
-
-            //if (File.Exists(file.FullName))
-            //{
-            //    //the file is unavailable because it is:
-            //    //still being written to
-            //    //or being processed by another thread
-            //    return true;
-            //}
-            //else
-            //{
-            //    //the file is unavailable because it is:
-            //    //does not exist (has already been processed)
-            //    return false;
-            //}
         }
         catch (UnauthorizedAccessException)
         {
@@ -111,7 +97,7 @@ public static class FileStuff
         }
     }
 
-    public static string TryBase64HashFromFile(this FileInfo file)
+    public static string? TryBase64HashFromFile(this FileInfo file)
     {
         try
         {
@@ -134,7 +120,7 @@ public static class FileStuff
         }
     }
 
-    public static Process OpenFile(this FileInfo file)
+    public static Process? OpenFile(this FileInfo file)
     {
         var result = Process.Start(
             new ProcessStartInfo(file.FullName)

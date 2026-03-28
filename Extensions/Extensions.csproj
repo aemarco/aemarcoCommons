@@ -5,13 +5,9 @@
 		<TargetFramework>$(DefaultNetVersion)</TargetFramework>
 		<RootNamespace>aemarcoCommons.Extensions</RootNamespace>
 		<AssemblyName>aemarcoCommons.Extensions</AssemblyName>
-
-		<Nullable>disable</Nullable>
 	</PropertyGroup>
 
 	<!-- nuget references-->
-	<ItemGroup>
-	</ItemGroup>
 
 	<!-- nuget build-->
 	<PropertyGroup>

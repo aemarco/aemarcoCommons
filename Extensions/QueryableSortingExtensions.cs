@@ -4,8 +4,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-#nullable enable
-
 namespace aemarcoCommons.Extensions;
 
 public interface IOrdering

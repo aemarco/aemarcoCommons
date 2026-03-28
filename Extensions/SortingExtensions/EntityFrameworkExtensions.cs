@@ -33,7 +33,7 @@ public static class EntityFrameworkExtensions
         // Call query.OrderBy(selector), with query and selector: x=> x.PropName
         // Note that we pass the selector as Expression to the method and we don't compile it.
         // By doing so EF can extract "order by" columns and generate SQL for it
-        var newQuery = (IOrderedQueryable<T>)genericMethod.Invoke(genericMethod, new object[] { query, selector });
+        var newQuery = (IOrderedQueryable<T>)genericMethod.Invoke(genericMethod, new object[] { query, selector })!;
         return newQuery;
     }
 
@@ -63,7 +63,7 @@ public static class EntityFrameworkExtensions
         // Call query.OrderByDescending(selector), with query and selector: x=> x.PropName
         // Note that we pass the selector as Expression to the method and we don't compile it.
         // By doing so EF can extract "order by" columns and generate SQL for it
-        var newQuery = (IOrderedQueryable<T>)genericMethod.Invoke(genericMethod, new object[] { query, selector });
+        var newQuery = (IOrderedQueryable<T>)genericMethod.Invoke(genericMethod, new object[] { query, selector })!;
         return newQuery;
     }
 

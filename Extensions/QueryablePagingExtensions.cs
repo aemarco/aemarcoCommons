@@ -1,7 +1,5 @@
 ﻿using System.Linq;
 
-#nullable enable
-
 namespace aemarcoCommons.Extensions;
 
 public interface IPaging

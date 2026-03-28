@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 
 namespace aemarcoCommons.Extensions.CryptoExtensions;
 
-#nullable enable
-
 public static class Base64Stuff
 {
 

@@ -50,7 +50,7 @@ public class AttributeExtensionsTests
     [TestCase(typeof(TestClassB), "abc")]
     public void GetAttribute_Returns_CorrectlyThroughObject(Type type, string expected)
     {
-        var obj = Activator.CreateInstance(type);
+        var obj = Activator.CreateInstance(type)!;
         var attr = obj.GetAttribute<DummyAAttribute>();
         var result = attr?.Info;
         result.ShouldBe(expected);
@@ -58,7 +58,7 @@ public class AttributeExtensionsTests
     [Test]
     public void GetAttribute_Returns_CorrectlyThroughObjectNull()
     {
-        var obj = Activator.CreateInstance(typeof(TestClassA));
+        var obj = Activator.CreateInstance(typeof(TestClassA))!;
         var attr = obj.GetAttribute<DummyAAttribute>();
         var result = attr?.Info;
         result.ShouldBeNull();
@@ -70,7 +70,7 @@ public class AttributeExtensionsTests
     [TestCase(typeof(TestClassB), "xxx")]
     public void GetAttribute_Returns_CorrectlyThroughObjectMember(Type type, string expected)
     {
-        var obj = Activator.CreateInstance(type);
+        var obj = Activator.CreateInstance(type)!;
         var attr = obj.GetAttribute<DummyBAttribute>(nameof(TestClassB.Info));
         var result = attr?.Info;
 
@@ -80,7 +80,7 @@ public class AttributeExtensionsTests
     [Test]
     public void GetAttribute_Returns_CorrectlyThroughObjectMemberNull()
     {
-        var obj = Activator.CreateInstance(typeof(TestClassA));
+        var obj = Activator.CreateInstance(typeof(TestClassA))!;
         var attr = obj.GetAttribute<DummyBAttribute>(nameof(TestClassB.Info));
         var result = attr?.Info;
 
@@ -93,7 +93,7 @@ public class AttributeExtensionsTests
     [TestCase(typeof(TestClassB), true)]
     public void HasAttribute_Returns_CorrectlyThroughObject(Type type, bool expected)
     {
-        var obj = Activator.CreateInstance(type);
+        var obj = Activator.CreateInstance(type)!;
         var result = obj.HasAttribute<DummyAAttribute>();
 
         result.ShouldBe(expected);
@@ -104,7 +104,7 @@ public class AttributeExtensionsTests
     [TestCase(typeof(TestClassB), true)]
     public void HasAttribute_Returns_CorrectlyThroughObjectMember(Type type, bool expected)
     {
-        var obj = Activator.CreateInstance(type);
+        var obj = Activator.CreateInstance(type)!;
         var result = obj.HasAttribute<DummyBAttribute>(nameof(TestClassB.Info));
 
         result.ShouldBe(expected);
@@ -127,7 +127,7 @@ public class AttributeExtensionsTests
     [TestCase(typeof(TestClassB), 1)]
     public void GetAttributes_Returns_CorrectlyThroughObject(Type type, int expected)
     {
-        var obj = Activator.CreateInstance(type);
+        var obj = Activator.CreateInstance(type)!;
         var list = obj.GetAttributes<DummyAAttribute>();
         var result = list.Count();
 
@@ -151,7 +151,7 @@ public class AttributeExtensionsTests
     [TestCase(typeof(TestClassB), 1)]
     public void GetAttributes_Returns_CorrectlyThroughObjectMember(Type type, int expected)
     {
-        var obj = Activator.CreateInstance(type);
+        var obj = Activator.CreateInstance(type)!;
         var list = obj.GetAttributes<DummyBAttribute>(nameof(TestClassB.Info));
         var result = list.Count();
 
@@ -167,14 +167,14 @@ public class AttributeExtensionsTests
     public void GetAttribute_Returns_CorrectlyA(TestEnum value, string info)
     {
         var result = value.GetAttribute<DummyAAttribute>();
-        result.Info.ShouldBe(info);
+        result?.Info.ShouldBe(info);
     }
 
     [TestCase(TestEnum.Test4, "444")]
     public void GetAttribute_Returns_CorrectlyB(TestEnum value, string info)
     {
         var result = value.GetAttribute<DummyBAttribute>();
-        result.Info.ShouldBe(info);
+        result?.Info.ShouldBe(info);
     }
 
     [Test]
