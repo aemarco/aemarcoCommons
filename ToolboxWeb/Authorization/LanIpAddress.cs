@@ -1,3 +1,5 @@
+using System.Net.Sockets;
+
 namespace aemarcoCommons.ToolboxWeb.Authorization;
 
 /// <summary>
@@ -18,11 +20,28 @@ public class LanIpAddressOptions
     ];
 
     /// <summary>
-    /// When true (default), requests arriving from the server's own public IP are allowed,
+    /// When true, requests arriving from the server's own public IP are allowed,
     /// covering NAT hairpinning scenarios where a LAN device reaches the server via its
-    /// public address. Set to false if the public IP is dynamic or hairpin traffic is unwanted.
+    /// public address. Disabled by default; enable only when hairpin NAT is in use.
     /// </summary>
-    public bool AllowOwnPublicIp { get; set; } = true;
+    public bool AllowOwnPublicIp { get; set; }
+
+    /// <summary>
+    /// Clears <see cref="LocalSubnets"/> and adds each IP as an exact /32 (IPv4) or /128 (IPv6) entry.
+    /// </summary>
+    public void WithIpAddresses(params string[] ipAddresses)
+    {
+        LocalSubnets.Clear();
+        foreach (var ip in ipAddresses)
+        {
+            if (!IPAddress.TryParse(ip, out var addr))
+                throw new ArgumentException($"'{ip}' is not a valid IP address.", nameof(ipAddresses));
+            var prefix = addr.AddressFamily == AddressFamily.InterNetworkV6
+                ? 128
+                : 32;
+            LocalSubnets.Add($"{ip}/{prefix}");
+        }
+    }
 }
 
 public static class LanIpAddressExtensions
@@ -58,7 +77,7 @@ public static class LanIpAddressExtensions
                     policy.AddRequirements(new LanIpAddressRequirement(name));
                 });
             services.AddHttpContextAccessor();
-            services.AddHttpClient();
+            services.AddPublicIpService();
             var optBuilder = services.AddOptions<LanIpAddressOptions>(name);
             if (configure is not null)
                 optBuilder.Configure<IServiceProvider>((opts, sp) => configure(sp, opts));
@@ -77,17 +96,18 @@ public class LanIpAddressHandler : AuthorizationHandler<LanIpAddressRequirement>
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IOptionsMonitor<LanIpAddressOptions> _optionsMonitor;
-    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IPublicIpService _publicIpService;
     private readonly ILogger<LanIpAddressHandler> _logger;
+
     public LanIpAddressHandler(
         IHttpContextAccessor httpContextAccessor,
         IOptionsMonitor<LanIpAddressOptions> optionsMonitor,
-        IHttpClientFactory httpClientFactory,
+        IPublicIpService publicIpService,
         ILogger<LanIpAddressHandler> logger)
     {
         _httpContextAccessor = httpContextAccessor;
         _optionsMonitor = optionsMonitor;
-        _httpClientFactory = httpClientFactory;
+        _publicIpService = publicIpService;
         _logger = logger;
     }
 
@@ -140,7 +160,7 @@ public class LanIpAddressHandler : AuthorizationHandler<LanIpAddressRequirement>
 
         if (options.AllowOwnPublicIp)
         {
-            var ownIp = await GetOwnPublicIpAsync();
+            var ownIp = await _publicIpService.Resolve();
             if (ownIp is null)
                 return subnets; // resolution failed — don't cache, retry next request
 
@@ -208,40 +228,5 @@ public class LanIpAddressHandler : AuthorizationHandler<LanIpAddressRequirement>
 
 
 
-
-    private readonly SemaphoreSlim _publicIpSemaphore = new(1, 1);
-    private IPAddress? _ownPublicIp;
-    private DateTimeOffset _retryAfter = DateTimeOffset.MinValue;
-    private async Task<IPAddress?> GetOwnPublicIpAsync()
-    {
-        if (_ownPublicIp is not null)
-            return _ownPublicIp;
-
-        if (DateTimeOffset.UtcNow < _retryAfter)
-            return null;
-
-        await _publicIpSemaphore.WaitAsync();
-        try
-        {
-            // double-check after acquiring
-            if (_ownPublicIp is not null)
-                return _ownPublicIp;
-
-            if (DateTimeOffset.UtcNow < _retryAfter)
-                return null;
-
-            using var client = _httpClientFactory.CreateClient();
-            var ip = await PublicIpResolver.ResolveAsync(client, _logger);
-            if (ip is null)
-                _retryAfter = DateTimeOffset.UtcNow.AddMinutes(1);
-            else
-                _ownPublicIp = ip;
-            return ip;
-        }
-        finally
-        {
-            _publicIpSemaphore.Release();
-        }
-    }
 
 }
