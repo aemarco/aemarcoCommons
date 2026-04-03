@@ -1,9 +1,4 @@
-﻿using System;
-using System.Globalization;
-using System.Windows;
-using System.Windows.Data;
-
-namespace aemarcoCommons.WpfTools.Converters;
+﻿namespace aemarcoCommons.WpfTools.Converters;
 
 /// <summary>
 /// Two-way converter from double to string

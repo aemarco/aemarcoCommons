@@ -1,7 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Globalization;
-using System.Windows.Data;
 
 namespace aemarcoCommons.WpfTools.Converters;
 

@@ -1,7 +1,5 @@
 ﻿using aemarcoCommons.Extensions.NetworkExtensions;
 using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Windows;
 
 namespace aemarcoCommons.WpfTools.BaseModels;
 

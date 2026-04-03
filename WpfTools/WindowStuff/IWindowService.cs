@@ -1,8 +1,5 @@
 ﻿using aemarcoCommons.WpfTools.BaseModels;
-using aemarcoCommons.WpfTools.Dialogs;
-using System;
 using System.Collections.Generic;
-using System.Windows;
 using System.Windows.Controls;
 
 namespace aemarcoCommons.WpfTools.WindowStuff;

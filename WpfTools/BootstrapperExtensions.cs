@@ -1,14 +1,5 @@
-﻿using aemarcoCommons.Toolbox;
-using aemarcoCommons.WpfTools.BaseNav;
-using aemarcoCommons.WpfTools.Commands;
-using aemarcoCommons.WpfTools.Dialogs;
-using aemarcoCommons.WpfTools.WindowStuff;
-using CommunityToolkit.Mvvm.Messaging;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Linq;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-using System.Windows;
 
 
 namespace aemarcoCommons.WpfTools;
