@@ -29,7 +29,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{284B28FC-9401-48CF-B5D1-27449B9BF167}"
 	ProjectSection(SolutionItems) = preProject
 		Tests\Directory.Build.props = Tests\Directory.Build.props
-		Tests\Directory.Package.props = Tests\Directory.Package.props
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExtensionsTests", "Tests\ExtensionsTests\ExtensionsTests.csproj", "{22A10F51-3A80-4629-B3A4-E80D429C6AE0}"
@@ -67,6 +66,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfToolsManualTests", "TestsManual\WpfToolsManualTests\WpfToolsManualTests.csproj", "{6CB7F8D0-44D5-2625-F361-207CB42D701A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolboxTesting", "ToolboxTesting\ToolboxTesting.csproj", "{E0B3272A-1F8C-4647-9FBD-EB9E97E69429}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolboxWeb", "ToolboxWeb\ToolboxWeb.csproj", "{9CC7B749-A779-4BF4-8643-5A8584ACE18E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolboxWebTests", "Tests\ToolboxWebTests\ToolboxWebTests.csproj", "{7CE234BD-4E8A-871E-42A6-52DB5175AF6D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -158,6 +161,14 @@ Global
 		{E0B3272A-1F8C-4647-9FBD-EB9E97E69429}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0B3272A-1F8C-4647-9FBD-EB9E97E69429}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0B3272A-1F8C-4647-9FBD-EB9E97E69429}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CC7B749-A779-4BF4-8643-5A8584ACE18E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CC7B749-A779-4BF4-8643-5A8584ACE18E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CC7B749-A779-4BF4-8643-5A8584ACE18E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CC7B749-A779-4BF4-8643-5A8584ACE18E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CE234BD-4E8A-871E-42A6-52DB5175AF6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CE234BD-4E8A-871E-42A6-52DB5175AF6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CE234BD-4E8A-871E-42A6-52DB5175AF6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CE234BD-4E8A-871E-42A6-52DB5175AF6D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -171,6 +182,7 @@ Global
 		{6630E679-714B-ECD8-4ED7-3748057B43A2} = {79920A53-2275-4774-A137-CFA7029190A5}
 		{8CEA2807-70CD-149A-C925-A8E82F63EA89} = {79920A53-2275-4774-A137-CFA7029190A5}
 		{6CB7F8D0-44D5-2625-F361-207CB42D701A} = {79920A53-2275-4774-A137-CFA7029190A5}
+		{7CE234BD-4E8A-871E-42A6-52DB5175AF6D} = {284B28FC-9401-48CF-B5D1-27449B9BF167}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5222E321-3FD1-438C-889C-F421ECCF1B57}

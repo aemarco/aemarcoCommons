@@ -17,6 +17,32 @@ public static class StringManipulationExtensions
     /// If the specified substring is null, the method returns the original string unchanged.
     /// </returns>
     [return: NotNullIfNotNull(nameof(@this))]
+    public static string? RemoveStart(this string? @this, string? startToRemove, StringComparison comparison = StringComparison.Ordinal)
+    {
+        if (@this is null)
+            return null;
+        if (startToRemove is null)
+            return @this;
+
+        if (!@this.StartsWith(startToRemove, comparison))
+            return @this;
+
+        return @this[startToRemove.Length..];
+    }
+
+
+    /// <summary>
+    /// Removes the specified substring from the beginning of the current string.
+    /// </summary>
+    /// <param name="this">The current string instance.</param>
+    /// <param name="startToRemove">The substring to remove from the beginning of the current string.</param>
+    /// <param name="comparison">how to compare given startToRemove</param>
+    /// <returns>
+    /// A string that is equivalent to the current string except that it does not begin with the specified substring.
+    /// If the current string is null, the method returns null.
+    /// If the specified substring is null, the method returns the original string unchanged.
+    /// </returns>
+    [return: NotNullIfNotNull(nameof(@this))]
     public static string? TrimStart(this string? @this, string? startToRemove, StringComparison comparison = StringComparison.Ordinal)
     {
         if (@this is null)

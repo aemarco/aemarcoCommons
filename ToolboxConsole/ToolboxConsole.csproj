@@ -6,7 +6,11 @@
 		<RootNamespace>aemarcoCommons.ToolboxConsole</RootNamespace>
 		<AssemblyName>aemarcoCommons.ToolboxConsole</AssemblyName>
 	</PropertyGroup>
-	
+
+	<!-- project references -->
+	<ItemGroup>
+		<ProjectReference Include="..\Extensions\Extensions.csproj" />
+	</ItemGroup>
 
 	<!-- nuget references-->
 	<ItemGroup>

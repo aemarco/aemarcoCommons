@@ -76,10 +76,11 @@ public static partial class RegexExtensions
     public static string? ToFriendlyFilename(this string? fileName)
     {
         if (fileName == null) return null;
-        return Regex.Replace(fileName, @"[^A-Za-z0-9_\.~]+", "-");
+        var result = FileNameRegex().Replace(fileName, "-");
+        return result.Length > 255 ? result[..255] : result;
     }
-
-
+    [GeneratedRegex(@"[^A-Za-z0-9_\.~]+")]
+    private static partial Regex FileNameRegex();
 
 
 
@@ -249,8 +250,5 @@ public static partial class RegexExtensions
         }
         return null;
     }
-
-
-
 
 }

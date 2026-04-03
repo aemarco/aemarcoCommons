@@ -5,8 +5,6 @@
 		<TargetFramework>$(DefaultNetVersion)</TargetFramework>
 		<RootNamespace>aemarcoCommons.ToolboxImage</RootNamespace>
 		<AssemblyName>aemarcoCommons.ToolboxImage</AssemblyName>
-
-		<!-- PackageValidation??-->
 	</PropertyGroup>
 
 	<!-- project references -->

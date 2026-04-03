@@ -7,6 +7,11 @@
 		<AssemblyName>aemarcoCommons.ToolboxTopService</AssemblyName>
 	</PropertyGroup>
 
+	<!-- project references -->
+	<ItemGroup>
+		<ProjectReference Include="..\Extensions\Extensions.csproj" />
+	</ItemGroup>
+
 	<!-- nuget references -->
 	<ItemGroup>
 		<PackageReference Include="CliWrap" />

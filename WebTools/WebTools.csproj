@@ -19,7 +19,9 @@
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
 		<PackageReference Include="Serilog.AspNetCore" />
-		<PackageReference Include="Riok.Mapperly" ExcludeAssets="runtime" PrivateAssets="all" />
+		<PackageReference Include="Riok.Mapperly" ExcludeAssets="runtime" PrivateAssets="all">
+		  <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 
 	</ItemGroup>
 
@@ -39,9 +41,6 @@
 	<ItemGroup>
 		<None Update="..\README.md" Pack="false" />
 		<None Include="README.md" Pack="true" PackagePath="\" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Mapping\" />
 	</ItemGroup>
 
 </Project>

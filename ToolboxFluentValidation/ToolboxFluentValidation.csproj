@@ -5,9 +5,13 @@
 		<TargetFramework>$(DefaultNetVersion)</TargetFramework>
 		<RootNamespace>aemarcoCommons.ToolboxFluentValidation</RootNamespace>
 		<AssemblyName>aemarcoCommons.ToolboxFluentValidation</AssemblyName>
-
 	</PropertyGroup>
-	
+
+	<!-- project references -->
+	<ItemGroup>
+		<ProjectReference Include="..\Extensions\Extensions.csproj" />
+	</ItemGroup>
+
 	<!-- nuget references -->
 	<ItemGroup>
 		<PackageReference Include="FluentValidation" />

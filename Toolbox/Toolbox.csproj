@@ -21,7 +21,7 @@
 
 	<!-- nuget references -->
 	<ItemGroup>
-		<PackageReference Include="Autofac.Extensions.DependencyInjection" />
+	
 		<PackageReference Include="Humanizer.Core" />
 		<PackageReference Include="CliWrap" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" />

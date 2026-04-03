@@ -2,6 +2,7 @@
 using System.Linq;
 
 namespace ToolboxAppOptionsTests.Services;
+
 public class StartupValidationServiceTests : AppOptionTestBase
 {
 
@@ -10,7 +11,9 @@ public class StartupValidationServiceTests : AppOptionTestBase
     public void StartupValidationService_ValidatingOnStartup()
     {
         var app = Host.CreateApplicationBuilder();
-        app.Services.AddConfigOptionsUtils(app.Configuration, x => x.AddAssemblyMarker(typeof(AppOptionTestBase)));
+        app.Services.AddConfigOptionsUtils(
+            app.Configuration,
+            x => x.AddAssemblyMarker(typeof(AppOptionTestBase)));
         var host = app.Build();
 
         try
@@ -29,7 +32,9 @@ public class StartupValidationServiceTests : AppOptionTestBase
     public void StartupValidationService_ValidatingOnStartupSingle()
     {
         var app = Host.CreateApplicationBuilder();
-        app.Services.AddConfigOptionsUtils(app.Configuration, x => x.AddAssemblyMarker(typeof(AppOptionTestBase)));
+        app.Services.AddConfigOptionsUtils(
+            app.Configuration,
+            x => x.AddAssemblyMarker(typeof(AppOptionTestBase)));
         //we strip all validators, so only the Multi... is failing,
         //and therefor we get only a single exception then in StartupValidationService
         foreach (var service in app.Services
@@ -41,8 +46,9 @@ public class StartupValidationServiceTests : AppOptionTestBase
         }
         var host = app.Build();
 
-        Should.Throw<OptionsValidationException>(() => host.Start());
+        Should.Throw<OptionsValidationException>(host.Start);
     }
+
     public class SingleValidationTestSettings : ISettingsBase
     {
         // ReSharper disable once UnusedAutoPropertyAccessor.Global

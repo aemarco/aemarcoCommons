@@ -50,7 +50,7 @@ public class AppOptionFactory<TOptions> :
 
 
         // Ensure options are provided to validate against
-        ArgumentNullException.ThrowIfNull(nameof(options));
+        //ArgumentNullException.ThrowIfNull(nameof(options));
 
 
         //if no validator is defined, we are fine
