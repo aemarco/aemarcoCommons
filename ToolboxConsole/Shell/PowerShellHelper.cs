@@ -1,9 +1,7 @@
 ﻿using CliWrap;
-using Spectre.Console;
 using System;
 using System.Diagnostics;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace aemarcoCommons.ToolboxConsole.Shell;
 

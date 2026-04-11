@@ -2,11 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using Spectre.Console;
 using Spectre.Console.Cli;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace aemarcoCommons.ToolboxConsole;
 
@@ -14,84 +12,111 @@ namespace aemarcoCommons.ToolboxConsole;
 
 public static class HostApplicationBuilderExtensions
 {
-
     private static AppTypeRegistrar? _registrar;
-    public static async Task RunAsSpectreCommandApp(
-        this HostApplicationBuilder app,
-        Action<IConfigurator>? configureCommandApp = null)
+    extension(HostApplicationBuilder app)
     {
-        _registrar = new AppTypeRegistrar(app);
-        var commandApp = new Spectre.Console.Cli.CommandApp(_registrar);
-        await app.RunCommandApp(commandApp, configureCommandApp);
-    }
-
-    public static async Task RunAsSpectreCommandApp<TDefaultCommand>(
-        this HostApplicationBuilder app,
-        Action<IConfigurator>? configureCommandApp = null)
-        where TDefaultCommand : class, ICommand
-    {
-        _registrar = new AppTypeRegistrar(app);
-        var commandApp = new CommandApp<TDefaultCommand>(_registrar);
-        await app.RunCommandApp(commandApp, configureCommandApp);
-    }
-
-
-
-    private static async Task RunCommandApp(
-        this HostApplicationBuilder app,
-        ICommandApp commandApp,
-        Action<IConfigurator>? configureCommandApp)
-    {
-        if (configureCommandApp is not null)
-            commandApp.Configure(configureCommandApp);
-
-        //so that we don´t get the startup / shutdown messages
-        app.Services.Configure<ConsoleLifetimeOptions>(options => options.SuppressStatusMessages = true);
-
-
-
-        //start our command app
-        var commandAppTask = commandApp.RunAsync(Environment.GetCommandLineArgs().Skip(1).ToArray());
-        var host = _registrar!.Host!;
-
-        //start our host wrapper
-        await Task.Run(async () =>
+        public async Task RunAsSpectreCommandApp(Action<IConfigurator>? configureCommandApp = null)
         {
-            try
+            _registrar = new AppTypeRegistrar(app);
+            var commandApp = new Spectre.Console.Cli.CommandApp(_registrar);
+            await app.RunCommandApp(
+                commandApp,
+                (_, x) => configureCommandApp?.Invoke(x));
+        }
+
+        public async Task RunAsSpectreCommandApp<TDefaultCommand>(Action<IConfigurator>? configureCommandApp = null)
+            where TDefaultCommand : class, ICommand
+        {
+            _registrar = new AppTypeRegistrar(app);
+            var commandApp = new CommandApp<TDefaultCommand>(_registrar);
+            await app.RunCommandApp(
+                commandApp,
+                (_, x) => configureCommandApp?.Invoke(x));
+        }
+
+        public async Task RunAsSpectreCommandApp(Action<HostApplicationBuilder, IConfigurator>? configureCommandApp = null)
+        {
+            _registrar = new AppTypeRegistrar(app);
+            var commandApp = new Spectre.Console.Cli.CommandApp(_registrar);
+            await app.RunCommandApp(commandApp, configureCommandApp);
+        }
+
+        public async Task RunAsSpectreCommandApp<TDefaultCommand>(Action<HostApplicationBuilder, IConfigurator>? configureCommandApp = null)
+            where TDefaultCommand : class, ICommand
+        {
+            _registrar = new AppTypeRegistrar(app);
+            var commandApp = new CommandApp<TDefaultCommand>(_registrar);
+            await app.RunCommandApp(commandApp, configureCommandApp);
+        }
+
+        private async Task RunCommandApp(ICommandApp commandApp,
+            Action<HostApplicationBuilder, IConfigurator>? configureCommandApp)
+        {
+            //run configuration of command app
+            commandApp.Configure(x =>
             {
-                var lifetime = host.Services.GetRequiredService<IHostApplicationLifetime>();
-                await host.StartAsync();
+                x.SetApplicationName(app.Environment.ApplicationName);
+                configureCommandApp?.Invoke(app, x);
+            });
 
-                //wait for either our commandApp to complete, or host shuts down by Ctrl+C
-                Task.WaitAll([commandAppTask], lifetime.ApplicationStopping);
+            //so that we don´t get the startup / shutdown messages
+            app.Services.Configure<ConsoleLifetimeOptions>(options =>
+                options.SuppressStatusMessages = true);
 
+
+
+            //start our command app
+            var args = Environment.GetCommandLineArgs().Skip(1).ToArray();
+            var commandAppTask = commandApp.RunAsync(args);
+            if (commandAppTask.Status is TaskStatus.RanToCompletion)
+            {
                 //command app has ended by itself
                 Environment.ExitCode = await commandAppTask;
+                return;
             }
-            catch (OperationCanceledException) //when interrupted by Ctrl+C
+
+            if (_registrar?.Host is not { } host)
+                return; //we are already done
+
+            //start our host wrapper
+            await Task.Run(async () =>
             {
-                Environment.ExitCode = 128;
-            }
-            catch (Exception ex) //useful if PropagateExceptions was used
-            {
-                AnsiConsole.WriteException(ex, ExceptionFormats.ShortenEverything);
-                Environment.ExitCode = 1;
-            }
-            finally
-            {
-                await Log.CloseAndFlushAsync();
                 try
                 {
-                    //either way, we try a graceful shutdown
-                    await host.StopAsync();
+                    var lifetime = host.Services.GetRequiredService<IHostApplicationLifetime>();
+                    await host.StartAsync();
+
+                    //wait for either our commandApp to complete, or host shuts down by Ctrl+C
+                    Task.WaitAll([commandAppTask], lifetime.ApplicationStopping);
+
+                    //command app has ended by itself
+                    Environment.ExitCode = await commandAppTask;
                 }
-                catch (Exception ex)
+                catch (OperationCanceledException) //when interrupted by Ctrl+C
+                {
+                    Environment.ExitCode = 128;
+                }
+                catch (Exception ex) //useful if PropagateExceptions was used
                 {
                     AnsiConsole.WriteException(ex, ExceptionFormats.ShortenEverything);
-                    Environment.ExitCode = 1;
+                    Environment.ExitCode = -1;
                 }
-                host.Dispose();
-            }
-        });
+                finally
+                {
+                    await Log.CloseAndFlushAsync();
+                    try
+                    {
+                        //either way, we try a graceful shutdown
+                        await host.StopAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        AnsiConsole.WriteException(ex, ExceptionFormats.ShortenEverything);
+                        Environment.ExitCode = -1;
+                    }
+                    host.Dispose();
+                }
+            });
+        }
     }
 }
