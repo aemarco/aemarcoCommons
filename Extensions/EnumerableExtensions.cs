@@ -1,17 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 
 namespace aemarcoCommons.Extensions;
 
+
 public static class EnumerableExtensions
 {
-    internal static Random Random { get; set; } = new Random();
-    public static List<T> Shuffle<T>(this IEnumerable<T> list)
-    {
-        var result = list.OrderBy(_ => Random.Next()).ToList();
-        return result;
-    }
+
 
     /// <summary>
     /// Checks is not null and contains elements
@@ -19,7 +16,7 @@ public static class EnumerableExtensions
     /// <typeparam name="T">type</typeparam>
     /// <param name="source">collection to check</param>
     /// <returns>true when collection with elements</returns>
-    public static bool NotNullOrEmpty<T>(this IEnumerable<T> source)
+    public static bool NotNullOrEmpty<T>([NotNullWhen(true)] this IEnumerable<T>? source)
     {
         return source != null && source.Any();
     }
@@ -30,7 +27,7 @@ public static class EnumerableExtensions
     /// <typeparam name="T">type</typeparam>
     /// <param name="source">collection to check</param>
     /// <returns>true when collection is null or empty</returns>
-    public static bool NullOrEmpty<T>(this IEnumerable<T> source) => !source.NotNullOrEmpty();
+    public static bool NullOrEmpty<T>([NotNullWhen(false)] this IEnumerable<T>? source) => !source.NotNullOrEmpty();
 
 
 
@@ -60,23 +57,6 @@ public static class EnumerableExtensions
         {
             yield return current.Value;
         }
-
-        //var result = new List<(int Min, int Max)>();
-        //foreach (var range in ranges.OrderBy(x => x.Min).ToList())
-        //{
-        //    if (result.NotNullOrEmpty())
-        //    {
-        //        var last = result.Last();
-        //        if (last.Max >= range.Min - 1)
-        //        {
-        //            result.Remove(last);
-        //            result.Add((last.Min, Math.Max(last.Max, range.Max)));
-        //            continue;
-        //        }
-        //    }
-        //    result.Add(range);
-        //}
-        //return result;
     }
 
     public static void AddDistinct<T>(this ICollection<T> collection, T item)
@@ -90,7 +70,7 @@ public static class EnumerableExtensions
     public static void AddDistinct<T, TComp>(this ICollection<T> collection, T item, Expression<Func<T, TComp>> selector)
     {
         Func<T, TComp> func = selector.Compile();
-        if (collection.All(x => !func(x).Equals(func(item))))
+        if (collection.All(x => !func(x)!.Equals(func(item))))
         {
             collection.Add(item);
         }

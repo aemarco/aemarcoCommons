@@ -5,19 +5,21 @@ namespace aemarcoCommons.Extensions.OwinExtensions;
 
 public static class OwinExtensions
 {
-    public static T GetClaimValue<T>(this IPrincipal principal, string type, T defaultValue = default)
+    public static T? GetClaimValue<T>(this IPrincipal principal, string type, T? defaultValue = default)
     {
-        if (principal?.Identity == null) return defaultValue;
+        if (principal.Identity is null)
+            return defaultValue;
 
         var identity = (ClaimsIdentity)principal.Identity;
-        object value = identity.FindFirst(type)?.Value;
+        object? value = identity.FindFirst(type)?.Value;
 
-        if (value == null) return defaultValue;
+        if (value is null)
+            return defaultValue;
 
         return (T)Convert.ChangeType(value, typeof(T));
     }
 
-    public static string GetClaimValue(this IPrincipal principal, string type, string defaultValue = default)
+    public static string? GetClaimValue(this IPrincipal principal, string type, string? defaultValue = null)
     {
         return principal.GetClaimValue<string>(type, defaultValue);
     }

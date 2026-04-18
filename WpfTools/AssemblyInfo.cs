@@ -1,6 +1,5 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.Versioning;
-using System.Windows;
 using System.Windows.Markup;
 
 [assembly: ThemeInfo(
@@ -26,5 +25,6 @@ using System.Windows.Markup;
 
 [assembly: InternalsVisibleTo("aemarcoCommons.WpfToolsTests")]
 [assembly: InternalsVisibleTo("aemarcoCommons.WpfTools.Tests")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 [assembly: InternalsVisibleTo("WpfToolsTests")]
 [assembly: InternalsVisibleTo("WpfTools.Tests")]

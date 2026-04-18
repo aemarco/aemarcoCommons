@@ -1,9 +1,12 @@
-﻿namespace aemarcoCommons.Extensions.ExceptionExtensions;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace aemarcoCommons.Extensions.ExceptionExtensions;
 
 public static class ReadingStuff
 {
 
-    public static Exception Unpack(this Exception exception)
+    [return: NotNullIfNotNull(nameof(exception))]
+    public static Exception? Unpack(this Exception? exception)
     {
         var result = exception;
         while (result?.InnerException != null)

@@ -1,7 +1,4 @@
 ﻿using aemarcoCommons.WpfTools.BaseModels;
-using aemarcoCommons.WpfTools.Dialogs;
-using System;
-using System.Windows;
 
 namespace aemarcoCommons.WpfTools.WindowStuff;
 

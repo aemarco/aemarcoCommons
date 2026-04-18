@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace aemarcoCommons.Extensions.CryptoExtensions;
 
+
 public static class Symetric
 {
 
@@ -25,7 +26,7 @@ public static class Symetric
     {
         var bytesToDecrypt = Convert.FromBase64String(cryptedBase64);
         using var memory = new MemoryStream(bytesToDecrypt);
-        byte[] decryptedBytes = null;
+        byte[] decryptedBytes = [];
 
         Decrypt(password, memory, cryptoStream =>
         {
@@ -56,7 +57,7 @@ public static class Symetric
     {
         var bytesToDecrypt = Convert.FromBase64String(cryptedBase64);
         await using var memory = new MemoryStream(bytesToDecrypt);
-        byte[] decryptedBytes = null;
+        byte[] decryptedBytes = [];
 
         await DecryptAsync(password, memory, async cryptoStream =>
         {
@@ -196,7 +197,6 @@ public static class Symetric
         var salt = GetRandomBytes(aesAlg.BlockSize);
         destinationStream.Write(salt, 0, salt.Length);
 
-        using var pwd = new Rfc2898DeriveBytes(passPhrase, salt, settings.DerivationPasswordIterations, settings.HashAlgorithmName);
         aesAlg.Padding = PaddingMode.PKCS7;
 
         // Generate IV using GetRandomBytes
@@ -205,7 +205,12 @@ public static class Symetric
 
         // Key
         aesAlg.KeySize = settings.KeySize ?? 128;
-        aesAlg.Key = pwd.GetBytes(aesAlg.KeySize / 8);
+        aesAlg.Key = Rfc2898DeriveBytes.Pbkdf2(
+            passPhrase,
+            salt,
+            settings.DerivationPasswordIterations,
+            settings.HashAlgorithmName,
+            aesAlg.KeySize / 8);
 
         using var cryptoStream = new CryptoStream(destinationStream, aesAlg.CreateEncryptor(), CryptoStreamMode.Write);
         writeAction(cryptoStream);
@@ -227,7 +232,6 @@ public static class Symetric
         var salt = new byte[aesAlg.BlockSize / 8];
         sourceStream.ReadExactly(salt, 0, salt.Length);
 
-        using var pwd = new Rfc2898DeriveBytes(passPhrase, salt, settings.DerivationPasswordIterations, settings.HashAlgorithmName);
         aesAlg.Padding = PaddingMode.PKCS7;
 
         // Read IV
@@ -236,7 +240,12 @@ public static class Symetric
 
         // Read key size
         aesAlg.KeySize = settings.KeySize ?? 64 * sourceStream.ReadByte(); // Old file → key size byte
-        aesAlg.Key = pwd.GetBytes(aesAlg.KeySize / 8);
+        aesAlg.Key = Rfc2898DeriveBytes.Pbkdf2(
+            passPhrase,
+            salt,
+            settings.DerivationPasswordIterations,
+            settings.HashAlgorithmName,
+            aesAlg.KeySize / 8);
 
         using var cryptoStream = new CryptoStream(sourceStream, aesAlg.CreateDecryptor(aesAlg.Key, iv), CryptoStreamMode.Read);
         readAction(cryptoStream);
@@ -254,14 +263,19 @@ public static class Symetric
         var salt = GetRandomBytes(aesAlg.BlockSize);
         await destinationStream.WriteAsync(salt);
 
-        using var pwd = new Rfc2898DeriveBytes(passPhrase, salt, settings.DerivationPasswordIterations, settings.HashAlgorithmName);
+
         aesAlg.Padding = PaddingMode.PKCS7;
 
         aesAlg.IV = GetRandomBytes(aesAlg.BlockSize);
         await destinationStream.WriteAsync(aesAlg.IV);
 
         aesAlg.KeySize = settings.KeySize ?? 128;
-        aesAlg.Key = pwd.GetBytes(aesAlg.KeySize / 8);
+        aesAlg.Key = aesAlg.Key = Rfc2898DeriveBytes.Pbkdf2(
+            passPhrase,
+            salt,
+            settings.DerivationPasswordIterations,
+            settings.HashAlgorithmName,
+            aesAlg.KeySize / 8);
 
         await using var cryptoStream = new CryptoStream(destinationStream, aesAlg.CreateEncryptor(), CryptoStreamMode.Write);
         await writeFunc(cryptoStream);
@@ -282,14 +296,19 @@ public static class Symetric
         var salt = new byte[aesAlg.BlockSize / 8];
         await sourceStream.ReadExactlyAsync(salt);
 
-        using var pwd = new Rfc2898DeriveBytes(passPhrase, salt, settings.DerivationPasswordIterations, settings.HashAlgorithmName);
+
         aesAlg.Padding = PaddingMode.PKCS7;
 
         var iv = new byte[aesAlg.BlockSize / 8];
         await sourceStream.ReadExactlyAsync(iv);
 
         aesAlg.KeySize = settings.KeySize ?? 64 * sourceStream.ReadByte();
-        aesAlg.Key = pwd.GetBytes(aesAlg.KeySize / 8);
+        aesAlg.Key = aesAlg.Key = Rfc2898DeriveBytes.Pbkdf2(
+            passPhrase,
+            salt,
+            settings.DerivationPasswordIterations,
+            settings.HashAlgorithmName,
+            aesAlg.KeySize / 8);
 
         await using var cryptoStream = new CryptoStream(sourceStream, aesAlg.CreateDecryptor(aesAlg.Key, iv), CryptoStreamMode.Read);
         await readFunc(cryptoStream);

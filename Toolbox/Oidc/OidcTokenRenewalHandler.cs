@@ -1,6 +1,7 @@
 ﻿using IdentityModel.OidcClient;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -30,8 +31,9 @@ public class OidcTokenRenewalHandler : DelegatingHandler
     }
 
 
-    private OidcClient _oidcClient;
-    private ISessionStore _sessionStore;
+    private OidcClient? _oidcClient;
+    private ISessionStore? _sessionStore;
+    [MemberNotNull(nameof(_oidcClient), nameof(_sessionStore))]
     private void EnsureSetup()
     {
         if (_oidcClient == null)
@@ -93,10 +95,13 @@ public class OidcTokenRenewalHandler : DelegatingHandler
         }
 
         //seems we refreshed the token
-        session = await _sessionStore.GetSession()
+        session = await _sessionStore!.GetSession()
             .ConfigureAwait(false);
 
         response.Dispose(); // This 401 response will not be used for anything so is disposed to unblock the socket.
+
+        if (session is null)
+            return new HttpResponseMessage(HttpStatusCode.Unauthorized) { RequestMessage = request };
 
         //we refreshed the token, so we try the same request once more
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", session.AccessToken);
@@ -107,7 +112,7 @@ public class OidcTokenRenewalHandler : DelegatingHandler
 
 
 
-    private async Task<Session> GetAccessTokenAsync(CancellationToken cancellationToken)
+    private async Task<Session?> GetAccessTokenAsync(CancellationToken cancellationToken)
     {
         //in case somebody is refreshing currently, we don´t want to return until refreshed, so locking
         var res = await _oidcTokenRenewalHandlerHelper.HandleLockedAsync(
@@ -116,11 +121,11 @@ public class OidcTokenRenewalHandler : DelegatingHandler
             .ConfigureAwait(false);
 
         return res
-            ? await _sessionStore.GetSession()
+            ? await _sessionStore!.GetSession()
             : null;
     }
 
-    private async Task<bool> RefreshTokensAsync(Session session, CancellationToken cancellationToken)
+    private async Task<bool> RefreshTokensAsync(Session? session, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(session?.RefreshToken))
         {
@@ -129,13 +134,13 @@ public class OidcTokenRenewalHandler : DelegatingHandler
 
         return await _oidcTokenRenewalHandlerHelper.HandleLockedAsync(async () =>
             {
-                var response = await _oidcClient.RefreshTokenAsync(session.RefreshToken, cancellationToken: cancellationToken)
+                var response = await _oidcClient!.RefreshTokenAsync(session.RefreshToken, cancellationToken: cancellationToken)
                     .ConfigureAwait(false);
 
                 if (response.IsError)
                     throw new Exception("Could not refresh token");
 
-                await _sessionStore.SetSession(
+                await _sessionStore!.SetSession(
                         new Session
                         {
                             IdToken = response.IdentityToken,

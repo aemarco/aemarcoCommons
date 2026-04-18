@@ -1,8 +1,4 @@
-﻿using aemarcoCommons.Extensions;
-using FluentAssertions;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
+using aemarcoCommons.Extensions;
 using System.Linq;
 
 namespace ExtensionsTests;
@@ -10,40 +6,20 @@ namespace ExtensionsTests;
 public class EnumerableExtensionsTests
 {
 
-
-    [Test]
-    public void Shuffle_Works()
-    {
-        EnumerableExtensions.Random = new Random(42);
-        var list = new List<int> { 1, 2, 3 };
-        var expected = new List<int> { 3, 2, 1 };
-
-        var result = list.Shuffle();
-
-        result.Should().BeEquivalentTo(expected);
-    }
-
-
-
-
-
-
-
-
     [TestCase(new string[] { }, false)]
     [TestCase(new[] { "bob" }, true)]
     public void NotNullOrEmpty_Delivers(string[] collection, bool expected)
     {
 
         var result = collection.NotNullOrEmpty();
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
     }
     [Test]
     public void NotNullOrEmpty_DeliversNull()
     {
         string[]? collection = null;
         var result = collection.NotNullOrEmpty();
-        result.Should().Be(false);
+        result.ShouldBe(false);
     }
 
 
@@ -56,14 +32,14 @@ public class EnumerableExtensionsTests
     {
 
         var result = collection.NullOrEmpty();
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
     }
     [Test]
     public void NullOrEmpty_DeliversNull()
     {
         string[]? collection = null;
         var result = collection.NullOrEmpty();
-        result.Should().Be(true);
+        result.ShouldBe(true);
     }
 
     [Test]
@@ -72,11 +48,8 @@ public class EnumerableExtensionsTests
         var ranges = new[] { (1, 3), (5, 6) };
         var consolidated = ranges.ConsolidateRanges().ToList();
 
-        consolidated.Should().HaveCount(2);
-        consolidated.Should().ContainInOrder(
-            (1, 3),
-            (5, 6)
-        );
+        consolidated.Count.ShouldBe(2);
+        consolidated.ShouldBe(new[] { (1, 3), (5, 6) });
     }
 
     [Test]
@@ -85,8 +58,8 @@ public class EnumerableExtensionsTests
         var ranges = new[] { (1, 3), (2, 6), (5, 9) };
         var consolidated = ranges.ConsolidateRanges().ToList();
 
-        consolidated.Should().HaveCount(1);
-        consolidated.Should().Contain((1, 9));
+        consolidated.Count.ShouldBe(1);
+        consolidated.ShouldContain((1, 9));
     }
 
     [Test]
@@ -95,8 +68,8 @@ public class EnumerableExtensionsTests
         var ranges = new[] { (1, 9), (2, 6), (5, 9) };
         var consolidated = ranges.ConsolidateRanges().ToList();
 
-        consolidated.Should().HaveCount(1);
-        consolidated.Should().Contain((1, 9));
+        consolidated.Count.ShouldBe(1);
+        consolidated.ShouldContain((1, 9));
     }
 
     [Test]
@@ -105,8 +78,8 @@ public class EnumerableExtensionsTests
         var ranges = new[] { (1, 3), (4, 6), (6, 9) };
         var consolidated = ranges.ConsolidateRanges().ToList();
 
-        consolidated.Should().HaveCount(1);
-        consolidated.Should().Contain((1, 9));
+        consolidated.Count.ShouldBe(1);
+        consolidated.ShouldContain((1, 9));
     }
 
     [Test]
@@ -115,8 +88,8 @@ public class EnumerableExtensionsTests
         var ranges = new[] { (1, 3) };
         var consolidated = ranges.ConsolidateRanges().ToList();
 
-        consolidated.Should().HaveCount(1);
-        consolidated.Should().Contain((1, 3));
+        consolidated.Count.ShouldBe(1);
+        consolidated.ShouldContain((1, 3));
     }
 
     [Test]
@@ -125,7 +98,7 @@ public class EnumerableExtensionsTests
         var ranges = Enumerable.Empty<(int, int)>();
         var consolidated = ranges.ConsolidateRanges().ToList();
 
-        consolidated.Should().BeEmpty();
+        consolidated.ShouldBeEmpty();
     }
 
     [Test]
@@ -140,7 +113,7 @@ public class EnumerableExtensionsTests
         collection.AddDistinct(1);
 
         // Assert
-        collection.Should().BeEquivalentTo(new[] { 1, 2 });
+        collection.ShouldBe(new[] { 1, 2 });
     }
 
     [Test]
@@ -155,7 +128,7 @@ public class EnumerableExtensionsTests
         collection.AddRangeDistinct(new[] { 1, 2 });
 
         // Assert
-        collection.Should().BeEquivalentTo(new[] { 1, 2, 3 });
+        collection.ShouldBe(new[] { 1, 2, 3 });
     }
 
     [Test]
@@ -170,7 +143,7 @@ public class EnumerableExtensionsTests
         collection.AddRangeDistinct(new[] { ("Second", 3), ("Fifth", 5) }, x => x.Item1);
 
         // Assert
-        collection.Should().BeEquivalentTo(new[]
+        collection.ShouldBe(new[]
         {
             ("First", 1),
             ("Second", 2),
@@ -189,7 +162,7 @@ public class EnumerableExtensionsTests
         IEnumerable<int> sequence = new List<int> { 42 };
         const int target = 50;
         var result = sequence.FindClosestItem(target);
-        result.Should().Be(42);
+        result.ShouldBe(42);
     }
 
     [TestCase(0, 30)]
@@ -202,7 +175,7 @@ public class EnumerableExtensionsTests
     {
         IEnumerable<int> sequence = new List<int> { 30, 40, 50, 60 };
         var result = sequence.FindClosestItem(target);
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
     }
 
     [Test]
@@ -211,7 +184,7 @@ public class EnumerableExtensionsTests
         IEnumerable<int> sequence = new List<int>();
         const int target = 100;
         Action action = () => sequence.FindClosestItem(target);
-        action.Should().Throw<ArgumentException>().WithMessage("Sequence is empty");
+        Should.Throw<ArgumentException>(action).Message.ShouldBe("Sequence is empty");
     }
 
     [Test]
@@ -220,7 +193,7 @@ public class EnumerableExtensionsTests
         IEnumerable<int> sequence = null!;
         const int target = 100;
         Action action = () => sequence.FindClosestItem(target);
-        action.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'sequence')");
+        Should.Throw<ArgumentNullException>(action).Message.ShouldBe("Value cannot be null. (Parameter 'sequence')");
     }
 
     #endregion

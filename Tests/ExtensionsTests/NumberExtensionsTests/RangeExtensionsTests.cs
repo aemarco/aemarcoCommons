@@ -1,7 +1,4 @@
-﻿using aemarcoCommons.Extensions;
-using FluentAssertions;
-using NUnit.Framework;
-using System;
+using aemarcoCommons.Extensions;
 
 namespace ExtensionsTests.NumberExtensionsTests;
 
@@ -17,7 +14,7 @@ public class RangeExtensionsTests
     [TestCase(int.MaxValue, 0, 10, 10)]
     public void Clamp_Int_Works(int value, int min, int max, int expected)
     {
-        value.Clamp(min, max).Should().Be(expected);
+        value.Clamp(min, max).ShouldBe(expected);
     }
 
     [TestCase(5.5f, 0f, 10f, 5.5f)]
@@ -29,7 +26,7 @@ public class RangeExtensionsTests
     [TestCase(float.PositiveInfinity, 0f, 10f, 10f)]
     public void Clamp_Float_Works(float value, float min, float max, float expected)
     {
-        value.Clamp(min, max).Should().BeApproximately(expected, 0.0001f);
+        value.Clamp(min, max).ShouldBe(expected, 0.0001f);
     }
 
     [TestCase(5.5, 0, 10, 5.5)]
@@ -41,7 +38,7 @@ public class RangeExtensionsTests
     [TestCase(double.PositiveInfinity, 0, 10, 10)]
     public void Clamp_Double_Works(double value, double min, double max, double expected)
     {
-        value.Clamp(min, max).Should().BeApproximately(expected, 0.0001);
+        value.Clamp(min, max).ShouldBe(expected, 0.0001);
     }
 
     [Test]
@@ -50,9 +47,9 @@ public class RangeExtensionsTests
         Action actInt = () => 5.Clamp(10, 0);
         Action actFloat = () => 5f.Clamp(10f, 0f);
         Action actDouble = () => 5d.Clamp(10d, 0d);
-        actInt.Should().Throw<ArgumentException>();
-        actFloat.Should().Throw<ArgumentException>();
-        actDouble.Should().Throw<ArgumentException>();
+        Should.Throw<ArgumentException>(actInt);
+        Should.Throw<ArgumentException>(actFloat);
+        Should.Throw<ArgumentException>(actDouble);
     }
 
     // --- NormalizeExtrapolate ---
@@ -63,7 +60,7 @@ public class RangeExtensionsTests
     [TestCase(5, 0, 10, 1, 0, 0.5f)] // reverse normalization
     public void NormalizeExtrapolate_Float_Works(float value, float min, float max, float targetMin, float targetMax, float expected)
     {
-        value.NormalizeExtrapolate(min, max, targetMin, targetMax).Should().BeApproximately(expected, 0.0001f);
+        value.NormalizeExtrapolate(min, max, targetMin, targetMax).ShouldBe(expected, 0.0001f);
     }
 
     [TestCase(5, 0, 10, 0, 1, 0.5)]
@@ -72,7 +69,7 @@ public class RangeExtensionsTests
     [TestCase(5, 0, 10, 1, 0, 0.5)] // reverse normalization
     public void NormalizeExtrapolate_Double_Works(double value, double min, double max, double targetMin, double targetMax, double expected)
     {
-        value.NormalizeExtrapolate(min, max, targetMin, targetMax).Should().BeApproximately(expected, 0.0001);
+        value.NormalizeExtrapolate(min, max, targetMin, targetMax).ShouldBe(expected, 0.0001);
     }
 
     [Test]
@@ -80,8 +77,8 @@ public class RangeExtensionsTests
     {
         Action actFloat = () => 5f.NormalizeExtrapolate(1f, 1f);
         Action actDouble = () => 5d.NormalizeExtrapolate(1d, 1d);
-        actFloat.Should().Throw<ArgumentException>();
-        actDouble.Should().Throw<ArgumentException>();
+        Should.Throw<ArgumentException>(actFloat);
+        Should.Throw<ArgumentException>(actDouble);
     }
 
     // --- NormalizeToRange ---
@@ -91,7 +88,7 @@ public class RangeExtensionsTests
     [TestCase(15, 0, 10, 0, 1, 1)]
     public void NormalizeToRange_Float_Works(float value, float min, float max, float targetMin, float targetMax, float expected)
     {
-        value.NormalizeToRange(min, max, targetMin, targetMax).Should().BeApproximately(expected, 0.0001f);
+        value.NormalizeToRange(min, max, targetMin, targetMax).ShouldBe(expected, 0.0001f);
     }
 
     [TestCase(5, 0, 10, 0, 1, 0.5)]
@@ -99,7 +96,7 @@ public class RangeExtensionsTests
     [TestCase(15, 0, 10, 0, 1, 1)]
     public void NormalizeToRange_Double_Works(double value, double min, double max, double targetMin, double targetMax, double expected)
     {
-        value.NormalizeToRange(min, max, targetMin, targetMax).Should().BeApproximately(expected, 0.0001);
+        value.NormalizeToRange(min, max, targetMin, targetMax).ShouldBe(expected, 0.0001);
     }
 
     [Test]
@@ -107,8 +104,8 @@ public class RangeExtensionsTests
     {
         Action actFloat = () => 5f.NormalizeToRange(0, 10, 1, 0);
         Action actDouble = () => 5d.NormalizeToRange(0, 10, 1, 0);
-        actFloat.Should().Throw<ArgumentException>();
-        actDouble.Should().Throw<ArgumentException>();
+        Should.Throw<ArgumentException>(actFloat);
+        Should.Throw<ArgumentException>(actDouble);
     }
 
 
@@ -123,7 +120,7 @@ public class RangeExtensionsTests
     [TestCase(5, 5, 5)]
     public void RangeMidpoint_Float_Works(float min, float max, float expected)
     {
-        RangeExtensions.RangeMidpoint(min, max).Should().BeApproximately(expected, 0.0001f);
+        RangeExtensions.RangeMidpoint(min, max).ShouldBe(expected, 0.0001f);
     }
 
     [TestCase(0.0, 10.0, 5.0)]
@@ -132,7 +129,7 @@ public class RangeExtensionsTests
     [TestCase(5.0, 5.0, 5.0)]
     public void RangeMidpoint_Double_Works(double min, double max, double expected)
     {
-        RangeExtensions.RangeMidpoint(min, max).Should().BeApproximately(expected, 0.0001);
+        RangeExtensions.RangeMidpoint(min, max).ShouldBe(expected, 0.0001);
     }
 
     [Test]
@@ -140,8 +137,8 @@ public class RangeExtensionsTests
     {
         Action actFloat = () => RangeExtensions.RangeMidpoint(10f, 0f);
         Action actDouble = () => RangeExtensions.RangeMidpoint(10d, 0d);
-        actFloat.Should().Throw<ArgumentException>();
-        actDouble.Should().Throw<ArgumentException>();
+        Should.Throw<ArgumentException>(actFloat);
+        Should.Throw<ArgumentException>(actDouble);
     }
 
     // --- IsInRange ---
@@ -153,7 +150,7 @@ public class RangeExtensionsTests
     [TestCase(11, 0, 10, false)]
     public void IsInRange_Int_Works(int value, int min, int max, bool expected)
     {
-        value.IsInRange(min, max).Should().Be(expected);
+        value.IsInRange(min, max).ShouldBe(expected);
     }
 
 
@@ -164,7 +161,7 @@ public class RangeExtensionsTests
     [TestCase(11, 0, 10, false)]
     public void IsInRange_Float_Works(float value, float min, float max, bool expected)
     {
-        value.IsInRange(min, max).Should().Be(expected);
+        value.IsInRange(min, max).ShouldBe(expected);
     }
 
     [TestCase(0, 0, 10, true)]
@@ -174,7 +171,7 @@ public class RangeExtensionsTests
     [TestCase(10.1, 0, 10, false)]
     public void IsInRange_Double_Works(double value, double min, double max, bool expected)
     {
-        value.IsInRange(min, max).Should().Be(expected);
+        value.IsInRange(min, max).ShouldBe(expected);
     }
 
     [Test]
@@ -183,9 +180,9 @@ public class RangeExtensionsTests
         Action actInt = () => 5.IsInRange(10, 0);
         Action actFloat = () => 5f.IsInRange(10f, 0f);
         Action actDouble = () => 5d.IsInRange(10d, 0d);
-        actInt.Should().Throw<ArgumentException>();
-        actFloat.Should().Throw<ArgumentException>();
-        actDouble.Should().Throw<ArgumentException>();
+        Should.Throw<ArgumentException>(actInt);
+        Should.Throw<ArgumentException>(actFloat);
+        Should.Throw<ArgumentException>(actDouble);
     }
 
     // --- OverlapsWith ---
@@ -197,7 +194,7 @@ public class RangeExtensionsTests
     [TestCase(5, 5, 5, 5, true)]
     public void OverlapsWith_Int_Works(int min1, int max1, int min2, int max2, bool expected)
     {
-        RangeExtensions.OverlapsWith(min1, max1, min2, max2).Should().Be(expected);
+        RangeExtensions.OverlapsWith(min1, max1, min2, max2).ShouldBe(expected);
     }
 
     [TestCase(0, 10, 5, 15, true)]
@@ -207,7 +204,7 @@ public class RangeExtensionsTests
     [TestCase(5, 5, 5, 5, true)]
     public void OverlapsWith_Float_Works(float min1, float max1, float min2, float max2, bool expected)
     {
-        RangeExtensions.OverlapsWith(min1, max1, min2, max2).Should().Be(expected);
+        RangeExtensions.OverlapsWith(min1, max1, min2, max2).ShouldBe(expected);
     }
 
     [TestCase(0, 10, 5, 15, true)]
@@ -217,7 +214,7 @@ public class RangeExtensionsTests
     [TestCase(5, 5, 5, 5, true)]
     public void OverlapsWith_Double_Works(double min1, double max1, double min2, double max2, bool expected)
     {
-        RangeExtensions.OverlapsWith(min1, max1, min2, max2).Should().Be(expected);
+        RangeExtensions.OverlapsWith(min1, max1, min2, max2).ShouldBe(expected);
     }
 
     [Test]
@@ -226,8 +223,8 @@ public class RangeExtensionsTests
         Action actInt = () => RangeExtensions.OverlapsWith(10, 0, 0, 10);
         Action actFloat = () => RangeExtensions.OverlapsWith(10f, 0f, 0f, 10f);
         Action actDouble = () => RangeExtensions.OverlapsWith(10d, 0d, 0d, 10d);
-        actInt.Should().Throw<ArgumentException>();
-        actFloat.Should().Throw<ArgumentException>();
-        actDouble.Should().Throw<ArgumentException>();
+        Should.Throw<ArgumentException>(actInt);
+        Should.Throw<ArgumentException>(actFloat);
+        Should.Throw<ArgumentException>(actDouble);
     }
 }

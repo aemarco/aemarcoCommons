@@ -1,7 +1,4 @@
-﻿using aemarcoCommons.Toolbox.GeoTools;
-using FluentAssertions;
-using NUnit.Framework;
-using System.Threading.Tasks;
+using aemarcoCommons.Toolbox.GeoTools;
 
 namespace ToolboxTests.GeoTools;
 
@@ -21,7 +18,8 @@ public class GeoServiceTests
     public async Task GetIpInfo_Delivers()
     {
         var result = await _service.GetIpInfo();
-        result.Should().NotBeNull().And.Contain(".");
+        result.ShouldNotBeNull();
+        result.ShouldContain(".");
     }
 
     [Test]
@@ -29,7 +27,7 @@ public class GeoServiceTests
     {
         var result1 = await _service.GetIpInfo();
         var result2 = await _service.GetIpInfo();
-        result1.Should().BeSameAs(result2); //compare reference
+        result1.ShouldBeSameAs(result2); //compare reference
     }
 
     #endregion
@@ -40,7 +38,7 @@ public class GeoServiceTests
     public async Task GetSunriseSunsetInfo_Delivers()
     {
         var result = await _service.GetSunriseSunsetInfoInfo(36.7201600f, -4.4203400f);
-        result.Should().NotBeNull();
+        result.ShouldNotBeNull();
     }
 
     [Test]
@@ -48,7 +46,7 @@ public class GeoServiceTests
     {
         var result1 = await _service.GetSunriseSunsetInfoInfo(36.7201600f, -4.4203400f);
         var result2 = await _service.GetSunriseSunsetInfoInfo(36.7201600f, -4.4203400f);
-        result1.Should().BeSameAs(result2); //compare reference
+        result1.ShouldBeSameAs(result2); //compare reference
     }
 
 

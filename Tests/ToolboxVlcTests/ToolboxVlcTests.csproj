@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<!-- project definition -->
+	<PropertyGroup>
+		<TargetFramework>$(DefaultNetVersion)-windows</TargetFramework>
+	</PropertyGroup>
+
+	<!-- project references -->
+	<ItemGroup>
+		<ProjectReference Include="..\..\ToolboxVlc\ToolboxVlc.csproj" />
+	</ItemGroup>
+
+</Project>

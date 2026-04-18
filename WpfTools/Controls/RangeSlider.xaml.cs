@@ -1,8 +1,4 @@
-﻿using System;
-using System.Windows;
-
-
-namespace aemarcoCommons.WpfTools.Controls;
+﻿namespace aemarcoCommons.WpfTools.Controls;
 
 
 public partial class RangeSlider

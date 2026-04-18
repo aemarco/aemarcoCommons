@@ -147,6 +147,8 @@ public static partial class PowerConsole
                 continue;
 
             var temp = share.Root;
+            if (temp is null)
+                continue;
             shares.Add(new ConsoleMenuItem<DirectoryInfo>($"{share.Server} --> {share.NetName}", _ =>
             {
                 path = temp.FullName;

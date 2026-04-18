@@ -1,7 +1,5 @@
 ﻿using aemarcoCommons.WpfTools.BaseModels;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Windows;
 
 namespace aemarcoCommons.WpfTools.Commands;
 

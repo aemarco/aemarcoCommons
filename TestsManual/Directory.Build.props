@@ -1,0 +1,14 @@
+<!-- TestsManual -->
+<Project>
+
+	<!-- project definition -->
+	<PropertyGroup>
+		<DefaultNetVersion>net10.0</DefaultNetVersion>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<!-- nuget references -->
+	<PropertyGroup>
+		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+	</PropertyGroup>
+</Project>

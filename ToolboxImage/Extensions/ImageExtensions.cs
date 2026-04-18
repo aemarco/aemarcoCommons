@@ -128,4 +128,5 @@ public static class ImageExtensions
         );
         return image;
     }
+
 }

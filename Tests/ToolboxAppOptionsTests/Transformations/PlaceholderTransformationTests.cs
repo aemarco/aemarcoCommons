@@ -12,7 +12,7 @@ public class PlaceholderTransformationTests : AppOptionTestBase
             "{{{PlaceholderValue}}}",
             typeof(PlaceholderTestSettings).GetProperty(nameof(PlaceholderTestSettings.Message))!,
             Config);
-        result.Should().Be("Bob");
+        result.ShouldBe("Bob");
     }
     [Test]
     public void PerformWriteTransformation_DoesNothing()
@@ -22,7 +22,7 @@ public class PlaceholderTransformationTests : AppOptionTestBase
             "Bob",
             typeof(PlaceholderTestSettings).GetProperty(nameof(PlaceholderTestSettings.Message))!,
             Config);
-        result.Should().Be("Bob");
+        result.ShouldBe("Bob");
     }
     [Test]
     public void TransformObject_DoesResolvePlaceholders()
@@ -39,7 +39,7 @@ public class PlaceholderTransformationTests : AppOptionTestBase
             config,
             transformer.PerformReadTransformation);
 
-        testSettings.Message.Should().Be("Bob");
+        testSettings.Message.ShouldBe("Bob");
     }
     public class PlaceholderTestSettings : ISettingsBase
     {

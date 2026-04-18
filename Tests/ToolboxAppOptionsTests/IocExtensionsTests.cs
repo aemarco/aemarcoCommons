@@ -25,7 +25,7 @@ public class ServiceCollectionExtensionsTests : AppOptionTestBase
         var sp = sc.BuildServiceProvider();
         var magic = sp.GetRequiredService<ShowCaseSettings>();
 
-        magic.Message.Should().Be("awesome");
+        magic.Message.ShouldBe("awesome");
 
     }
     [SettingsPath("ShowCase")]
@@ -42,19 +42,19 @@ public class ServiceCollectionExtensionsTests : AppOptionTestBase
     public void AddConfigOptionsUtils_RegistersIConfiguration()
     {
         var config = Sp.GetService<IConfiguration>();
-        config.Should().NotBeNull();
+        config.ShouldNotBeNull();
     }
     [Test]
     public void AddConfigOptionsUtils_RegistersIConfigurationRoot()
     {
         var config = Sp.GetService<IConfigurationRoot>();
-        config.Should().NotBeNull();
+        config.ShouldNotBeNull();
     }
     [Test]
     public void AddConfigOptionsUtils_RegistersConfigurationOptions()
     {
         var config = Sp.GetService<ToolboxAppOptionsSettings>();
-        config.Should().NotBeNull();
+        config.ShouldNotBeNull();
     }
     [Test]
     public void AddConfigOptionsUtils_RegistersOptions()
@@ -62,20 +62,20 @@ public class ServiceCollectionExtensionsTests : AppOptionTestBase
         var settings = Sp
             .GetRequiredService<IOptions<TestSettings>>()
             .Value;
-        settings.Message.Should().Be("HelloWorld");
+        settings.Message.ShouldBe("HelloWorld");
     }
     [Test]
     public void AddConfigOptionsUtils_RegistersSelf()
     {
         var settings = Sp
             .GetRequiredService<TestSettings>();
-        settings.Message.Should().Be("HelloWorld");
+        settings.Message.ShouldBe("HelloWorld");
     }
     [Test]
     public void AddConfigOptionsUtils_RegistersValidators()
     {
         var validator = Sp.GetService<IValidator<TestSettings>>();
-        validator.Should().NotBeNull();
+        validator.ShouldNotBeNull();
     }
 
     public class TestSettings : ISettingsBase

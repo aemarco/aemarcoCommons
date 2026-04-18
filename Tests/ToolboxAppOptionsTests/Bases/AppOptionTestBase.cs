@@ -1,20 +1,16 @@
 ﻿using aemarcoCommons.ToolboxAppOptions.Transformations;
 
 namespace ToolboxAppOptionsTests.Bases;
+
 public class AppOptionTestBase
 {
-    protected IConfigurationRoot Config
-    {
-        get
-        {
-            return new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
-                .Build();
-        }
-    }
 
+    protected IConfigurationRoot Config =>
+        new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json")
+            .Build();
 
-    protected IServiceCollection Sc
+    private IServiceCollection Sc
     {
         get
         {
@@ -40,7 +36,7 @@ public class AppOptionTestBase
 
 
 
-    protected ProtectedTransformer Pt
+    protected static ProtectedTransformer Pt
     {
         get
         {

@@ -1,9 +1,5 @@
-﻿using aemarcoCommons.Extensions.CryptoExtensions;
+using aemarcoCommons.Extensions.CryptoExtensions;
 using aemarcoCommons.Extensions.FileExtensions;
-using FluentAssertions;
-using NUnit.Framework;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace ExtensionsTests.CryptoExtensionsTests;
 
@@ -18,7 +14,7 @@ public class SymetricTests
         var encrypted = text.EncryptToBase64("password");
         var result = encrypted.DecryptFromBase64("password");
 
-        result.Should().Be(text);
+        result.ShouldBe(text);
     }
 
 
@@ -30,7 +26,7 @@ public class SymetricTests
         var encrypted = await text.EncryptToBase64Async("password");
         var result = await encrypted.DecryptFromBase64Async("password");
 
-        result.Should().Be(text);
+        result.ShouldBe(text);
     }
 
     [Test]
@@ -47,7 +43,7 @@ public class SymetricTests
         var fromFile = File.ReadAllBytes(fileInfo.FullName);
         fileInfo.Delete();
 
-        bytes.Should().Equal(fromFile);
+        bytes.ShouldBe(fromFile);
     }
 
     [Test]
@@ -63,7 +59,7 @@ public class SymetricTests
 
         var fromFile = await File.ReadAllBytesAsync(decrypted.FullName);
         decrypted.Delete();
-        bytes.Should().Equal(fromFile);
+        bytes.ShouldBe(fromFile);
 
     }
 
@@ -88,7 +84,7 @@ public class SymetricTests
         var result = fileInfo.Base64HashFromFile() == decrypted.Base64HashFromFile();
         fileInfo.Delete();
         decrypted.Delete();
-        result.Should().BeTrue();
+        result.ShouldBeTrue();
     }
     [Test]
     [Explicit]
@@ -111,6 +107,6 @@ public class SymetricTests
         fileInfo.Delete();
         decrypted.Delete();
 
-        result.Should().BeTrue();
+        result.ShouldBeTrue();
     }
 }

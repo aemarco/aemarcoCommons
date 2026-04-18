@@ -2,7 +2,7 @@
 
 	<!-- project definition -->
 	<PropertyGroup>
-		<TargetFramework>net8.0-windows</TargetFramework>
+		<TargetFramework>$(DefaultNetVersion)-windows</TargetFramework>
 		<RootNamespace>aemarcoCommons.WebTools</RootNamespace>
 		<AssemblyName>aemarcoCommons.WebTools</AssemblyName>
 
@@ -15,7 +15,14 @@
 
 	<!-- nuget references-->
 	<ItemGroup>
-		<PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+		<PackageReference Include="Serilog.AspNetCore" />
+		<PackageReference Include="Riok.Mapperly" ExcludeAssets="runtime" PrivateAssets="all">
+		  <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+
 	</ItemGroup>
 
 	<!-- proj build-->
@@ -32,8 +39,10 @@
 		<PackageTags>WebTools</PackageTags>
 	</PropertyGroup>
 	<ItemGroup>
-		<None Update="..\README.md" Pack="false" />
 		<None Include="README.md" Pack="true" PackagePath="\" />
+		<None Include="Resources\icon.png" Pack="true" PackagePath="\" />
+		<None Include="Resources\LICENSE.md" Pack="true" PackagePath="\" />
+		<None Include="Resources\NOTICE.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 </Project>

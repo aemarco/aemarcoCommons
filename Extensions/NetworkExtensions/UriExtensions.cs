@@ -12,7 +12,7 @@ public static class UriExtensions
 
     public static bool TcpPing(this Uri uri)
     {
-        TcpClient client = null;
+        TcpClient? client = null;
         try
         {
             client = new TcpClient(uri.Host, uri.Port);

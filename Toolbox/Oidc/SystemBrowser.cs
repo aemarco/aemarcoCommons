@@ -12,8 +12,8 @@ namespace aemarcoCommons.Toolbox.Oidc;
 public class SystemBrowser : IBrowser
 {
     private readonly int _port;
-    private readonly string _postLoginUrl;
-    public SystemBrowser(int? port, string postLoginUrl = null)
+    private readonly string? _postLoginUrl;
+    public SystemBrowser(int? port, string? postLoginUrl = null)
     {
         //_port = GetRandomUnusedPort();
         _port = port ?? GetRandomUnusedPort();
@@ -42,7 +42,7 @@ public class SystemBrowser : IBrowser
             listener.Start();
             var abort = cancellationToken.Register(x =>
             {
-                ((HttpListener)x).Abort();
+                ((HttpListener)x!).Abort();
             }, listener);
 
             new Uri(options.StartUrl).OpenInBrowser();
@@ -96,7 +96,7 @@ public class SystemBrowser : IBrowser
         }
     }
 
-    private string GetHtml(string query)
+    private string GetHtml(string? query)
     {
         string message, template;
         if (string.IsNullOrWhiteSpace(query))

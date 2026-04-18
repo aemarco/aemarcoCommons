@@ -13,7 +13,7 @@ public static class JsonExtensions
 
         try
         {
-            return JsonConvert.DeserializeObject<T>(File.ReadAllText(filePath));
+            return JsonConvert.DeserializeObject<T>(File.ReadAllText(filePath)) ?? new T();
         }
         catch
         {

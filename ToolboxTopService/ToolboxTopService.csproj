@@ -2,16 +2,20 @@
 
 	<!-- project definition -->
 	<PropertyGroup>
-		<TargetFramework>net8.0-windows</TargetFramework>
-		
+		<TargetFramework>$(DefaultNetVersion)-windows</TargetFramework>
 		<RootNamespace>aemarcoCommons.ToolboxTopService</RootNamespace>
 		<AssemblyName>aemarcoCommons.ToolboxTopService</AssemblyName>
 	</PropertyGroup>
 
+	<!-- project references -->
+	<ItemGroup>
+		<ProjectReference Include="..\Extensions\Extensions.csproj" />
+	</ItemGroup>
+
 	<!-- nuget references -->
 	<ItemGroup>
-		<PackageReference Include="CliWrap" Version="3.9.0" />
-		<PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.7" />
+		<PackageReference Include="CliWrap" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" />
 	</ItemGroup>
 
 	<!-- nuget build-->
@@ -20,10 +24,10 @@
 		<PackageTags>WindowsService Topshelf</PackageTags>
 	</PropertyGroup>
 	<ItemGroup>
-		<None Update="..\README.md" Pack="false" />
 		<None Include="README.md" Pack="true" PackagePath="\" />
-		<None Update="..\icon.png" Pack="false" />
-		<None Include="icon.png" Pack="true" PackagePath="\" />
+		<None Include="Resources\icon.png" Pack="true" PackagePath="\" />
+		<None Include="Resources\LICENSE.md" Pack="true" PackagePath="\" />
+		<None Include="Resources\NOTICE.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 	
 </Project>

@@ -8,11 +8,11 @@ public class ToolboxAppOptionsSettingsTests : AppOptionTestBase
     {
         var result = new ToolboxAppOptionsSettings();
 
-        result.StringTransformations.Should().HaveCount(0);
-        result.Assemblies.Should().HaveCount(0);
-        result.EnableValidationOnStartup.Should().Be(true);
+        result.StringTransformations.ShouldBeEmpty();
+        result.Assemblies.ShouldBeEmpty();
+        result.EnableValidationOnStartup.ShouldBeTrue();
 
-        result.ConfigurationTypes.Should().HaveCount(0);
-        result.ConfigurationAssemblies.Should().HaveCount(0);
+        result.ConfigurationTypes.ShouldBeEmpty();
+        result.ConfigurationAssemblies.ShouldBeEmpty();
     }
 }

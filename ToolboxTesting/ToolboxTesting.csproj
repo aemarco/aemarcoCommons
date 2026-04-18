@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<!-- project definition -->
+	<PropertyGroup>
+		<TargetFramework>$(DefaultNetVersion)</TargetFramework>
+		<RootNamespace>aemarcoCommons.ToolboxTesting</RootNamespace>
+		<AssemblyName>aemarcoCommons.ToolboxTesting</AssemblyName>
+	</PropertyGroup>
+
+	<!-- project references -->
+	<ItemGroup>
+		<ProjectReference Include="..\Extensions\Extensions.csproj" />
+	</ItemGroup>
+
+
+	<!-- nuget references-->
+	<ItemGroup>
+		
+		<!-- nunit -->
+		<PackageReference Include="NUnit" />
+
+	</ItemGroup>
+
+	<!-- nuget build-->
+	<PropertyGroup>
+		<Description>Tooling for unit testing</Description>
+		<PackageTags>NUnit;Testing</PackageTags>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath="\" />
+		<None Include="Resources\icon.png" Pack="true" PackagePath="\" />
+		<None Include="Resources\LICENSE.md" Pack="true" PackagePath="\" />
+		<None Include="Resources\NOTICE.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+	
+</Project>

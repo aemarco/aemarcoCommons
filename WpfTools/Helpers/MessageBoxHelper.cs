@@ -1,6 +1,4 @@
-﻿using System.Windows;
-
-namespace aemarcoCommons.WpfTools.Helpers;
+﻿namespace aemarcoCommons.WpfTools.Helpers;
 
 public static class MessageBoxHelper
 {

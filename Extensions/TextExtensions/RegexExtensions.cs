@@ -1,14 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
 
+
 namespace aemarcoCommons.Extensions.TextExtensions;
 
 public static partial class RegexExtensions
 {
-    public static bool IsValidEmail(this string email)
+    public static bool IsValidEmail([NotNullWhen(true)] this string? email)
     {
         if (string.IsNullOrWhiteSpace(email))
             return false;
@@ -59,8 +61,10 @@ public static partial class RegexExtensions
         }
     }
 
-    public static IEnumerable<long> GetNumbersFromText(this string text)
+    public static IEnumerable<long> GetNumbersFromText(this string? text)
     {
+        if (text == null) yield break;
+
         var matches = Regex.Matches(text, @"\d+");
         foreach (Match match in matches)
         {
@@ -68,15 +72,15 @@ public static partial class RegexExtensions
         }
     }
 
-    public static string ToFriendlyFilename(this string fileName)
+    [return: NotNullIfNotNull(nameof(fileName))]
+    public static string? ToFriendlyFilename(this string? fileName)
     {
-        return Regex.Replace(fileName, @"[^A-Za-z0-9_\.~]+", "-");
+        if (fileName == null) return null;
+        var result = FileNameRegex().Replace(fileName, "-");
+        return result.Length > 255 ? result[..255] : result;
     }
-
-
-#nullable enable
-
-
+    [GeneratedRegex(@"[^A-Za-z0-9_\.~]+")]
+    private static partial Regex FileNameRegex();
 
 
 
@@ -95,15 +99,15 @@ public static partial class RegexExtensions
     [
         // Jahr vorne (YYYY sep M/D)
         "yyyy-M-d", "yyyy.M.d", "yyyy/M/d", "yyyy M d", "yyyy_M_d",
-        "yyyy-MM-d", "yyyy.MM.d", "yyyy/MM/d", "yyyy MM d", "yyyy_MM_d",
+        "yyyy-MM-d", "yyyy.MM.d", "yyyy/MM.d", "yyyy MM d", "yyyy_MM_d",
         "yyyy-M-dd", "yyyy.M.dd", "yyyy/M/dd", "yyyy M dd", "yyyy_M_dd",
-        "yyyy-MM-dd", "yyyy.MM.dd", "yyyy/MM/dd", "yyyy MM dd", "yyyy_MM_dd",
+        "yyyy-MM-dd", "yyyy.MM.dd", "yyyy/MM.dd", "yyyy MM dd", "yyyy_MM_dd",
 
         // Jahr hinten (D/M sep YYYY)
         "d-M-yyyy", "d_M_yyyy", "d.M.yyyy", "d|M|yyyy", "d/M/yyyy", "d M yyyy",
-        "d-MM-yyyy", "d_MM_yyyy", "d.MM.yyyy", "d|MM|yyyy", "d/MM/yyyy", "d MM yyyy",
+        "d-MM-yyyy", "d_MM_yyyy", "d.MM.yyyy", "d|MM|yyyy", "d/MM.yyyy", "d MM yyyy",
         "dd-M-yyyy", "dd_M_yyyy", "dd.M.yyyy", "dd|M|yyyy", "dd/M/yyyy", "dd M yyyy",
-        "dd-MM-yyyy", "dd_MM_yyyy", "dd.MM.yyyy", "dd|MM|yyyy", "dd/MM/yyyy", "dd MM yyyy",
+        "dd-MM-yyyy", "dd_MM_yyyy", "dd.MM.yyyy", "dd|MM|yyyy", "dd/MM.yyyy", "dd MM yyyy",
 
         // optional: US-Variante Monat-Tag-Jahr
         "M-d-yyyy", "M_d_yyyy", "M.d.yyyy", "M|d|yyyy", "M/d/yyyy", "M d yyyy",
@@ -128,9 +132,9 @@ public static partial class RegexExtensions
 
         // Asiatische/abgekürzte Variante: Jahr-Monat-Tag (yy)
         "yy-M-d", "yy.M.d", "yy/M/d", "yy M d", "yy_M_d",
-        "yy-MM-d", "yy.MM.d", "yy/MM/d", "yy MM d", "yy_MM_d",
+        "yy-MM-d", "yy.MM.d", "yy/MM.d", "yy MM d", "yy_MM_d",
         "yy-M-dd", "yy.M.dd", "yy/M/dd", "yy M dd", "yy_M_dd",
-        "yy-MM-dd", "yy.MM.dd", "yy/MM/dd", "yy MM dd", "yy_MM_dd",
+        "yy-MM-dd", "yy.MM.dd", "yy/MM.dd", "yy MM dd", "yy_MM_dd",
 
         // US-Variante: Monat-Tag-Jahr (yy)
         "M-d-yy", "M.d.yy", "M/d/yy", "M d yy", "M_M_yy",
@@ -140,16 +144,16 @@ public static partial class RegexExtensions
 
         // Europäische Variante: Tag-Monat-Jahr (yy)
         "d-M-yy", "d.M.yy", "d/M/yy", "d M yy", "d_M_yy",
-        "d-MM-yy", "d.MM.yy", "d/MM/yy", "d MM yy", "d_MM_yy",
+        "d-MM-yy", "d.MM.yy", "d/MM.yy", "d MM yy", "d_MM_yy",
         "dd-M-yy", "dd.M.yy", "dd/M/yy", "dd M yy", "dd_M_yy",
-        "dd-MM-yy", "dd.MM.yy", "dd/MM/yy", "dd MM yy", "dd_MM_yy"
+        "dd-MM-yy", "dd.MM.yy", "dd/MM.yy", "dd MM yy", "dd_MM_yy"
     ];
 
     [GeneratedRegex(@"\d{4}", RegexOptions.Compiled)]
     private static partial Regex YearOnlyPattern();
 
     public static DateTimeOffset? ToDateTimeOffset(
-        this string input,
+        this string? input,
         int? minYear = null,
         int? maxYear = null)
     {
@@ -246,8 +250,5 @@ public static partial class RegexExtensions
         }
         return null;
     }
-
-
-
 
 }

@@ -1,8 +1,5 @@
-﻿using aemarcoCommons.Extensions.FileExtensions;
+using aemarcoCommons.Extensions.FileExtensions;
 using aemarcoCommons.Toolbox.SecurityTools;
-using FluentAssertions;
-using NUnit.Framework;
-using System.IO;
 
 namespace ToolboxTests.SecurityTests;
 
@@ -32,9 +29,9 @@ public class VirusScanServiceTests
     {
         var result = new VirusScanService().ScanFile("eicar");
 
-        result.Success.Should().BeTrue();
-        result.IsThread.Should().BeTrue();
-        result.Exception.Should().BeNull();
+        result.Success.ShouldBeTrue();
+        result.IsThread.ShouldBe(true);
+        result.Exception.ShouldBeNull();
     }
 
     [Test]
@@ -42,9 +39,9 @@ public class VirusScanServiceTests
     {
         var result = new VirusScanService().ScanFile("save");
 
-        result.Success.Should().BeTrue();
-        result.IsThread.Should().BeFalse();
-        result.Exception.Should().BeNull();
+        result.Success.ShouldBeTrue();
+        result.IsThread.ShouldBe(false);
+        result.Exception.ShouldBeNull();
     }
 
     [Test]
@@ -52,9 +49,9 @@ public class VirusScanServiceTests
     {
         var result = new VirusScanService().ScanFile("save", "123.exe");
 
-        result.Success.Should().BeFalse();
-        result.IsThread.Should().BeNull();
-        result.Exception.Should().BeOfType(typeof(FileNotFoundException));
+        result.Success.ShouldBeFalse();
+        result.IsThread.ShouldBeNull();
+        result.Exception.ShouldBeOfType<FileNotFoundException>();
     }
 
     [Test]
@@ -62,9 +59,9 @@ public class VirusScanServiceTests
     {
         var result = new VirusScanService().ScanFile("notThere");
 
-        result.Success.Should().BeFalse();
-        result.IsThread.Should().BeNull();
-        result.Exception.Should().BeOfType(typeof(FileNotFoundException));
+        result.Success.ShouldBeFalse();
+        result.IsThread.ShouldBeNull();
+        result.Exception.ShouldBeOfType<FileNotFoundException>();
     }
 
 }

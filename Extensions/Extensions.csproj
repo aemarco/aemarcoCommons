@@ -2,17 +2,12 @@
 
 	<!-- project definition -->
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>$(DefaultNetVersion)</TargetFramework>
 		<RootNamespace>aemarcoCommons.Extensions</RootNamespace>
 		<AssemblyName>aemarcoCommons.Extensions</AssemblyName>
-		<Nullable>disable</Nullable>
-
 	</PropertyGroup>
 
 	<!-- nuget references-->
-	<ItemGroup>
-		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.6.3" />
-	</ItemGroup>
 
 	<!-- nuget build-->
 	<PropertyGroup>
@@ -20,8 +15,9 @@
 		<PackageTags>Extensions</PackageTags>
 	</PropertyGroup>
 	<ItemGroup>
-		<None Update="..\README.md" Pack="false" />
 		<None Include="README.md" Pack="true" PackagePath="\" />
+		<None Include="Resources\icon.png" Pack="true" PackagePath="\" />
+		<None Include="Resources\LICENSE.md" Pack="true" PackagePath="\" />
+		<None Include="Resources\NOTICE.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
-
 </Project>

@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	
+	<!-- project definition -->
+	<PropertyGroup>
+		<TargetFramework>$(DefaultNetVersion)</TargetFramework>
+	</PropertyGroup>
+
+	<!-- project references -->
+	<ItemGroup>
+		<ProjectReference Include="..\..\ToolboxWeb\ToolboxWeb.csproj" />
+	</ItemGroup>
+
+</Project>

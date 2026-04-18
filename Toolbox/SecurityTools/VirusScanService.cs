@@ -63,7 +63,7 @@ public readonly struct VirusScanResult
         : this(false, null, exception)
     { }
 
-    private VirusScanResult(bool success, bool? isThread, Exception exception)
+    private VirusScanResult(bool success, bool? isThread, Exception? exception)
     {
         Success = success;
         IsThread = isThread;
@@ -72,5 +72,5 @@ public readonly struct VirusScanResult
 
     public bool Success { get; }
     public bool? IsThread { get; }
-    public Exception Exception { get; }
+    public Exception? Exception { get; }
 }

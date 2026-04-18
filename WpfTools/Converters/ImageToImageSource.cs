@@ -1,8 +1,5 @@
-﻿using System;
-using System.Drawing.Imaging;
-using System.Globalization;
+﻿using System.Drawing.Imaging;
 using System.IO;
-using System.Windows.Data;
 
 namespace aemarcoCommons.WpfTools.Converters;
 

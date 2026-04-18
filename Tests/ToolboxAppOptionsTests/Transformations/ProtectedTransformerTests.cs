@@ -10,7 +10,7 @@ public class ProtectedTransformerTests : AppOptionTestBase
             "Nj4KRDlw1axXf05Kv1dHXk3C3G91VaQVN+Xxt7MJjBMCwNqAsxVgJj/5Im/VbNPB3A==",
             typeof(ProtectedTestSettings).GetProperty(nameof(ProtectedTestSettings.Message))!,
             Config);
-        result.Should().Be("Bob");
+        result.ShouldBe("Bob");
     }
     [Test]
     public void PerformWriteTransformation_DoesEncrypt()
@@ -28,7 +28,7 @@ public class ProtectedTransformerTests : AppOptionTestBase
             pi,
             Config);
 
-        result.Should().Be(writeMessage);
+        result.ShouldBe(writeMessage);
     }
     [Test]
     public void TransformObject_DoesTransform()
@@ -45,7 +45,7 @@ public class ProtectedTransformerTests : AppOptionTestBase
             config,
             transformer.PerformReadTransformation);
 
-        testSettings.Message.Should().Be("Bob");
+        testSettings.Message.ShouldBe("Bob");
     }
     public class ProtectedTestSettings : ISettingsBase
     {

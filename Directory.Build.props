@@ -1,9 +1,57 @@
+<!-- aemarcoCommons -->
 <Project>
-	<!-- this runs at the beginning -->
-  
+	
 	<!-- project definition -->
 	<PropertyGroup>
+		<DefaultNetVersion>net10.0</DefaultNetVersion>
 		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<!-- nuget references -->
+	<PropertyGroup>
+		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+	</PropertyGroup>
+	<ItemGroup>
+		<!-- auto versioning tool -->
+		<PackageReference Include="Nerdbank.GitVersioning" Condition="!Exists('packages.config')">
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+
+		<!-- auto github link etc -->
+		<PackageReference Include="DotNet.ReproducibleBuilds">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<!-- pdb files -->
+	<PropertyGroup Condition="'$(Configuration)'=='Release'">
+		<DebugType>embedded</DebugType>
+		<DebugSymbols>true</DebugSymbols>
+	</PropertyGroup>
+
+	<!-- test internals -->
+	<ItemGroup>
+		<InternalsVisibleTo Include="$(AssemblyName)Tests" />
+		<InternalsVisibleTo Include="$(AssemblyName).Tests" />
+		<InternalsVisibleTo Include="$(MSBuildProjectName)Tests" />
+		<InternalsVisibleTo Include="$(MSBuildProjectName).Tests" />
+		<InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+	</ItemGroup>
+
+	<!-- nuget build-->
+	<PropertyGroup>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageId>aemarco$(MSBuildProjectName)</PackageId>
+		<Product>aemarco$(MSBuildProjectName)</Product>
+		<Authors>aemarco</Authors>
+		<Company>aemarco</Company>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<PackageProjectUrl>https://github.com/aemarco/aemarcoCommons</PackageProjectUrl>
+		
+		<PackageIcon>icon.png</PackageIcon>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<!-- PackageValidation-->
@@ -14,61 +62,5 @@
 		<EnableStrictModeForCompatibleTfms>true</EnableStrictModeForCompatibleTfms>
 		<GenerateCompatibilitySuppressionFile>false</GenerateCompatibilitySuppressionFile>
 	</PropertyGroup>
-
-
-	<!-- pdb files -->
-	<PropertyGroup Condition="'$(Configuration)'=='Release'">
-		<DebugType>embedded</DebugType>
-		<DebugSymbols>true</DebugSymbols>
-	</PropertyGroup>
-
-
-	<!-- test internals -->
-	<ItemGroup>
-		<InternalsVisibleTo Include="$(AssemblyName)Tests" />
-		<InternalsVisibleTo Include="$(AssemblyName).Tests" />
-		<InternalsVisibleTo Include="$(MSBuildProjectName)Tests" />
-		<InternalsVisibleTo Include="$(MSBuildProjectName).Tests" />
-	</ItemGroup>
-
-	
-	<!-- tooling -->
-	<ItemGroup>
-		<!-- auto versioning tool -->
-		<PackageReference Include="Nerdbank.GitVersioning" Condition="!Exists('packages.config')">
-			<PrivateAssets>all</PrivateAssets>
-			<Version>3.7.115</Version>
-		</PackageReference>
-
-		<!-- auto github link etc -->
-		<PackageReference Include="DotNet.ReproducibleBuilds" Version="1.2.25">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-	</ItemGroup>
-
-	<!-- nuget build-->
-	<PropertyGroup>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<PackageId>aemarco$(MSBuildProjectName)</PackageId>
-		<Product>aemarco$(MSBuildProjectName)</Product>
-		<Authors>aemarco</Authors>
-		<Company>aemarco</Company>
-		<PackageLicenseExpression>Unlicense</PackageLicenseExpression>
-		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
-		<PackageProjectUrl>https://github.com/aemarco/aemarcoCommons</PackageProjectUrl>
-		<PackageIcon>icon.png</PackageIcon>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
-	</PropertyGroup>
-	<ItemGroup>
-		<None Include="..\README.md" Pack="true" PackagePath="\">
-			<Visible>false</Visible>
-		</None>
-		<None Include="..\icon.png" Pack="true" PackagePath="\">
-			<Visible>false</Visible>
-		</None>
-	</ItemGroup>
-
-	
 
 </Project>

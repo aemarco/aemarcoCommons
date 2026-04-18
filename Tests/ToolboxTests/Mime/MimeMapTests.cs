@@ -1,6 +1,4 @@
-﻿using aemarcoCommons.Toolbox.Mime;
-using FluentAssertions;
-using NUnit.Framework;
+using aemarcoCommons.Toolbox.Mime;
 
 namespace ToolboxTests.Mime;
 
@@ -19,15 +17,15 @@ public class MimeMapTests
     public void TryGetMimeType_WorksAsExpected(string ext, bool expectedSuccess, string expectedMime)
     {
         var success = MimeMap.TryGetMimeType(ext, out var mime);
-        success.Should().Be(expectedSuccess);
+        success.ShouldBe(expectedSuccess);
         if (success)
-            mime.Should().Be(expectedMime);
+            mime.ShouldBe(expectedMime);
     }
     [Test]
     public void TryGetMimeType_ThrowsOnNull()
     {
-        var act = () => MimeMap.TryGetMimeType(null, out _);
-        act.Should().Throw<System.ArgumentNullException>();
+        Should.Throw<ArgumentNullException>(
+            () => MimeMap.TryGetMimeType(null!, out _));
     }
 
 
@@ -39,13 +37,13 @@ public class MimeMapTests
     public void GetMimeType_ReturnsExpectedMimeType(string ext, string expectedMime)
     {
         var result = MimeMap.GetMimeType(ext);
-        result.Should().Be(expectedMime);
+        result.ShouldBe(expectedMime);
     }
     [Test]
     public void GetMimeType_ThrowsOnNull()
     {
-        var act = () => MimeMap.GetMimeType(null);
-        act.Should().Throw<System.ArgumentNullException>();
+        Should.Throw<ArgumentNullException>(
+            () => MimeMap.GetMimeType(null!));
     }
 
 
@@ -53,22 +51,22 @@ public class MimeMapTests
     [TestCase("text/plain", ".txt")]
     [TestCase("application/pdf", ".pdf")]
     [TestCase("application/unknown", null)]
-    public void GetExtension_ReturnsExpectedExtension(string mimeType, string expectedExt)
+    public void GetExtension_ReturnsExpectedExtension(string mimeType, string? expectedExt)
     {
         var result = MimeMap.GetExtension(mimeType);
-        result.Should().Be(expectedExt);
+        result.ShouldBe(expectedExt);
     }
     [Test]
     public void GetExtension_ThrowsOnNull()
     {
-        var act = () => MimeMap.GetExtension(null);
-        act.Should().Throw<System.ArgumentNullException>();
+        Should.Throw<ArgumentNullException>(
+            () => MimeMap.GetExtension(null!));
     }
     [Test]
     public void GetExtension_ThrowsOnDotInput()
     {
-        var act = () => MimeMap.GetExtension(".jpg");
-        act.Should().Throw<System.ArgumentException>();
+        Should.Throw<ArgumentException>(
+            () => MimeMap.GetExtension(".jpg"));
     }
 
 }

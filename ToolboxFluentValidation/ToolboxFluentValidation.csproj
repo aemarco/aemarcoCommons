@@ -2,16 +2,20 @@
 
 	<!-- project definition -->
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>$(DefaultNetVersion)</TargetFramework>
 		<RootNamespace>aemarcoCommons.ToolboxFluentValidation</RootNamespace>
 		<AssemblyName>aemarcoCommons.ToolboxFluentValidation</AssemblyName>
-
 	</PropertyGroup>
-	
+
+	<!-- project references -->
+	<ItemGroup>
+		<ProjectReference Include="..\Extensions\Extensions.csproj" />
+	</ItemGroup>
+
 	<!-- nuget references -->
 	<ItemGroup>
-		<PackageReference Include="FluentValidation" Version="12.0.0" />
-		<PackageReference Include="CronExpressionDescriptor" Version="2.44.0" />
+		<PackageReference Include="FluentValidation" />
+		<PackageReference Include="CronExpressionDescriptor" />
 	</ItemGroup>
 
 	<!-- nuget build-->
@@ -21,12 +25,11 @@
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 	</PropertyGroup>
 	<ItemGroup>
-		<None Update="..\README.md" Pack="false" />
 		<None Include="README.md" Pack="true" PackagePath="\" />
-		<None Update="..\icon.png" Pack="false" />
 		<None Include="Resources\icon.png" Pack="true" PackagePath="\" />
-		<None Include="LICENSE.md" Pack="true" PackagePath="\" />
-		<None Include="NOTICE.md" Pack="true" PackagePath="\" />
+		<None Include="Resources\LICENSE.md" Pack="true" PackagePath="\" />
+		<None Include="Resources\NOTICE.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
+	
 	
 </Project>

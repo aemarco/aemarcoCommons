@@ -23,7 +23,7 @@ public partial class GeoService
 
     private readonly ConcurrentDictionary<string, SunriseSunsetInfo> _sunriseSunsetResponses = new ConcurrentDictionary<string, SunriseSunsetInfo>();
 
-    public async Task<SunriseSunsetInfo> GetSunriseSunsetInfoInfo(
+    public async Task<SunriseSunsetInfo?> GetSunriseSunsetInfoInfo(
         float latitude,
         float longitude,
         DateTimeOffset? date = null,
@@ -40,7 +40,7 @@ public partial class GeoService
         var query = $"lat={latitude}&lng={longitude}&date={date.Value.Date:yyyy-MM-dd}&formatted=0";
 
         //return cached result if already present
-        if (!byPassCache && _sunriseSunsetResponses.TryGetValue(query, out SunriseSunsetInfo cached))
+        if (!byPassCache && _sunriseSunsetResponses.TryGetValue(query, out SunriseSunsetInfo? cached))
             return cached;
 
         try
@@ -55,7 +55,8 @@ public partial class GeoService
                 var result = info.ToInfo(throwExceptions);
 
                 //remember configured number of result, so we don´t ask to often
-                _sunriseSunsetResponses.TryAdd(query, result);
+                if (result is not null)
+                    _sunriseSunsetResponses.TryAdd(query, result);
                 while (_sunriseSunsetResponses.Count > _geoServiceSettings.NumberOfCachedSunriseSunsetInfos)
                 {
                     _sunriseSunsetResponses.TryRemove(_sunriseSunsetResponses.Keys.First(), out _);
@@ -75,10 +76,10 @@ public partial class GeoService
 internal class SunriseSunsetResponse
 {
     [JsonProperty("results")]
-    public SunriseSunsetInfo Results { get; set; }
+    public SunriseSunsetInfo Results { get; set; } = null!;
 
     [JsonProperty("status")]
-    public string Status { get; set; }
+    public string Status { get; set; } = null!;
 }
 
 
@@ -140,7 +141,7 @@ public class TimeSpanSecondsConverter : JsonConverter<TimeSpan>
 
 internal static class SunriseSunsetExtensions
 {
-    public static SunriseSunsetInfo ToInfo(this SunriseSunsetResponse response, bool throwExceptions = false)
+    public static SunriseSunsetInfo? ToInfo(this SunriseSunsetResponse response, bool throwExceptions = false)
     {
         //if okay, we return info
         if (response.Status == "OK")

@@ -10,7 +10,7 @@ public static class PowerShellHelper
 {
     public static async Task<CommandResult> RunCommand(
         string command,
-        Action<string> output = null,
+        Action<string>? output = null,
         params string[] args)
     {
         var cmd = CreateCommand(command, args);
@@ -78,9 +78,9 @@ public static class PowerShellHelper
 
 public class PowerShellCommandResult
 {
-    public string Command { get; set; }
-    public string Output { get; set; }
-    public string Errors { get; set; }
+    public required string Command { get; set; }
+    public required string Output { get; set; }
+    public required string Errors { get; set; }
     public int ExitCode { get; set; }
 
     public override string ToString()

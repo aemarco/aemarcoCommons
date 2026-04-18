@@ -1,7 +1,4 @@
-﻿using aemarcoCommons.Extensions.PictureExtensions;
-using FluentAssertions;
-using NUnit.Framework;
-using System;
+using aemarcoCommons.Extensions.PictureExtensions;
 using System.Drawing;
 
 namespace ExtensionsTests.PictureExtensionsTests;
@@ -21,7 +18,7 @@ public class RatioExtensionsTests
         var rect = new Size(targetWidth, targetHeight);
         var result = rect.ToMinRatio(cutAllowed);
 
-        result.Should().BeInRange(expected - 0.01, expected + 0.01);
+        result.ShouldBeInRange(expected - 0.01, expected + 0.01);
     }
 
 
@@ -33,8 +30,7 @@ public class RatioExtensionsTests
     {
         var rect = new Size(targetWidth, targetHeight);
 
-        rect.Invoking(x => x.ToMinRatio(cutAllowed))
-            .Should().Throw<ArgumentOutOfRangeException>();
+        Should.Throw<ArgumentOutOfRangeException>(() => rect.ToMinRatio(cutAllowed));
     }
 
 
@@ -51,7 +47,7 @@ public class RatioExtensionsTests
         var rect = new Size(targetWidth, targetHeight);
         var result = rect.ToMaxRatio(cutAllowed);
 
-        result.Should().BeInRange(expected - 0.01, expected + 0.01);
+        result.ShouldBeInRange(expected - 0.01, expected + 0.01);
     }
 
 
@@ -63,8 +59,7 @@ public class RatioExtensionsTests
     {
         var rect = new Size(targetWidth, targetHeight);
 
-        rect.Invoking(x => x.ToMaxRatio(cutAllowed))
-            .Should().Throw<ArgumentOutOfRangeException>();
+        Should.Throw<ArgumentOutOfRangeException>(() => rect.ToMaxRatio(cutAllowed));
     }
 
 }

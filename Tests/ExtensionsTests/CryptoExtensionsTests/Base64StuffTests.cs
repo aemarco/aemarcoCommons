@@ -1,6 +1,4 @@
-﻿using aemarcoCommons.Extensions.CryptoExtensions;
-using FluentAssertions;
-using NUnit.Framework;
+using aemarcoCommons.Extensions.CryptoExtensions;
 
 namespace ExtensionsTests.CryptoExtensionsTests;
 
@@ -13,7 +11,7 @@ public class Base64StuffTests
     {
 
         var result = text.ToBase64HashString();
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
     }
 
 

@@ -1,6 +1,9 @@
 # `aemarcoWebTools`
 
-<a href=https://www.nuget.org/packages/aemarcoWebTools><img src="https://buildstats.info/nuget/aemarcoWebTools"></a>
+[![NuGet](https://img.shields.io/nuget/v/aemarcoWebTools.svg)](https://www.nuget.org/packages/aemarcoWebTools/)
+![NuGet](https://img.shields.io/nuget/dt/aemarcoWebTools.svg)
+
+
 
 ## Table of Contents
 

@@ -1,10 +1,8 @@
-﻿using aemarcoCommons.Toolbox;
+using aemarcoCommons.Toolbox;
 using aemarcoCommons.Toolbox.Oidc;
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using NUnit.Framework;
 
 namespace ToolboxTests;
+
 public class BootstrapperExtensionsTests
 {
 
@@ -18,7 +16,7 @@ public class BootstrapperExtensionsTests
         var s = sp.GetService<OidcTokenRenewalHandler>();
 
 
-        s.Should().NotBeNull();
+        s.ShouldNotBeNull();
 
     }
 

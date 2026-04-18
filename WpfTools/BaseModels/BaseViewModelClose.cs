@@ -1,9 +1,9 @@
 ﻿using aemarcoCommons.WpfTools.Helpers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
 
 namespace aemarcoCommons.WpfTools.BaseModels;
+
 public partial class BaseViewModel : ICloseWindow
 {
 

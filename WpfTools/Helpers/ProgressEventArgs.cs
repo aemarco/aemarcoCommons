@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace aemarcoCommons.WpfTools.Helpers;
+﻿namespace aemarcoCommons.WpfTools.Helpers;
 
 public class ProgressEventArgs : EventArgs
 {

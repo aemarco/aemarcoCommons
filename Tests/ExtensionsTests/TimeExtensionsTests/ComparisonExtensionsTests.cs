@@ -1,7 +1,4 @@
-﻿using aemarcoCommons.Extensions.TimeExtensions;
-using FluentAssertions;
-using NUnit.Framework;
-using System;
+using aemarcoCommons.Extensions.TimeExtensions;
 
 namespace ExtensionsTests.TimeExtensionsTests;
 
@@ -17,7 +14,7 @@ public class ComparisonExtensionsTests
 
         var result = timestamp.IsYoungerThan(timespan);
 
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
     }
 
 
@@ -30,6 +27,6 @@ public class ComparisonExtensionsTests
 
         var result = timestamp.IsOlderThan(timespan);
 
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
     }
 }

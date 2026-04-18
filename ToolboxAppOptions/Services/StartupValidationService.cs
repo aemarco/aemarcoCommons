@@ -1,6 +1,6 @@
 ﻿namespace aemarcoCommons.ToolboxAppOptions.Services;
 
-internal class StartupValidationService : BackgroundService
+internal class StartupValidationService : IHostedService
 {
 
     private readonly IServiceProvider _serviceProvider;
@@ -14,9 +14,8 @@ internal class StartupValidationService : BackgroundService
     }
 
 
-    protected override Task ExecuteAsync(CancellationToken stoppingToken)
+    public Task StartAsync(CancellationToken cancellationToken)
     {
-
         List<Exception>? exceptions = null;
 
         foreach (var type in _configurationOptions.ConfigurationTypes)
@@ -36,12 +35,11 @@ internal class StartupValidationService : BackgroundService
             return Task.CompletedTask;
 
         if (exceptions.Count == 1)
-        {
-            // Rethrow if it's a single error
             ExceptionDispatchInfo.Capture(exceptions[0]).Throw();
-        }
 
         throw new AggregateException(exceptions);
-
     }
+
+    public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+
 }

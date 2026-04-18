@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<!-- project definition -->
+	<PropertyGroup>
+		<TargetFramework>$(DefaultNetVersion)</TargetFramework>
+		<RootNamespace>aemarcoCommons.ToolboxWeb</RootNamespace>
+		<AssemblyName>aemarcoCommons.ToolboxWeb</AssemblyName>
+	</PropertyGroup>
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
+	<!-- project references -->
+	<ItemGroup>
+		<ProjectReference Include="..\Extensions\Extensions.csproj" />
+	</ItemGroup>
+
+	<!-- nuget references-->
+	<ItemGroup>
+		<PackageReference Include="Serilog.AspNetCore" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" />
+		<PackageReference Include="Riok.Mapperly" ExcludeAssets="runtime" PrivateAssets="all">
+			<IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<!-- proj build-->
+	<PropertyGroup>
+		<Description>c# web tools collection</Description>
+		<PackageTags>WebTools</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath="\" />
+		<None Include="Resources\icon.png" Pack="true" PackagePath="\" />
+		<None Include="Resources\LICENSE.md" Pack="true" PackagePath="\" />
+		<None Include="Resources\NOTICE.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+</Project>

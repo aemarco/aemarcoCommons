@@ -1,6 +1,4 @@
-﻿using aemarcoCommons.Extensions.TextExtensions;
-using FluentAssertions;
-using NUnit.Framework;
+using aemarcoCommons.Extensions.TextExtensions;
 
 namespace ExtensionsTests.TextExtensionsTests;
 
@@ -32,7 +30,7 @@ public class RegexExtensionsTests
     public void Email_ValidatesCorrect(string email, bool expected)
     {
         var result = email.IsValidEmail();
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
     }
 
 
@@ -57,7 +55,7 @@ public class RegexExtensionsTests
     [TestCase("", null, null, null)]
     [TestCase(null, null, null, null)]
     public void ToDateTimeOffset_VariousFormats_ReturnsExpected(
-        string input,
+        string? input,
         int? expectedYear, int? expectedMonth, int? expectedDay)
     {
         var result = input.ToDateTimeOffset(2020, 2025);

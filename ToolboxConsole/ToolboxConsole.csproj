@@ -2,19 +2,35 @@
 
 	<!-- project definition -->
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>$(DefaultNetVersion)</TargetFramework>
 		<RootNamespace>aemarcoCommons.ToolboxConsole</RootNamespace>
 		<AssemblyName>aemarcoCommons.ToolboxConsole</AssemblyName>
 	</PropertyGroup>
-	
+
+	<!-- project references -->
+	<ItemGroup>
+		<ProjectReference Include="..\Extensions\Extensions.csproj" />
+	</ItemGroup>
 
 	<!-- nuget references-->
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.7" />
-		<PackageReference Include="Spectre.Console.Cli" Version="0.48.0" />
-		<PackageReference Include="Spectre.Console.Json" Version="0.48.0" />
-		<PackageReference Include="Serilog" Version="4.2.0" />
-		<PackageReference Include="CliWrap" Version="3.9.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" />
+		
+		<PackageReference Include="Spectre.Console.Cli" />
+		<PackageReference Include="Spectre.Console.Json" />
+
+		<PackageReference Include="Serilog" />
+		<PackageReference Include="Serilog.Extensions.Hosting" />
+		<PackageReference Include="Serilog.Settings.Configuration" />
+		<PackageReference Include="Serilog.Enrichers.Environment" />
+		<PackageReference Include="Serilog.Enrichers.Thread" />
+		<PackageReference Include="Serilog.Sinks.Seq" />
+		<PackageReference Include="Serilog.Sinks.Async" />
+		<PackageReference Include="Serilog.Sinks.File" />
+		<PackageReference Include="Serilog.Sinks.Console" />
+		<PackageReference Include="Serilog.Sinks.Debug" />
+
+		<PackageReference Include="CliWrap" />
 	</ItemGroup>
 
 
@@ -22,15 +38,11 @@
 	<PropertyGroup>
 		<Description>Tooling around Console-Apps</Description>
 		<PackageTags>ConsoleApp, Spectre, IOC</PackageTags>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	</PropertyGroup>
 	<ItemGroup>
-		<None Update="..\README.md" Pack="false" />
 		<None Include="README.md" Pack="true" PackagePath="\" />
-		<None Update="..\icon.png" Pack="false" />
 		<None Include="Resources\icon.png" Pack="true" PackagePath="\" />
-		<None Include="LICENSE.md" />
-		<None Include="NOTICE.md" />
+		<None Include="Resources\LICENSE.md" Pack="true" PackagePath="\" />
+		<None Include="Resources\NOTICE.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
-
 </Project>

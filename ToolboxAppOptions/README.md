@@ -1,8 +1,7 @@
 # `aemarcoToolboxAppOptions`
 
-<a href=https://www.nuget.org/packages/aemarcoToolboxAppOptions><img src="https://buildstats.info/nuget/aemarcoToolboxAppOptions"></a><br/>
-
-
+[![NuGet](https://img.shields.io/nuget/v/aemarcoToolboxAppOptions.svg)](https://www.nuget.org/packages/aemarcoToolboxAppOptions/)
+![NuGet](https://img.shields.io/nuget/dt/aemarcoToolboxAppOptions.svg)
 
 
 ## Overview

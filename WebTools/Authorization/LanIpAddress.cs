@@ -2,13 +2,14 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
 namespace aemarcoCommons.WebTools.Authorization;
+
 
 public static class LanIpAddressExtensions
 {
@@ -36,7 +37,7 @@ public static class LanIpAddressExtensions
         });
         services.AddHttpClient();
         services.AddHttpContextAccessor();
-        services.AddSingleton<IAuthorizationHandler, LanIpAddressHandler>();
+        services.TryAddEnumerable(ServiceDescriptor.Singleton<IAuthorizationHandler, LanIpAddressHandler>());
         return services;
     }
 }

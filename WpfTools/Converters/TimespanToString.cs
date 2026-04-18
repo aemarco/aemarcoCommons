@@ -1,8 +1,4 @@
 ﻿using Humanizer;
-using Humanizer.Localisation;
-using System;
-using System.Globalization;
-using System.Windows.Data;
 
 
 namespace aemarcoCommons.WpfTools.Converters;

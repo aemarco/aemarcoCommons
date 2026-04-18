@@ -7,7 +7,7 @@ namespace aemarcoCommons.Extensions.StorageExtensions;
 public static class FolderOpsExtensions
 {
 
-    public static void MoveToFolder(this DirectoryInfo source, string targetPath, bool overwrite = false, Action<long, long> progress = null)
+    public static void MoveToFolder(this DirectoryInfo source, string targetPath, bool overwrite = false, Action<long, long>? progress = null)
     {
         long done = 0;
         var total = source.GetFiles("*", SearchOption.AllDirectories).Sum(x => x.Length);
@@ -24,7 +24,7 @@ public static class FolderOpsExtensions
     /// <param name="targetPath">Directory to put the copied folder in</param>
     /// <param name="overwrite">Existing files should be overwritten</param>
     /// <param name="progress">will be called to report progress</param>
-    public static void CopyToFolder(this DirectoryInfo source, string targetPath, bool overwrite = false, Action<long, long> progress = null)
+    public static void CopyToFolder(this DirectoryInfo source, string targetPath, bool overwrite = false, Action<long, long>? progress = null)
     {
         long done = 0;
         var total = source.GetFiles("*", SearchOption.AllDirectories).Sum(x => x.Length);
@@ -88,7 +88,7 @@ public static class FolderOpsExtensions
 
 
     // ReSharper disable once SuggestBaseTypeForParameter
-    private static void DoOperation(bool copy, DirectoryInfo source, string targetPath, bool overwrite, Action<long, long> progress, ref long done, ref long total)
+    private static void DoOperation(bool copy, DirectoryInfo source, string targetPath, bool overwrite, Action<long, long>? progress, ref long done, ref long total)
     {
         var destDirectory = Path.Combine(targetPath, source.Name);
         if (!Directory.Exists(destDirectory)) Directory.CreateDirectory(destDirectory);

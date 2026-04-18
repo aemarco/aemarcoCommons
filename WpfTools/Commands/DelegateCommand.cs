@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace aemarcoCommons.WpfTools.Commands;
+﻿namespace aemarcoCommons.WpfTools.Commands;
 
 /// <summary>
 /// Simplistic delegate command .

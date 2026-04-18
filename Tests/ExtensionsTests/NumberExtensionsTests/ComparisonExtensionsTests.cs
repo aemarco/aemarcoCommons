@@ -1,6 +1,4 @@
-﻿using aemarcoCommons.Extensions.NumberExtensions;
-using FluentAssertions;
-using NUnit.Framework;
+using aemarcoCommons.Extensions.NumberExtensions;
 
 namespace ExtensionsTests.NumberExtensionsTests;
 
@@ -14,7 +12,7 @@ public class ComparisonExtensionsTests
     public void IsNearlyEqual_Rocks(double left, double right, double epsilon, bool expected)
     {
         var result = left.IsNearlyEqual(right, epsilon);
-        result.Should().Be(expected);
+        result.ShouldBe(expected);
     }
 
 
