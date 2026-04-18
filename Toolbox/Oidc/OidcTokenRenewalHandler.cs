@@ -95,10 +95,13 @@ public class OidcTokenRenewalHandler : DelegatingHandler
         }
 
         //seems we refreshed the token
-        session = await _sessionStore.GetSession()
+        session = await _sessionStore!.GetSession()
             .ConfigureAwait(false);
 
         response.Dispose(); // This 401 response will not be used for anything so is disposed to unblock the socket.
+
+        if (session is null)
+            return new HttpResponseMessage(HttpStatusCode.Unauthorized) { RequestMessage = request };
 
         //we refreshed the token, so we try the same request once more
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", session.AccessToken);
@@ -118,7 +121,7 @@ public class OidcTokenRenewalHandler : DelegatingHandler
             .ConfigureAwait(false);
 
         return res
-            ? await _sessionStore.GetSession()
+            ? await _sessionStore!.GetSession()
             : null;
     }
 
@@ -131,13 +134,13 @@ public class OidcTokenRenewalHandler : DelegatingHandler
 
         return await _oidcTokenRenewalHandlerHelper.HandleLockedAsync(async () =>
             {
-                var response = await _oidcClient.RefreshTokenAsync(session.RefreshToken, cancellationToken: cancellationToken)
+                var response = await _oidcClient!.RefreshTokenAsync(session.RefreshToken, cancellationToken: cancellationToken)
                     .ConfigureAwait(false);
 
                 if (response.IsError)
                     throw new Exception("Could not refresh token");
 
-                await _sessionStore.SetSession(
+                await _sessionStore!.SetSession(
                         new Session
                         {
                             IdToken = response.IdentityToken,

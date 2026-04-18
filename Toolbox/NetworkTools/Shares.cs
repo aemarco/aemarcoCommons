@@ -356,14 +356,14 @@ public class ShareCollection : ReadOnlyCollectionBase
 
     /// <summary>Enumerate shares (NT)</summary>
     [DllImport("netapi32", CharSet = CharSet.Unicode)]
-    protected static extern int NetShareEnum(string lpServerName, int dwLevel,
+    protected static extern int NetShareEnum(string? lpServerName, int dwLevel,
         out IntPtr lpBuffer, int dwPrefMaxLen, out int entriesRead,
         out int totalEntries, ref int hResume);
 
     /// <summary>Enumerate shares (9x)</summary>
     [DllImport("svrapi", CharSet = CharSet.Ansi)]
     protected static extern int NetShareEnum(
-        [MarshalAs(UnmanagedType.LPTStr)] string lpServerName, int dwLevel,
+        [MarshalAs(UnmanagedType.LPTStr)] string? lpServerName, int dwLevel,
         IntPtr lpBuffer, ushort cbBuffer, out ushort entriesRead,
         out ushort totalEntries);
 
@@ -380,7 +380,7 @@ public class ShareCollection : ReadOnlyCollectionBase
     /// </summary>
     /// <param name="server">The server name</param>
     /// <param name="shares">The ShareCollection</param>
-    protected static void EnumerateSharesNT(string server, ShareCollection shares)
+    protected static void EnumerateSharesNT(string? server, ShareCollection shares)
     {
         int level = 2;
         IntPtr pBuffer = IntPtr.Zero;
@@ -434,7 +434,7 @@ public class ShareCollection : ReadOnlyCollectionBase
     /// </summary>
     /// <param name="server">The server name</param>
     /// <param name="shares">The ShareCollection</param>
-    protected static void EnumerateShares9x(string server, ShareCollection shares)
+    protected static void EnumerateShares9x(string? server, ShareCollection shares)
     {
         int level = 50;
 
@@ -588,7 +588,7 @@ public class ShareCollection : ReadOnlyCollectionBase
                 ShareCollection shi = LocalShares;
                 if (null != shi)
                 {
-                    Share share = shi[fileName];
+                    Share? share = shi[fileName];
                     if (null != share)
                     {
                         string path = share.Path;
@@ -744,7 +744,7 @@ public class ShareCollection : ReadOnlyCollectionBase
             path = Path.GetFullPath(path);
             if (!IsValidFilePath(path)) return null;
 
-            Share match = null;
+            Share? match = null;
 
             for (int i = 0; i < InnerList.Count; i++)
             {

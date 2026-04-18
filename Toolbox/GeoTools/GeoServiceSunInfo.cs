@@ -55,7 +55,8 @@ public partial class GeoService
                 var result = info.ToInfo(throwExceptions);
 
                 //remember configured number of result, so we don´t ask to often
-                _sunriseSunsetResponses.TryAdd(query, result);
+                if (result is not null)
+                    _sunriseSunsetResponses.TryAdd(query, result);
                 while (_sunriseSunsetResponses.Count > _geoServiceSettings.NumberOfCachedSunriseSunsetInfos)
                 {
                     _sunriseSunsetResponses.TryRemove(_sunriseSunsetResponses.Keys.First(), out _);

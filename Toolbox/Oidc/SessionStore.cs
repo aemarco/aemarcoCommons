@@ -8,7 +8,7 @@ namespace aemarcoCommons.Toolbox.Oidc;
 /// </summary>
 public interface ISessionStore
 {
-    event EventHandler AccessTokenChanged;
+    event EventHandler? AccessTokenChanged;
 
     Task<Session?> GetSession();
     Task SetSession(Session session);
@@ -22,7 +22,7 @@ public interface ISessionStore
 /// </summary>
 public class SessionStore : ISessionStore
 {
-    public event EventHandler AccessTokenChanged;
+    public event EventHandler? AccessTokenChanged;
     protected void OnAccessTokenChanged()
     {
         AccessTokenChanged?.Invoke(this, EventArgs.Empty);
