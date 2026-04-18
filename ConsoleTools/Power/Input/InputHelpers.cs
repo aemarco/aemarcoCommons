@@ -6,6 +6,7 @@ namespace aemarcoCommons.ConsoleTools;
 
 public static partial class PowerConsole
 {
+    [Obsolete("Use aemarcoCommons.ToolboxConsole.PowerConsole instead.")]
     private static T? MenuSelectionHelper<T>(string header, IEnumerable<T> selectable, Func<T, string> displayProperty, bool abortable, bool clear = true)
         where T : class
     {

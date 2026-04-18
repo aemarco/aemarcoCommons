@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace aemarcoCommons.ConsoleTools.SpectreHost;
 
 
-
+[Obsolete("Use aemarcoCommons.ToolboxConsole.PowerConsole instead.")]
 public static class HostApplicationBuilderExtensions
 {
 

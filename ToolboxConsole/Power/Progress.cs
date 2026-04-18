@@ -6,7 +6,7 @@ namespace aemarcoCommons.ToolboxConsole;
 public static partial class PowerConsole
 {
 
-    public static void StartProgress(System.Action<ProgressContext> work)
+    public static void StartProgress(Action<ProgressContext> work)
     {
         AnsiConsole.Progress()
             .Columns(
@@ -18,7 +18,7 @@ public static partial class PowerConsole
             .Start(work);
     }
 
-    public static T StartProgress<T>(System.Func<ProgressContext, T> work)
+    public static T StartProgress<T>(Func<ProgressContext, T> work)
     {
         return AnsiConsole.Progress()
             .Columns(
@@ -31,7 +31,7 @@ public static partial class PowerConsole
     }
 
 
-    public static async Task StartProgressAsync(System.Func<ProgressContext, Task> work)
+    public static async Task StartProgressAsync(Func<ProgressContext, Task> work)
     {
         await AnsiConsole.Progress()
             .Columns(
@@ -43,7 +43,7 @@ public static partial class PowerConsole
             .StartAsync(work);
     }
 
-    public static async Task StartProgressAsync<T>(System.Func<ProgressContext, T, CancellationToken, Task> work,
+    public static async Task StartProgressAsync<T>(Func<ProgressContext, T, CancellationToken, Task> work,
         T request,
         CancellationToken cancellationToken)
     {
@@ -52,7 +52,7 @@ public static partial class PowerConsole
     }
 
 
-    public static async Task<T> StartProgressAsync<T>(System.Func<ProgressContext, Task<T>> work)
+    public static async Task<T> StartProgressAsync<T>(Func<ProgressContext, Task<T>> work)
     {
         return await AnsiConsole.Progress()
             .Columns(
@@ -71,7 +71,7 @@ public static partial class PowerConsole
         task.StopTask();
     }
 
-    public static async Task<T> StartStatusAsync<T>(System.Func<StatusContext, Task<T>> work)
+    public static async Task<T> StartStatusAsync<T>(Func<StatusContext, Task<T>> work)
     {
         return await AnsiConsole.Status()
             .SpinnerStyle(Style.Parse("green"))

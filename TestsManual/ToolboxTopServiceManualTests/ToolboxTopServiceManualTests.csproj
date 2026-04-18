@@ -1,16 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>$(DefaultNetVersion)-windows</TargetFramework>
-	<ServerGarbageCollection>false</ServerGarbageCollection>
+	<!-- project definition -->
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>$(DefaultNetVersion)-windows</TargetFramework>
+		<ServerGarbageCollection>false</ServerGarbageCollection>
 
-	<AssemblyName>SomeServiceTest</AssemblyName>
-  </PropertyGroup>
+		<AssemblyName>SomeServiceTest</AssemblyName>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\ToolboxTopService\ToolboxTopService.csproj" />
-  </ItemGroup>
+	<!-- project references -->
+	<ItemGroup>
+		<ProjectReference Include="..\..\ToolboxTopService\ToolboxTopService.csproj" />
+	</ItemGroup>
 
-	 
+
 </Project>
