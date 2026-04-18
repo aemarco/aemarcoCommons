@@ -5,7 +5,10 @@
 	<PropertyGroup>
 		<DefaultNetVersion>net10.0</DefaultNetVersion>
 		<Nullable>enable</Nullable>
-		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 	</PropertyGroup>
 
+	<!-- nuget references -->
+	<PropertyGroup>
+		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+	</PropertyGroup>
 </Project>
