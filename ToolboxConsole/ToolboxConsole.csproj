@@ -5,6 +5,7 @@
 		<TargetFramework>$(DefaultNetVersion)</TargetFramework>
 		<RootNamespace>aemarcoCommons.ToolboxConsole</RootNamespace>
 		<AssemblyName>aemarcoCommons.ToolboxConsole</AssemblyName>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 
 	<!-- project references -->

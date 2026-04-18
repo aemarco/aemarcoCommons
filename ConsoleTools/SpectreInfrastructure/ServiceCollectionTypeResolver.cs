@@ -6,6 +6,7 @@ namespace aemarcoCommons.ConsoleTools.SpectreInfrastructure;
 //https://spectreconsole.net/cli/commandapp
 //https://github.com/spectreconsole/examples/blob/main/examples/Cli/Injection/Infrastructure/TypeResolver.cs
 
+[Obsolete("Use aemarcoCommons.ToolboxConsole instead.")]
 public sealed class ServiceCollectionTypeResolver : ITypeResolver, IDisposable
 {
     private readonly IServiceProvider _provider;

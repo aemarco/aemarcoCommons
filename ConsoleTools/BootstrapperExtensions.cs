@@ -7,6 +7,7 @@ public static class BootstrapperExtensions
 {
 
     //Microsoft.Extensions.DependencyInjection
+    [Obsolete("Use aemarcoCommons.ToolboxConsole instead.")]
     public static ITypeRegistrar ToTypeRegistrar(this IServiceCollection services) =>
         new SpectreInfrastructure.ServiceCollectionTypeRegistrar(services);
 

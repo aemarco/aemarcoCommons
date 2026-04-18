@@ -28,9 +28,9 @@ jobs:
         run: nbgv get-version
         
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.x'
+          dotnet-version: '10.x'
 
       - name: Restore packages
         run: dotnet restore
@@ -60,9 +60,9 @@ jobs:
       name: push-to-nuget-org
     steps:
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.x'
+          dotnet-version: '10.x'
 
       - name: Download artifacts
         uses: actions/download-artifact@v4

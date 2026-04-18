@@ -5,6 +5,7 @@ namespace aemarcoCommons.ConsoleTools.Interop;
 
 public static class PowerShellHelper
 {
+    [Obsolete("Use aemarcoCommons.ToolboxConsole.Shell.PowerShellHelper instead.")]
     public static async Task RunCommand(
         string command,
         params string[] args)

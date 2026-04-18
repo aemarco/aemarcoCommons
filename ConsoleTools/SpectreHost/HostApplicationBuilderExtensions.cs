@@ -10,11 +10,12 @@ using System.Threading.Tasks;
 namespace aemarcoCommons.ConsoleTools.SpectreHost;
 
 
-
+[Obsolete("Use aemarcoCommons.ToolboxConsole.PowerConsole instead.")]
 public static class HostApplicationBuilderExtensions
 {
 
     private static AppTypeRegistrar? _registrar;
+    [Obsolete("Use aemarcoCommons.ToolboxConsole instead.")]
     public static async Task RunAsSpectreCommandApp(
         this HostApplicationBuilder app,
         Action<IConfigurator>? configureCommandApp = null)
@@ -26,6 +27,7 @@ public static class HostApplicationBuilderExtensions
             (_, x) => configureCommandApp?.Invoke(x));
     }
 
+    [Obsolete("Use aemarcoCommons.ToolboxConsole instead.")]
     public static async Task RunAsSpectreCommandApp<TDefaultCommand>(
         this HostApplicationBuilder app,
         Action<IConfigurator>? configureCommandApp = null)
@@ -39,6 +41,7 @@ public static class HostApplicationBuilderExtensions
     }
 
 
+    [Obsolete("Use aemarcoCommons.ToolboxConsole instead.")]
     public static async Task RunAsSpectreCommandApp(
         this HostApplicationBuilder app,
         Action<HostApplicationBuilder, IConfigurator>? configureCommandApp = null)
@@ -47,6 +50,7 @@ public static class HostApplicationBuilderExtensions
         var commandApp = new CommandApp(_registrar);
         await app.RunCommandApp(commandApp, configureCommandApp);
     }
+    [Obsolete("Use aemarcoCommons.ToolboxConsole instead.")]
     public static async Task RunAsSpectreCommandApp<TDefaultCommand>(
         this HostApplicationBuilder app,
         Action<HostApplicationBuilder, IConfigurator>? configureCommandApp = null)

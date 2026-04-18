@@ -2,13 +2,13 @@
 
   <!-- project definition -->
   <PropertyGroup>
-    <TargetFramework>$(DefaultNetVersion)-windows</TargetFramework>
+    <TargetFramework>$(DefaultNetVersion)</TargetFramework>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
 
   <!-- project references -->
   <ItemGroup>
-    <ProjectReference Include="..\..\ConsoleTools\ConsoleTools.csproj" />
+    <ProjectReference Include="..\..\ToolboxConsole\ToolboxConsole.csproj" />
   </ItemGroup>
 
 </Project>

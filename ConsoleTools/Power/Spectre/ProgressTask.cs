@@ -4,6 +4,7 @@ namespace aemarcoCommons.ConsoleTools;
 public static partial class PowerConsole
 {
 
+    [Obsolete("Use aemarcoCommons.ToolboxConsole.PowerConsole instead.")]
     public static void CompleteTask(this ProgressTask task)
     {
         task.Value = task.MaxValue;

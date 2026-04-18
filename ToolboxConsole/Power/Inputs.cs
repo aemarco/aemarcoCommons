@@ -1,24 +1,30 @@
-﻿// ReSharper disable once CheckNamespace
-namespace aemarcoCommons.ConsoleTools;
+// ReSharper disable once CheckNamespace
+namespace aemarcoCommons.ToolboxConsole;
 
 public static partial class PowerConsole
 {
+    public static string EnsureTextInput(string prompt, int minLength = 1, bool clear = false)
+    {
+        if (clear)
+            Console.Clear();
 
-    /// <summary>
-    /// Ensures input of an integer number from the user, which lies within given range
-    /// </summary>
-    /// <param name="prompt">prompt</param>
-    /// <param name="min">inclusive minimum of the range</param>
-    /// <param name="max">inclusive maximum of the range</param>
-    /// <param name="clear">console should be cleared?</param>
-    /// <returns>input number in range</returns>
-    [Obsolete("Use aemarcoCommons.ToolboxConsole.PowerConsole instead.")]
+        var textPrompt = new TextPrompt<string>($"[purple]{prompt}[/]")
+            .PromptStyle("green")
+            .Validate(x =>
+                x.Length < minLength
+                    ? ValidationResult.Error($"[red]Must be at least {minLength} letter(s)[/]")
+                    : ValidationResult.Success());
+        textPrompt.AllowEmpty = minLength == 0;
+
+        return AnsiConsole.Prompt(textPrompt);
+    }
+
     public static int EnsureIntInput(string prompt, int min = int.MinValue, int max = int.MaxValue, bool clear = false)
     {
         if (clear)
             Console.Clear();
 
-        var result = AnsiConsole.Prompt(
+        return AnsiConsole.Prompt(
             new TextPrompt<int>($"[purple]{prompt.EscapeMarkup()}[/]")
                 .PromptStyle("green")
                 .Validate(number =>
@@ -27,28 +33,16 @@ public static partial class PowerConsole
                         return ValidationResult.Error($"Number must be equal or greater than {min}.");
                     if (number > max)
                         return ValidationResult.Error($"Number must be smaller or equal than {max}.");
-
                     return ValidationResult.Success();
                 }));
-        return result;
     }
 
-
-    /// <summary>
-    /// Ensures input of either null or an integer from the user, which lies within given range
-    /// </summary>
-    /// <param name="prompt">prompt</param>
-    /// <param name="min">inclusive minimum of the range</param>
-    /// <param name="max">inclusive maximum of the range</param>
-    /// <param name="clear">console should be cleared?</param>
-    /// <returns>nullable input number in range</returns>
-    [Obsolete("Use aemarcoCommons.ToolboxConsole.PowerConsole instead.")]
     public static int? EnsureNullableIntInput(string prompt, int min = int.MinValue, int max = int.MaxValue, bool clear = false)
     {
         if (clear)
             Console.Clear();
 
-        var result = AnsiConsole.Prompt(
+        return AnsiConsole.Prompt(
             new TextPrompt<int?>($"[purple]{prompt}[/]")
                 .PromptStyle("green")
                 .AllowEmpty()
@@ -60,10 +54,23 @@ public static partial class PowerConsole
                         return ValidationResult.Error($"Number must be equal or greater than {min}.");
                     if (number > max)
                         return ValidationResult.Error($"Number must be smaller or equal than {max}.");
-
                     return ValidationResult.Success();
                 }));
-        return result;
     }
 
+    public static bool EnsureDecision(string question, bool clear = true)
+    {
+        if (clear)
+            Console.Clear();
+
+        static string GetText(bool x) => x ? "Yes" : "No";
+        var result = AnsiConsole.Prompt(
+            new SelectionPrompt<bool>()
+                .Title($"[purple]{question}[/]")
+                .UseConverter(GetText)
+                .AddChoices([true, false]));
+        AnsiConsole.MarkupLine($"[purple]{question}[/] [green]{GetText(result)}[/]");
+
+        return result;
+    }
 }

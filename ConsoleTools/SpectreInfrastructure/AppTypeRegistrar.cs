@@ -4,6 +4,7 @@ using Spectre.Console.Cli;
 
 namespace aemarcoCommons.ConsoleTools.SpectreInfrastructure;
 
+[Obsolete("Use aemarcoCommons.ToolboxConsole instead.")]
 public sealed class AppTypeRegistrar : ITypeRegistrar
 {
     private readonly HostApplicationBuilder _builder;

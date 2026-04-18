@@ -1,12 +1,32 @@
-﻿using System.Collections.Generic;
-
+using System.Collections.Generic;
 
 // ReSharper disable once CheckNamespace
-namespace aemarcoCommons.ConsoleTools;
+namespace aemarcoCommons.ToolboxConsole;
 
 public static partial class PowerConsole
 {
-    [Obsolete("Use aemarcoCommons.ToolboxConsole.PowerConsole instead.")]
+    /// <summary>
+    /// Ensures a selection via Spectre SelectionPrompt
+    /// </summary>
+    public static T EnsureSelection<T>(string header, IEnumerable<T> selectable, Func<T, string> displayProperty)
+        where T : class
+    {
+        return AnsiConsole.Prompt(
+            new SelectionPrompt<T>()
+                .Title($"[purple]{header}[/]")
+                .UseConverter(displayProperty)
+                .AddChoices([.. selectable]));
+    }
+
+    /// <summary>
+    /// Allows selection via ConsoleMenu, adds Abort at the end — returns null on abort
+    /// </summary>
+    public static T? AbortableSelection<T>(string header, IEnumerable<T> selectable, Func<T, string> displayProperty)
+        where T : class
+    {
+        return MenuSelectionHelper(header, selectable, displayProperty, abortable: true);
+    }
+
     private static T? MenuSelectionHelper<T>(string header, IEnumerable<T> selectable, Func<T, string> displayProperty, bool abortable, bool clear = true)
         where T : class
     {
@@ -15,7 +35,6 @@ public static partial class PowerConsole
         if (clear) Console.Clear();
         var items = new List<ConsoleMenuItem>();
 
-        // ReSharper disable once LoopCanBeConvertedToQuery
         foreach (var item in selectable)
         {
             var temp = item;
@@ -39,5 +58,4 @@ public static partial class PowerConsole
 
         return result;
     }
-
 }

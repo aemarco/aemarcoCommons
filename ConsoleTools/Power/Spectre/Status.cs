@@ -5,6 +5,7 @@ namespace aemarcoCommons.ConsoleTools;
 
 public static partial class PowerConsole
 {
+    [Obsolete("Use aemarcoCommons.ToolboxConsole.PowerConsole instead.")]
     public static async Task<T> StartStatusAsync<T>(
         Func<StatusContext, Task<T>> work)
     {

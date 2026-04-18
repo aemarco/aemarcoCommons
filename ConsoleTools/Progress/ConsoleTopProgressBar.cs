@@ -5,6 +5,7 @@ namespace aemarcoCommons.ConsoleTools;
 /// This progress bar fits, if a lot of console outputs are written in between progress steps.
 /// Place the number of max. lines of content in between steps into the constructor. defaults to 1.
 /// </summary>
+[Obsolete("Use Spectre.Console progress via PowerConsole.StartProgress in aemarcoCommons.ToolboxConsole instead.")]
 public class ConsoleTopProgressBar : ConsoleProgressBar
 {
     private readonly int _contentHeight;
