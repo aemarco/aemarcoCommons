@@ -12,6 +12,7 @@ public static partial class PowerConsole
     /// <param name="minLength">min length</param>
     /// <param name="clear">console should be cleared?</param>
     /// <returns>input string</returns>
+    [Obsolete("Use aemarcoCommons.ToolboxConsole.PowerConsole instead.")]
     public static string EnsureTextInput(string prompt, int minLength = 1, bool clear = false)
     {
         if (clear)

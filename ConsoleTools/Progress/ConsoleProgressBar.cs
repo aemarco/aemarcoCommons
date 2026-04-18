@@ -3,6 +3,7 @@
 // ReSharper disable once CheckNamespace
 namespace aemarcoCommons.ConsoleTools;
 
+[Obsolete("Use Spectre.Console progress via PowerConsole.StartProgress in aemarcoCommons.ToolboxConsole instead.")]
 public abstract class ConsoleProgressBar
 {
     public abstract void UpdateProgress(long done, long total);
@@ -88,6 +89,7 @@ public abstract class ConsoleProgressBar
 /// <summary>
 /// This progress bar fits, if no console outputs are written in between progress steps
 /// </summary>
+[Obsolete("Use Spectre.Console progress via PowerConsole.StartProgress in aemarcoCommons.ToolboxConsole instead.")]
 public class ConsoleOneLineProgressBar : ConsoleProgressBar
 {
     public override void UpdateProgress(long done, long total)

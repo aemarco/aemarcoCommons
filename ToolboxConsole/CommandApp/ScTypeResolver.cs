@@ -1,5 +1,4 @@
 ﻿using Spectre.Console.Cli;
-using System;
 
 namespace aemarcoCommons.ToolboxConsole.CommandApp;
 

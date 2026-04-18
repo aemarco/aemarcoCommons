@@ -11,6 +11,7 @@ public static partial class PowerConsole
     /// /// <param name="question">question to ask</param>
     /// /// <param name="clear">clear console before asking</param>
     /// <returns>true if decision is Yes</returns>
+    [Obsolete("Use aemarcoCommons.ToolboxConsole.PowerConsole instead.")]
     public static bool EnsureDecision(string question, bool clear = true)
     {
         if (clear)

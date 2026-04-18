@@ -6,6 +6,7 @@ namespace aemarcoCommons.ConsoleTools.SpectreInfrastructure;
 //https://spectreconsole.net/cli/commandapp
 //https://github.com/spectreconsole/examples/blob/main/examples/Cli/Injection/Infrastructure/TypeRegistrar.cs
 
+[Obsolete("Use aemarcoCommons.ToolboxConsole instead.")]
 public sealed class ServiceCollectionTypeRegistrar : ITypeRegistrar
 {
     private readonly IServiceCollection _builder;

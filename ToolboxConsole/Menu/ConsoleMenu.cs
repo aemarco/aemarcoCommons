@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 // ReSharper disable once CheckNamespace
-namespace aemarcoCommons.ConsoleTools;
+namespace aemarcoCommons.ToolboxConsole;
 
-[Obsolete("Use aemarcoCommons.ToolboxConsole instead.")]
 public class ConsoleMenu
 {
     private readonly ConsoleMenuItem[] _menuItems;
@@ -28,10 +26,10 @@ public class ConsoleMenu
 
         StartConsoleDrawInLoopUntilInputIsMade();
 
-
         _itemIsSelected = false;
         _menuItems[_selectedItemIndex].Execute();
     }
+
     public async Task RunConsoleMenuAsync()
     {
         if (!string.IsNullOrEmpty(_description))
@@ -41,7 +39,6 @@ public class ConsoleMenu
         }
 
         StartConsoleDrawInLoopUntilInputIsMade();
-
 
         _itemIsSelected = false;
         await _menuItems[_selectedItemIndex].ExecuteAsync();
@@ -54,23 +51,18 @@ public class ConsoleMenu
         var bottomOffset = 0;
         Console.CursorVisible = false;
 
-
         while (!_itemIsSelected)
         {
             for (var i = 0; i < _menuItems.Length; i++)
-            {
                 WriteConsoleItem(i, _selectedItemIndex);
-            }
 
             bottomOffset = Console.CursorTop;
             var kb = Console.ReadKey(true);
             HandleKeyPress(kb.Key);
 
-            //Reset the cursor to the top of the screen
             Console.SetCursorPosition(0, topOffset);
         }
 
-        //set the cursor just after the menu so that the program can continue after the menu
         Console.SetCursorPosition(0, bottomOffset);
         Console.CursorVisible = true;
     }
@@ -84,23 +76,20 @@ public class ConsoleMenu
                 _selectedItemIndex = (_selectedItemIndex == 0) ? _menuItems.Length - 1 : _selectedItemIndex - 1;
                 CheckForUnselectable(pressedKey);
                 break;
-
             case ConsoleKey.DownArrow:
                 _selectedItemIndex = (_selectedItemIndex == _menuItems.Length - 1) ? 0 : _selectedItemIndex + 1;
                 CheckForUnselectable(pressedKey);
                 break;
-
             case ConsoleKey.Enter:
                 _itemIsSelected = true;
                 break;
         }
     }
+
     private void CheckForUnselectable(ConsoleKey pressedKey)
     {
         if (_menuItems[_selectedItemIndex].GetType() == typeof(ConsoleMenuSeparator))
-        {
             HandleKeyPress(pressedKey);
-        }
     }
 
     private void WriteConsoleItem(int itemIndex, int selectedItemIndex)
@@ -113,27 +102,25 @@ public class ConsoleMenu
 
         var text = _menuItems[itemIndex].Label;
         if (_menuItems[itemIndex].GetType() == typeof(ConsoleMenuSeparator))
-        {
             text = text.PadRight(_menuItems.Max(x => x.Label.Length), _menuItems[itemIndex].Label[0]);
-        }
+
         Console.WriteLine(" {0,-20}", text);
         Console.ResetColor();
     }
 }
 
-[Obsolete("Use aemarcoCommons.ToolboxConsole instead.")]
 public abstract class ConsoleMenuItem
 {
     protected ConsoleMenuItem(string label)
     {
         Label = label;
     }
+
     public string Label { get; }
     public virtual void Execute() { }
     public virtual Task ExecuteAsync() => Task.CompletedTask;
 }
 
-[Obsolete("Use aemarcoCommons.ToolboxConsole instead.")]
 public class ConsoleMenuItem<T> : ConsoleMenuItem
 {
     private readonly Action<T?>? _callBack;
@@ -168,7 +155,6 @@ public class ConsoleMenuItem<T> : ConsoleMenuItem
     }
 }
 
-[Obsolete("Use aemarcoCommons.ToolboxConsole instead.")]
 public class ConsoleMenuSeparator : ConsoleMenuItem
 {
     public ConsoleMenuSeparator(char separatorChar = '-')

@@ -7,6 +7,7 @@ namespace aemarcoCommons.ConsoleTools;
 public static partial class PowerConsole
 {
 
+    [Obsolete("Use aemarcoCommons.ToolboxConsole.PowerConsole instead.")]
     public static void StartProgress(Action<ProgressContext> work)
     {
         AnsiConsole.Progress()
@@ -19,6 +20,7 @@ public static partial class PowerConsole
             .Start(work);
     }
 
+    [Obsolete("Use aemarcoCommons.ToolboxConsole.PowerConsole instead.")]
     public static T StartProgress<T>(Func<ProgressContext, T> work)
     {
         return AnsiConsole.Progress()
@@ -32,6 +34,7 @@ public static partial class PowerConsole
     }
 
 
+    [Obsolete("Use aemarcoCommons.ToolboxConsole.PowerConsole instead.")]
     public static async Task StartProgressAsync(Func<ProgressContext, Task> work)
     {
         await AnsiConsole.Progress()
@@ -44,6 +47,7 @@ public static partial class PowerConsole
             .StartAsync(work);
     }
 
+    [Obsolete("Use aemarcoCommons.ToolboxConsole.PowerConsole instead.")]
     public static async Task StartProgressAsync<T>(
         Func<ProgressContext, T, CancellationToken, Task> work,
         T request,
@@ -54,6 +58,7 @@ public static partial class PowerConsole
     }
 
 
+    [Obsolete("Use aemarcoCommons.ToolboxConsole.PowerConsole instead.")]
     public static async Task<T> StartProgressAsync<T>(Func<ProgressContext, Task<T>> work)
     {
         return await AnsiConsole.Progress()

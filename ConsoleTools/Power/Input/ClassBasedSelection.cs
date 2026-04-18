@@ -14,6 +14,7 @@ public static partial class PowerConsole
     /// <param name="displayProperty">Displayed as</param>
     /// <returns>Selected item</returns>
 
+    [Obsolete("Use aemarcoCommons.ToolboxConsole.PowerConsole instead.")]
     public static T EnsureSelection<T>(string header, IEnumerable<T> selectable, Func<T, string> displayProperty)
         where T : class
     {
@@ -34,6 +35,7 @@ public static partial class PowerConsole
     /// <param name="displayProperty">Displayed as</param>
     /// <returns>Selected item or null on abort</returns>
 
+    [Obsolete("Use aemarcoCommons.ToolboxConsole.PowerConsole instead.")]
     public static T? AbortableSelection<T>(string header, IEnumerable<T> selectable, Func<T, string> displayProperty)
         where T : class
     {

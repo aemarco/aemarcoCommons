@@ -1,24 +1,21 @@
-﻿using aemarcoCommons.Toolbox.NetworkTools;
+using aemarcoCommons.ToolboxConsole.Shares;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Versioning;
 
-
 // ReSharper disable once CheckNamespace
-namespace aemarcoCommons.ConsoleTools;
+namespace aemarcoCommons.ToolboxConsole;
 
 public static partial class PowerConsole
 {
-
     /// <summary>
     /// Selection of a path in a ConsoleMenu
     /// </summary>
     /// <param name="path">path to start at</param>
     /// <param name="includedServers">servers to include for share selection</param>
-    /// <param name="showHidden">shot hidden folders</param>
+    /// <param name="showHidden">show hidden folders</param>
     /// <returns>selected path</returns>
-    [Obsolete("Use aemarcoCommons.ToolboxConsole.PowerConsole instead.")]
     public static string PathSelector(string path, IEnumerable<string>? includedServers = null, bool showHidden = false)
     {
         var serverItems = includedServers?.Distinct().ToArray();
@@ -34,15 +31,14 @@ public static partial class PowerConsole
             {
                 path = PathSelector(
                     x is null
-                        ? DriveSelector(serverItems) :
-                        x.FullName,
+                        ? DriveSelector(serverItems)
+                        : x.FullName,
                     serverItems,
                     showHidden);
             }, dir.Parent)
         };
 
         //one level down
-        // ReSharper disable once LoopCanBeConvertedToQuery
         foreach (var sub in dir
                      .GetDirectories()
                      .Where(x => showHidden || !x.Attributes.HasFlag(FileAttributes.Hidden)))
@@ -59,7 +55,6 @@ public static partial class PowerConsole
         dirItems.Add(new ConsoleMenuItem<DirectoryInfo>("Select", _ =>
         {
             path = dir.FullName;
-
         }));
 
         var menu = new ConsoleMenu(dir.FullName, dirItems);
@@ -71,17 +66,13 @@ public static partial class PowerConsole
     /// <summary>
     /// Selection of a drive in a ConsoleMenu
     /// </summary>
-    /// <returns></returns>
-    [Obsolete("Use aemarcoCommons.ToolboxConsole.PowerConsole instead.")]
     public static string DriveSelector(IEnumerable<string>? servers = null)
     {
         string? path = null;
         Console.Clear();
 
         var driveItems = new List<ConsoleMenuItem>();
-        // ReSharper disable once LoopCanBeConvertedToQuery
-        foreach (var drive in DriveInfo.GetDrives()
-                     .Where(x => x.IsReady))
+        foreach (var drive in DriveInfo.GetDrives().Where(x => x.IsReady))
         {
             var temp = drive;
             driveItems.Add(new ConsoleMenuItem<DriveInfo>($"{temp.Name} ({temp.VolumeLabel})", _ =>
@@ -100,6 +91,7 @@ public static partial class PowerConsole
                 path = ServerSelector(list) ?? DriveSelector(list);
             }));
         }
+
         var menu = new ConsoleMenu("Drives", driveItems);
         menu.RunConsoleMenu();
 
@@ -109,30 +101,21 @@ public static partial class PowerConsole
     /// <summary>
     /// Selection of a share for given servers
     /// </summary>
-    /// <param name="servers">servers which can be selected</param>
-    /// <returns></returns>
-    [Obsolete("Use aemarcoCommons.ToolboxConsole.PowerConsole instead.")]
     [SupportedOSPlatform("windows")]
     public static string? ServerSelector(IEnumerable<string> servers)
     {
         var serverItems = servers.ToList();
-        switch (serverItems.Count)
-        {
-            case 1:
-                return ShareSelector(serverItems[0]); //shortcut for one server
-        }
+        if (serverItems.Count == 1)
+            return ShareSelector(serverItems[0]);
 
-        //rely on a selection of which server to use
         var serverItem = AbortableSelection("Server", serverItems, x => x.TrimStart('\\'));
-        var path = ShareSelector(serverItem);
-        return path;
+        return ShareSelector(serverItem);
     }
 
     /// <summary>
     /// Selection of a share for given server
     /// </summary>
     /// <returns>unc path to share or null when no shares are available</returns>
-    [Obsolete("Use aemarcoCommons.ToolboxConsole.PowerConsole instead.")]
     [SupportedOSPlatform("windows")]
     public static string? ShareSelector(string? server)
     {
@@ -143,7 +126,7 @@ public static partial class PowerConsole
         Console.Clear();
         string? path = null;
         var shares = new List<ConsoleMenuItem<DirectoryInfo>>();
-        // ReSharper disable once LoopCanBeConvertedToQuery
+
         foreach (Share share in ShareCollection.GetShares(server))
         {
             if (!share.IsFileSystem ||
@@ -158,6 +141,7 @@ public static partial class PowerConsole
                 path = temp.FullName;
             }));
         }
+
         if (shares.Count == 0)
             return path;
 

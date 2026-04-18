@@ -64,4 +64,18 @@ public static partial class PowerConsole
             .StartAsync(work);
     }
 
+    public static void CompleteTask(this ProgressTask task)
+    {
+        task.Value = task.MaxValue;
+        task.IsIndeterminate = false;
+        task.StopTask();
+    }
+
+    public static async Task<T> StartStatusAsync<T>(System.Func<StatusContext, Task<T>> work)
+    {
+        return await AnsiConsole.Status()
+            .SpinnerStyle(Style.Parse("green"))
+            .StartAsync("[purple]Doing stuff...[/]", work);
+    }
+
 }
