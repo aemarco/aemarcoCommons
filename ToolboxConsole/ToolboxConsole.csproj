@@ -38,15 +38,11 @@
 	<PropertyGroup>
 		<Description>Tooling around Console-Apps</Description>
 		<PackageTags>ConsoleApp, Spectre, IOC</PackageTags>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	</PropertyGroup>
 	<ItemGroup>
-		<None Update="..\README.md" Pack="false" />
 		<None Include="README.md" Pack="true" PackagePath="\" />
-		<None Update="..\icon.png" Pack="false" />
 		<None Include="Resources\icon.png" Pack="true" PackagePath="\" />
-		<None Include="LICENSE.md" Pack="true" PackagePath="\" />
-		<None Include="NOTICE.md" Pack="true" PackagePath="\" />
+		<None Include="Resources\LICENSE.md" Pack="true" PackagePath="\" />
+		<None Include="Resources\NOTICE.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
-
 </Project>

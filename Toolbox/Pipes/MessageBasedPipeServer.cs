@@ -42,7 +42,7 @@ public class MessageBasedPipeServer
         // ReSharper disable once FunctionNeverReturns
     }
 
-    public void HandleAsMessage(string message)
+    public void HandleAsMessage(string? message)
     {
         if (string.IsNullOrWhiteSpace(message))
             return;
@@ -56,24 +56,18 @@ public static class MessageBasedPipeClient
     public static void SendMessageToPipe(this string message, string targetMachine, string pipeName)
     {
         if (string.IsNullOrWhiteSpace(message)) return;
-        using (var namedPipeClientStream = new NamedPipeClientStream(targetMachine, pipeName, PipeDirection.Out))
+        using var namedPipeClientStream = new NamedPipeClientStream(targetMachine, pipeName, PipeDirection.Out);
+        try
         {
-            try
-            {
-                namedPipeClientStream.Connect(TimeSpan.FromSeconds(3).Milliseconds);
-                using (var writer = new StreamWriter(namedPipeClientStream))
-                {
-                    writer.AutoFlush = true;
-                    writer.WriteLine(message);
-                }
-            }
-            catch
-            {
-                // ignored
-            }
-
+            namedPipeClientStream.Connect(TimeSpan.FromSeconds(3).Milliseconds);
+            using var writer = new StreamWriter(namedPipeClientStream);
+            writer.AutoFlush = true;
+            writer.WriteLine(message);
         }
-
+        catch
+        {
+            // ignored
+        }
     }
 
 }

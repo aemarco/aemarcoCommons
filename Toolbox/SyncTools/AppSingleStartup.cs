@@ -15,7 +15,7 @@ public class AppSingleStartup : IDisposable
     /// </summary>
     /// <param name="name"></param>
     // ReSharper disable once MemberCanBePrivate.Global
-    public AppSingleStartup(string name)
+    public AppSingleStartup(string? name)
     {
         Name = name;
     }
@@ -29,10 +29,10 @@ public class AppSingleStartup : IDisposable
 
     #endregion
 
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
 
-    private Mutex _mutex;
+    private Mutex? _mutex;
     public bool Start()
     {
         if (_disposed)
@@ -64,7 +64,7 @@ public class AppSingleStartup : IDisposable
         if (disposing)
         {
             //managed resources here
-            _mutex.Dispose();
+            _mutex?.Dispose();
         }
         //unmanaged resources here
 

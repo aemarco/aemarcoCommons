@@ -142,7 +142,7 @@ public class Share
     /// <summary>
     /// Get the root of a disk-based share
     /// </summary>
-    public DirectoryInfo Root
+    public DirectoryInfo? Root
     {
         get
         {
@@ -182,7 +182,7 @@ public class Share
     /// </summary>
     /// <param name="path"></param>
     /// <returns></returns>
-    public bool MatchesPath(string path)
+    public bool MatchesPath(string? path)
     {
         if (!IsFileSystem) return false;
         if (null == path || 0 == path.Length) return true;
@@ -409,12 +409,12 @@ public class ShareCollection : ReadOnlyCollectionBase
                 {
                     if (1 == level)
                     {
-                        SHARE_INFO_1 si = (SHARE_INFO_1)Marshal.PtrToStructure(pItem, t);
+                        SHARE_INFO_1 si = (SHARE_INFO_1)Marshal.PtrToStructure(pItem, t)!;
                         shares.Add(si.NetName, string.Empty, si.ShareType, si.Remark);
                     }
                     else
                     {
-                        SHARE_INFO_2 si = (SHARE_INFO_2)Marshal.PtrToStructure(pItem, t);
+                        SHARE_INFO_2 si = (SHARE_INFO_2)Marshal.PtrToStructure(pItem, t)!;
                         shares.Add(si.NetName, si.Path, si.ShareType, si.Remark);
                     }
                 }
@@ -467,12 +467,12 @@ public class ShareCollection : ReadOnlyCollectionBase
 
                     if (1 == level)
                     {
-                        SHARE_INFO_1_9x si = (SHARE_INFO_1_9x)Marshal.PtrToStructure(pItem, t);
+                        SHARE_INFO_1_9x si = (SHARE_INFO_1_9x)Marshal.PtrToStructure(pItem, t)!;
                         shares.Add(si.NetName, string.Empty, si.ShareType, si.Remark);
                     }
                     else
                     {
-                        SHARE_INFO_50 si = (SHARE_INFO_50)Marshal.PtrToStructure(pItem, t);
+                        SHARE_INFO_50 si = (SHARE_INFO_50)Marshal.PtrToStructure(pItem, t)!;
                         shares.Add(si.NetName, si.Path, si.ShareType, si.Remark);
                     }
                 }
@@ -569,7 +569,7 @@ public class ShareCollection : ReadOnlyCollectionBase
                 if (NO_ERROR == nRet)
                 {
                     rni = (UNIVERSAL_NAME_INFO)Marshal.PtrToStructure(pBuffer,
-                        typeof(UNIVERSAL_NAME_INFO));
+                        typeof(UNIVERSAL_NAME_INFO))!;
                 }
             }
             finally
@@ -622,7 +622,7 @@ public class ShareCollection : ReadOnlyCollectionBase
     /// </summary>
     /// <param name="fileName"></param>
     /// <returns></returns>
-    public static Share PathToShare(string fileName)
+    public static Share? PathToShare(string? fileName)
     {
         if (null == fileName || 0 == fileName.Length) return null;
 
@@ -641,7 +641,7 @@ public class ShareCollection : ReadOnlyCollectionBase
     #region Local shares
 
     /// <summary>The local shares</summary>
-    private static ShareCollection _local = null;
+    private static ShareCollection? _local;
 
     /// <summary>
     /// Return the local shares
@@ -728,14 +728,14 @@ public class ShareCollection : ReadOnlyCollectionBase
     /// </summary>
     public Share this[int index]
     {
-        get { return (Share)InnerList[index]; }
+        get { return (Share)InnerList[index]!; }
     }
 
     /// <summary>
     /// Returns the <see cref="Share"/> which matches a given local path
     /// </summary>
     /// <param name="path">The path to match</param>
-    public Share this[string path]
+    public Share? this[string? path]
     {
         get
         {
@@ -748,7 +748,7 @@ public class ShareCollection : ReadOnlyCollectionBase
 
             for (int i = 0; i < InnerList.Count; i++)
             {
-                Share s = (Share)InnerList[i];
+                Share s = (Share)InnerList[i]!;
 
                 if (s.IsFileSystem && s.MatchesPath(path))
                 {

@@ -22,9 +22,6 @@ public static class SslHelper
             throw new ArgumentException("Password must be provided", nameof(password));
 
         using var cert = X509CertificateLoader.LoadPkcs12FromFile(file, password, X509KeyStorageFlags.PersistKeySet | X509KeyStorageFlags.MachineKeySet);
-        if (cert.Thumbprint == null)
-            throw new ApplicationException("Could not get thumbprint from cert");
-
         var store = new X509Store(StoreName.My, StoreLocation.LocalMachine);
         store.Open(OpenFlags.ReadWrite);
         var storeResults = store.Certificates.Find(X509FindType.FindByThumbprint, cert.Thumbprint, false);

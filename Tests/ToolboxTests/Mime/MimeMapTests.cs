@@ -24,8 +24,8 @@ public class MimeMapTests
     [Test]
     public void TryGetMimeType_ThrowsOnNull()
     {
-        Action act = () => MimeMap.TryGetMimeType(null, out _);
-        Should.Throw<ArgumentNullException>(act);
+        Should.Throw<ArgumentNullException>(
+            () => MimeMap.TryGetMimeType(null!, out _));
     }
 
 
@@ -42,8 +42,8 @@ public class MimeMapTests
     [Test]
     public void GetMimeType_ThrowsOnNull()
     {
-        var act = () => MimeMap.GetMimeType(null);
-        Should.Throw<ArgumentNullException>(act);
+        Should.Throw<ArgumentNullException>(
+            () => MimeMap.GetMimeType(null!));
     }
 
 
@@ -59,14 +59,14 @@ public class MimeMapTests
     [Test]
     public void GetExtension_ThrowsOnNull()
     {
-        var act = () => MimeMap.GetExtension(null);
-        Should.Throw<ArgumentNullException>(act);
+        Should.Throw<ArgumentNullException>(
+            () => MimeMap.GetExtension(null!));
     }
     [Test]
     public void GetExtension_ThrowsOnDotInput()
     {
-        var act = () => MimeMap.GetExtension(".jpg");
-        Should.Throw<ArgumentException>(act);
+        Should.Throw<ArgumentException>(
+            () => MimeMap.GetExtension(".jpg"));
     }
 
 }

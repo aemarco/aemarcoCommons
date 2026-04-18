@@ -1,6 +1,7 @@
 ﻿using IdentityModel.OidcClient;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -30,8 +31,9 @@ public class OidcTokenRenewalHandler : DelegatingHandler
     }
 
 
-    private OidcClient _oidcClient;
-    private ISessionStore _sessionStore;
+    private OidcClient? _oidcClient;
+    private ISessionStore? _sessionStore;
+    [MemberNotNull(nameof(_oidcClient), nameof(_sessionStore))]
     private void EnsureSetup()
     {
         if (_oidcClient == null)
@@ -107,7 +109,7 @@ public class OidcTokenRenewalHandler : DelegatingHandler
 
 
 
-    private async Task<Session> GetAccessTokenAsync(CancellationToken cancellationToken)
+    private async Task<Session?> GetAccessTokenAsync(CancellationToken cancellationToken)
     {
         //in case somebody is refreshing currently, we don´t want to return until refreshed, so locking
         var res = await _oidcTokenRenewalHandlerHelper.HandleLockedAsync(
@@ -120,7 +122,7 @@ public class OidcTokenRenewalHandler : DelegatingHandler
             : null;
     }
 
-    private async Task<bool> RefreshTokensAsync(Session session, CancellationToken cancellationToken)
+    private async Task<bool> RefreshTokensAsync(Session? session, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(session?.RefreshToken))
         {

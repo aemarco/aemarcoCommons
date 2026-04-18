@@ -56,21 +56,12 @@
 		<Product>aemarco$(MSBuildProjectName)</Product>
 		<Authors>aemarco</Authors>
 		<Company>aemarco</Company>
-		<PackageLicenseExpression>Unlicense</PackageLicenseExpression>
-		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 		<PackageProjectUrl>https://github.com/aemarco/aemarcoCommons</PackageProjectUrl>
+		
 		<PackageIcon>icon.png</PackageIcon>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
-	<ItemGroup>
-		<None Include="..\README.md" Pack="true" PackagePath="\">
-			<Visible>false</Visible>
-		</None>
-		<None Include="..\icon.png" Pack="true" PackagePath="\">
-			<Visible>false</Visible>
-		</None>
-	</ItemGroup>
-
-	
 
 </Project>

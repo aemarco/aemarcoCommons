@@ -10,7 +10,7 @@ public interface ISessionStore
 {
     event EventHandler AccessTokenChanged;
 
-    Task<Session> GetSession();
+    Task<Session?> GetSession();
     Task SetSession(Session session);
     Task EndSession();
 }
@@ -28,8 +28,8 @@ public class SessionStore : ISessionStore
         AccessTokenChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    private Session _session;
-    public virtual Task<Session> GetSession()
+    private Session? _session;
+    public virtual Task<Session?> GetSession()
     {
         return Task.FromResult(_session);
     }
@@ -50,7 +50,7 @@ public class SessionStore : ISessionStore
 
 public class Session
 {
-    public string IdToken { get; set; }
-    public string AccessToken { get; set; }
-    public string RefreshToken { get; set; }
+    public string? IdToken { get; set; }
+    public string? AccessToken { get; set; }
+    public string? RefreshToken { get; set; }
 }

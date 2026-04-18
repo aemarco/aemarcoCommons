@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace aemarcoCommons.Toolbox.Mime;
@@ -24,7 +25,7 @@ public class MimeMap
     /// <param name="mimeType">The variable to store the MIME type.</param>
     /// <returns>The MIME type.</returns>
     /// <exception cref="ArgumentNullException" />
-    public static bool TryGetMimeType(string ext, out string mimeType)
+    public static bool TryGetMimeType(string ext, [NotNullWhen(true)] out string? mimeType)
     {
         if (ext is null)
             throw new ArgumentNullException(nameof(ext));
@@ -64,7 +65,7 @@ public class MimeMap
     /// <returns>The extension.</returns>
     /// <exception cref="ArgumentNullException" />
     /// <exception cref="ArgumentException" />
-    public static string GetExtension(string mimeType)
+    public static string? GetExtension(string mimeType)
     {
         if (mimeType is null)
             throw new ArgumentNullException(nameof(mimeType));
@@ -72,7 +73,7 @@ public class MimeMap
         if (mimeType.StartsWith(Dot))
             throw new ArgumentException($"Requested mime type is not valid: {mimeType}");
 
-        return MappingsMimeToExt.Value.TryGetValue(mimeType, out string extension)
+        return MappingsMimeToExt.Value.TryGetValue(mimeType, out string? extension)
             ? extension
             : null;
     }

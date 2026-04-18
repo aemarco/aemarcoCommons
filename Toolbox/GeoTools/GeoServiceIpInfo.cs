@@ -20,9 +20,9 @@ internal partial class GeoServiceSettings
 public partial class GeoService
 {
 
-    private string _lastIpInfo;
+    private string? _lastIpInfo;
     private DateTimeOffset? _lastInInfoTimestamp;
-    public async Task<string> GetIpInfo(
+    public async Task<string?> GetIpInfo(
         bool throwExceptions = false,
         TimeSpan? maximumInfoAge = null)
     {
@@ -33,7 +33,7 @@ public partial class GeoService
         {
             return _lastIpInfo;
         }
-        string result = null;
+        string? result = null;
 
 
         var errors = new List<Exception>(2);
@@ -47,7 +47,7 @@ public partial class GeoService
                 var ipText = await response.Content
                     .ReadAsStringAsync()
                     .ConfigureAwait(false);
-                if (IPAddress.TryParse(ipText, out IPAddress test))
+                if (IPAddress.TryParse(ipText, out IPAddress? test))
                     result = test.ToString();
             }
         }
@@ -64,7 +64,7 @@ public partial class GeoService
                 response.EnsureSuccessStatusCode();
                 var info = await response.Content.ReadAsStringAsync();
                 var match = Regex.Match(info, @"(?:\d{1,3}.){3}.\d{1,3}");
-                if (match.Success && IPAddress.TryParse(match.Value, out IPAddress test))
+                if (match.Success && IPAddress.TryParse(match.Value, out IPAddress? test))
                     result = test.ToString();
             }
             catch (Exception ex)

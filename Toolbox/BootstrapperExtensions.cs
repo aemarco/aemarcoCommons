@@ -17,7 +17,7 @@ namespace aemarcoCommons.Toolbox;
 public static class BootstrapperExtensions
 {
 
-    public static IConfigurationBuilder ConfigAppsettings(this IConfigurationBuilder builder, string environmentName = null)
+    public static IConfigurationBuilder ConfigAppsettings(this IConfigurationBuilder builder, string? environmentName = null)
     {
 
         environmentName = environmentName

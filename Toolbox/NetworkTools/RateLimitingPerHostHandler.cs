@@ -23,7 +23,7 @@ public class RateLimitingPerHostHandler : DelegatingHandler
         if (request.RequestUri is not null)
         {
             var host = request.RequestUri.Host;
-            if (RateLimits.TryGetValue(host, out RateLimitingInfo info))
+            if (RateLimits.TryGetValue(host, out RateLimitingInfo? info))
             {
                 var earliest = info.LastRequest.AddMilliseconds(info.Delay);
                 await earliest.WaitTill(cancellationToken)
