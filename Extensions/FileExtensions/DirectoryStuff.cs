@@ -64,18 +64,21 @@ public static class DirectoryStuff
 
 
     /// <summary>
-    /// Ensures that <paramref name="targetFolder"/> contains exactly the given files by *file name*.
-    /// 
-    /// - Existing files with matching names are kept as-is.
-    /// - Files not listed are deleted.
-    /// - Files listed but missing are copied from their source paths.
-    /// - Duplicate file names ?? First file wins, others are ignored
-    /// 
-    /// Note: Matching is done by file name only (not content or path).
+    /// Synchronizes <paramref name="targetFolder"/> to contain exactly the files specified by <paramref name="sourceFiles"/>, matched by file name only.
+    ///
+    /// **Operation:**
+    /// - Files in target matching a source file name are kept as-is (never overwritten).
+    /// - Files in target with no matching source file name are deleted.
+    /// - Source files not yet present in target are copied to the target folder root.
+    ///
+    /// **Limitations:**
+    /// - Matching is by file name only (case-sensitive on Linux, case-insensitive on Windows).
+    /// - If multiple source files have the same name, the first one is used; others are ignored.
+    /// - Deletions that fail due to file locks are logged but do not stop the operation (via TryDelete).
     /// </summary>
-    /// <param name="targetFolder">absolute target folder path</param>
-    /// <param name="sourceFiles">absolute file paths for source files</param>
-    /// <param name="cancellationToken">cancellation</param>
+    /// <param name="targetFolder">Target folder to synchronize (will be created if missing)</param>
+    /// <param name="sourceFiles">Absolute file paths of files that should exist in target folder</param>
+    /// <param name="cancellationToken">Cancellation token</param>
     public static void SyncFolderByFileName(this DirectoryInfo targetFolder, IEnumerable<string> sourceFiles, CancellationToken cancellationToken = default)
     {
         targetFolder.Create();
@@ -86,7 +89,7 @@ public static class DirectoryStuff
                 x => Path.Combine(targetFolder.FullName, x.Name));
 
         var existingFiles = targetFolder
-            .GetFiles("*.*", SearchOption.AllDirectories)
+            .GetFiles("*", SearchOption.TopDirectoryOnly)
             .ToList();
 
         //delete obsolete files
