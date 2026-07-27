@@ -5,6 +5,22 @@ namespace aemarcoCommons.ToolboxFluentValidation;
 //https://docs.fluentvalidation.net/en/latest/custom-validators.html
 public static class StringRuleBuilderExtensions
 {
+
+    public static IRuleBuilderOptions<T, string?> BeValidAbsoluteUri<T>(
+        this IRuleBuilder<T, string?> ruleBuilder, bool? trailingSlash = false)
+    {
+        return ruleBuilder
+            .Must(text => IsAbsoluteWebUri(text, trailingSlash))
+            .WithMessage(
+                trailingSlash.HasValue
+                    ? trailingSlash.Value
+                        ? "'{PropertyName}' must be a valid Web-Uri with a trailing slash"
+                        : "'{PropertyName}' must be a valid Web-Uri without a trailing slash"
+                    : "'{PropertyName}' must be a valid Web-Uri");
+    }
+
+
+
     public static IRuleBuilderOptions<T, string> BeValidAbsoluteWebUri<T>(
         this IRuleBuilder<T, string> ruleBuilder, bool allowTrailingSlash = false)
     {
@@ -26,10 +42,12 @@ public static class StringRuleBuilderExtensions
 
 
 
-    private static bool IsAbsoluteWebUri(string url, bool allowTrailingSlash) =>
+    private static bool IsAbsoluteWebUri(string? url, bool? trailingSlash) =>
         !string.IsNullOrWhiteSpace(url) &&
-        (!url.EndsWith('/') || allowTrailingSlash) &&
-        Uri.TryCreate(url, UriKind.Absolute, out Uri? uriResult) &&
+        (!trailingSlash.HasValue ||
+         (trailingSlash.Value && url.EndsWith('/')) ||
+         (!trailingSlash.Value && !url.EndsWith('/'))) &&
+        Uri.TryCreate(url, UriKind.Absolute, out var uriResult) &&
         (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
 
 
