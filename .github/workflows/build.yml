@@ -7,6 +7,7 @@ on:
       - develop
   pull_request:
     branches:
+      - main
       - develop
   workflow_dispatch:
 
@@ -55,7 +56,7 @@ jobs:
   publish:
     needs: build
     runs-on: windows-latest
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    if: github.ref == 'refs/heads/main'
     environment:
       name: push-to-nuget-org
     steps:
