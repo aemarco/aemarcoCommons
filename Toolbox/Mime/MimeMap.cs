@@ -4,17 +4,17 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace aemarcoCommons.Toolbox.Mime;
 
-public class MimeMap
+public static class MimeMap
 {
 
     private const string Dot = ".";
     private const string QuestionMark = "?";
     private const string DefaultMimeType = "application/octet-stream";
-    private static readonly Lazy<IDictionary<string, string>> MappingsExtToMime = new Lazy<IDictionary<string, string>>(BuildMappingsExtToMime);
-    private static readonly Lazy<IDictionary<string, string>> MappingsMimeToExt = new Lazy<IDictionary<string, string>>(BuildMappingsMimeToExt);
+    private static readonly Lazy<IDictionary<string, string>> MappingsExtToMime = new(BuildMappingsExtToMime);
+    private static readonly Lazy<IDictionary<string, string>> MappingsMimeToExt = new(BuildMappingsMimeToExt);
 
-    public static string[] Extensions => MappingsExtToMime.Value.Keys.ToArray();
-    public static string[] MimeTypes => MappingsMimeToExt.Value.Values.ToArray();
+    public static string[] Extensions => [.. MappingsExtToMime.Value.Keys];
+    public static string[] MimeTypes => [.. MappingsMimeToExt.Value.Values];
 
 
     /// <summary>
@@ -77,7 +77,7 @@ public class MimeMap
             : null;
     }
 
-    private static IDictionary<string, string> BuildMappingsExtToMime()
+    private static Dictionary<string, string> BuildMappingsExtToMime()
     {
         // ReSharper disable StringLiteralTypo
         var mappings = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
@@ -732,7 +732,7 @@ public class MimeMap
         // ReSharper restore StringLiteralTypo
         return mappings;
     }
-    private static IDictionary<string, string> BuildMappingsMimeToExt()
+    private static Dictionary<string, string> BuildMappingsMimeToExt()
     {
         // ReSharper disable StringLiteralTypo
         var mappings = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
