@@ -13,7 +13,7 @@ public static partial class PowerConsole
     {
         return AnsiConsole.Prompt(
             new SelectionPrompt<T>()
-                .Title($"[purple]{header}[/]")
+                .Title($"[purple]{header.EscapeMarkup()}[/]")
                 .UseConverter(displayProperty)
                 .AddChoices([.. selectable]));
     }

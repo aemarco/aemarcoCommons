@@ -144,8 +144,8 @@ public class LanIpAddressHandler : AuthorizationHandler<LanIpAddressRequirement>
             return;
         }
 
-        if (_logger.IsEnabled(LogLevel.Debug))
-            _logger.LogDebug("Access granted to {RemoteIp}", remoteIp);
+
+        _logger.LogDebug("Access granted to {RemoteIp}", remoteIp);
         context.Succeed(requirement);
     }
 

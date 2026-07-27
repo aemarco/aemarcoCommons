@@ -19,6 +19,16 @@ namespace aemarcoCommons.ToolboxImage.Extensions;
 public static class ImageExtensions
 {
 
+    //read
+    public static async Task<ImageInfo> IdentifyImageAsync(this FileInfo file)
+    {
+        var result = await Image.IdentifyAsync(file.FullName);
+        return result;
+    }
+
+
+    //update
+
     /// <summary>
     /// Creates a resized clone of the specified image using the given parameters.
     /// </summary>

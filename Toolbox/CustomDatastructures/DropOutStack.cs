@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace aemarcoCommons.Toolbox.CustomDatastructures;
+﻿namespace aemarcoCommons.Toolbox.CustomDatastructures;
 
 public class DropOutStack<T>
 {
