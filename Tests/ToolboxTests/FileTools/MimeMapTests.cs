@@ -1,6 +1,6 @@
-using aemarcoCommons.Toolbox.Mime;
+using aemarcoCommons.Toolbox.FileTools;
 
-namespace ToolboxTests.Mime;
+namespace ToolboxTests.FileTools;
 
 [TestFixture]
 public class MimeMapTests

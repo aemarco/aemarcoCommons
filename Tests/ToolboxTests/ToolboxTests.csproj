@@ -20,6 +20,7 @@
 		<Content Include="Resources\840_1050.jpg">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
+		<None Include="Resources\TestData\**" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
 
 </Project>

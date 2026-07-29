@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using Polly.Contrib.WaitAndRetry;
 using Polly.Extensions.Http;
-using System;
 using System.Net.Http;
 using System.Reflection;
 

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 
-namespace aemarcoCommons.Toolbox.Mime;
+namespace aemarcoCommons.Toolbox.FileTools;
 
 public static class MimeMap
 {

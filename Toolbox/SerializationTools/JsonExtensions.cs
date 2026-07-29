@@ -1,6 +1,5 @@
 ﻿using aemarcoCommons.Extensions.FileExtensions;
 using Newtonsoft.Json;
-using System.IO;
 
 namespace aemarcoCommons.Toolbox.SerializationTools;
 

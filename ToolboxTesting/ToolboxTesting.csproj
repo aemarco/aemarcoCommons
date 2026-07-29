@@ -19,6 +19,9 @@
 		<!-- nunit -->
 		<PackageReference Include="NUnit" />
 
+		<!-- assertion (brings EmptyFiles along for test fixtures) -->
+		<PackageReference Include="Shouldly" />
+
 	</ItemGroup>
 
 	<!-- nuget build-->

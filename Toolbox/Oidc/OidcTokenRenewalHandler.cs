@@ -1,6 +1,5 @@
 ﻿using IdentityModel.OidcClient;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;

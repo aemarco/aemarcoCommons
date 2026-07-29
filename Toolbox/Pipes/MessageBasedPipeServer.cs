@@ -1,6 +1,4 @@
 ﻿using aemarcoCommons.Extensions.TaskExtensions;
-using System;
-using System.IO;
 using System.IO.Pipes;
 using System.Runtime.Versioning;
 using System.Threading;
