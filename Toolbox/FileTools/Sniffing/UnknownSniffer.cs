@@ -1,18 +1,27 @@
 namespace aemarcoCommons.Toolbox.FileTools.Sniffing;
 
-public sealed class UnknownSniffer : IContentSniffer
+public sealed class UnknownSniffer
 {
-    private readonly IReadOnlyCollection<IContentSniffer> _sniffers;
 
+    private static readonly Lazy<IReadOnlyCollection<IContentSniffer>> AllKnownSniffers = new(DiscoverSniffers);
+    private readonly IReadOnlyCollection<IContentSniffer> _sniffers;
     public UnknownSniffer(IReadOnlyCollection<IContentSniffer> sniffers)
     {
         _sniffers = sniffers;
     }
+    public UnknownSniffer()
+        : this(AllKnownSniffers.Value)
+    { }
 
-    public string Extension =>
-        throw new NotSupportedException($"{nameof(UnknownSniffer)} has no fixed extension; call {nameof(Sniff)} directly.");
 
-    public SniffResult Sniff(FileInfo file) => Sniff(file, [.. _sniffers]);
+    public SniffResult Sniff(FileInfo file) =>
+        Sniff(
+            file,
+            [
+                .. _sniffers
+                    .OrderByDescending(s => s.Extension.Equals(file.Extension, StringComparison.OrdinalIgnoreCase))
+            ]);
+
 
     private static SniffResult Sniff(FileInfo file, IContentSniffer[] remaining)
     {
@@ -26,4 +35,15 @@ public sealed class UnknownSniffer : IContentSniffer
             _ => result,
         };
     }
+
+    private static IReadOnlyCollection<IContentSniffer> DiscoverSniffers() =>
+    [
+        .. typeof(IContentSniffer).Assembly
+            .GetTypes()
+            .Where(t => t is { IsClass: true, IsAbstract: false } &&
+                        typeof(IContentSniffer).IsAssignableFrom(t) &&
+                        t.GetConstructor(Type.EmptyTypes) is not null)
+            .Select(t => (IContentSniffer)Activator.CreateInstance(t)!)
+    ];
+
 }
