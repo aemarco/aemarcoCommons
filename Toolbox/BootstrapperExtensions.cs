@@ -4,7 +4,6 @@ using aemarcoCommons.Toolbox.Oidc;
 using aemarcoCommons.Toolbox.SecurityTools;
 using aemarcoCommons.Toolbox.SerializationTools;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using Polly.Contrib.WaitAndRetry;
 using Polly.Extensions.Http;
