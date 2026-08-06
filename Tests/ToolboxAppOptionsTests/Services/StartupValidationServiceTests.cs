@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Hosting;
-using System.Linq;
 
 namespace ToolboxAppOptionsTests.Services;
 
