@@ -1,3 +1,4 @@
+#pragma warning disable IDE0130
 namespace aemarcoCommons.ToolboxMediatR;
 
 public static class LoggingBehaviorExtensions
@@ -33,7 +34,7 @@ public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
             if (!typeof(TRequest).HasAttribute<NoLogAttribute>())
             {
                 if (response is Unit)
-                    _logger.LogInformation("Handled {typeName} message {@message}", typeName, request);
+                    _logger.LogInformation("Handled {typeName} message {@request}", typeName, request);
                 else
                     _logger.LogInformation("Handled {typeName} with {@request} and {@response}", typeName, request,
                         response);
@@ -46,7 +47,7 @@ public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to handle {typeName} Message {@message}", typeName, request);
+            _logger.LogError(ex, "Failed to handle {typeName} Message {@request}", typeName, request);
             throw;
         }
     }
