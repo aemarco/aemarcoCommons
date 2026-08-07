@@ -5,18 +5,19 @@ public class TypeToFileStore<T> : ITypeToFileStore<T>
 {
 
     private readonly TypeToFileSettings _settings;
+    private readonly ILogger<TypeToFileStore<T>> _logger;
     private readonly bool _isUserProtected;
     private readonly int _currentVersion;
-    private readonly ILogger<TypeToFileStore<T>> _logger;
     public TypeToFileStore(
         TypeToFileSettings settings,
         ILogger<TypeToFileStore<T>> logger)
     {
         _settings = settings;
+        _logger = logger;
+
         var typeSettings = typeof(T).GetCustomAttribute<TypeToFileSettingsAttribute>();
         _isUserProtected = typeSettings?.IsUserProtected ?? false;
         _currentVersion = typeSettings?.Version ?? 0;
-        _logger = logger;
         Instance = LoadExistingOrDefault();
     }
 

@@ -22,4 +22,5 @@ public interface ITypeToFileValue
     /// Use this to perform any post-save logic.
     /// </summary>
     void OnSaved() { }
+
 }
