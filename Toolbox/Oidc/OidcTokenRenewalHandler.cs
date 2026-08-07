@@ -69,6 +69,8 @@ public class OidcTokenRenewalHandler : DelegatingHandler
             else
             {
                 //otherwise we fail
+                await _sessionStore.EndSession()
+                    .ConfigureAwait(false);
                 return new HttpResponseMessage(HttpStatusCode.Unauthorized) { RequestMessage = request };
             }
         }
@@ -89,6 +91,8 @@ public class OidcTokenRenewalHandler : DelegatingHandler
         if (!await RefreshTokensAsync(session, cancellationToken).ConfigureAwait(false))
         {
             //we cant refresh
+            await _sessionStore!.EndSession()
+                .ConfigureAwait(false);
             return response;
         }
 
