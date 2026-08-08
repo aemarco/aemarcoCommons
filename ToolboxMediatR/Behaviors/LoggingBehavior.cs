@@ -15,7 +15,8 @@ public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
 {
 
     private readonly ILogger<LoggingBehavior<TRequest, TResponse?>> _logger;
-    public LoggingBehavior(ILogger<LoggingBehavior<TRequest, TResponse?>> logger)
+    public LoggingBehavior(
+        ILogger<LoggingBehavior<TRequest, TResponse?>> logger)
     {
         _logger = logger;
     }
@@ -30,14 +31,28 @@ public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
         {
             var response = await next(cancellationToken);
 
+            if (typeof(TRequest).HasAttribute<NoLogAttribute>())
+                return response;
 
-            if (!typeof(TRequest).HasAttribute<NoLogAttribute>())
+            var logRequest = !typeof(TRequest).HasAttribute<NoLogRequestAttribute>();
+            var logResponse =
+                response is not Unit &&
+                !typeof(TRequest).HasAttribute<NoLogResponseAttribute>();
+
+            switch (logRequest, logResponse)
             {
-                if (response is Unit)
-                    _logger.LogInformation("Handled {typeName} message {@request}", typeName, request);
-                else
-                    _logger.LogInformation("Handled {typeName} with {@request} and {@response}", typeName, request,
-                        response);
+                case (true, true):
+                    _logger.LogInformation("Handled {typeName} with {@request} and {@response}", typeName, request, response);
+                    break;
+                case (true, false):
+                    _logger.LogInformation("Handled {typeName} with {@request}", typeName, request);
+                    break;
+                case (false, true):
+                    _logger.LogInformation("Handled {typeName} with {@response}", typeName, response);
+                    break;
+                case (false, false):
+                    _logger.LogInformation("Handled {typeName}", typeName);
+                    break;
             }
             return response;
         }
@@ -55,3 +70,9 @@ public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
 
 [AttributeUsage(AttributeTargets.Class)]
 public class NoLogAttribute : Attribute;
+
+[AttributeUsage(AttributeTargets.Class)]
+public class NoLogRequestAttribute : Attribute;
+
+[AttributeUsage(AttributeTargets.Class)]
+public class NoLogResponseAttribute : Attribute;
