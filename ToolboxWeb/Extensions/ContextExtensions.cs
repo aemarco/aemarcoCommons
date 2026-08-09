@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Net.Http.Headers;
-// ReSharper disable MemberCanBePrivate.Global
-// ReSharper disable UnusedMember.Global
+﻿using Microsoft.Net.Http.Headers;
 
-namespace aemarcoCommons.WebTools.Extensions;
+namespace aemarcoCommons.ToolboxWeb.Extensions;
 
 public static class ContextExtensions
 {

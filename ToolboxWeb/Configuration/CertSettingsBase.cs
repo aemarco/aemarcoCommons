@@ -1,4 +1,4 @@
-﻿namespace aemarcoCommons.WebTools.Configuration;
+﻿namespace aemarcoCommons.ToolboxWeb.Configuration;
 
 public class CertSettingsBase
 {

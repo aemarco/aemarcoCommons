@@ -22,8 +22,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToolboxAppOptions", "Toolbo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfTools", "WpfTools\WpfTools.csproj", "{FAC45454-9828-4EA8-8965-C8CB8BCF81D0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebTools", "WebTools\WebTools.csproj", "{8D683B88-39A5-4FBC-AB50-7866EF955B90}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{284B28FC-9401-48CF-B5D1-27449B9BF167}"
 	ProjectSection(SolutionItems) = preProject
 		Tests\Directory.Build.props = Tests\Directory.Build.props
@@ -93,10 +91,6 @@ Global
 		{FAC45454-9828-4EA8-8965-C8CB8BCF81D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAC45454-9828-4EA8-8965-C8CB8BCF81D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FAC45454-9828-4EA8-8965-C8CB8BCF81D0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8D683B88-39A5-4FBC-AB50-7866EF955B90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8D683B88-39A5-4FBC-AB50-7866EF955B90}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8D683B88-39A5-4FBC-AB50-7866EF955B90}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8D683B88-39A5-4FBC-AB50-7866EF955B90}.Release|Any CPU.Build.0 = Release|Any CPU
 		{22A10F51-3A80-4629-B3A4-E80D429C6AE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{22A10F51-3A80-4629-B3A4-E80D429C6AE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22A10F51-3A80-4629-B3A4-E80D429C6AE0}.Release|Any CPU.ActiveCfg = Release|Any CPU

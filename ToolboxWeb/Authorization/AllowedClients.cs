@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace aemarcoCommons.WebTools.Authorization;
+﻿namespace aemarcoCommons.ToolboxWeb.Authorization;
 
 public static class AllowedClientsExtensions
 {

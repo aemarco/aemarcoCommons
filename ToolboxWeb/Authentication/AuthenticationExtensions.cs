@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
-using System.Threading.Tasks;
 
-namespace aemarcoCommons.WebTools.Authentication;
+namespace aemarcoCommons.ToolboxWeb.Authentication;
 
 public static class AuthenticationExtensions
 {
@@ -40,7 +37,7 @@ public class AlwaysSucceedAuthenticationHandler : AuthenticationHandler<Authenti
     {
         var ticket = new AuthenticationTicket(
             new ClaimsPrincipal(
-                    new ClaimsIdentity(
+                new ClaimsIdentity(
                     [
                         new Claim(ClaimTypes.Name, "Anonymous")
                     ],

@@ -1,14 +1,10 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+
 // ReSharper disable ClassNeverInstantiated.Global
 
-namespace aemarcoCommons.WebTools.Middleware;
+namespace aemarcoCommons.ToolboxWeb.Middleware;
 
 public static class BearerToHeaderMiddlewareExtensions
 {

@@ -19,6 +19,7 @@
 	<ItemGroup>
 		<PackageReference Include="Serilog.AspNetCore" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
 		<PackageReference Include="Riok.Mapperly" ExcludeAssets="runtime" PrivateAssets="all">
 			<IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>

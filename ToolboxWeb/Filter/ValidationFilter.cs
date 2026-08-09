@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace aemarcoCommons.WebTools.Filter;
+namespace aemarcoCommons.ToolboxWeb.Filter;
 
 public class ValidationFilter : IActionFilter
 {
