@@ -1,5 +1,5 @@
-﻿using IdentityModel.OidcClient;
-using System.Diagnostics.CodeAnalysis;
+﻿using IdentityModel;
+using IdentityModel.OidcClient;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -15,51 +15,34 @@ namespace aemarcoCommons.Toolbox.Oidc;
 public class OidcTokenRenewalHandler : DelegatingHandler
 {
 
+
     private readonly IServiceProvider _serviceProvider;
     private readonly OidcTokenRenewalHandlerHelper _oidcTokenRenewalHandlerHelper;
-
-
-
     public OidcTokenRenewalHandler(
-        OidcTokenRenewalHandlerHelper oidcTokenRenewalHandlerHelper,
-        IServiceProvider serviceProvider)
+        IServiceProvider serviceProvider,
+        OidcTokenRenewalHandlerHelper oidcTokenRenewalHandlerHelper)
     {
-        _oidcTokenRenewalHandlerHelper = oidcTokenRenewalHandlerHelper;
         _serviceProvider = serviceProvider;
+        _oidcTokenRenewalHandlerHelper = oidcTokenRenewalHandlerHelper;
+
     }
 
-
-    private OidcClient? _oidcClient;
     private ISessionStore? _sessionStore;
-    [MemberNotNull(nameof(_oidcClient), nameof(_sessionStore))]
-    private void EnsureSetup()
-    {
-        if (_oidcClient == null)
-        {
-            _oidcClient = _serviceProvider.GetRequiredService<OidcClient>();
-        }
-        if (_sessionStore == null)
-        {
-            _sessionStore = _serviceProvider.GetRequiredService<ISessionStore>();
-        }
-    }
-
-
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        EnsureSetup();
-
-        //if we have no access token, we try to get one with refresh
-        var session = await GetAccessTokenAsync(cancellationToken)
+        _sessionStore ??= _serviceProvider.GetRequiredService<ISessionStore>();
+        var session = await _sessionStore.GetSession()
             .ConfigureAwait(false);
 
         if (string.IsNullOrWhiteSpace(session?.AccessToken))
-        {
-            if (await RefreshTokensAsync(session, cancellationToken)
+        {//if we have no access token, we try to get one with refresh
+
+            if (await _oidcTokenRenewalHandlerHelper.RefreshTokensAsync(cancellationToken)
                     .ConfigureAwait(false))
             {
                 //seems we will get a new session
-                session = await _sessionStore.GetSession();
+                session = await _sessionStore.GetSession()
+                    .ConfigureAwait(false);
                 if (string.IsNullOrWhiteSpace(session?.AccessToken))
                 {
                     //otherwise we fail
@@ -88,21 +71,21 @@ public class OidcTokenRenewalHandler : DelegatingHandler
         }
 
         //if we get 401, we try to refresh the access token
-        if (!await RefreshTokensAsync(session, cancellationToken).ConfigureAwait(false))
+        if (!await _oidcTokenRenewalHandlerHelper.RefreshTokensAsync(cancellationToken).ConfigureAwait(false))
         {
             //we cant refresh
-            await _sessionStore!.EndSession()
+            await _sessionStore.EndSession()
                 .ConfigureAwait(false);
             return response;
         }
 
         //seems we refreshed the token
-        session = await _sessionStore!.GetSession()
+        session = await _sessionStore.GetSession()
             .ConfigureAwait(false);
 
         response.Dispose(); // This 401 response will not be used for anything so is disposed to unblock the socket.
 
-        if (session is null)
+        if (string.IsNullOrWhiteSpace(session?.AccessToken))
             return new HttpResponseMessage(HttpStatusCode.Unauthorized) { RequestMessage = request };
 
         //we refreshed the token, so we try the same request once more
@@ -111,82 +94,67 @@ public class OidcTokenRenewalHandler : DelegatingHandler
             .ConfigureAwait(false);
     }
 
-
-
-
-    private async Task<Session?> GetAccessTokenAsync(CancellationToken cancellationToken)
-    {
-        //in case somebody is refreshing currently, we don´t want to return until refreshed, so locking
-        var res = await _oidcTokenRenewalHandlerHelper.HandleLockedAsync(
-                () => Task.CompletedTask,
-                cancellationToken)
-            .ConfigureAwait(false);
-
-        return res
-            ? await _sessionStore!.GetSession()
-            : null;
-    }
-
-    private async Task<bool> RefreshTokensAsync(Session? session, CancellationToken cancellationToken)
-    {
-        if (string.IsNullOrWhiteSpace(session?.RefreshToken))
-        {
-            return false;
-        }
-
-        return await _oidcTokenRenewalHandlerHelper.HandleLockedAsync(async () =>
-            {
-                var response = await _oidcClient!.RefreshTokenAsync(session.RefreshToken, cancellationToken: cancellationToken)
-                    .ConfigureAwait(false);
-
-                if (response.IsError)
-                    throw new Exception("Could not refresh token");
-
-                await _sessionStore!.SetSession(
-                        new Session
-                        {
-                            IdToken = response.IdentityToken,
-                            AccessToken = response.AccessToken,
-                            RefreshToken = response.RefreshToken
-                        })
-                    .ConfigureAwait(false);
-
-            }, cancellationToken)
-            .ConfigureAwait(false);
-
-    }
-
-
 }
 
 // ReSharper disable once ClassNeverInstantiated.Global
 public class OidcTokenRenewalHandlerHelper
 {
-    private readonly SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
+
+
+    private readonly IServiceProvider _serviceProvider;
+    private readonly SemaphoreSlim _lock = new(1, 1);
     private TimeSpan LockTimeout { get; } = TimeSpan.FromSeconds(5);
-
-
-    public async Task<bool> HandleLockedAsync(Func<Task> action, CancellationToken cancellationToken)
+    public OidcTokenRenewalHandlerHelper(IServiceProvider serviceProvider)
     {
-        if (await _lock.WaitAsync(LockTimeout, cancellationToken)
+        _serviceProvider = serviceProvider;
+    }
+
+
+    private ISessionStore? _sessionStore;
+    private OidcClient? _oidcClient;
+    public async Task<bool> RefreshTokensAsync(CancellationToken cancellationToken)
+    {
+
+        _sessionStore ??= _serviceProvider.GetRequiredService<ISessionStore>();
+        _oidcClient ??= _serviceProvider.GetRequiredService<OidcClient>();
+
+        if (!await _lock.WaitAsync(LockTimeout, cancellationToken)
                 .ConfigureAwait(false))
+            throw new TimeoutException("Could not acquire refresh lock in time");
+
+        try
         {
-            try
-            {
-                await action()
-                    .ConfigureAwait(false);
-                return true;
-            }
-            catch
-            {
+            var session = await _sessionStore.GetSession()
+                .ConfigureAwait(false);
+            if (string.IsNullOrWhiteSpace(session?.RefreshToken))
                 return false;
-            }
-            finally
+
+
+            var response = await _oidcClient.RefreshTokenAsync(session.RefreshToken, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
+
+            if (response.IsError)
             {
-                _lock.Release();
+                if (response.Error == OidcConstants.TokenErrors.InvalidGrant)
+                    return false;
+
+                throw new Exception($"Could not refresh token with Error {response.Error} and description {response.ErrorDescription}");
             }
+
+            await _sessionStore.SetSession(
+                    new Session
+                    {
+                        IdToken = response.IdentityToken,
+                        AccessToken = response.AccessToken,
+                        RefreshToken = response.RefreshToken
+                    })
+                .ConfigureAwait(false);
+            return true;
         }
-        return false;
+        finally
+        {
+            _lock.Release();
+        }
     }
 
 }
