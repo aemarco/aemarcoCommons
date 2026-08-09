@@ -1,4 +1,5 @@
-﻿using Microsoft.Net.Http.Headers;
+﻿using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.Net.Http.Headers;
 
 namespace aemarcoCommons.ToolboxWeb.Extensions;
 
@@ -16,15 +17,14 @@ public static class ContextExtensions
         return uri;
     }
 
-    public static string GetAbsolutePath(this HttpContext context)
-    {
-        var uri = $"{context.GetBasePath()}{context.Request.Path.ToUriComponent()}{context.Request.QueryString.ToUriComponent()}";
-        return uri;
-    }
+    public static string GetAbsolutePath(this HttpContext context) =>
+        context.Request.GetEncodedUrl();
 
-    public static string GetAccessToken(this HttpContext context)
+    public static string? GetAccessToken(this HttpContext context)
     {
-        var token = context.Request.Headers[HeaderNames.Authorization].ToString();
-        return token;
+        var header = context.Request.Headers[HeaderNames.Authorization].ToString();
+        return header.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase)
+            ? header["Bearer ".Length..]
+            : null;
     }
 }

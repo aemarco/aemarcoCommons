@@ -2,48 +2,6 @@ using System.Net.Sockets;
 
 namespace aemarcoCommons.ToolboxWeb.Authorization;
 
-/// <summary>
-/// Defines which IP ranges are considered local/trusted for a given LAN policy.
-/// Loopback addresses (127.0.0.1, ::1) are always allowed.
-/// </summary>
-public class LanIpAddressOptions
-{
-    /// <summary>
-    /// CIDR subnets that are considered local, e.g. "192.168.20.0/24" or "10.0.0.0/8".
-    /// Defaults to all RFC-1918 private address ranges.
-    /// </summary>
-    public List<string> LocalSubnets { get; set; } =
-    [
-        "10.0.0.0/8",
-        "172.16.0.0/12",
-        "192.168.0.0/16"
-    ];
-
-    /// <summary>
-    /// When true, requests arriving from the server's own public IP are allowed,
-    /// covering NAT hairpinning scenarios where a LAN device reaches the server via its
-    /// public address. Disabled by default; enable only when hairpin NAT is in use.
-    /// </summary>
-    public bool AllowOwnPublicIp { get; set; }
-
-    /// <summary>
-    /// Clears <see cref="LocalSubnets"/> and adds each IP as an exact /32 (IPv4) or /128 (IPv6) entry.
-    /// </summary>
-    public void WithIpAddresses(params string[] ipAddresses)
-    {
-        LocalSubnets.Clear();
-        foreach (var ip in ipAddresses)
-        {
-            if (!IPAddress.TryParse(ip, out var addr))
-                throw new ArgumentException($"'{ip}' is not a valid IP address.", nameof(ipAddresses));
-            var prefix = addr.AddressFamily == AddressFamily.InterNetworkV6
-                ? 128
-                : 32;
-            LocalSubnets.Add($"{ip}/{prefix}");
-        }
-    }
-}
-
 public static class LanIpAddressExtensions
 {
     extension(IServiceCollection services)
@@ -83,6 +41,49 @@ public static class LanIpAddressExtensions
                 optBuilder.Configure<IServiceProvider>((opts, sp) => configure(sp, opts));
             services.TryAddEnumerable(ServiceDescriptor.Singleton<IAuthorizationHandler, LanIpAddressHandler>());
             return services;
+        }
+    }
+}
+
+
+/// <summary>
+/// Defines which IP ranges are considered local/trusted for a given LAN policy.
+/// Loopback addresses (127.0.0.1, ::1) are always allowed.
+/// </summary>
+public class LanIpAddressOptions
+{
+    /// <summary>
+    /// CIDR subnets that are considered local, e.g. "192.168.20.0/24" or "10.0.0.0/8".
+    /// Defaults to all RFC-1918 private address ranges.
+    /// </summary>
+    public List<string> LocalSubnets { get; set; } =
+    [
+        "10.0.0.0/8",
+        "172.16.0.0/12",
+        "192.168.0.0/16"
+    ];
+
+    /// <summary>
+    /// When true, requests arriving from the server's own public IP are allowed,
+    /// covering NAT hairpinning scenarios where a LAN device reaches the server via its
+    /// public address. Disabled by default; enable only when hairpin NAT is in use.
+    /// </summary>
+    public bool AllowOwnPublicIp { get; set; }
+
+    /// <summary>
+    /// Clears <see cref="LocalSubnets"/> and adds each IP as an exact /32 (IPv4) or /128 (IPv6) entry.
+    /// </summary>
+    public void WithIpAddresses(params string[] ipAddresses)
+    {
+        LocalSubnets.Clear();
+        foreach (var ip in ipAddresses)
+        {
+            if (!IPAddress.TryParse(ip, out var addr))
+                throw new ArgumentException($"'{ip}' is not a valid IP address.", nameof(ipAddresses));
+            var prefix = addr.AddressFamily == AddressFamily.InterNetworkV6
+                ? 128
+                : 32;
+            LocalSubnets.Add($"{ip}/{prefix}");
         }
     }
 }

@@ -1,9 +1,14 @@
-﻿namespace aemarcoCommons.ToolboxWeb.OpenIdConnect;
+﻿using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable IDE0130
+
+namespace aemarcoCommons.ToolboxWeb.OpenIdConnect;
 
 /// <summary>
 /// If you are using this (unchanged), you can call 'ApplyTo' on it, to directly apply it to OpenIdConnectOptions.
 /// </summary>
 /// <remarks>If you extend, you need to roll your own mapper</remarks>
+[Obsolete("Use aemarcoCommons.ToolboxWeb.Configuration.OpenIdConnectSettings")]
 public class OpenIdConnectSettings
 {
 
@@ -53,12 +58,22 @@ public class OpenIdConnectSettings
     /// </summary>
     /// <remarks>This URI can be out of the application's domain. By default it points to the root.</remarks>
     public string SignedOutRedirectUri { get; init; } = "/";
+
 }
 
-[Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Source)]
-public static partial class OpenIdConnectSettingsMapping
+public static class OpenIdConnectSettingsMapping
 {
-    [MapProperty(nameof(OpenIdConnectSettings.Scopes), nameof(OpenIdConnectOptions.Scope))]
-    public static partial void ApplyTo(this OpenIdConnectSettings settings, OpenIdConnectOptions options);
-
+    public static void ApplyTo(this OpenIdConnectSettings settings, OpenIdConnectOptions options)
+    {
+        options.Authority = settings.Authority;
+        options.ClientId = settings.ClientId;
+        options.ClientSecret = settings.ClientSecret;
+        options.SignedOutCallbackPath = (PathString)settings.SignedOutCallbackPath;
+        options.SignedOutRedirectUri = settings.SignedOutRedirectUri;
+        foreach (var item in settings.Scopes)
+        {
+            options.Scope.Add(item);
+        }
+        options.CallbackPath = (PathString)settings.CallbackPath;
+    }
 }

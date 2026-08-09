@@ -2,6 +2,9 @@
 
 public static class AllowedClientsExtensions
 {
+    /// <summary>
+    /// Adds an authorization policy that requires the caller's 'client_id' claim to match one of the given client IDs.
+    /// </summary>
     public static IServiceCollection AddAllowedClientsPolicy(
         this IServiceCollection services,
         string policyName,

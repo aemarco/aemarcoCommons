@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
-
-// ReSharper disable ClassNeverInstantiated.Global
+﻿using aemarcoCommons.ToolboxWeb.Models;
+using aemarcoCommons.ToolboxWeb.Models.Exceptions;
+using Microsoft.AspNetCore.Builder;
 
 namespace aemarcoCommons.ToolboxWeb.Middleware;
 
@@ -63,49 +63,6 @@ public class ExceptionMiddleware<T> where T : Exception
         context.Response.StatusCode = errorResponse.StatusCode;
         context.Response.ContentType = "application/json";
         return context.Response.WriteAsync(JsonSerializer.Serialize(errorResponse));
-    }
-
-}
-
-public class ErrorResponse
-{
-    public ErrorResponse(int statusCode, string message)
-    {
-        StatusCode = statusCode;
-        Message = message;
-    }
-
-    /// <summary>
-    /// Http Status Code
-    /// </summary>
-    public int StatusCode { get; }
-
-    /// <summary>
-    /// some message
-    /// </summary>
-    public string Message { get; }
-}
-
-public class BadRequestException : Exception
-{
-    /// <summary>
-    /// Exception based on Argument exception param name
-    /// </summary>
-    /// <param name="exception">argument exception with param name</param>
-    public BadRequestException(ArgumentException exception)
-        : base($"Reason ArgumentException '{exception.ParamName}'", exception)
-    {
-
-    }
-
-    /// <summary>
-    /// Exception based on general message, will be prefixed with Reason and put in ''
-    /// </summary>
-    /// <param name="message">parameter name or message</param>
-    public BadRequestException(string message)
-        : base($"Reason '{message}'")
-    {
-
     }
 
 }

@@ -8,18 +8,14 @@ public static class AuthenticationExtensions
 {
 
     /// <summary>
-    /// Bypasses the Authentication... Ensure it is not used as default scheme
+    /// Registers a scheme that authenticates every request as an anonymous identity, performing no real check.
+    /// Useful for policies where identity itself isn't the gate (e.g. LAN-IP-based ones), since ASP.NET Core's
+    /// pipeline always needs some scheme to produce a ClaimsPrincipal before a policy's requirements can run.
+    /// Never register it as the default scheme — that would let every request through as "authenticated".
     /// </summary>
-    /// <param name="builder"></param>
-    /// <param name="scheme"></param>
-    /// <returns></returns>
     public static AuthenticationBuilder AddAnonymousScheme(this AuthenticationBuilder builder, string scheme)
     {
-        builder
-            .AddScheme<AuthenticationSchemeOptions, AlwaysSucceedAuthenticationHandler>(scheme, _ =>
-            {
-
-            });
+        builder.AddScheme<AuthenticationSchemeOptions, AlwaysSucceedAuthenticationHandler>(scheme, _ => { });
         return builder;
     }
 }

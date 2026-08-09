@@ -1,7 +1,6 @@
 // Global using directives
 
 global using aemarcoCommons.ToolboxWeb.Services;
-global using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.Extensions.DependencyInjection;

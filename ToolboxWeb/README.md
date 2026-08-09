@@ -11,9 +11,7 @@ Successor to `WebTools`, which is being discontinued. Unlike `WebTools`, this pr
 1. [Authorization](#authorization)
 1. [Configuration](#configuration)
 1. [Extensions](#extensions)
-1. [Filter](#filter)
 1. [Middleware](#middleware)
-1. [OpenID Connect](#openid-connect)
 
 ## Authentication
 
@@ -81,22 +79,38 @@ https://andrewlock.net/setting-global-authorization-policies-using-the-defaultpo
 
 ## Configuration
 
-`CertSettingsBase` — minimal POCO (`Authority`, `Path`, `Pwd`) for certificate-backed JWT bearer setups. Extend it and bind via your own settings pipeline (e.g. `ISettingsBase`).
+### X509 Certificate Settings
+
+`X509CertificateSettingsBase` — POCO (`Authority`, `Audience`, `Path`, `Pwd`) for certificate-backed JWT bearer setups. `Authority` and `Audience` are independent settings — don't reuse one for both, or you lose the distinction between "who signed this token" and "who it's meant for". Call `ApplyTo(TokenValidationParameters)` to load the cert and wire up `ValidIssuer`/`ValidAudience`/`IssuerSigningKey` in one go:
+
+```csharp
+services.AddOptions<JwtBearerOptions>(scheme)
+    .Configure<CertSettings>((options, certSettings) =>
+        certSettings.ApplyTo(options.TokenValidationParameters));
+```
+
+If you are using this (unchanged), nothing extra is needed. If you extend, you need to roll your own mapper. To use together with ToolboxAppOptions, just do:
+
+```csharp
+public class CertSettings : X509CertificateSettingsBase, ISettingsBase;
+```
+
+### OpenID Connect Settings
+
+`OpenIdConnectSettings` — settings POCO that maps directly onto `OpenIdConnectOptions` via the generated `ApplyTo()` extension. If you are using this (unchanged), nothing extra is needed. If you extend, you need to roll your own mapper. To use together with ToolboxAppOptions, just do:
+
+```csharp
+public class OidcSettings : OpenIdConnectSettings, ISettingsBase;
+```
+
+```csharp
+services.AddOptions<OpenIdConnectOptions>(scheme)
+    .Configure<OidcSettings>((options, oidcSettings) => oidcSettings.ApplyTo(options));
+```
 
 ## Extensions
 
-`ContextExtensions` — `HttpContext` helpers for reconstructing the request's root/base/absolute URL (`GetRootPath`/`GetBasePath`/`GetAbsolutePath`) and reading the raw `Authorization` header value (`GetAccessToken`).
-
-## Filter
-
-Adds a filter, which only calls the action when the ModelState is valid.
-
-```csharp
-services.AddControllers(options =>
-{
-    options.Filters.Add(new ValidationFilter());
-});
-```
+`ContextExtensions` — `HttpContext` helpers for reconstructing the request's root/base/absolute URL (`GetRootPath`/`GetBasePath`/`GetAbsolutePath`) and reading the caller's bearer token (`GetAccessToken`). `GetAccessToken` returns just the token — the `"Bearer "` scheme prefix is stripped — or `null` if the `Authorization` header isn't a bearer token at all.
 
 ## Middleware
 
@@ -115,12 +129,4 @@ Catches exceptions and writes a JSON `ErrorResponse`. `BadRequestException` maps
 ```csharp
 app.UseExceptionMiddleware();            // production: catches everything
 app.UseDeveloperExceptionMiddleware();   // dev: BadRequestException still returns 400 JSON, everything else goes to ASP.NET's developer exception page
-```
-
-## OpenID Connect
-
-`OpenIdConnectSettings` — settings POCO that maps directly onto `OpenIdConnectOptions` via the generated `ApplyTo()` extension. Use it unchanged if you can; if you add properties, you're responsible for writing your own mapper (`ApplyTo` is generated with `RequiredMappingStrategy.Source`, so an unmapped new property fails to compile rather than silently being dropped).
-
-```csharp
-services.Configure<OpenIdConnectOptions>(options => oidcSettings.ApplyTo(options));
 ```
