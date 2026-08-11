@@ -21,6 +21,9 @@ public static class WebAppExtensions
                 {
                     configureLogger
                         .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                        .MinimumLevel.Override("Microsoft.AspNetCore.Hosting", LogEventLevel.Warning)
+                        .MinimumLevel.Override("Microsoft.AspNetCore.Mvc", LogEventLevel.Warning)
+                        .MinimumLevel.Override("Microsoft.AspNetCore.Routing", LogEventLevel.Warning)
                         .MinimumLevel.Override("System", LogEventLevel.Information)
                         .Enrich.FromLogContext()
                         .Enrich.WithThreadId()
