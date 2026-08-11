@@ -29,6 +29,7 @@ public static class ConsoleAppExtensions
                 {
                     configureLogger
                         .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                        .MinimumLevel.Override("System", LogEventLevel.Information)
                         .Enrich.FromLogContext()
                         .Enrich.WithThreadId()
                         .Enrich.WithMachineName()
