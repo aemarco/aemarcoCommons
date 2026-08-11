@@ -11,6 +11,7 @@ Successor to `WebTools`, which is being discontinued. Unlike `WebTools`, this pr
 1. [Authorization](#authorization)
 1. [Configuration](#configuration)
 1. [Extensions](#extensions)
+1. [Logging](#logging)
 1. [Middleware](#middleware)
 
 ## Authentication
@@ -111,6 +112,17 @@ services.AddOptions<OpenIdConnectOptions>(scheme)
 ## Extensions
 
 `ContextExtensions` — `HttpContext` helpers for reconstructing the request's root/base/absolute URL (`GetRootPath`/`GetBasePath`/`GetAbsolutePath`) and reading the caller's bearer token (`GetAccessToken`). `GetAccessToken` returns just the token — the `"Bearer "` scheme prefix is stripped — or `null` if the `Authorization` header isn't a bearer token at all.
+
+## Logging
+
+### `SetupSerilogging`
+
+Precedence — code defaults < `appsettings.json` < the `configure` callback — is deliberate, and achieved differently per Serilog API since Serilog isn't symmetric here:
+
+- **Enrichment properties** use first-set-wins semantics, so they're applied before `ReadFrom.Configuration`. `"app"`/`"EnvironmentApplicationName"` are derived from `app.Environment.ApplicationName` rather than left config-overridable, since that's reconfigured at the builder level, not through Serilog.
+- **`MinimumLevel.Override`** uses last-set-wins semantics, so `ReadFrom.Configuration` runs after the code-level `"Microsoft": Information` default, and `configure` runs last of all. This is namespace-prefix matching, not glob — `"Microsoft*"` is a literal string matching nothing.
+
+Same implementation as `ToolboxConsole.ConsoleAppExtensions.SetupSerilogging`, just on `WebApplicationBuilder` for the web tier instead of the console tier.
 
 ## Middleware
 
