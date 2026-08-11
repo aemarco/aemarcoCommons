@@ -9,8 +9,6 @@ using System.Linq;
 
 namespace aemarcoCommons.ToolboxConsole;
 
-
-
 public static class ConsoleAppExtensions
 {
     private static AppTypeRegistrar? _registrar;
