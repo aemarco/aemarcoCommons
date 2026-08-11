@@ -85,5 +85,3 @@ public class ServiceCollectionExtensionsTests : AppOptionTestBase
     public class TestSettingsValidator : AbstractValidator<TestSettings>;
 
 }
-
-

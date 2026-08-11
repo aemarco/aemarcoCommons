@@ -21,6 +21,3 @@ public partial class BaseViewModel : ICloseWindow
     private bool _canClose = true;
 
 }
-
-
-

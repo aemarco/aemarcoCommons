@@ -56,6 +56,3 @@ public class NotifyCallsMethodAttribute : Attribute
     public string MethodName { get; }
     public object[] Parameters { get; }
 }
-
-
-

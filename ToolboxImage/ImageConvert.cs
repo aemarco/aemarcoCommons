@@ -27,7 +27,7 @@ public static class ImageConvert
     {
         using var inputStream = new MemoryStream(source);
         using var image = Image.Load(inputStream);
-        
+
         using var outputStream = new MemoryStream();
         image.Save(outputStream, new JpegEncoder());
         return outputStream.ToArray();
