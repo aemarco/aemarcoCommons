@@ -45,7 +45,7 @@ public static class ImageScale
         image.ResizeMutate(width, height, mode, maxHorizontalCropPercentage, maxVerticalCropPercentage);
 
         var result = new MemoryStream();
-        image.Save(result, new JpegEncoder());
+        image.Save(result, new JpegEncoder { Quality = 75 });
         result.Seek(0, SeekOrigin.Begin);
         return result;
     }
