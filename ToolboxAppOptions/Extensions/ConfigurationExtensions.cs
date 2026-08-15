@@ -25,7 +25,7 @@ public static class ConfigurationExtensions
 
         public TValue? GetResolved<TValue>(string path)
         {
-            var result = config.GetValue<TValue>(path);
+            var result = config.GetSection(path).Get<TValue>();
             if (result is null || typeof(TValue) != typeof(string))
                 return result;
 
