@@ -1,11 +1,16 @@
 #pragma warning disable IDE0130
+using System.Diagnostics.CodeAnalysis;
+
 namespace aemarcoCommons.ToolboxAppOptions;
 
 public static class ConfigurationExtensions
 {
     extension(IConfiguration config)
     {
-        public TValue? GetResolved<TSettings, TValue>(Expression<Func<TSettings, TValue>> selector)
+        //MaybeNull instead of TValue?: same meaning, but the IDE read TValue? in this extension block as a notnull constraint
+        //and flagged every GetResolved<..., string?> call
+        [return: MaybeNull]
+        public TValue GetResolved<TSettings, TValue>(Expression<Func<TSettings, TValue>> selector)
             where TSettings : ISettingsBase
         {
             if (selector.Body is not MemberExpression { Expression: ParameterExpression, Member.Name: { } propertyName })
@@ -23,7 +28,8 @@ public static class ConfigurationExtensions
             return config.GetResolved<TValue>(key);
         }
 
-        public TValue? GetResolved<TValue>(string path)
+        [return: MaybeNull]
+        public TValue GetResolved<TValue>(string path)
         {
             var result = config.GetSection(path).Get<TValue>();
             if (result is null || typeof(TValue) != typeof(string))

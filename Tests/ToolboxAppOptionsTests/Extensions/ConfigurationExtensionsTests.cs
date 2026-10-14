@@ -103,7 +103,7 @@ internal class ConfigurationExtensionsTests
     public void GetResolved_RawPathString_ReturnsBoundValue()
     {
         var config = BuildConfig(("Auth:Username", "aemarco"));
-        var result = config.GetResolved<string?>("Auth:Username");
+        var result = config.GetResolved<string>("Auth:Username");
         result.ShouldBe("aemarco");
     }
 
@@ -113,7 +113,7 @@ internal class ConfigurationExtensionsTests
         var config = BuildConfig(
             ("Auth:Username", "{{{PlaceholderValue}}}"),
             ("PlaceholderValue", "aemarco"));
-        var result = config.GetResolved<string?>("Auth:Username");
+        var result = config.GetResolved<string>("Auth:Username");
         result.ShouldBe("aemarco");
     }
 
@@ -121,7 +121,7 @@ internal class ConfigurationExtensionsTests
     public void GetResolved_RawPathMissing_ReturnsDefault()
     {
         var config = BuildConfig();
-        var result = config.GetResolved<string?>("Auth:Username");
+        var result = config.GetResolved<string>("Auth:Username");
         result.ShouldBeNull();
     }
 
