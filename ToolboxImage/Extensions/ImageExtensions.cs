@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+using SixLabors.ImageSharp.Formats.Tiff;
+
 namespace aemarcoCommons.ToolboxImage.Extensions;
 
 public static class ImageExtensions
@@ -24,6 +26,39 @@ public static class ImageExtensions
     {
         var result = await Image.IdentifyAsync(file.FullName);
         return result;
+    }
+
+
+    /// <summary>
+    /// Whether the header bytes of the file say TIFF, whatever the extension claims. Reads the header only.
+    /// A format ImageSharp does not know (e.g. avif) is not TIFF.
+    /// </summary>
+    public static bool IsTiff(this FileInfo file)
+    {
+        try
+        {
+            return Image.DetectFormat(file.FullName) is TiffFormat;
+        }
+        catch (Exception ex) when (ex is UnknownImageFormatException or InvalidImageContentException)
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Whether the header bytes say TIFF. Reads the header only.
+    /// A format ImageSharp does not know is not TIFF.
+    /// </summary>
+    public static bool IsTiff(this byte[] bytes)
+    {
+        try
+        {
+            return Image.DetectFormat(bytes) is TiffFormat;
+        }
+        catch (Exception ex) when (ex is UnknownImageFormatException or InvalidImageContentException)
+        {
+            return false;
+        }
     }
 
 
