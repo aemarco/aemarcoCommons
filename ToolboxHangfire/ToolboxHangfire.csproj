@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<!-- project definition -->
+	<PropertyGroup>
+		<TargetFramework>$(DefaultNetVersion)</TargetFramework>
+		<RootNamespace>aemarcoCommons.ToolboxHangfire</RootNamespace>
+		<AssemblyName>aemarcoCommons.ToolboxHangfire</AssemblyName>
+	</PropertyGroup>
+
+	<!-- nuget references-->
+	<ItemGroup>
+		<PackageReference Include="Hangfire.Core" />
+		<PackageReference Include="Hangfire.NetCore" />
+		<PackageReference Include="Newtonsoft.Json" />
+		<PackageReference Include="Serilog" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
+	</ItemGroup>
+
+	<!-- nuget build-->
+	<PropertyGroup>
+		<Description>Tooling around Hangfire</Description>
+		<PackageTags>Hangfire</PackageTags>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath="\" />
+		<None Include="Resources\icon.png" Pack="true" PackagePath="\" />
+		<None Include="Resources\LICENSE.md" Pack="true" PackagePath="\" />
+		<None Include="Resources\NOTICE.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+</Project>
