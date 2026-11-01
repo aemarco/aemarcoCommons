@@ -59,6 +59,8 @@ jobs:
     if: github.ref == 'refs/heads/main'
     environment:
       name: push-to-nuget-org
+    permissions:
+      id-token: write  # OIDC token for the trusted publishing policy on nuget.org
     steps:
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
@@ -71,6 +73,12 @@ jobs:
           name: drop
           path: ./artifacts
 
+      - name: NuGet login (OIDC -> temp API key)
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
       - name: Push packages to NuGet.org
         shell: pwsh
         run: |
@@ -80,6 +88,6 @@ jobs:
           Get-ChildItem ./artifacts -Filter *.nupkg | ForEach-Object {
             dotnet nuget push $_.FullName `
               --source https://api.nuget.org/v3/index.json `
-              --api-key ${{ secrets.NUGET_API_KEY }} `
+              --api-key ${{ steps.login.outputs.NUGET_API_KEY }} `
               --skip-duplicate
           }
