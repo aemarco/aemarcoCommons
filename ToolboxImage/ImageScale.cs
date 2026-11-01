@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+using SixLabors.ImageSharp.Metadata.Profiles.Exif;
+
 namespace aemarcoCommons.ToolboxImage;
 
 public static class ImageScale
@@ -46,6 +48,54 @@ public static class ImageScale
 
         var result = new MemoryStream();
         image.Save(result, new JpegEncoder { Quality = 75 });
+        result.Seek(0, SeekOrigin.Begin);
+        return result;
+    }
+
+    /// <summary>
+    /// Scales an image loaded from a stream down until it has at most the given number of pixels and returns the result as a MemoryStream.
+    /// </summary>
+    /// <param name="source">The input stream containing the image data.</param>
+    /// <param name="maxPixels">The maximum number of pixels (width × height) of the result.</param>
+    /// <returns>A <see cref="MemoryStream"/> containing the image in JPEG format.</returns>
+    /// <remarks>
+    /// The aspect ratio is kept, nothing is cropped or padded, and an image that already has at most
+    /// <paramref name="maxPixels"/> pixels is not enlarged. Unlike a box, a pixel budget fits every aspect ratio.
+    /// A JPEG that needs no resize and carries no EXIF rotation is returned byte for byte, so it is not compressed a second time;
+    /// everything else is rotated upright and written as a new JPEG with quality 95.
+    /// </remarks>
+    public static MemoryStream ShrinkToPixels(Stream source, long maxPixels)
+    {
+        var info = Image.Identify(source);
+        source.Seek(0, SeekOrigin.Begin);
+        var pixels = (long)info.Width * info.Height;
+        var isRotated =
+            info.Metadata.ExifProfile is { } exif &&
+            exif.TryGetValue(ExifTag.Orientation, out var orientation) &&
+            orientation.Value > 1;
+        if (pixels <= maxPixels &&
+            !isRotated &&
+            info.Metadata.DecodedImageFormat is JpegFormat)
+        {
+            var copy = new MemoryStream();
+            source.CopyTo(copy);
+            copy.Seek(0, SeekOrigin.Begin);
+            return copy;
+        }
+
+        using var image = Image.Load(source);
+        image.Mutate(x => x.AutoOrient());
+        var orientedPixels = (long)image.Width * image.Height;
+        if (orientedPixels > maxPixels)
+        {
+            var factor = Math.Sqrt((double)maxPixels / orientedPixels);
+            var width = Math.Max(1, (int)Math.Floor(image.Width * factor));
+            var height = Math.Max(1, (int)Math.Floor(image.Height * factor));
+            image.Mutate(x => x.Resize(width, height));
+        }
+
+        var result = new MemoryStream();
+        image.Save(result, new JpegEncoder { Quality = 95 });
         result.Seek(0, SeekOrigin.Begin);
         return result;
     }
