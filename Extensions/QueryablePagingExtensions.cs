@@ -31,5 +31,3 @@ public static class QueryablePagingExtensions
         return query;
     }
 }
-
-

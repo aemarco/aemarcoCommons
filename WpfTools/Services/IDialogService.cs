@@ -1,4 +1,5 @@
 ﻿namespace aemarcoCommons.WpfTools.Services;
+
 public interface IDialogService
 {
 

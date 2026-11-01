@@ -20,10 +20,21 @@
 	<!-- nuget references-->
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Hosting" />
+
 		<PackageReference Include="CommunityToolkit.Mvvm" />
 		<PackageReference Include="Hardcodet.NotifyIcon.Wpf" />
 		<PackageReference Include="FontAwesome.WPF" NoWarn="NU1701" />
 		<PackageReference Include="WpfAnimatedGif" />
+
+		<PackageReference Include="Serilog.Extensions.Hosting" />
+		<PackageReference Include="Serilog.Settings.Configuration" />
+		<PackageReference Include="Serilog.Enrichers.Environment" />
+		<PackageReference Include="Serilog.Enrichers.Thread" />
+		<PackageReference Include="Serilog.Sinks.Debug" />
+		<PackageReference Include="Serilog.Sinks.Async" />
+		<PackageReference Include="Serilog.Sinks.File" />
+		<PackageReference Include="Serilog.Sinks.Seq" />
+
 	</ItemGroup>
 
 	<!-- proj build-->

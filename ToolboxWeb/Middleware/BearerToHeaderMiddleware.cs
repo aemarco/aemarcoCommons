@@ -1,0 +1,55 @@
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http.Extensions;
+using System.Linq;
+
+// ReSharper disable ClassNeverInstantiated.Global
+
+namespace aemarcoCommons.ToolboxWeb.Middleware;
+
+public static class BearerToHeaderMiddlewareExtensions
+{
+
+    public static void UseBearerToHeaderMiddleware(this IApplicationBuilder app)
+    {
+        app.UseMiddleware<BearerToHeaderMiddleware>();
+    }
+
+}
+
+/// <summary>
+/// This Middleware takes access tokens from query parameter, removes it there and puts in as authorization header
+/// https://tools.ietf.org/html/rfc6750#section-2.3
+/// </summary>
+public class BearerToHeaderMiddleware
+{
+    private readonly RequestDelegate _next;
+    private readonly ILogger<BearerToHeaderMiddleware> _logger;
+
+    public BearerToHeaderMiddleware(
+        RequestDelegate next,
+        ILogger<BearerToHeaderMiddleware> logger)
+    {
+        _next = next;
+        _logger = logger;
+    }
+
+    public async Task InvokeAsync(HttpContext context)
+    {
+        if (context.Request.Query.TryGetValue("access_token", out var token))
+        {
+            var items = context.Request.Query
+                .SelectMany(x => x.Value,
+                    (col, value) => new KeyValuePair<string, string>(col.Key, value!))
+                .ToList();
+            items.RemoveAll(x => x.Key.Equals("access_token", StringComparison.OrdinalIgnoreCase));
+            context.Request.QueryString = new QueryBuilder(items).ToQueryString();
+            context.Request.Headers.Authorization = $"Bearer {token.FirstOrDefault()}";
+
+            _logger.LogDebug("Access token moved to Authorization header");
+        }
+        await _next(context);
+
+
+
+    }
+}

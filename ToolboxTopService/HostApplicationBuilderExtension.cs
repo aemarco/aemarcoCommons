@@ -33,5 +33,3 @@ public static class HostApplicationBuilderExtension
         return Environment.ExitCode;
     }
 }
-
-

@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 
 namespace aemarcoCommons.WpfTools.Dialogs;
+
 public partial class AskInputDialogViewModel : DialogViewModel
 {
 

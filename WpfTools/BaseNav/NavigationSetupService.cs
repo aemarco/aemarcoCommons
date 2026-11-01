@@ -1,7 +1,4 @@
-﻿
-using Microsoft.Extensions.Hosting;
-
-namespace aemarcoCommons.WpfTools.BaseNav;
+﻿namespace aemarcoCommons.WpfTools.BaseNav;
 
 #pragma warning disable CsWinRT1028
 public class NavigationSetupService : BackgroundService

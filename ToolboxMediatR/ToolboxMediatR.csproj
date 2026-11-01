@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<!-- project definition -->
+	<PropertyGroup>
+		<TargetFramework>$(DefaultNetVersion)</TargetFramework>
+		<RootNamespace>aemarcoCommons.ToolboxMediatR</RootNamespace>
+		<AssemblyName>aemarcoCommons.ToolboxMediatR</AssemblyName>
+	</PropertyGroup>
+
+	<!-- project references -->
+	<ItemGroup>
+		<ProjectReference Include="..\Extensions\Extensions.csproj" />
+	</ItemGroup>
+
+	<!-- nuget references-->
+	<ItemGroup>
+		<PackageReference Include="MediatR" />
+	</ItemGroup>
+
+	<!-- nuget build-->
+	<PropertyGroup>
+		<Description>Tooling around MediatR</Description>
+		<PackageTags>MediatR</PackageTags>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath="\" />
+		<None Include="Resources\icon.png" Pack="true" PackagePath="\" />
+		<None Include="Resources\LICENSE.md" Pack="true" PackagePath="\" />
+		<None Include="Resources\NOTICE.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+</Project>

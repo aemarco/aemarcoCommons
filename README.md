@@ -46,6 +46,10 @@ If you want to show some love, ETH donations are very welcome @ 0x95378259e5140F
 [![NuGet](https://img.shields.io/nuget/v/aemarcoToolboxImage.svg)](https://www.nuget.org/packages/aemarcoToolboxImage/)
 ![NuGet](https://img.shields.io/nuget/dt/aemarcoToolboxImage.svg)
 
+1. [aemarcoToolboxMediatR](https://github.com/aemarco/aemarcoCommons/tree/master/aemarcoToolboxMediatR)
+[![NuGet](https://img.shields.io/nuget/v/aemarcoToolboxMediatR.svg)](https://www.nuget.org/packages/aemarcoToolboxMediatR/)
+![NuGet](https://img.shields.io/nuget/dt/aemarcoToolboxMediatR.svg)
+
 1. [aemarcoToolboxFluentValidation](https://github.com/aemarco/aemarcoCommons/tree/master/aemarcoToolboxFluentValidation)
 [![NuGet](https://img.shields.io/nuget/v/aemarcoToolboxFluentValidation.svg)](https://www.nuget.org/packages/aemarcoToolboxFluentValidation/)
 ![NuGet](https://img.shields.io/nuget/dt/aemarcoToolboxFluentValidation.svg)

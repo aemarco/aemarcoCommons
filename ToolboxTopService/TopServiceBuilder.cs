@@ -60,4 +60,3 @@ public enum StartupType
     AutoDelayed,
     Disabled
 }
-

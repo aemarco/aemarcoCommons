@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.IO;
 using System.Runtime.InteropServices;
 // ReSharper disable All
 // author and credits to https://www.codeproject.com/Articles/2939/Network-Shares-and-UNC-paths

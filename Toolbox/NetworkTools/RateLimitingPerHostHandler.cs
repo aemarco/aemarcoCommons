@@ -1,6 +1,5 @@
 ﻿using aemarcoCommons.Extensions.TimeExtensions;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Concurrent;
 using System.Net.Http;
 using System.Threading;

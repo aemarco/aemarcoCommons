@@ -7,7 +7,7 @@ public static class StringRuleBuilderExtensions
 {
 
     public static IRuleBuilderOptions<T, string?> BeValidAbsoluteUri<T>(
-        this IRuleBuilder<T, string?> ruleBuilder, bool? trailingSlash = false)
+        this IRuleBuilder<T, string?> ruleBuilder, bool? trailingSlash = null)
     {
         return ruleBuilder
             .Must(text => IsAbsoluteWebUri(text, trailingSlash))
